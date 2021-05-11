@@ -5,6 +5,7 @@
 /regression
 /fralda
 /timeout
+/permababy
 
 -> /permissions@burrsobot  (Só em chats e só por admins)
 -> /chatscript@burrsobot  (Só em chats e só por admins)

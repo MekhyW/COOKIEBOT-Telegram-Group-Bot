@@ -19,6 +19,7 @@ import geopy
 import wolframalpha
 WolframAPP_ID = ''
 WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
+DeepaiTOKEN = ''
 import telepot
 from telepot.loop import MessageLoop
 cookiebotTOKEN = ''
@@ -35,6 +36,7 @@ sentcooldownmessage = False
 stickerspamlimit = 5
 intrometerpercentage = 2
 intrometerminimumwords = 6
+lowresolutionarea = 100000
 
 #OFFSET ALL MESSAGES SENT SO FAR (INFINITE AMOUNT)
 cookiebot.getUpdates(offset=float('inf'))
@@ -153,7 +155,18 @@ def thread_function(msg):
                 elif content_type == "audio":
                     pass
                 elif content_type == "photo":
-                    pass
+                    Area = 0
+                    for photo in msg['photo']:
+                        if photo['width'] * photo['height'] > Area:
+                            Area = photo['width'] * photo['height']
+                            Fileid = photo['file_id']
+                    if Area < lowresolutionarea:
+                        cookiebot.sendChatAction(chat_id, 'upload_photo')
+                        path = cookiebot.getFile(Fileid)['file_path']
+                        url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
+                        r = requests.post("https://api.deepai.org/api/torch-srgan", data={'image': '{}'.format(url),},headers={'Api-Key': '{}'.format(DeepaiTOKEN)})
+                        output_url = r.json()['output_url']
+                        cookiebot.sendPhoto(chat_id, output_url, caption="Imagem de baixa resolução ampliada".format(Area), reply_to_message_id=msg['message_id'])
                 elif content_type == "document":
                     pass
                 elif content_type == "sticker":
@@ -230,7 +243,7 @@ def thread_function(msg):
                         target = msg['reply_to_message']['text']
                     else:
                         target = msg['text'].replace("/completar ", '')
-                    r = requests.post("https://api.deepai.org/api/text-generator",data={'text': translator.translate(target, dest='en').pronunciation,},headers={'api-key': '8a5dedaf-d5a5-4b37-93a1-fcd6e94c6ba4'})
+                    r = requests.post("https://api.deepai.org/api/text-generator",data={'text': translator.translate(target, dest='en').pronunciation,},headers={'api-key': DeepaiTOKEN})
                     Answer = translator.translate(r.json()['output'], dest='pt').text
                     cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
                 elif 'text' in msg and msg['text'].startswith("/startup"):
