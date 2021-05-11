@@ -21,7 +21,6 @@ dadjoke - Dor
 adddadjoke - Adiciona frase ao dadjoke
 sabedoria - Ilumino seu dia 
 addsabedoria - Adiciona frase ao sabedoria
-spamark - Chamar o horny manso
 biblia - Tiro o pecado das suas costas
 portal - Uma ratazana e um desejo
 naoclique - NAO CLIQUE
