@@ -518,7 +518,7 @@ def thread_function(msg):
                         target = target.split()[0]
                     cookiebot.sendMessage(chat_id, LocucaoAdverbial+"@"+target, reply_to_message_id=msg['message_id'])
                     text_file.close()
-                elif 'text' in msg and 'reply_to_message' in msg and msg['reply_to_message']['text'] == "Se vc é um admin, Responda ESTA mensagem com um evento e data\n\nExemplo: 'Comissões do Ark 31/02/2077 06:21\n(horário de Brasília pls)'" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
+                elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, Responda ESTA mensagem com um evento e data\n\nExemplo: 'Comissões do Ark 31/02/2077 06:21\n(horário de Brasília pls)'" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
                     cookiebot.sendChatAction(chat_id, 'typing')
                     Event = msg['text'].split(" ")
                     if len(Event) >= 3:
