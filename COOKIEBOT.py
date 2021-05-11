@@ -34,9 +34,9 @@ lastmessagedate = "1-1-1"
 lastmessagetime = "0"
 sentcooldownmessage = False
 stickerspamlimit = 5
-intrometerpercentage = 2
+intrometerpercentage = 1
 intrometerminimumwords = 6
-lowresolutionarea = 100000
+lowresolutionarea = 76800
 
 #OFFSET ALL MESSAGES SENT SO FAR (INFINITE AMOUNT)
 cookiebot.getUpdates(offset=float('inf'))
@@ -166,7 +166,7 @@ def thread_function(msg):
                         url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
                         r = requests.post("https://api.deepai.org/api/torch-srgan", data={'image': '{}'.format(url),},headers={'Api-Key': '{}'.format(DeepaiTOKEN)})
                         output_url = r.json()['output_url']
-                        cookiebot.sendPhoto(chat_id, output_url, caption="Imagem de baixa resolução ampliada".format(Area), reply_to_message_id=msg['message_id'])
+                        cookiebot.sendPhoto(chat_id, output_url, caption="Imagem ampliada".format(Area), reply_to_message_id=msg['message_id'])
                 elif content_type == "document":
                     pass
                 elif content_type == "sticker":
@@ -365,10 +365,6 @@ def thread_function(msg):
                     for line in lines:
                         string += str(line)
                     cookiebot.sendMessage(chat_id, string, reply_to_message_id=msg['message_id'])
-                elif 'text' in msg and msg['text'].startswith("/spamark"):
-                    cookiebot.sendChatAction(chat_id, 'typing')
-                    for corno in range(3):
-                        cookiebot.sendMessage(chat_id, "@ArkTheBear @ArkTheBear @ArkTheBear @ArkTheBear @ArkTheBear @ArkTheBear @ArkTheBear @ArkTheBear")
                 elif Burrbot == False and 'text' in msg and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")):
                     cookiebot.sendChatAction(chat_id, 'typing')
                     text_file = open("Hoje.txt", "r+", encoding='utf8')
