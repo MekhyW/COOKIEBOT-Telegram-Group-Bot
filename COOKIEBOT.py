@@ -38,9 +38,6 @@ intrometerpercentage = 1
 intrometerminimumwords = 6
 lowresolutionarea = 76800
 
-#OFFSET ALL MESSAGES SENT SO FAR (INFINITE AMOUNT)
-cookiebot.getUpdates(offset=float('inf'))
-
 #STRING IN FILE CHECKER
 def check_if_string_in_file(file_name, string_to_search):
     for line in file_name:
