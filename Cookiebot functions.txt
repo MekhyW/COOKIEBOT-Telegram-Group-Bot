@@ -1,0 +1,75 @@
+Cookiebot Commands
+
+qualquercoisa - Uma foto doq vc quiser
+ideiadesenho - Chega de art block
+everyone - Admins podem chamar todos os membros do grupo
+portugues - Traduz texto para pr/br
+ingles - Traduz texto para us/en
+hoje - DESATIVADO COM O BURRBOT
+cheiro - DESATIVADO COM O BURRBOT
+eventos - Proximos eventos registrados em mim
+addevento - Criar um evento
+removeevento - Deletar um evento
+fodase - Xingo o autor de uma mensagem
+startup - Qual o slogan da sua startup
+numero - Falo fatos sobre um numero
+insulto - Mando a real
+idade - Te digo quantos anos vc tem
+genero - Sera que e menino ou menina
+completar - Faço lero lero a partir de uma frase
+dadjoke - Dor
+adddadjoke - Adiciona frase ao dadjoke
+sabedoria - Ilumino seu dia 
+addsabedoria - Adiciona frase ao sabedoria
+spamark - Chamar o horny manso
+biblia - Tiro o pecado das suas costas
+portal - Uma ratazana e um desejo
+naoclique - NAO CLIQUE
+nada - nada kkkk
+addhoje - Adicionar ao hoje
+addcheiro - Adicionar cheiro
+tavivo - Manda um ping de teste com data
+stop- Safe switch do mekhy
+contato - Usa esse comando nunca te pedi nada
+comandos - Lista os comandos do bot
+allen - allen
+aly - aly
+bobfirrer - bobfirrer
+cloretodeodio - cloretodeodio
+deltasnep - deltasnep
+doctordirewolf - doctordirewolf
+dr4g40 - dr4g40
+fcking1212 - fcking1212
+gummypuh - gummypuh
+haura - haura
+juuj - juuj
+kuark - kuark
+loganartic - loganartic
+lukit - lukit
+matt - matt
+mekhy - mekhy
+momo - momo
+mousse - mousse
+mrnatmax - mrnatmax
+naja - naja
+nicolas - nicolas
+nizmot - nizmot
+purplegalaxy - purplegalaxy
+ralph - ralph
+ratenhas - ratenhas
+seive - seive
+sopero - sopero
+tomecow - tomecow
+tonnyrussel - tonnyrussel
+yoshiro - yoshiro
+
+
+PASSIVAS:
+IA de conversa - Responde mensagens
+IA assistente - Matemática, vocabulário, física, química, weather, etc
+sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
+speech to text - Transcripta mensagens de voz
+identificador de musica - 6 ou mais palavras, ele manda uma musica correspondente se houver
+location to address - Manda o endereço correspondente a um location
+welcome message
+leaving message
