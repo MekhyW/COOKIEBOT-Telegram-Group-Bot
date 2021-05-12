@@ -6,6 +6,7 @@
 /fralda
 /timeout
 /permababy
+/mix
 
 -> /permissions@burrsobot  (Só em chats e só por admins)
 -> /chatscript@burrsobot  (Só em chats e só por admins)
