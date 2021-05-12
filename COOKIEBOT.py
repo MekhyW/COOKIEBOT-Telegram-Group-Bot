@@ -215,6 +215,13 @@ def thread_function(msg):
                         sentcooldownmessage = True
                     elif sentcooldownmessage == True:
                         cookiebot.deleteMessage(telepot.message_identifier(msg))
+                elif 'text' in msg and msg['text'].startswith("/escolha"):
+                    cookiebot.sendChatAction(chat_id, 'typing')
+                    if len(msg['text'].split()) == 1:
+                        cookiebot.sendMessage(chat_id, "Envie os termos pra escolher\nEXEMPLO: '/escolher A, B, C'", reply_to_message_id=msg['message_id'])
+                    else:
+                        terms = msg['text'].split(",")
+                        cookiebot.sendMessage(chat_id, terms[random.randint(1, len(terms)-1)].capitalize(), reply_to_message_id=msg['message_id'])
                 elif 'text' in msg and msg['text'].startswith("/idade"):
                     cookiebot.sendChatAction(chat_id, 'typing')
                     if not " " in msg['text']:
