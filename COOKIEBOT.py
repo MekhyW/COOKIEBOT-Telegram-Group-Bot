@@ -288,6 +288,21 @@ def thread_function(msg):
                         text_file.write("\n"+msg['reply_to_message']['text'].replace("\n", "\\n"))
                         text_file.close()
                         cookiebot.sendMessage(chat_id, "Frase toppen adicionada! ✅", reply_to_message_id=msg['message_id'])
+                elif Burrbot == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
+                    text_file = open("Regras_" + str(chat_id)+".txt", 'w', encoding='utf-8')
+                    text_file.write(msg['text'])
+                    cookiebot.sendMessage(chat_id, "Mensagem de regras atualizada! ✅", reply_to_message_id=msg['message_id'])
+                elif Burrbot == False and 'text' in msg and msg['text'].startswith("/novasregras"):
+                    cookiebot.sendChatAction(chat_id, 'typing')
+                    cookiebot.sendMessage(chat_id, "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras", reply_to_message_id=msg['message_id'])
+                elif Burrbot == False and 'text' in msg and msg['text'].startswith("/regras"):
+                    cookiebot.sendChatAction(chat_id, 'typing')
+                    if os.path.exists("Regras_" + str(chat_id)+".txt"):
+                        with open("Regras_" + str(chat_id)+".txt", encoding='utf-8') as file:
+                            regras = file.read()
+                        cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
+                    else:    
+                        cookiebot.sendMessage(chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", reply_to_message_id=msg['message_id'])
                 elif 'text' in msg and msg['text'].startswith("/removeevento"):
                     if msg['text'] == "/removeevento" or msg['text'] == "/removeevento@CookieMWbot":
                         cookiebot.sendChatAction(chat_id, 'typing')
