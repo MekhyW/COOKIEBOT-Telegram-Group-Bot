@@ -31,6 +31,7 @@ tavivo - Manda um ping de teste com data
 stop- Safe switch do mekhy
 contato - Usa esse comando nunca te pedi nada
 comandos - Lista os comandos do bot
+ruby - ruby
 allen - allen
 aly - aly
 bobfirrer - bobfirrer
