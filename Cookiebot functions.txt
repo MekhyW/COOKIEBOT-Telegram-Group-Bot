@@ -1,4 +1,4 @@
-Cookiebot Commands
+Comandos do Cookiebot!
 
 qualquercoisa - Uma foto doq vc quiser
 ideiadesenho - Chega de art block
@@ -23,6 +23,7 @@ sabedoria - Ilumino seu dia
 addsabedoria - Adiciona frase ao sabedoria
 biblia - Tiro o pecado das suas costas
 portal - Uma ratazana e um desejo
+escolha - Deixa o bot escolher pra vc
 naoclique - NAO CLIQUE
 nada - nada kkkk
 addhoje - Adicionar ao hoje
