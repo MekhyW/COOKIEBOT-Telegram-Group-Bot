@@ -1,3 +1,8 @@
+cookiebotTOKEN = ''
+DeepaiTOKEN = ''
+WolframAPP_ID = ''
+spotipyCLIENT_ID = ''
+spotipyCLIENT_SECRET = ''
 import os
 import subprocess
 import sys
@@ -10,19 +15,14 @@ translator = googletrans.Translator()
 from google_images_download import google_images_download
 google_images_response = google_images_download.googleimagesdownload()
 import spotipy
-spotipyCLIENT_ID = ''
-spotipyCLIENT_SECRET = ''
 spotify = spotipy.Spotify(spotipy.oauth2.SpotifyClientCredentials(client_id=spotipyCLIENT_ID, client_secret=spotipyCLIENT_SECRET).get_access_token())
 import speech_recognition
 recognizer = speech_recognition.Recognizer()
 import geopy
 import wolframalpha
-WolframAPP_ID = ''
 WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
-DeepaiTOKEN = ''
 import telepot
 from telepot.loop import MessageLoop
-cookiebotTOKEN = ''
 cookiebot = telepot.Bot(cookiebotTOKEN)
 import logging
 import threading
