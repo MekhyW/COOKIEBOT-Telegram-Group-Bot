@@ -3,6 +3,9 @@ Comandos do Cookiebot!
 qualquercoisa - Uma foto doq vc quiser
 ideiadesenho - Chega de art block
 everyone - Admins podem chamar todos os membros do grupo
+regras - Mostra as regras do grupo
+novasregras - Atualiza as regras do grupo
+novobemvindo - Atualiza a mensagem de boas vindas
 portugues - Traduz texto para pr/br
 ingles - Traduz texto para us/en
 hoje - DESATIVADO COM O BURRBOT
@@ -68,10 +71,11 @@ yoshiro - yoshiro
 PASSIVAS:
 IA de conversa - Responde mensagens
 IA assistente - Matemática, vocabulário, física, química, weather, etc
+limbo de imagem - Impede que novos membros mandem fotos, por um intervalo
 sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
 speech to text - Transcripta mensagens de voz
 identificador de musica - 6 ou mais palavras, ele manda uma musica correspondente se houver
 location to address - Manda o endereço correspondente a um location
 image upscaler - Amplia imagens de baixa resolução com inteligência artificial
-welcome message
+CUSTOM welcome message
 leaving message
