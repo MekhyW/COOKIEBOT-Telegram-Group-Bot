@@ -288,7 +288,7 @@ def Regras(msg, chat_id):
     if os.path.exists("Regras_" + str(chat_id)+".txt"):
         with open("Regras_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
-        cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, regras+"\n\nDúvidas em relação ao bot? Mande para @MekhyW", reply_to_message_id=msg['message_id'])
     else:    
         cookiebot.sendMessage(chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", reply_to_message_id=msg['message_id'])
 
