@@ -34,6 +34,7 @@ lastmessagedate = "1-1-1"
 lastmessagetime = "0"
 sentcooldownmessage = False
 stickerspamlimit = 5
+limbotimespan = 600
 intrometerpercentage = 1
 intrometerminimumwords = 6
 lowresolutionarea = 76800
@@ -48,9 +49,37 @@ def check_if_string_in_file(file_name, string_to_search):
 
 
 
-def new_chat_member(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "Seja bem vindo(a)!", reply_to_message_id=msg['message_id'])
+
+def Limbo(msg, chat_id):
+    text = open("Limbo.txt", 'a+')
+    text.write(str(chat_id) + " " + str(msg['from']['id']) + " " + str(datetime.datetime.now()) + "\n")
+    text.close()
+
+def CheckLimbo(msg, chat_id):
+    text = open("Limbo.txt", 'r')
+    lines = text.readlines()
+    text.close()
+    text = open("Limbo.txt", 'w+')
+    for line in lines:
+        if len(line.split()) == 4:
+            #CHATID userID 2021-05-13 11:45:29.027116
+            year = int(line.split()[2].split("-")[0])
+            month = int(line.split()[2].split("-")[1])
+            day = int(line.split()[2].split("-")[2])
+            hour = int(line.split()[3].split(":")[0])
+            minute = int(line.split()[3].split(":")[1])
+            second = float(line.split()[3].split(":")[2])
+            limbosettime = (hour*3600) + (minute*60) + (second)
+            if str(chat_id) != line.split()[0] or str(msg['from']['id']) != line.split()[1]:
+                text.write(line)
+            elif datetime.date.today() == datetime.date(year, month, day) and limbosettime+limbotimespan >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
+                cookiebot.deleteMessage(telepot.message_identifier(msg))
+                text.write(line)
+            else:
+                pass
+        else:
+            pass
+    text.close()
 
 def left_chat_member(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -223,6 +252,26 @@ def AddSabedoria(msg, chat_id):
         text_file.write("\n"+msg['reply_to_message']['text'].replace("\n", "\\n"))
         text_file.close()
         cookiebot.sendMessage(chat_id, "Frase toppen adicionada! ✅", reply_to_message_id=msg['message_id'])
+
+
+def AtualizaBemvindo(msg, chat_id):
+    text_file = open("Welcome_" + str(chat_id)+".txt", 'w', encoding='utf-8')
+    text_file.write(msg['text'])
+    cookiebot.sendMessage(chat_id, "Mensagem de Boas Vindas atualizada! ✅", reply_to_message_id=msg['message_id'])
+    text_file.close()
+
+def NovoBemvindo(msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    cookiebot.sendMessage(chat_id, "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo", reply_to_message_id=msg['message_id'])
+
+def Bemvindo(msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    if os.path.exists("Welcome_" + str(chat_id)+".txt"):
+        with open("Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
+            regras = file.read()
+        cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(limbotimespan/60)), reply_to_message_id=msg['message_id'])
+    else:    
+        cookiebot.sendMessage(chat_id, "Seja bem vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(limbotimespan/60)), reply_to_message_id=msg['message_id'])
 
 def AtualizaRegras(msg, chat_id):
     text_file = open("Regras_" + str(chat_id)+".txt", 'w', encoding='utf-8')
@@ -569,7 +618,7 @@ def thread_function(msg):
             firstpass = False
         if firstpass == False:
             content_type, chat_type, chat_id = telepot.glance(msg)
-            print(content_type, chat_type, chat_id, msg['message_id'])
+            print(content_type, chat_type, chat_id, msg['message_id'], msg['from']['id'])
             if chat_type == 'private':
                 if msg['text'] == "/stop" and msg['from']['username'] == 'MekhyW':
                     os._exit(0)
@@ -643,7 +692,8 @@ def thread_function(msg):
                 text_file.close()
                 #END OF CALENDAR SYNC AND BURRBOT CHECK
                 if content_type == "new_chat_member":
-                    new_chat_member(msg, chat_id)
+                    Bemvindo(msg, chat_id)
+                    Limbo(msg, chat_id)
                 elif content_type == "left_chat_member":
                     left_chat_member(msg, chat_id)
                 elif content_type == "voice":
@@ -651,6 +701,7 @@ def thread_function(msg):
                 elif content_type == "audio":
                     pass
                 elif content_type == "photo":
+                    CheckLimbo(msg, chat_id)
                     Upscaler(msg, chat_id)
                 elif content_type == "document":
                     pass
@@ -658,7 +709,7 @@ def thread_function(msg):
                     Sticker_anti_spam(msg, chat_id)
                 elif content_type == "location":
                     Location_to_text(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/") and (Burrbot==False or msg['text'] not in open("Burrbot functions.txt", "r+").read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
+                elif 'text' in msg and msg['text'].startswith("/") and (Burrbot==False or msg['text'] not in open("Burrbot functions.txt", "r+").read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and msg['from']['username'] not in str(cookiebot.getChatAdministrators(chat_id)):
                     CooldownAction(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/escolha"):
                     Escolha(msg, chat_id)
@@ -678,6 +729,10 @@ def thread_function(msg):
                     AddDadJoke(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/addsabedoria"):
                     AddSabedoria(msg, chat_id)
+                elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
+                    AtualizaBemvindo(msg, chat_id)
+                elif 'text' in msg and msg['text'].startswith("/novobemvindo"):
+                    NovoBemvindo(msg, chat_id)
                 elif Burrbot == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
                     AtualizaRegras(msg, chat_id)
                 elif Burrbot == False and 'text' in msg and msg['text'].startswith("/novasregras"):
