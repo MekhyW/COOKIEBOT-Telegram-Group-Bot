@@ -78,8 +78,7 @@ def CheckCaptcha(msg, chat_id):
             captchasettime = (hour*3600) + (minute*60) + (second)
             chat = int(line.split()[0])
             user = int(line.split()[1])
-            if captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                print("KICK NO USUARIO {}".format(user))
+            if chat == chat_id and captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                 cookiebot.kickChatMember(chat, user)
                 cookiebot.sendMessage(chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user))
             elif chat == chat_id and user == msg['from']['id']:
@@ -99,7 +98,6 @@ def SolveCaptcha(msg, chat_id):
         if str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
             cookiebot.sendChatAction(chat_id, 'typing')
             if msg['text'].upper() == line.split()[4]:
-                pass
                 cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!", reply_to_message_id=msg['message_id'])
                 cookiebot.deleteMessage(telepot.message_identifier(msg['reply_to_message']))
             else:
@@ -662,7 +660,28 @@ def IdentificaMusica(msg, chat_id):
         names = names[2:]
         cookiebot.sendAudio(chat_id, results['tracks']['items'][0]['preview_url'], caption=results['tracks']['items'][0]['name'], title=results['tracks']['items'][0]['name'], performer=names, reply_to_message_id=msg['message_id'])
 
+def AddtoStickerDatabase(msg, chat_id):
+    text = open("Sticker_Database.txt", 'r+')
+    lines = text.readlines()
+    text.close()
+    text = open("Sticker_Database.txt", 'w')
+    if len(lines) > 100:
+        i = len(lines) - 100
+    else:
+        i = 0
+    while i < len(lines):
+        if not lines[i] == "\n":
+            text.write(lines[i])
+        i += 1
+    i = 0
+    text.write(msg['sticker']['file_id'] + "\n")
+    text.close()
 
+def ReplySticker(msg, chat_id):
+    text = open("Sticker_Database.txt", 'r+')
+    lines = text.readlines()
+    text.close()
+    cookiebot.sendSticker(chat_id, random.choice(lines).replace("\n", ''), reply_to_message_id=msg['message_id'])
 
 
 
@@ -695,13 +714,39 @@ def thread_function(msg):
                     text_file.write("\n"+msg['from']['username'])
                 text_file.close()
                 #END OF NEW NAME GATHERING
-                #BEGINNING OF CALENDAR SYNC AND BURRBOT CHECK
-                text_file = open("Burrbot chats.txt", "r")
-                if check_if_string_in_file(text_file, str(chat_id)):
-                    Burrbot = True
-                else:
-                    Burrbot = False
+                #BEGGINNING OF CONFIG GATHERING
+                global Burrbot
+                global stickerspamlimit
+                global limbotimespan
+                global captchatimespan
+                global intrometerpercentage
+                global intrometerminimumwords
+                global lowresolutionarea
+                if not os.path.isfile("Config_"+str(chat_id)+".txt"):
+                    open("Config_"+str(chat_id)+".txt", 'a').close()
+                    text_file = open("Config_"+str(chat_id)+".txt", "w")
+                    text_file.write("BURRBOT: 0\nSticker_Spam_Limit: 5\nLimbo_Time: 600\nCaptcha_Time: 300\nIntrometer_Percentage: 1\nIntrometer_minimum_words: 6\nLow_resolution_area: 76800")
+                    text_file.close()
+                text_file = open("Config_"+str(chat_id)+".txt", "r")
+                lines = text_file.readlines()
                 text_file.close()
+                for line in lines:
+                    if line.split()[0] == "BURRBOT:":
+                        Burrbot = int(line.split()[1])
+                    elif line.split()[0] == "Sticker_Spam_Limit:":
+                        stickerspamlimit = int(line.split()[1])
+                    elif line.split()[0] == "Limbo_Time:":
+                        limbotimespan = int(line.split()[1])
+                    elif line.split()[0] == "Captcha_Time:":
+                        captchatimespan = int(line.split()[1])
+                    elif line.split()[0] == "Intrometer_Percentage:":
+                        intrometerpercentage = int(line.split()[1])
+                    elif line.split()[0] == "Intrometer_minimum_words:":
+                        intrometerminimumwords = int(line.split()[1])
+                    elif line.split()[0] == "Low_resolution_area:":
+                        lowresolutionarea = int(line.split()[1])
+                #END OF CONFIG GATHERING
+                #BEGINNING OF CALENDAR SYNC AND BURRBOT CHECK
                 text_file = open(str(chat_id)+".txt", "r")
                 lines = text_file.read().split("\n")
                 text_file.close()
@@ -754,7 +799,7 @@ def thread_function(msg):
                 if content_type == "new_chat_member":
                     Bemvindo(msg, chat_id)
                     Limbo(msg, chat_id)
-                    if Burrbot == False:
+                    if captchatimespan > 0:
                         Captcha(msg, chat_id)
                 elif content_type == "voice":
                     Speech_to_text(msg, chat_id)
@@ -767,6 +812,9 @@ def thread_function(msg):
                     pass
                 elif content_type == "sticker":
                     Sticker_anti_spam(msg, chat_id)
+                    AddtoStickerDatabase(msg, chat_id)
+                    if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
+                        ReplySticker(msg, chat_id)
                 elif content_type == "location":
                     Location_to_text(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/") and (Burrbot==False or msg['text'] not in open("Burrbot functions.txt", "r+").read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and msg['from']['username'] not in str(cookiebot.getChatAdministrators(chat_id)):

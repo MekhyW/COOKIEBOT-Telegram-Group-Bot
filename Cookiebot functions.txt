@@ -71,11 +71,12 @@ yoshiro - yoshiro
 PASSIVAS:
 IA de conversa - Responde mensagens
 IA assistente - Matemática, vocabulário, física, química, weather, etc
+stickers - Responde um sticker com outro sticker
+captcha - Impede que bots mandem mensagens e kicka eles se não provarem que são humanos
 limbo de imagem - Impede que novos membros mandem fotos, por um intervalo
 sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
 speech to text - Transcripta mensagens de voz
 identificador de musica - 6 ou mais palavras, ele manda uma musica correspondente se houver
 location to address - Manda o endereço correspondente a um location
 image upscaler - Amplia imagens de baixa resolução com inteligência artificial
-CUSTOM welcome message
-leaving message
+Custom welcome message

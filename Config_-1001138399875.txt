@@ -1,0 +1,7 @@
+BURRBOT: 0
+Sticker_Spam_Limit: 5
+Limbo_Time: 600
+Captcha_Time: 300
+Intrometer_Percentage: 1
+Intrometer_minimum_words: 6
+Low_resolution_area: 76800
