@@ -10,6 +10,8 @@ import random
 import json
 import requests
 import datetime
+from captcha.image import ImageCaptcha
+captcha = ImageCaptcha()
 import googletrans
 translator = googletrans.Translator()
 from google_images_download import google_images_download
@@ -35,6 +37,7 @@ lastmessagetime = "0"
 sentcooldownmessage = False
 stickerspamlimit = 5
 limbotimespan = 600
+captchatimespan = 300
 intrometerpercentage = 1
 intrometerminimumwords = 6
 lowresolutionarea = 76800
@@ -48,11 +51,64 @@ def check_if_string_in_file(file_name, string_to_search):
 
 
 
+def Captcha(msg, chat_id):
+    caracters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
+    captcha.write(password, 'CAPTCHA.png')
+    text = open("Captcha.txt", 'a+')
+    text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + " " + password + "\n")
+    text.close()
+    photo = open('CAPTCHA.png', 'rb')
+    cookiebot.sendPhoto(chat_id, photo, caption="Robôs não são permitidos nesse chat!\nProve que você não é um respondendo a ESTA mensagem com o código acima", reply_to_message_id=msg['message_id'])
 
+def CheckCaptcha(msg, chat_id):
+    text = open("Captcha.txt", 'r')
+    lines = text.readlines()
+    text.close()
+    text = open("Captcha.txt", 'w+')
+    for line in lines:
+        if len(line.split()) == 5:
+            #CHATID userID 2021-05-13 11:45:29.027116 password
+            year = int(line.split()[2].split("-")[0])
+            month = int(line.split()[2].split("-")[1])
+            day = int(line.split()[2].split("-")[2])
+            hour = int(line.split()[3].split(":")[0])
+            minute = int(line.split()[3].split(":")[1])
+            second = float(line.split()[3].split(":")[2])
+            captchasettime = (hour*3600) + (minute*60) + (second)
+            chat = int(line.split()[0])
+            user = int(line.split()[1])
+            if captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
+                print("KICK NO USUARIO {}".format(user))
+                cookiebot.kickChatMember(chat, user)
+                cookiebot.sendMessage(chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user))
+            elif chat == chat_id and user == msg['from']['id']:
+                cookiebot.deleteMessage(telepot.message_identifier(msg))
+                text.write(line)
+            else:    
+                text.write(line)
+        else:
+            pass
+
+def SolveCaptcha(msg, chat_id):
+    text = open("Captcha.txt", 'r')
+    lines = text.readlines()
+    text.close()
+    text = open("Captcha.txt", 'w+')
+    for line in lines:
+        if str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
+            cookiebot.sendChatAction(chat_id, 'typing')
+            if msg['text'].upper() == line.split()[4]:
+                pass
+                cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!", reply_to_message_id=msg['message_id'])
+                cookiebot.deleteMessage(telepot.message_identifier(msg['reply_to_message']))
+            else:
+                cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.", reply_to_message_id=msg['message_id'])
+                text.write(line)
 
 def Limbo(msg, chat_id):
     text = open("Limbo.txt", 'a+')
-    text.write(str(chat_id) + " " + str(msg['from']['id']) + " " + str(datetime.datetime.now()) + "\n")
+    text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + "\n")
     text.close()
 
 def CheckLimbo(msg, chat_id):
@@ -70,7 +126,7 @@ def CheckLimbo(msg, chat_id):
             minute = int(line.split()[3].split(":")[1])
             second = float(line.split()[3].split(":")[2])
             limbosettime = (hour*3600) + (minute*60) + (second)
-            if str(chat_id) != line.split()[0] or str(msg['from']['id']) != line.split()[1]:
+            if str(chat_id) != line.split()[0] or str(msg['new_chat_participant']['id']) != line.split()[1]:
                 text.write(line)
             elif datetime.date.today() == datetime.date(year, month, day) and limbosettime+limbotimespan >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                 cookiebot.deleteMessage(telepot.message_identifier(msg))
@@ -255,10 +311,12 @@ def AddSabedoria(msg, chat_id):
 
 
 def AtualizaBemvindo(msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
     text_file = open("Welcome_" + str(chat_id)+".txt", 'w', encoding='utf-8')
     text_file.write(msg['text'])
     cookiebot.sendMessage(chat_id, "Mensagem de Boas Vindas atualizada! ✅", reply_to_message_id=msg['message_id'])
     text_file.close()
+    cookiebot.deleteMessage(telepot.message_identifier(msg['reply_to_message']))
 
 def NovoBemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -274,10 +332,12 @@ def Bemvindo(msg, chat_id):
         cookiebot.sendMessage(chat_id, "Seja bem vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo\nUse o /regras para ver as regras do grupo".format(str(limbotimespan/60)), reply_to_message_id=msg['message_id'])
 
 def AtualizaRegras(msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
     text_file = open("Regras_" + str(chat_id)+".txt", 'w', encoding='utf-8')
     text_file.write(msg['text'])
     cookiebot.sendMessage(chat_id, "Mensagem de regras atualizada! ✅", reply_to_message_id=msg['message_id'])
     text_file.close()
+    cookiebot.deleteMessage(telepot.message_identifier(msg['reply_to_message']))
 
 def NovasRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -694,8 +754,8 @@ def thread_function(msg):
                 if content_type == "new_chat_member":
                     Bemvindo(msg, chat_id)
                     Limbo(msg, chat_id)
-                elif content_type == "left_chat_member":
-                    left_chat_member(msg, chat_id)
+                    if Burrbot == False:
+                        Captcha(msg, chat_id)
                 elif content_type == "voice":
                     Speech_to_text(msg, chat_id)
                 elif content_type == "audio":
@@ -793,10 +853,14 @@ def thread_function(msg):
                     Quem(msg, chat_id)
                 elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, Responda ESTA mensagem com um evento e data\n\nExemplo: 'Comissões do Ark 31/02/2077 06:21\n(horário de Brasília pls)'" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
                     EventoAdicionado(msg, chat_id)
+                elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Robôs não são permitidos nesse chat!\nProve que você não é um respondendo a ESTA mensagem com o código acima":
+                    SolveCaptcha(msg, chat_id)
                 elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text']):
                     InteligenciaArtificial(msg, chat_id)
                 elif 'text' in msg and len(msg['text'].split()) >= intrometerminimumwords:
                     IdentificaMusica(msg, chat_id)
+                else:
+                    CheckCaptcha(msg, chat_id)
                 #BEGGINNING OF COOLDOWN UPDATES
                 if 'text' in msg:
                     if float(lastmessagetime)+60 < ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
