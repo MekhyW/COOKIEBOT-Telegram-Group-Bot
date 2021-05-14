@@ -1,4 +1,4 @@
-BURRBOT: 0
+BURRBOT: 1
 Sticker_Spam_Limit: 5
 Limbo_Time: 600
 Captcha_Time: 300
