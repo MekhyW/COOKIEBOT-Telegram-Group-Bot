@@ -665,8 +665,8 @@ def AddtoStickerDatabase(msg, chat_id):
     lines = text.readlines()
     text.close()
     text = open("Sticker_Database.txt", 'w')
-    if len(lines) > 100:
-        i = len(lines) - 100
+    if len(lines) > 1000:
+        i = len(lines) - 1000
     else:
         i = 0
     while i < len(lines):
