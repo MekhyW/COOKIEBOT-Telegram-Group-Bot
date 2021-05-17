@@ -353,33 +353,48 @@ def Regras(msg, chat_id):
 def RemoveEvento(msg, chat_id):
     if msg['text'] == "/removeevento" or msg['text'] == "/removeevento@CookieMWbot":
         cookiebot.sendChatAction(chat_id, 'typing')
-        cookiebot.sendMessage(chat_id, "Se vc é um admin, Mande o nome do evento pra remover\nExemplo: /removeevento Invasão da área 51", reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, "Se vc é um admin, Mande o ID do evento pra remover\nExemplo: /removeevento 69420", reply_to_message_id=msg['message_id'])
     elif msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
         cookiebot.sendChatAction(chat_id, 'typing')
-        text_file = open(str(chat_id)+".txt", "r")
+        text_file = open("Events.txt", "r")
         lines = text_file.read().split("\n")
         text_file.close()
-        text_file = open(str(chat_id)+".txt", "w")
+        text_file = open("Events.txt", "w")
+        query = msg['text'].replace("/removeevento ", '')
         found = False
         for line in lines:
-            query = msg['text'].replace("/removeevento", '')
-            if line.startswith("EVENT") and (query in line or query.capitalize() in line):
-                cookiebot.sendMessage(chat_id, "Evento "+line.replace("EVENT", '')+" Removido!", reply_to_message_id=msg['message_id'])
-                found = True
-                break
-            else:
-                text_file.write(line+"\n")
+            if len(line.split()) >= 6:
+                if query == line.split()[1]:
+                    if "REPEAT" not in line:
+                        cookiebot.sendMessage(chat_id, "Evento com ID "+line.split()[1]+" Removido!", reply_to_message_id=msg['message_id'])
+                    found = True
+                else:
+                    text_file.write(line+"\n")
         if found == False:
-            cookiebot.sendMessage(chat_id, "Não foi possível encontrar o evento "+line.replace("EVENT", ''), reply_to_message_id=msg['message_id'])
+            cookiebot.sendMessage(chat_id, "Não foi possível encontrar o evento com ID "+query, reply_to_message_id=msg['message_id'])
         text_file.close()
 
 def AddEvento(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "Se vc é um admin, Responda ESTA mensagem com um evento e data\n\nExemplo: 'Comissões do Ark 31/02/2077 06:21\n(horário de Brasília pls)'", reply_to_message_id=msg['message_id'])
+    if not 'reply_to_message' in msg:
+        cookiebot.sendMessage(chat_id, "Se vc é um admin, Responda a uma mensagem e diga uma data e hora\n\nExemplo: '31/02/2077 16:21'", reply_to_message_id=msg['message_id'])
+    elif msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
+        try:
+            time = datetime.datetime.strptime(msg['text'].replace("/addevento ", ''), '%d/%m/%Y %H:%M')
+            text = open("Events.txt", 'a+')
+            event = str(chat_id) + " " + str(msg['reply_to_message']['message_id']) + " " + str(datetime.datetime.now()) + " " + str(time) + "\n"
+            text.write(event)
+            while not str(time - datetime.datetime.now() - datetime.timedelta(hours=24)).startswith("-"):
+                time = time - datetime.timedelta(hours=24)
+                event = str(chat_id) + " " + str(msg['reply_to_message']['message_id']) + " " + str(datetime.datetime.now()) + " " + str(time) + " REPEAT" + "\n"
+                text.write(event)
+            cookiebot.sendMessage(chat_id, "Evento com ID {} adicionado!".format(str(msg['reply_to_message']['message_id'])), reply_to_message_id=msg['message_id'])
+        except:
+            cookiebot.sendMessage(chat_id, "Formato incorreto, deveria ser /addevento DIA/MES/ANO HORA:MINUTO", reply_to_message_id=msg['message_id'])
 
 def Eventos(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    text_file = open(str(chat_id)+".txt", "r+")
+    text_file = open("Events.txt", "r+")
     lines = text_file.read().split("\n")
     events = []
     dates = []
@@ -394,19 +409,39 @@ def Eventos(msg, chat_id):
                     sortedlist[i] = sortedlist[i+1]
                     sortedlist[i+1] = temp
     for line in lines:
-        if line.startswith("EVENT"):
+        if len(line.split()) == 6:
             events.append(line)
-            eventarr = line.split(" ")
-            day, month, year = line.split(" ")[len(eventarr)-2].split("/")
+            year, month, day = line.split(" ")[4].split("-")
             dates.append([year, month, day])
     text_file.close()
     bubbleSort(dates, events)
     answer = "📅 PROXIMOS EVENTOS REGISTRADOS: 📅\n\n"
     x = 1
     for event in events:
-        answer += (str(x) + ") " + event.replace("EVENT ", '') + "\n")
+        answer += (str(x) + ") " + "ID " + event.split()[1] + " --> " + event.split()[4] + " " + event.split()[5] + "\n")
         x += 1
     cookiebot.sendMessage(chat_id, answer, reply_to_message_id=msg['message_id'])
+
+def CheckEventos(msg, chat_id):
+    text = open("Events.txt", 'r+')
+    lines = text.readlines()
+    text.close()
+    text = open("Events.txt", 'w')
+    for line in lines:
+        if len(line.split()) >= 6:
+            year, month, day = line.split()[4].split("-")
+            hour, minute, second = line.split()[5].split(":")
+            if datetime.datetime.now() < datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second)):
+                text.write(line+"\n")
+            else:
+                for file in os.listdir():
+                    if file.startswith("-"):
+                        chatid = file.split(".txt")[0]
+                        if chatid.split("-")[1].isdigit():
+                            hojeID = cookiebot.forwardMessage(chatid, line.split()[0], line.split()[1])['message_id']
+                            if chatid == line.split()[0] and "REPEAT" not in line:
+                                cookiebot.pinChatMessage(chatid, hojeID, True)
+    text.close()
 
 def NaoClique(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -610,22 +645,6 @@ def Quem(msg, chat_id):
     cookiebot.sendMessage(chat_id, LocucaoAdverbial+"@"+target, reply_to_message_id=msg['message_id'])
     text_file.close()
 
-def EventoAdicionado(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    Event = msg['text'].split(" ")
-    if len(Event) >= 3:
-        Date = Event[len(Event)-2].split("/")
-        Time = Event[len(Event)-1].split(":")
-        if len(Date) == 3 and len(Time) == 2 and Date[0].isnumeric() and Date[1].isnumeric() and Date[2].isnumeric() and Time[0].isnumeric() and Time[1].isnumeric():
-            text_file = open(str(chat_id)+".txt", "a")
-            text_file.write("\n"+"EVENT "+msg['text'])
-            text_file.close()
-            cookiebot.sendMessage(chat_id, "Evento Adicionado! ✅\nUse /eventos para checar", reply_to_message_id=msg['message_id'])
-        else:
-            cookiebot.sendMessage(chat_id, "Formato inválido", reply_to_message_id=msg['message_id'])
-    else:
-        cookiebot.sendMessage(chat_id, "Faltam informações", reply_to_message_id=msg['message_id'])
-
 def InteligenciaArtificial(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     if "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text']:
@@ -754,19 +773,6 @@ def thread_function(msg):
                 for line in lines:
                     if line == '':
                         pass
-                    elif line.startswith("EVENT"):
-                        eventarr = line.split(" ")
-                        day, month, year = line.split(" ")[len(eventarr)-2].split("/")
-                        if datetime.date.today() < datetime.date(int(year), int(month), int(day)):
-                            text_file.write(line+"\n")
-                        elif datetime.date.today() == datetime.date(int(year), int(month), int(day)):
-                            hojeID = cookiebot.sendMessage(chat_id, "FALTA POUCO!\n--> "+line.replace("EVENT ", '')+' 🎉')['message_id']
-                            cookiebot.pinChatMessage(chat_id, hojeID, True)
-                            for file in os.listdir():
-                                if file.startswith("-"):
-                                    chatid = file.split(".txt")[0]
-                                    if chatid.split("-")[1].isdigit():
-                                        cookiebot.forwardMessage(chatid, chat_id, hojeID)
                     elif line.startswith(msg['from']['username']):
                         global lastmessagedate
                         global lastmessagetime
@@ -899,8 +905,6 @@ def thread_function(msg):
                     QualquerCoisa(msg, chat_id)
                 elif 'text' in msg and (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
                     Quem(msg, chat_id)
-                elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, Responda ESTA mensagem com um evento e data\n\nExemplo: 'Comissões do Ark 31/02/2077 06:21\n(horário de Brasília pls)'" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
-                    EventoAdicionado(msg, chat_id)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Robôs não são permitidos nesse chat!\nProve que você não é um respondendo a ESTA mensagem com o código acima":
                     SolveCaptcha(msg, chat_id)
                 elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text']):
@@ -908,6 +912,7 @@ def thread_function(msg):
                 elif 'text' in msg and len(msg['text'].split()) >= intrometerminimumwords:
                     IdentificaMusica(msg, chat_id)
                 else:
+                    CheckEventos(msg, chat_id)
                     CheckCaptcha(msg, chat_id)
                 #BEGGINNING OF COOLDOWN UPDATES
                 if 'text' in msg:
