@@ -443,16 +443,6 @@ def CheckEventos(msg, chat_id):
                                 cookiebot.pinChatMessage(chatid, hojeID, True)
     text.close()
 
-def NaoClique(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    number = random.randint(1, 3)
-    if number == 1:
-        cookiebot.sendMessage(chat_id, "VOCÊ SÓ TINHA UMA MISSÃO CARA", reply_to_message_id=msg['message_id'])
-    elif number == 2:
-        cookiebot.sendMessage(chat_id, "VOCÊ É A VERGONHA DA FAMILIA", reply_to_message_id=msg['message_id'])
-    elif number == 3:
-        cookiebot.sendMessage(chat_id, "VOCÊ FALHOU MISERAVELMENTE", reply_to_message_id=msg['message_id'])
-
 def TaVivo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "Estou vivo (não recomendo)\n\nPing enviado em:\n" + str(datetime.datetime.now()))
@@ -861,8 +851,6 @@ def thread_function(msg):
                     Eventos(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/nada"):
                     pass
-                elif 'text' in msg and msg['text'].startswith("/naoclique"):
-                    NaoClique(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/tavivo"):
                     TaVivo(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/everyone"):
