@@ -1,0 +1,4 @@
+["fursuit", "evento"] > Não precisa de fursuit pra ir em eventos da furry fandom
+["fursuit", "eventos"] > Não precisa de fursuit pra ir em eventos da furry fandom
+["quando", "bff"] > A próxima BFF ocorrerá entre os dias 13 e 15 de maio de 2022!!
+["qnd", "bff"] > A próxima BFF ocorrerá entre os dias 13 e 15 de maio de 2022!!

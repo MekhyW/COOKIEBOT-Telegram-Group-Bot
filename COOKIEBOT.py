@@ -2,7 +2,6 @@ DeepaiTOKEN = ''
 spotipyCLIENT_ID = ''
 spotipyCLIENT_SECRET = ''
 WolframAPP_ID = ''
-IBMWATSONTOKEN = ''
 cookiebotTOKEN = ''
 import os
 import subprocess
@@ -21,9 +20,7 @@ import spotipy
 import speech_recognition
 import geopy
 import wolframalpha
-from ibm_watson import NaturalLanguageUnderstandingV1
-from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
-from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+import unidecode
 import telepot
 from telepot.loop import MessageLoop
 captcha = ImageCaptcha()
@@ -32,8 +29,6 @@ google_images_response = google_images_download.googleimagesdownload()
 spotify = spotipy.Spotify(spotipy.oauth2.SpotifyClientCredentials(client_id=spotipyCLIENT_ID, client_secret=spotipyCLIENT_SECRET).get_access_token())
 recognizer = speech_recognition.Recognizer()
 WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
-service = NaturalLanguageUnderstandingV1(version='2018-03-16', authenticator=IAMAuthenticator(IBMWATSONTOKEN))
-service.set_service_url('https://gateway.watsonplatform.net/natural-language-understanding/api')
 cookiebot = telepot.Bot(cookiebotTOKEN)
 threads = list()
 firstpass = True
@@ -643,6 +638,25 @@ def Quem(msg, chat_id):
     cookiebot.sendMessage(chat_id, LocucaoAdverbial+"@"+target, reply_to_message_id=msg['message_id'])
     text_file.close()
 
+def OnSay(msg, chat_id):
+    if len(msg['text'].split()) > 3:
+        keyword_texts = []
+        for word in msg['text'].split():
+            keyword_texts.append(unidecode.unidecode(''.join(filter(str.isalnum, word.lower()))))
+        print(keyword_texts)
+        text_file = open("Onsay_Dictionary.txt", 'r', encoding='utf8')
+        lines = text_file.readlines()
+        text_file.close()
+        for line in lines:
+            if len(line.split(" > ")) == 2:
+                queries = json.loads(line.split(" > ")[0])
+                answer = line.split(" > ")[1]
+                if set(queries).issubset(keyword_texts):
+                    cookiebot.sendChatAction(chat_id, 'typing')
+                    cookiebot.sendMessage(chat_id, answer, reply_to_message_id=msg['message_id'])
+                    return True
+    return False
+
 def InteligenciaArtificial(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     if "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text']:
@@ -904,13 +918,16 @@ def thread_function(msg):
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)):
                     SolveCaptcha(msg, chat_id)
                 elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text']):
-                    InteligenciaArtificial(msg, chat_id)
+                    if not OnSay(msg, chat_id):
+                        InteligenciaArtificial(msg, chat_id)
                 elif 'text' in msg and len(msg['text'].split()) >= intrometerminimumwords:
-                    IdentificaMusica(msg, chat_id)
-                else:
+                    if not OnSay(msg, chat_id):
+                        IdentificaMusica(msg, chat_id)
+                elif 'text' in msg:
                     CheckEventos(msg, chat_id)
                     SolveCaptcha(msg, chat_id)
                     CheckCaptcha(msg, chat_id)
+                    OnSay(msg, chat_id)
                 #BEGGINNING OF COOLDOWN UPDATES
                 if 'text' in msg:
                     if float(lastmessagetime)+60 < ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
