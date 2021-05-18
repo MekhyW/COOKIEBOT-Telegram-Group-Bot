@@ -1,8 +1,9 @@
-cookiebotTOKEN = ''
 DeepaiTOKEN = ''
-WolframAPP_ID = ''
 spotipyCLIENT_ID = ''
 spotipyCLIENT_SECRET = ''
+WolframAPP_ID = ''
+IBMWATSONTOKEN = ''
+cookiebotTOKEN = ''
 import os
 import subprocess
 import sys
@@ -10,26 +11,31 @@ import random
 import json
 import requests
 import datetime
-from captcha.image import ImageCaptcha
-captcha = ImageCaptcha()
-import googletrans
-translator = googletrans.Translator()
-from google_images_download import google_images_download
-google_images_response = google_images_download.googleimagesdownload()
-import spotipy
-spotify = spotipy.Spotify(spotipy.oauth2.SpotifyClientCredentials(client_id=spotipyCLIENT_ID, client_secret=spotipyCLIENT_SECRET).get_access_token())
-import speech_recognition
-recognizer = speech_recognition.Recognizer()
-import geopy
-import wolframalpha
-WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
-import telepot
-from telepot.loop import MessageLoop
-cookiebot = telepot.Bot(cookiebotTOKEN)
+import time
 import logging
 import threading
+from captcha.image import ImageCaptcha
+import googletrans
+from google_images_download import google_images_download
+import spotipy
+import speech_recognition
+import geopy
+import wolframalpha
+from ibm_watson import NaturalLanguageUnderstandingV1
+from ibm_watson.natural_language_understanding_v1 import Features, EntitiesOptions, KeywordsOptions
+from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
+import telepot
+from telepot.loop import MessageLoop
+captcha = ImageCaptcha()
+translator = googletrans.Translator()
+google_images_response = google_images_download.googleimagesdownload()
+spotify = spotipy.Spotify(spotipy.oauth2.SpotifyClientCredentials(client_id=spotipyCLIENT_ID, client_secret=spotipyCLIENT_SECRET).get_access_token())
+recognizer = speech_recognition.Recognizer()
+WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
+service = NaturalLanguageUnderstandingV1(version='2018-03-16', authenticator=IAMAuthenticator(IBMWATSONTOKEN))
+service.set_service_url('https://gateway.watsonplatform.net/natural-language-understanding/api')
+cookiebot = telepot.Bot(cookiebotTOKEN)
 threads = list()
-import time
 firstpass = True
 start_time = time.time()
 lastmessagedate = "1-1-1"
@@ -52,14 +58,14 @@ def check_if_string_in_file(file_name, string_to_search):
 
 
 def Captcha(msg, chat_id):
-    caracters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    caracters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '6', '7', '8', '9']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
     captcha.write(password, 'CAPTCHA.png')
     text = open("Captcha.txt", 'a+')
     text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + " " + password + "\n")
     text.close()
     photo = open('CAPTCHA.png', 'rb')
-    cookiebot.sendPhoto(chat_id, photo, caption="Robôs não são permitidos nesse chat!\nProve que você não é um respondendo a ESTA mensagem com o código acima", reply_to_message_id=msg['message_id'])
+    cookiebot.sendPhoto(chat_id, photo, caption="Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)), reply_to_message_id=msg['message_id'])
 
 def CheckCaptcha(msg, chat_id):
     text = open("Captcha.txt", 'r')
@@ -97,12 +103,14 @@ def SolveCaptcha(msg, chat_id):
     for line in lines:
         if str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
             cookiebot.sendChatAction(chat_id, 'typing')
-            if msg['text'].upper() == line.split()[4]:
+            if "".join(msg['text'].upper().split()) == line.split()[4]:
                 cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!", reply_to_message_id=msg['message_id'])
                 cookiebot.deleteMessage(telepot.message_identifier(msg['reply_to_message']))
             else:
                 cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.", reply_to_message_id=msg['message_id'])
                 text.write(line)
+        else:
+            text.write(line)
 
 def Limbo(msg, chat_id):
     text = open("Limbo.txt", 'a+')
@@ -893,7 +901,7 @@ def thread_function(msg):
                     QualquerCoisa(msg, chat_id)
                 elif 'text' in msg and (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
                     Quem(msg, chat_id)
-                elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Robôs não são permitidos nesse chat!\nProve que você não é um respondendo a ESTA mensagem com o código acima":
+                elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)):
                     SolveCaptcha(msg, chat_id)
                 elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text']):
                     InteligenciaArtificial(msg, chat_id)
@@ -901,6 +909,7 @@ def thread_function(msg):
                     IdentificaMusica(msg, chat_id)
                 else:
                     CheckEventos(msg, chat_id)
+                    SolveCaptcha(msg, chat_id)
                     CheckCaptcha(msg, chat_id)
                 #BEGGINNING OF COOLDOWN UPDATES
                 if 'text' in msg:
