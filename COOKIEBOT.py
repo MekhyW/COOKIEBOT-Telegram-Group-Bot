@@ -693,6 +693,7 @@ def ReplySticker(msg, chat_id):
     cookiebot.sendSticker(chat_id, random.choice(lines).replace("\n", ''), reply_to_message_id=msg['message_id'])
 
 def Configurar(msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
     if msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
         text = open("Config_"+str(chat_id)+".txt", 'r')
         variables = text.read()
@@ -706,6 +707,7 @@ def Configurar(msg, chat_id):
         cookiebot.sendMessage(chat_id, "Apenas admins podem configurar o bot!", reply_to_message_id=msg['message_id'])
 
 def ConfigurarSettar(msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
     if msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
         variable_to_be_altered = ""
         if msg['reply_to_message']['text'].startswith("Use 0 para não interferir com o burrbot caso ele esteja no grupo, ou 1 se ele não estiver."):
@@ -971,6 +973,8 @@ def handle(msg):
     messagehandle.start()
 
 def handle_query(msg):
+    cookiebot.sendChatAction(msg['message']['reply_to_message']['chat']['id'], 'typing')
+    cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     cookiebot.answerCallbackQuery(query_id, text='Agora marque a mensagem com o novo valor')
     if query_data == 'a':
