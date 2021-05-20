@@ -709,32 +709,35 @@ def Configurar(msg, chat_id):
 def ConfigurarSettar(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     if msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
-        variable_to_be_altered = ""
-        if msg['reply_to_message']['text'].startswith("Use 0 para não interferir com o burrbot caso ele esteja no grupo, ou 1 se ele não estiver."):
-            variable_to_be_altered = "BURRBOT"
-        elif msg['reply_to_message']['text'].startswith("Este é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo."):
-            variable_to_be_altered = "Sticker_Spam_Limit"
-        elif msg['reply_to_message']['text'].startswith("Este é o tempo pelo qual novos usuários no grupo não poderão mandar imagens (o bot apaga automaticamente)."):
-            variable_to_be_altered = "Limbo_Time"
-        elif msg['reply_to_message']['text'].startswith("Este é o tempo que novos usuários dispõem para resolver o Captcha. USE 0 PARA DESLIGAR O CAPTCHA!"):
-            variable_to_be_altered = "Captcha_Time"
-        elif msg['reply_to_message']['text'].startswith("Esta é a porcentagem de chance em porcentagem de eu responder a uma mensagem aleatoriamente, se ela for grande o suficiente."):
-            variable_to_be_altered = "Intrometer_Percentage"
-        elif msg['reply_to_message']['text'].startswith("Este é o mínimo de termos necessários em uma mensagem para eu responder de forma aleatória."):
-            variable_to_be_altered = "Intrometer_minimum_words"
-        elif msg['reply_to_message']['text'].startswith("Esta é a área máxima, em píxeis quadrados, que eu vou levar em consideração ao ampliar imagens de baixa resolução."):
-            variable_to_be_altered = "Low_resolution_area"
-        text_file = open("Config_"+str(chat_id)+".txt", 'r')
-        lines = text_file.readlines()
-        text_file.close()
-        text_file = open("Config_"+str(chat_id)+".txt", 'w')
-        for line in lines:
-            if variable_to_be_altered in line:
-                text_file.write(variable_to_be_altered + ": " + msg['text'] + "\n")
-                cookiebot.sendMessage(chat_id, "Variável configurada! ✔️", reply_to_message_id=msg['message_id'])
-            elif len(line.split()) > 1:
-                text_file.write(line)
-        text_file.close()
+        if msg['text'].isdigit():
+            variable_to_be_altered = ""
+            if msg['reply_to_message']['text'].startswith("Use 0 para não interferir com o burrbot caso ele esteja no grupo, ou 1 se ele não estiver."):
+                variable_to_be_altered = "BURRBOT"
+            elif msg['reply_to_message']['text'].startswith("Este é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo."):
+                variable_to_be_altered = "Sticker_Spam_Limit"
+            elif msg['reply_to_message']['text'].startswith("Este é o tempo pelo qual novos usuários no grupo não poderão mandar imagens (o bot apaga automaticamente)."):
+                variable_to_be_altered = "Limbo_Time"
+            elif msg['reply_to_message']['text'].startswith("Este é o tempo que novos usuários dispõem para resolver o Captcha. USE 0 PARA DESLIGAR O CAPTCHA!"):
+                variable_to_be_altered = "Captcha_Time"
+            elif msg['reply_to_message']['text'].startswith("Esta é a porcentagem de chance em porcentagem de eu responder a uma mensagem aleatoriamente, se ela for grande o suficiente."):
+                variable_to_be_altered = "Intrometer_Percentage"
+            elif msg['reply_to_message']['text'].startswith("Este é o mínimo de termos necessários em uma mensagem para eu responder de forma aleatória."):
+                variable_to_be_altered = "Intrometer_minimum_words"
+            elif msg['reply_to_message']['text'].startswith("Esta é a área máxima, em píxeis quadrados, que eu vou levar em consideração ao ampliar imagens de baixa resolução."):
+                variable_to_be_altered = "Low_resolution_area"
+            text_file = open("Config_"+str(chat_id)+".txt", 'r')
+            lines = text_file.readlines()
+            text_file.close()
+            text_file = open("Config_"+str(chat_id)+".txt", 'w')
+            for line in lines:
+                if variable_to_be_altered in line:
+                    text_file.write(variable_to_be_altered + ": " + msg['text'] + "\n")
+                    cookiebot.sendMessage(chat_id, "Variável configurada! ✔️", reply_to_message_id=msg['message_id'])
+                elif len(line.split()) > 1:
+                    text_file.write(line)
+            text_file.close()
+        else:
+            cookiebot.sendMessage(chat_id, "Apenas números naturais são aceitos!", reply_to_message_id=msg['message_id'])
     else:
         cookiebot.sendMessage(chat_id, "Apenas admins podem configurar o bot!", reply_to_message_id=msg['message_id'])
 
@@ -936,7 +939,7 @@ def thread_function(msg):
                     Quem(msg, chat_id)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)):
                     SolveCaptcha(msg, chat_id)
-                elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text']):
+                elif 'text' in msg and not msg['text'].startswith("@") and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text']):
                     if not OnSay(msg, chat_id):
                         InteligenciaArtificial(msg, chat_id)
                 elif 'text' in msg and len(msg['text'].split()) >= intrometerminimumwords:
