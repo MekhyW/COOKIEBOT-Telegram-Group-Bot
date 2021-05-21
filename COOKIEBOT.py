@@ -55,7 +55,7 @@ def check_if_string_in_file(file_name, string_to_search):
 
 
 def Captcha(msg, chat_id):
-    caracters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '6', '7', '8', '9']
+    caracters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
     captcha.write(password, 'CAPTCHA.png')
     text = open("Captcha.txt", 'a+')
@@ -63,6 +63,7 @@ def Captcha(msg, chat_id):
     text.close()
     photo = open('CAPTCHA.png', 'rb')
     cookiebot.sendPhoto(chat_id, photo, caption="Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)), reply_to_message_id=msg['message_id'])
+    photo.close()
 
 def CheckCaptcha(msg, chat_id):
     text = open("Captcha.txt", 'r')
@@ -70,7 +71,7 @@ def CheckCaptcha(msg, chat_id):
     text.close()
     text = open("Captcha.txt", 'w+')
     for line in lines:
-        if len(line.split()) == 5:
+        if len(line.split()) >= 5:
             #CHATID userID 2021-05-13 11:45:29.027116 password
             year = int(line.split()[2].split("-")[0])
             month = int(line.split()[2].split("-")[1])
@@ -91,6 +92,7 @@ def CheckCaptcha(msg, chat_id):
                 text.write(line)
         else:
             pass
+    text.close()
 
 def SolveCaptcha(msg, chat_id):
     text = open("Captcha.txt", 'r')
@@ -98,16 +100,18 @@ def SolveCaptcha(msg, chat_id):
     text.close()
     text = open("Captcha.txt", 'w+')
     for line in lines:
-        if str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
-            cookiebot.sendChatAction(chat_id, 'typing')
-            if "".join(msg['text'].upper().split()) == line.split()[4]:
-                cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!", reply_to_message_id=msg['message_id'])
-                cookiebot.deleteMessage(telepot.message_identifier(msg['reply_to_message']))
+        if len(line.split()) >= 5:
+            if str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
+                cookiebot.sendChatAction(chat_id, 'typing')
+                if "".join(msg['text'].upper().split()) == line.split()[4]:
+                    cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!", reply_to_message_id=msg['message_id'])
+                    cookiebot.deleteMessage(telepot.message_identifier(msg['reply_to_message']))
+                else:
+                    cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.", reply_to_message_id=msg['message_id'])
+                    text.write(line)
             else:
-                cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.", reply_to_message_id=msg['message_id'])
                 text.write(line)
-        else:
-            text.write(line)
+    text.close()
 
 def Limbo(msg, chat_id):
     text = open("Limbo.txt", 'a+')
@@ -746,7 +750,6 @@ def ConfigurarSettar(msg, chat_id):
 
 #MAIN THREAD FUNCTION
 def thread_function(msg):
-    try:
         global firstpass
         if time.time() - start_time > 3:
             firstpass = False
@@ -754,7 +757,7 @@ def thread_function(msg):
             content_type, chat_type, chat_id = telepot.glance(msg)
             print(content_type, chat_type, chat_id, msg['message_id'], msg['from']['id'])
             if chat_type == 'private':
-                if msg['text'] == "/stop" and msg['from']['username'] == 'MekhyW':
+                if msg['text'] == "/stop" and 'username' in msg['from'] and msg['from']['username'] == 'MekhyW':
                     os._exit(0)
                 cookiebot.sendMessage(chat_id, "Olá, sou o Cookiebot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando um bot com proteção para grupos e administração, use o @burrsobot\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
             elif "MekhyW" not in str(cookiebot.getChatAdministrators(chat_id)):
@@ -859,7 +862,7 @@ def thread_function(msg):
                         ReplySticker(msg, chat_id)
                 elif content_type == "location":
                     Location_to_text(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/") and (Burrbot==False or msg['text'] not in open("Burrbot functions.txt", "r+").read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and msg['from']['username'] not in str(cookiebot.getChatAdministrators(chat_id)):
+                elif 'text' in msg and msg['text'].startswith("/") and (Burrbot==False or msg['text'] not in open("Burrbot functions.txt", "r+").read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and 'username' in msg['from'] and msg['from']['username'] not in str(cookiebot.getChatAdministrators(chat_id)):
                     CooldownAction(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/escolha"):
                     Escolha(msg, chat_id)
@@ -965,8 +968,6 @@ def thread_function(msg):
                             text_file.write(line)
                     text_file.close()
                 #END OF COOLDOWN UPDATES
-    except:
-        pass
 
 #MESSAGE HANDLER
 def handle(msg):
