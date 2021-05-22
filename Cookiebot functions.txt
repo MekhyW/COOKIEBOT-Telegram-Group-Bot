@@ -13,7 +13,6 @@ cheiro - DESATIVADO COM O BURRBOT
 eventos - Proximos eventos registrados em mim
 addevento - Criar um evento
 removeevento - Deletar um evento
-fodase - Xingo o autor de uma mensagem
 startup - Qual o slogan da sua startup
 numero - Falo fatos sobre um numero
 insulto - Mando a real
