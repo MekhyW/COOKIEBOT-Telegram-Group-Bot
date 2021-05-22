@@ -738,7 +738,6 @@ def ConfigurarSettar(msg, chat_id):
 
 #MAIN THREAD FUNCTION
 def thread_function(msg):
-    try:
         global firstpass
         if time.time() - start_time > 3:
             firstpass = False
@@ -955,8 +954,6 @@ def thread_function(msg):
                             text_file.write(line)
                     text_file.close()
                 #END OF COOLDOWN UPDATES
-    except:
-        pass
 
 #MESSAGE HANDLER
 def handle(msg):
