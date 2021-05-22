@@ -37,6 +37,7 @@ firstpass = True
 start_time = time.time()
 lastmessagedate = "1-1-1"
 lastmessagetime = "0"
+FurBots = 0
 sentcooldownmessage = False
 stickerspamlimit = 5
 limbotimespan = 600
