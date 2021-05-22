@@ -691,7 +691,7 @@ def Configurar(msg, chat_id):
         variables = text.read()
         text.close()
         cookiebot.sendMessage(chat_id,"Configuração atual:\n\n" + variables + '\n\nEscolha a variável que vc gostaria de alterar', reply_to_message_id=msg['message_id'], reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-                                   [InlineKeyboardButton(text="Burrbot",callback_data='a'), InlineKeyboardButton(text="Limite Stickers",callback_data='b'),InlineKeyboardButton(text="🕒 Limbo",callback_data='c'), InlineKeyboardButton(text="🕒 CAPTCHA",callback_data='d')],
+                                   [InlineKeyboardButton(text="FurBots",callback_data='a'), InlineKeyboardButton(text="Limite Stickers",callback_data='b'),InlineKeyboardButton(text="🕒 Limbo",callback_data='c'), InlineKeyboardButton(text="🕒 CAPTCHA",callback_data='d')],
                                    [InlineKeyboardButton(text="% Intrometer",callback_data='e'), InlineKeyboardButton(text="Palavras Intrometer",callback_data='f'), InlineKeyboardButton(text="Área Ampliar 🖼️",callback_data='g')]
                                ]
                            ))
@@ -703,8 +703,8 @@ def ConfigurarSettar(msg, chat_id):
     if msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
         if msg['text'].isdigit():
             variable_to_be_altered = ""
-            if msg['reply_to_message']['text'].startswith("Use 0 para não interferir com o burrbot caso ele esteja no grupo, ou 1 se ele não estiver."):
-                variable_to_be_altered = "BURRBOT"
+            if msg['reply_to_message']['text'].startswith("Use 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nResponda ESTA mensagem com o novo valor da variável"):
+                variable_to_be_altered = "FurBots"
             elif msg['reply_to_message']['text'].startswith("Este é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo."):
                 variable_to_be_altered = "Sticker_Spam_Limit"
             elif msg['reply_to_message']['text'].startswith("Este é o tempo pelo qual novos usuários no grupo não poderão mandar imagens (o bot apaga automaticamente)."):
@@ -738,6 +738,7 @@ def ConfigurarSettar(msg, chat_id):
 
 #MAIN THREAD FUNCTION
 def thread_function(msg):
+    try:
         global firstpass
         if time.time() - start_time > 3:
             firstpass = False
@@ -761,7 +762,7 @@ def thread_function(msg):
                 text_file.close()
                 #END OF NEW NAME GATHERING
                 #BEGGINNING OF CONFIG GATHERING
-                global Burrbot
+                global FurBots
                 global stickerspamlimit
                 global limbotimespan
                 global captchatimespan
@@ -771,14 +772,14 @@ def thread_function(msg):
                 if not os.path.isfile("Config_"+str(chat_id)+".txt"):
                     open("Config_"+str(chat_id)+".txt", 'a').close()
                     text_file = open("Config_"+str(chat_id)+".txt", "w")
-                    text_file.write("BURRBOT: 0\nSticker_Spam_Limit: 5\nLimbo_Time: 600\nCaptcha_Time: 300\nIntrometer_Percentage: 1\nIntrometer_minimum_words: 6\nLow_resolution_area: 76800")
+                    text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nLimbo_Time: 600\nCaptcha_Time: 300\nIntrometer_Percentage: 1\nIntrometer_minimum_words: 6\nLow_resolution_area: 76800")
                     text_file.close()
                 text_file = open("Config_"+str(chat_id)+".txt", "r")
                 lines = text_file.readlines()
                 text_file.close()
                 for line in lines:
-                    if line.split()[0] == "BURRBOT:":
-                        Burrbot = int(line.split()[1])
+                    if line.split()[0] == "FurBots:":
+                        FurBots = int(line.split()[1])
                     elif line.split()[0] == "Sticker_Spam_Limit:":
                         stickerspamlimit = int(line.split()[1])
                     elif line.split()[0] == "Limbo_Time:":
@@ -792,7 +793,7 @@ def thread_function(msg):
                     elif line.split()[0] == "Low_resolution_area:":
                         lowresolutionarea = int(line.split()[1])
                 #END OF CONFIG GATHERING
-                #BEGINNING OF CALENDAR SYNC AND BURRBOT CHECK
+                #BEGINNING OF CALENDAR SYNC AND FURBOTS CHECK
                 text_file = open(str(chat_id)+".txt", "r")
                 lines = text_file.read().split("\n")
                 text_file.close()
@@ -828,7 +829,7 @@ def thread_function(msg):
                     else:
                         text_file.write(line+"\n")
                 text_file.close()
-                #END OF CALENDAR SYNC AND BURRBOT CHECK
+                #END OF CALENDAR SYNC AND FURBOTS CHECK
                 if content_type == "new_chat_member":
                     Bemvindo(msg, chat_id)
                     Limbo(msg, chat_id)
@@ -850,7 +851,7 @@ def thread_function(msg):
                         ReplySticker(msg, chat_id)
                 elif content_type == "location":
                     Location_to_text(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/") and (Burrbot==False or msg['text'] not in open("Burrbot functions.txt", "r+").read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and 'username' in msg['from'] and msg['from']['username'] not in str(cookiebot.getChatAdministrators(chat_id)):
+                elif 'text' in msg and msg['text'].startswith("/") and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+").read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and 'username' in msg['from'] and msg['from']['username'] not in str(cookiebot.getChatAdministrators(chat_id)):
                     CooldownAction(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/escolha"):
                     Escolha(msg, chat_id)
@@ -872,11 +873,11 @@ def thread_function(msg):
                     AtualizaBemvindo(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/novobemvindo"):
                     NovoBemvindo(msg, chat_id)
-                elif Burrbot == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
+                elif FurBots == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
                     AtualizaRegras(msg, chat_id)
-                elif Burrbot == False and 'text' in msg and msg['text'].startswith("/novasregras"):
+                elif FurBots == False and 'text' in msg and msg['text'].startswith("/novasregras"):
                     NovasRegras(msg, chat_id)
-                elif Burrbot == False and 'text' in msg and msg['text'].startswith("/regras"):
+                elif FurBots == False and 'text' in msg and msg['text'].startswith("/regras"):
                     Regras(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/removeevento"):
                     RemoveEvento(msg, chat_id)
@@ -892,11 +893,11 @@ def thread_function(msg):
                     Everyone(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/comandos"):
                     Comandos(msg, chat_id)
-                elif Burrbot == False and 'text' in msg and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")):
+                elif FurBots == False and 'text' in msg and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")):
                     Hoje(msg, chat_id)
-                elif Burrbot == False and 'text' in msg and (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")):
+                elif FurBots == False and 'text' in msg and (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")):
                     Cheiro(msg, chat_id)
-                elif Burrbot == False and 'text' in msg and ('eu faço' in msg['text'] or 'eu faco' in msg['text']) and '?' in msg['text']:
+                elif FurBots == False and 'text' in msg and ('eu faço' in msg['text'] or 'eu faco' in msg['text']) and '?' in msg['text']:
                     QqEuFaço(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/portugues"):
                     Portugues(msg, chat_id)
@@ -922,7 +923,7 @@ def thread_function(msg):
                     ConfigurarSettar(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists(msg['text'].replace('/', '').replace("@CookieMWbot", '')):
                     CustomCommand(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (Burrbot==False or msg['text'] not in open("Burrbot functions.txt", "r+").read()):
+                elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+").read()):
                     QualquerCoisa(msg, chat_id)
                 elif 'text' in msg and (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
                     Quem(msg, chat_id)
@@ -954,6 +955,8 @@ def thread_function(msg):
                             text_file.write(line)
                     text_file.close()
                 #END OF COOLDOWN UPDATES
+    except:
+        pass
 
 #MESSAGE HANDLER
 def handle(msg):
@@ -968,7 +971,7 @@ def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     cookiebot.answerCallbackQuery(query_id, text='Agora marque a mensagem com o novo valor')
     if query_data == 'a':
-       cookiebot.sendMessage(msg['message']['reply_to_message']['chat']['id'], 'Use 0 para não interferir com o burrbot caso ele esteja no grupo, ou 1 se ele não estiver.\nResponda ESTA mensagem com o novo valor da variável', reply_to_message_id=msg['message']['reply_to_message']['message_id'])
+       cookiebot.sendMessage(msg['message']['reply_to_message']['chat']['id'], 'Use 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nResponda ESTA mensagem com o novo valor da variável', reply_to_message_id=msg['message']['reply_to_message']['message_id'])
     elif query_data == 'b':
         cookiebot.sendMessage(msg['message']['reply_to_message']['chat']['id'], 'Este é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo.\nResponda ESTA mensagem com o novo valor da variável', reply_to_message_id=msg['message']['reply_to_message']['message_id'])
     elif query_data == 'c':
