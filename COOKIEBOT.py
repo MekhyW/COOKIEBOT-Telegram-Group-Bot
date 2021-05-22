@@ -55,6 +55,14 @@ def check_if_string_in_file(file_name, string_to_search):
     return False
 
 
+def CheckCAS(msg, chat_id):
+    r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']))
+    in_banlist = json.loads(r.text)['ok']
+    if in_banlist == True:
+        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+        cookiebot.sendMessage(chat_id, "Bani o usuário recém-chegado por ser flagrado pelo sistema anti-ban CAS https://cas.chat/")
+        return True
+    return False
 
 def Captcha(msg, chat_id):
     caracters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -831,10 +839,11 @@ def thread_function(msg):
                 text_file.close()
                 #END OF CALENDAR SYNC AND FURBOTS CHECK
                 if content_type == "new_chat_member":
-                    Bemvindo(msg, chat_id)
-                    Limbo(msg, chat_id)
-                    if captchatimespan > 0:
-                        Captcha(msg, chat_id)
+                    if CheckCAS(msg, chat_id) == False:
+                        Bemvindo(msg, chat_id)
+                        Limbo(msg, chat_id)
+                        if captchatimespan > 0:
+                            Captcha(msg, chat_id)
                 elif content_type == "voice":
                     Speech_to_text(msg, chat_id)
                 elif content_type == "audio":
