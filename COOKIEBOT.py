@@ -58,12 +58,12 @@ def Captcha(msg, chat_id):
     caracters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
     captcha.write(password, 'CAPTCHA.png')
-    text = open("Captcha.txt", 'a+')
-    text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + " " + password + "\n")
-    text.close()
     photo = open('CAPTCHA.png', 'rb')
-    cookiebot.sendPhoto(chat_id, photo, caption="Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)), reply_to_message_id=msg['message_id'])
+    captchaspawnID = cookiebot.sendPhoto(chat_id, photo, caption="Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)), reply_to_message_id=msg['message_id'])['message_id']
     photo.close()
+    text = open("Captcha.txt", 'a+')
+    text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + " " + password + " " + str(captchaspawnID) + "\n")
+    text.close()
 
 def CheckCaptcha(msg, chat_id):
     text = open("Captcha.txt", 'r')
@@ -105,6 +105,7 @@ def SolveCaptcha(msg, chat_id):
                 cookiebot.sendChatAction(chat_id, 'typing')
                 if "".join(msg['text'].upper().split()) == line.split()[4]:
                     cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!", reply_to_message_id=msg['message_id'])
+                    cookiebot.deleteMessage((line.split()[0], line.split()[5]))
                 else:
                     cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.", reply_to_message_id=msg['message_id'])
                     text.write(line)
@@ -389,6 +390,7 @@ def AddEvento(msg, chat_id):
                 event = str(chat_id) + " " + str(msg['reply_to_message']['message_id']) + " " + str(datetime.datetime.now()) + " " + str(time) + " REPEAT" + "\n"
                 text.write(event)
             cookiebot.sendMessage(chat_id, "Evento com ID {} adicionado!".format(str(msg['reply_to_message']['message_id'])), reply_to_message_id=msg['message_id'])
+            text.close()
         except:
             cookiebot.sendMessage(chat_id, "Formato incorreto, deveria ser /addevento DIA/MES/ANO HORA:MINUTO", reply_to_message_id=msg['message_id'])
 
@@ -510,19 +512,6 @@ def Ingles(msg, chat_id):
     else:
         translation = translator.translate(msg['reply_to_message']['text'], dest='en').text
         cookiebot.sendMessage(chat_id, "Tradução para inglês:\n\n'{}'".format(translation), reply_to_message_id=msg['message_id'])
-
-def Fodase(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if 'reply_to_message' not in msg:
-        cookiebot.sendMessage(chat_id, "Responda alguém com esse comando, vou xingar ela", reply_to_message_id=msg['message_id'])
-    else:
-        operations = json.loads(requests.get('https://www.foaas.com/operations').text)
-        urlcomplement = operations[random.randint(0, len(operations)-1)]['url'].replace(':from', '@'+msg['from']['username']).replace(':name', '@'+msg['reply_to_message']['from']['username'])
-        url = 'https://www.foaas.com{}'.format(urlcomplement)
-        response = requests.get(url).text
-        desired_text = response.split("<!DOCTYPE html> <html> <head> <title>FOAAS - ")[1].split("</title>")[0]
-        desired_text_ptbr = translator.translate(desired_text, dest='pt').text
-        cookiebot.sendMessage(chat_id, desired_text_ptbr, reply_to_message_id=msg['reply_to_message']['message_id'])
 
 def Insulto(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -913,8 +902,6 @@ def thread_function(msg):
                     Portugues(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/ingles"):
                     Ingles(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/fodase"):
-                    Fodase(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/insulto"):
                     Insulto(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/numero"):
