@@ -37,8 +37,10 @@ firstpass = True
 start_time = time.time()
 lastmessagedate = "1-1-1"
 lastmessagetime = "0"
-FurBots = 0
 sentcooldownmessage = False
+listaadmins = []
+listaadmins_id = []
+FurBots = 0
 stickerspamlimit = 5
 limbotimespan = 600
 captchatimespan = 300
@@ -361,7 +363,7 @@ def RemoveEvento(msg, chat_id):
     if msg['text'] == "/removeevento" or msg['text'] == "/removeevento@CookieMWbot":
         cookiebot.sendChatAction(chat_id, 'typing')
         cookiebot.sendMessage(chat_id, "Se vc é um admin, Mande o ID do evento pra remover\nExemplo: /removeevento 69420", reply_to_message_id=msg['message_id'])
-    elif msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
+    elif str(msg['from']['username']) in listaadmins:
         cookiebot.sendChatAction(chat_id, 'typing')
         text_file = open("Events.txt", "r", encoding='utf-8')
         lines = text_file.read().split("\n")
@@ -385,7 +387,7 @@ def AddEvento(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     if not 'reply_to_message' in msg:
         cookiebot.sendMessage(chat_id, "Se vc é um admin, Responda a uma mensagem e diga uma data e hora\n\nExemplo: '31/02/2077 16:21'", reply_to_message_id=msg['message_id'])
-    elif msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
+    elif str(msg['from']['username']) in listaadmins:
         try:
             time = datetime.datetime.strptime(msg['text'].replace("/addevento ", ''), '%d/%m/%Y %H:%M')
             text = open("Events.txt", 'a+', encoding='utf-8')
@@ -457,8 +459,8 @@ def TaVivo(msg, chat_id):
 
 def Everyone(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    if msg['from']['username'] not in str(cookiebot.getChatAdministrators(chat_id)):
-        cookiebot.sendMessage(chat_id, "Apenas admins podem chamar todos os membros do grupo.", reply_to_message_id=msg['message_id'])
+    if str(msg['from']['username']) not in listaadmins:
+        cookiebot.sendMessage(chat_id, "Você não tem permissão para chamar todos os membros do grupo.", reply_to_message_id=msg['message_id'])
     else:
         text_file = open(str(chat_id)+".txt", "r+", encoding='utf8')
         lines = text_file.readlines()
@@ -469,6 +471,9 @@ def Everyone(msg, chat_id):
                 result += ("@"+username+" ")
         text_file.close()
         cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
+
+def Admins(msg, chat_id):
+    pass
 
 def Comandos(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -692,7 +697,7 @@ def ReplySticker(msg, chat_id):
 
 def Configurar(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    if msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
+    if str(msg['from']['username']) in listaadmins:
         text = open("Config_"+str(chat_id)+".txt", 'r', encoding='utf-8')
         variables = text.read()
         text.close()
@@ -703,7 +708,7 @@ def Configurar(msg, chat_id):
                            ))
         cookiebot.sendMessage(chat_id,"Te mandei uma mensagem no chat privado para configurar" , reply_to_message_id=msg['message_id'])
     else:
-        cookiebot.sendMessage(chat_id, "Apenas admins podem configurar o bot!", reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, "Você não tem permissão para configurar o bot!", reply_to_message_id=msg['message_id'])
 
 def ConfigurarSettar(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -761,6 +766,8 @@ def thread_function(msg):
                 cookiebot.sendMessage(chat_id, "Posso apenas ficar no grupo se o @MekhyW estiver nele, e for um admin!\n\nIsso é feito para evitar spam e raids, me desculpem")
                 cookiebot.leaveChat(chat_id)
             elif chat_type == 'private' or "CookieMWbot" in str(cookiebot.getChatAdministrators(chat_id)):
+                global listaadmins
+                global listaadmins_id
                 global FurBots
                 global stickerspamlimit
                 global limbotimespan
@@ -770,6 +777,24 @@ def thread_function(msg):
                 global lowresolutionarea
                 global funfunctions
                 if chat_type != 'private':
+                    #BEGGINING OF ADMINISTRATORS GATHERING
+                    if not os.path.exists("GranularAdmins_" + str(chat_id)+".txt"):
+                        text = open("GranularAdmins_" + str(chat_id)+".txt", 'w').close()
+                    text_file = open("GranularAdmins_" + str(chat_id)+".txt", 'r', encoding='utf-8')
+                    lines = text_file.readlines()
+                    if lines != []:
+                        listaadmins = []
+                        for username in lines:
+                            listaadmins.append(username.replace("\n", ''))
+                    else:
+                        listaadmins = []
+                        listaadmins_id = []
+                        for admin in cookiebot.getChatAdministrators(chat_id):
+                            if 'username' in admin['user']:
+                                listaadmins.append(str(admin['user']['username']))
+                            listaadmins_id.append(str(admin['user']['id']))
+                    text_file.close()
+                    #END OF ADMINISTRATORS GATHERING
                     #BEGGINING OF NEW NAME GATHERING
                     if not os.path.isfile(str(chat_id)+".txt"):
                         open(str(chat_id)+".txt", 'a', encoding='utf-8').close() 
@@ -864,7 +889,7 @@ def thread_function(msg):
                         ReplySticker(msg, chat_id)
                 elif content_type == "location":
                     Location_to_text(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/") and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and 'username' in msg['from'] and msg['from']['username'] not in str(cookiebot.getChatAdministrators(chat_id)):
+                elif 'text' in msg and msg['text'].startswith("/") and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and 'username' in msg['from'] and str(msg['from']['username']) not in listaadmins:
                     CooldownAction(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/escolha") and funfunctions == True:
                     Escolha(msg, chat_id)
@@ -880,11 +905,11 @@ def thread_function(msg):
                     AddHoje(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/addcheiro") and funfunctions == True:
                     AddCheiro(msg, chat_id)
-                elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
+                elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo" and str(msg['from']['username']) in listaadmins:
                     AtualizaBemvindo(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/novobemvindo"):
                     NovoBemvindo(msg, chat_id)
-                elif FurBots == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras" and msg['from']['username'] in str(cookiebot.getChatAdministrators(chat_id)):
+                elif FurBots == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras" and str(msg['from']['username']) in listaadmins:
                     AtualizaRegras(msg, chat_id)
                 elif FurBots == False and 'text' in msg and msg['text'].startswith("/novasregras"):
                     NovasRegras(msg, chat_id)
@@ -902,6 +927,8 @@ def thread_function(msg):
                     TaVivo(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/everyone"):
                     Everyone(msg, chat_id)
+                elif 'text' in msg and msg['text'].startswith("/admins"):
+                    Admins(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/comandos"):
                     Comandos(msg, chat_id)
                 elif FurBots == False and 'text' in msg and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")) and funfunctions == True:
@@ -977,7 +1004,13 @@ def handle(msg):
 def handle_query(msg):
     cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
-    if query_data == 'CAPTCHA' and str(from_id) in str(cookiebot.getChatAdministrators(msg['message']['reply_to_message']['chat']['id'])):
+    #BEGGINING OF ADMINISTRATORS GATHERING
+    global listaadmins_id
+    listaadmins_id = []
+    for admin in cookiebot.getChatAdministrators(msg['message']['reply_to_message']['chat']['id']):
+        listaadmins_id.append(str(admin['user']['id']))
+    #END OF ADMINISTRATORS GATHERING
+    if query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
         SolveCaptcha(msg, msg['message']['reply_to_message']['chat']['id'], True)
     elif query_data.startswith('a CONFIG'):
        cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
