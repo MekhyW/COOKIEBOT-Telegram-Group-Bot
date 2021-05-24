@@ -537,13 +537,6 @@ def IdeiaDesenho(msg, chat_id):
     photo = open('IdeiaDesenho'+'/'+ideiasdesenho[ideiaID], 'rb')
     cookiebot.sendPhoto(chat_id, photo, caption="Referência com ID {}\n\nNão trace sem dar créditos! (use a busca reversa do google images)".format(ideiaID), reply_to_message_id=msg['message_id'])
 
-def Portal(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'upload_photo')
-    portal = os.listdir('portal')
-    portalID = random.randint(0, len(portal)-1)
-    photo = open('portal'+'/'+portal[portalID], 'rb')
-    cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
-
 def Contato(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     cookiebot.sendMessage(chat_id, '\nAre you a business or sponsor?\n💌 Email: felipe_catapano@yahoo.com.br')
@@ -924,8 +917,6 @@ def thread_function(msg):
                     DadJoke(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/ideiadesenho") and funfunctions == True:
                     IdeiaDesenho(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/portal") and funfunctions == True:
-                    Portal(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/contato"):
                     Contato(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/qualquercoisa") and funfunctions == True:
