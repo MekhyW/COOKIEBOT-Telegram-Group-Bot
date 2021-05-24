@@ -472,9 +472,6 @@ def Everyone(msg, chat_id):
         text_file.close()
         cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
 
-def Admins(msg, chat_id):
-    pass
-
 def Comandos(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     text_file = open("Cookiebot functions.txt", "r+", encoding='utf8')
@@ -927,8 +924,6 @@ def thread_function(msg):
                     TaVivo(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/everyone"):
                     Everyone(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/admins"):
-                    Admins(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/comandos"):
                     Comandos(msg, chat_id)
                 elif FurBots == False and 'text' in msg and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")) and funfunctions == True:
