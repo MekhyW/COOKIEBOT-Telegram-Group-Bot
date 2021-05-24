@@ -23,8 +23,6 @@ dadjoke - Dor
 portal - Uma ratazana e um desejo
 escolha - Deixa o bot escolher pra vc
 nada - nada kkkk
-addhoje - Adicionar ao hoje
-addcheiro - Adicionar cheiro
 tavivo - Manda um ping de teste com data
 stop- Safe switch do mekhy
 contato - Usa esse comando nunca te pedi nada

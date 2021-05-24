@@ -300,22 +300,6 @@ def Startup(msg, chat_id):
     startup = translator.translate(r.text, dest='pt').text
     cookiebot.sendMessage(chat_id, "{} Criou uma startup!\nO slogan é:\n'{}'".format(msg['from']['username'], startup))
 
-def AddHoje(msg, chat_id):
-    if 'reply_to_message' in msg:
-        cookiebot.sendChatAction(chat_id, 'typing')
-        text_file = open("Hoje.txt", "a+", encoding='utf8')
-        text_file.write("\n"+msg['reply_to_message']['text'].replace("\n", "\\n"))
-        text_file.close()
-        cookiebot.sendMessage(chat_id, "Coisa idiota pra fazer adicionada! ✅", reply_to_message_id=msg['message_id'])
-
-def AddCheiro(msg, chat_id):
-    if 'reply_to_message' in msg:
-        cookiebot.sendChatAction(chat_id, 'typing')
-        text_file = open("Cheiro.txt", "a+", encoding='utf8')
-        text_file.write("\n"+msg['reply_to_message']['text'].replace("\n", "\\n"))
-        text_file.close()
-        cookiebot.sendMessage(chat_id, "Cheirin exótico adicionado! ✅", reply_to_message_id=msg['message_id'])
-
 
 def AtualizaBemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -898,10 +882,6 @@ def thread_function(msg):
                     Completar(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/startup") and funfunctions == True:
                     Startup(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/addhoje") and funfunctions == True:
-                    AddHoje(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/addcheiro") and funfunctions == True:
-                    AddCheiro(msg, chat_id)
                 elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo" and str(msg['from']['username']) in listaadmins:
                     AtualizaBemvindo(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/novobemvindo"):
