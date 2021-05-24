@@ -63,6 +63,7 @@ tonnyrussel - tonnyrussel
 yoshiro - yoshiro
 
 PASSIVAS:
+Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem mexer nele. Fale com o Mekhy para implementar isso no seu chat
 IA de conversa - Responde mensagens
 IA assistente - Matemática, vocabulário, física, química, weather, etc
 IA customizada - Respostas automáticas para palavras-chave predefinidas
@@ -74,7 +75,7 @@ speech to text - Transcripta mensagens de voz
 identificador de musica - 6 ou mais palavras, ele manda uma musica correspondente se houver
 location to address - Manda o endereço correspondente a um location
 image upscaler - Amplia imagens de baixa resolução com inteligência artificial
-Custom welcome message
+Mensagem customizada de boas vindas
 
 
 Fale com o Mekhy para adicionar um comando seu ou ensinar algo ao bot!
