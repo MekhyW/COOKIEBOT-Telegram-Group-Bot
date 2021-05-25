@@ -756,6 +756,7 @@ def thread_function(msg):
                         text = open("GranularAdmins_" + str(chat_id)+".txt", 'w').close()
                     text_file = open("GranularAdmins_" + str(chat_id)+".txt", 'r', encoding='utf-8')
                     lines = text_file.readlines()
+                    text_file.close()
                     if lines != []:
                         listaadmins = []
                         for username in lines:
@@ -767,7 +768,6 @@ def thread_function(msg):
                             if 'username' in admin['user']:
                                 listaadmins.append(str(admin['user']['username']))
                             listaadmins_id.append(str(admin['user']['id']))
-                    text_file.close()
                     #END OF ADMINISTRATORS GATHERING
                     #BEGGINING OF NEW NAME GATHERING
                     if not os.path.isfile(str(chat_id)+".txt"):
@@ -962,10 +962,13 @@ def thread_function(msg):
 
 #MESSAGE HANDLER
 def handle(msg):
-    global threads
-    messagehandle = threading.Thread(target=thread_function, args=(msg,))
-    threads.append(messagehandle)
-    messagehandle.start()
+    try:
+        global threads
+        messagehandle = threading.Thread(target=thread_function, args=(msg,))
+        threads.append(messagehandle)
+        messagehandle.start()
+    except:
+        pass
 
 def handle_query(msg):
     cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
