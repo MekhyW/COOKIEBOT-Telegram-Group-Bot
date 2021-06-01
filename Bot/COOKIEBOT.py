@@ -971,23 +971,30 @@ def handle(msg):
         pass
 
 def handle_query(msg):
-    cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     if query_data.startswith('a CONFIG'):
-       cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+        cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
     elif query_data.startswith('b CONFIG'):
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
     elif query_data.startswith('c CONFIG'):
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo pelo qual novos usuários no grupo não poderão mandar imagens (o bot apaga automaticamente).\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
     elif query_data.startswith('d CONFIG'):
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo que novos usuários dispõem para resolver o Captcha. USE 0 PARA DESLIGAR O CAPTCHA!\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
     elif query_data.startswith('e CONFIG'):
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEsta é a porcentagem de chance em porcentagem de eu responder a uma mensagem aleatoriamente, se ela for grande o suficiente.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
     elif query_data.startswith('f CONFIG'):
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o mínimo de termos necessários em uma mensagem para eu responder de forma aleatória.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
     elif query_data.startswith('g CONFIG'):
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEsta é a área máxima, em píxeis quadrados, que eu vou levar em consideração ao ampliar imagens de baixa resolução.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
     elif query_data.startswith('h CONFIG'):
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
     else:
         global listaadmins_id
@@ -995,6 +1002,7 @@ def handle_query(msg):
         for admin in cookiebot.getChatAdministrators(msg['message']['reply_to_message']['chat']['id']):
             listaadmins_id.append(str(admin['user']['id']))
         if query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
+            cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
             SolveCaptcha(msg, msg['message']['reply_to_message']['chat']['id'], True)
         
 
