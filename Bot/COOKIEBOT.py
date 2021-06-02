@@ -66,6 +66,16 @@ def CheckCAS(msg, chat_id):
         return True
     return False
 
+
+def CheckRaider(msg, chat_id):
+    r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])})
+    is_raider = json.loads(r.text)['raider']
+    if is_raider == True:
+        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+        cookiebot.sendMessage(chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats")
+        return True
+    return False
+
 def Captcha(msg, chat_id):
     caracters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
@@ -842,7 +852,7 @@ def thread_function(msg):
                     text_file.close()
                     #END OF CALENDAR SYNC AND FURBOTS CHECK
                 if content_type == "new_chat_member":
-                    if CheckCAS(msg, chat_id) == False:
+                    if CheckCAS(msg, chat_id) == False and CheckRaider(msg, chat_id) == False:
                         Bemvindo(msg, chat_id)
                         Limbo(msg, chat_id)
                         if captchatimespan > 0:
