@@ -1,6 +1,67 @@
 
-Item no.: 1 --> Item name = yiffometro
+Item no.: 1 --> Item name = regras
 Evaluating...
-list index out of range
-Image objects data unpacking failed. Please leave a comment with the above error at https://github.com/hardikvasa/google-images-download/pull/298
-text supergroup -1001281222737 273854 1313503002
+Getting URLs without downloading images...
+Image URL: https://aempreendedora.com.br/wp-content/uploads/2018/05/Regras.jpg
+Printed url without downloading
+Image URL: https://s.dicio.com.br/regras.png
+Printed url without downloading
+Image URL: https://negociopilates.com.br/wp-content/uploads/2019/04/Regras-696x391.jpg
+Printed url without downloading
+Image URL: https://nova-escola-producao.s3.amazonaws.com/xRrwqz9hyaGMqvd7c99vzpysy3E8SgYKGVhDcSbRdYqFnPjGCSR9aEXX2qf4/regras-blog-orientadora.jpeg
+Printed url without downloading
+Image URL: http://marcusmarques.com.br/wp-content/uploads/2019/04/regras.jpg
+Printed url without downloading
+Image URL: https://i0.wp.com/www.cqcs.com.br/wp-content/uploads/2020/06/regras.jpg?fit=533%2C311&ssl=1
+Printed url without downloading
+Image URL: https://crismenegon.com.br/wp-content/uploads/2020/04/regras-no-mix-tudo.jpg
+Printed url without downloading
+Image URL: https://cdn-images-1.listennotes.com/podcasts/regras-do-jogo-holodeck-holodeck-design-F96C7p3ysdc-fin78m0z9R2.1400x1400.jpg
+Printed url without downloading
+Image URL: http://varejoativo.com.br/fotos/capa_111as-8-regras-de-ouro-do-feedback-620x384.png
+Printed url without downloading
+Image URL: https://a-static.mlcdn.com.br/574x431/quadro-placa-decorativa-frases-regras-da-casa-maison-de-lele/spezialleimports/6912209602/50e2a6454b235c5a72e0372a689a29ae.jpg
+Printed url without downloading
+Image URL: https://s.dicio.com.br/regra.png
+Printed url without downloading
+Image URL: https://i1.wp.com/reportersombra.com/wp-content/uploads/2018/07/CB_regrasobjetivooucastigo_destaque.jpg?resize=780%2C405&ssl=1
+Printed url without downloading
+Image URL: https://www.g4s.com/pt-br/-/media/g4s/brazil/images/regras-ouro.ashx
+Printed url without downloading
+Image URL: http://www.classificadorfiscal.com.br/regra.jpg
+Printed url without downloading
+Image URL: https://i0.wp.com/www.socbrazil.com/wp-content/uploads/2019/03/rules.png?w=688
+Printed url without downloading
+Image URL: https://feirashop.com.br/alugue-sua-loja/wp-content/uploads/2018/12/dicas-para-ter-sucesso-regras.jpg
+Printed url without downloading
+Image URL: https://static.wixstatic.com/media/ef89a2_46b2268d58534b9a9f0dd02ee0107143~mv2.png/v1/fill/w_500,h_268,al_c,q_85,usm_0.66_1.00_0.01/regras.webp
+Printed url without downloading
+Image URL: https://nova-escola-producao.s3.amazonaws.com/ecSQAUG8CYBx6WgW6B7PmFH5Vxu84YuxkKEcmn5MBrAu2NrvEvS7z7W64q7C/regras-blog-orientadoras-aluno-em-foco.jpeg
+Printed url without downloading
+Image URL: https://abreuimoveis.com.br/media/abreuimoveis/2018/02/abreu-regras.png
+Printed url without downloading
+Image URL: http://unidanegocios.com.br/wp-content/uploads/2017/07/nao-ex-1.png
+Printed url without downloading
+Image URL: http://superxadrez.com.br/wp-content/uploads/2017/04/regras.png
+Printed url without downloading
+Image URL: http://www.paginasdefilosofia.net/wp-content/uploads/2016/12/Regras.png
+Printed url without downloading
+Image URL: https://fernandofranzini.files.wordpress.com/2012/07/placa-proibido.jpg
+Printed url without downloading
+Image URL: https://tudocondo.com.br/assets/static/regras-de-ouro-do-condominio-2.3fd7121.75455b3.jpg
+Printed url without downloading
+Image URL: https://autibooks.vteximg.com.br/arquivos/ids/157143-1000-1500/Capa-do-audiobook-A-regra-e-nao-ter-regras---A-Netflix-e-a-cultura-da-reinvencao.jpg?v=637479721480630000
+Printed url without downloading
+Image URL: https://www.pontofrio-imagens.com.br/Control/ArquivoExibir.aspx?IdArquivo=1410376669
+Printed url without downloading
+Image URL: https://isinaliza.vteximg.com.br/arquivos/ids/227525-1000-1000/PLACA-REGRAS-PISCINA.jpg?v=637153234188230000
+Printed url without downloading
+Image URL: https://i0.wp.com/cysne.com.br/wp-content/uploads/2019/08/240949-normas-de-condominio-saiba-quais-sao-as-regras-de-convivencia.jpg?fit=2000%2C1333&ssl=1
+Printed url without downloading
+Image URL: https://cdnv2.moovin.com.br/bbdu/imagens/produtos/det/adesivos-regras-da-casa-3972142160ce7561033d88fbd7e0e0b3.jpg
+Printed url without downloading
+Image URL: https://i.ytimg.com/vi/P435GR8XIf4/maxresdefault.jpg
+Printed url without downloading
+
+Errors: 0
+
