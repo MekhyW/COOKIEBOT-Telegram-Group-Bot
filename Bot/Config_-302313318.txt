@@ -1,8 +1,0 @@
-FurBots: 0
-Sticker_Spam_Limit: 5
-Tempo_sem_poder_mandar_imagem: 600
-Tempo_Captcha: 300
-Intrometer_Percentage: 1
-Intrometer_minimum_words: 6
-Low_resolution_area: 76800
-Funções_Diversão: 1
