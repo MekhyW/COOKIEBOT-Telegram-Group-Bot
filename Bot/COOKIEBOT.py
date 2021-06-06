@@ -41,6 +41,7 @@ sentcooldownmessage = False
 listaadmins = []
 listaadmins_id = []
 FurBots = 0
+noraid = 1
 stickerspamlimit = 5
 limbotimespan = 600
 captchatimespan = 300
@@ -72,7 +73,7 @@ def CheckRaider(msg, chat_id):
     is_raider = json.loads(r.text)['raider']
     if is_raider == True:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        cookiebot.sendMessage(chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats")
+        cookiebot.sendMessage(chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.")
         return True
     return False
 
