@@ -7,6 +7,9 @@
 /timeout
 /permababy
 /mix
+/rules
+/rules@burrsobot
+/regras
 
 /aniversario
 /averageyiffometro
