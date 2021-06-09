@@ -5,5 +5,5 @@ Tempo_sem_poder_mandar_imagem: 600
 Tempo_Captcha: 1000
 Intrometer_Percentage: 2
 Intrometer_minimum_words: 10
-Low_resolution_area: 76800
+Low_resolution_area: 10000
 Funções_Diversão: 1

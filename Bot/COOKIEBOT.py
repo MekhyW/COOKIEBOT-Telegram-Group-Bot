@@ -46,8 +46,8 @@ messagespamlimit = 10
 limbotimespan = 600
 captchatimespan = 300
 intrometerpercentage = 1
-intrometerminimumwords = 6
-lowresolutionarea = 76800
+intrometerminimumwords = 10
+lowresolutionarea = 10000
 funfunctions = 1
 
 #STRING IN FILE CHECKER
@@ -795,7 +795,7 @@ def thread_function(msg):
                     if not os.path.isfile("Config_"+str(chat_id)+".txt"):
                         open("Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
                         text_file = open("Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-                        text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 1\nIntrometer_minimum_words: 6\nLow_resolution_area: 76800\nFunções_Diversão: 1")
+                        text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nMessage_Spam_Limit: 10\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 1\nIntrometer_minimum_words: 10\nLow_resolution_area: 10000\nFunções_Diversão: 1")
                         text_file.close()
                     text_file = open("Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
                     lines = text_file.readlines()
