@@ -625,8 +625,8 @@ def OnSay(msg, chat_id):
 
 def InteligenciaArtificial(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    if "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text']:
-        message = msg['text'].replace("Cookiebot", '').replace("cookiebot", '').replace("@CookieMWbot", '').replace("COOKIEBOT", '').replace("\n", '').capitalize()
+    if "Bombot" in msg['text'] or "bombot" in msg['text'] or "@CookieMWbot" in msg['text'] or "BOMBOT" in msg['text'] or "BomBot" in msg['text']:
+        message = msg['text'].replace("Bombot", '').replace("bombot", '').replace("@CookieMWbot", '').replace("BOMBOT", '').replace("BomBot", '').replace("\n", '').capitalize()
     else:
         message = msg['text'].replace("\n", '').capitalize()
     try:
@@ -748,7 +748,7 @@ def thread_function(msg):
             if chat_type == 'private' and 'reply_to_message' not in msg:
                 if msg['text'] == "/stop" and 'username' in msg['from'] and msg['from']['username'] == 'MekhyW':
                     os._exit(0)
-                cookiebot.sendMessage(chat_id, "Olá, sou o Cookiebot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
+                cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
             elif chat_type != 'private' and "MekhyW" not in str(cookiebot.getChatAdministrators(chat_id)):
                 cookiebot.sendMessage(chat_id, "Posso apenas ficar no grupo se o @MekhyW estiver nele, e for um admin!\n\nIsso é feito para evitar spam e raids, me desculpem")
                 cookiebot.leaveChat(chat_id)
@@ -875,7 +875,7 @@ def thread_function(msg):
                 elif content_type == "sticker":
                     Sticker_anti_spam(msg, chat_id)
                     AddtoStickerDatabase(msg, chat_id)
-                    if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
+                    if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'BomBot by Mekhy':
                         ReplySticker(msg, chat_id)
                 elif content_type == "location":
                     Location_to_text(msg, chat_id)
@@ -945,11 +945,11 @@ def thread_function(msg):
                     CustomCommand(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and funfunctions == True:
                     QualquerCoisa(msg, chat_id)
-                elif 'text' in msg and (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
+                elif 'text' in msg and (msg['text'].startswith("Bombot") or msg['text'].startswith("bombot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'BomBot by Mekhy') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
                     Quem(msg, chat_id)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)):
                     SolveCaptcha(msg, chat_id, False)
-                elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text']) and funfunctions == True:
+                elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Bombot') or "Bombot" in msg['text'] or "bombot" in msg['text'] or "@CookieMWbot" in msg['text'] or "BOMBOT" in msg['text'] or "BomBot" in msg['text']) and funfunctions == True:
                     if not OnSay(msg, chat_id):
                         InteligenciaArtificial(msg, chat_id)
                 elif 'text' in msg and len(msg['text'].split()) >= intrometerminimumwords and funfunctions == True:

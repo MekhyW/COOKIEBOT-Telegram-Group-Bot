@@ -1,4 +1,9 @@
-["fursuit", "evento"] > Não precisa de fursuit pra ir em eventos da furry fandom
-["fursuit", "eventos"] > Não precisa de fursuit pra ir em eventos da furry fandom
+["nao", "fursuit", "evento"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
+["nao", "fursuit", "eventos"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
+["nn", "fursuit", "evento"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
+["nn", "fursuit", "eventos"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
+["sem", "fursuit", "evento"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
+["sem", "fursuit", "eventos"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
 ["quando", "bff"] > A próxima BFF ocorrerá entre os dias 13 e 15 de maio de 2022!!
 ["qnd", "bff"] > A próxima BFF ocorrerá entre os dias 13 e 15 de maio de 2022!!
+["cookiebot"] > Meu nome agora é BomBot! Sou o novo bot da BFF
