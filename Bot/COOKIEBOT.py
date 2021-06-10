@@ -355,7 +355,7 @@ def Regras(msg, chat_id):
         cookiebot.sendMessage(chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", reply_to_message_id=msg['message_id'])
 
 def RemoveEvento(msg, chat_id):
-    if msg['text'] == "/removeevento" or msg['text'] == "/removeevento@CookieMWbot":
+    if msg['text'] == "/removeevento" or msg['text'] == "/removeevento@MekhysBomBot":
         cookiebot.sendChatAction(chat_id, 'typing')
         cookiebot.sendMessage(chat_id, "Se vc é um admin, Mande o ID do evento pra remover\nExemplo: /removeevento 69420", reply_to_message_id=msg['message_id'])
     elif str(msg['from']['username']) in listaadmins:
@@ -563,14 +563,14 @@ def PromptQualquerCoisa(msg, chat_id):
 
 def CustomCommand(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
-    images = os.listdir(msg['text'].replace('/', '').replace("@CookieMWbot", ''))
+    images = os.listdir(msg['text'].replace('/', '').replace("@MekhysBomBot", ''))
     imageID = random.randint(0, len(images)-1)
-    photo = open(msg['text'].replace('/', '').replace("@CookieMWbot", '')+'/'+images[imageID], 'rb')
+    photo = open(msg['text'].replace('/', '').replace("@MekhysBomBot", '')+'/'+images[imageID], 'rb')
     cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
 
 def QualquerCoisa(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
-    searchterm = msg['text'].split("@")[0].replace("/", '').replace("@CookieMWbot", '')
+    searchterm = msg['text'].split("@")[0].replace("/", '').replace("@MekhysBomBot", '')
     orig_stdout = sys.stdout
     f = open('URLS.txt', 'w')
     sys.stdout = f
@@ -625,8 +625,8 @@ def OnSay(msg, chat_id):
 
 def InteligenciaArtificial(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    if "Bombot" in msg['text'] or "bombot" in msg['text'] or "@CookieMWbot" in msg['text'] or "BOMBOT" in msg['text'] or "BomBot" in msg['text']:
-        message = msg['text'].replace("Bombot", '').replace("bombot", '').replace("@CookieMWbot", '').replace("BOMBOT", '').replace("BomBot", '').replace("\n", '').capitalize()
+    if "Bombot" in msg['text'] or "bombot" in msg['text'] or "@MekhysBomBot" in msg['text'] or "BOMBOT" in msg['text'] or "BomBot" in msg['text']:
+        message = msg['text'].replace("Bombot", '').replace("bombot", '').replace("@MekhysBomBot", '').replace("BOMBOT", '').replace("BomBot", '').replace("\n", '').capitalize()
     else:
         message = msg['text'].replace("\n", '').capitalize()
     try:
@@ -941,7 +941,7 @@ def thread_function(msg):
                     Configurar(msg, chat_id)
                 elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "Responda ESTA mensagem com o novo valor da variável" in msg['reply_to_message']['text']:
                     ConfigurarSettar(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists(msg['text'].replace('/', '').replace("@CookieMWbot", '')) and funfunctions == True:
+                elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists(msg['text'].replace('/', '').replace("@MekhysBomBot", '')) and funfunctions == True:
                     CustomCommand(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and funfunctions == True:
                     QualquerCoisa(msg, chat_id)
@@ -949,7 +949,7 @@ def thread_function(msg):
                     Quem(msg, chat_id)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)):
                     SolveCaptcha(msg, chat_id, False)
-                elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Bombot') or "Bombot" in msg['text'] or "bombot" in msg['text'] or "@CookieMWbot" in msg['text'] or "BOMBOT" in msg['text'] or "BomBot" in msg['text']) and funfunctions == True:
+                elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Bombot') or "Bombot" in msg['text'] or "bombot" in msg['text'] or "@MekhysBomBot" in msg['text'] or "BOMBOT" in msg['text'] or "BomBot" in msg['text']) and funfunctions == True:
                     if not OnSay(msg, chat_id):
                         InteligenciaArtificial(msg, chat_id)
                 elif 'text' in msg and len(msg['text'].split()) >= intrometerminimumwords and funfunctions == True:
