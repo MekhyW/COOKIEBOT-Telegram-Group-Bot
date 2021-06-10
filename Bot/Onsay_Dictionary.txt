@@ -6,4 +6,3 @@
 ["sem", "fursuit", "eventos"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
 ["quando", "bff"] > A próxima BFF ocorrerá entre os dias 13 e 15 de maio de 2022!!
 ["qnd", "bff"] > A próxima BFF ocorrerá entre os dias 13 e 15 de maio de 2022!!
-["cookiebot"] > Meu nome agora é BomBot! Sou o novo bot da BFF
