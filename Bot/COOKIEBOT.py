@@ -875,7 +875,7 @@ def thread_function(msg):
                 elif content_type == "sticker":
                     Sticker_anti_spam(msg, chat_id)
                     AddtoStickerDatabase(msg, chat_id)
-                    if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'CookieBot by Mekhy':
+                    if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'CookieBot':
                         ReplySticker(msg, chat_id)
                 elif content_type == "location":
                     Location_to_text(msg, chat_id)
@@ -945,7 +945,7 @@ def thread_function(msg):
                     CustomCommand(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and funfunctions == True:
                     QualquerCoisa(msg, chat_id)
-                elif 'text' in msg and (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'CookieBot by Mekhy') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
+                elif 'text' in msg and (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'CookieBot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
                     Quem(msg, chat_id)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)):
                     SolveCaptcha(msg, chat_id, False)
