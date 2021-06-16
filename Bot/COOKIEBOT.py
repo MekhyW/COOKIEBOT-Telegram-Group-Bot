@@ -329,9 +329,9 @@ def Bemvindo(msg, chat_id):
     if os.path.exists("Welcome_" + str(chat_id)+".txt"):
         with open("Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
-        cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo\nUse o /regras para ver as regras do grupo".format(str(limbotimespan/60)), reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))), reply_to_message_id=msg['message_id'])
     else:    
-        cookiebot.sendMessage(chat_id, "Seja bem vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo\nUse o /regras para ver as regras do grupo".format(str(limbotimespan/60)), reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, "Seja bem vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))), reply_to_message_id=msg['message_id'])
 
 def AtualizaRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
