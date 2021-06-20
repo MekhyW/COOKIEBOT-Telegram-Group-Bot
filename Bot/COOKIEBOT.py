@@ -790,7 +790,7 @@ def thread_function(msg):
             elif chat_type != 'private' and "MekhyW" not in str(cookiebot.getChatAdministrators(chat_id)):
                 cookiebot.sendMessage(chat_id, "Posso apenas ficar no grupo se o @MekhyW estiver nele, e for um admin!\n\nIsso é feito para evitar spam e raids, me desculpem")
                 cookiebot.leaveChat(chat_id)
-            elif chat_type == 'private' or "CookieMWbot" in str(cookiebot.getChatAdministrators(chat_id)):
+            elif chat_type == 'private' or "CookieMWbot" in str(cookiebot.getChatAdministrators(chat_id)) or "MekhysBombot" in str(cookiebot.getChatAdministrators(chat_id)):
                 global listaadmins
                 global listaadmins_id
                 global FurBots
