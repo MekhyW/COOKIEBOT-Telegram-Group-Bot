@@ -3,6 +3,7 @@ spotipyCLIENT_ID = ''
 spotipyCLIENT_SECRET = ''
 WolframAPP_ID = ''
 cookiebotTOKEN = ''
+#bombotTOKEN = ''
 import os
 import subprocess
 import sys
@@ -50,6 +51,17 @@ intrometerminimumwords = 12
 lowresolutionarea = 10000
 funfunctions = 1
 
+#WAIT FOR ANOTHER THREAD/SCRIPT TO FINISH USING FILE
+def wait_open(filename):
+    if os.path.exists(filename):
+        while True:
+            try:
+                text = open(filename, 'r')
+                text.close()
+                break
+            except IOError:
+                pass
+
 #STRING IN FILE CHECKER
 def check_if_string_in_file(file_name, string_to_search):
     for line in file_name:
@@ -84,11 +96,13 @@ def Captcha(msg, chat_id):
     photo = open('CAPTCHA.png', 'rb')
     captchaspawnID = cookiebot.sendPhoto(chat_id, photo, caption="Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo vc será expulso".format(str(captchatimespan/60)), reply_to_message_id=msg['message_id'], reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Aprovar",callback_data='CAPTCHA')]]))['message_id']
     photo.close()
+    wait_open("Captcha.txt")
     text = open("Captcha.txt", 'a+', encoding='utf-8')
     text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + " " + password + " " + str(captchaspawnID) + "\n")
     text.close()
 
 def CheckCaptcha(msg, chat_id):
+    wait_open("Captcha.txt")
     text = open("Captcha.txt", 'r', encoding='utf-8')
     lines = text.readlines()
     text.close()
@@ -118,6 +132,7 @@ def CheckCaptcha(msg, chat_id):
     text.close()
 
 def SolveCaptcha(msg, chat_id, button):
+    wait_open("Captcha.txt")
     text = open("Captcha.txt", 'r', encoding='utf-8')
     lines = text.readlines()
     text.close()
@@ -141,11 +156,13 @@ def SolveCaptcha(msg, chat_id, button):
     text.close()
 
 def Limbo(msg, chat_id):
+    wait_open("Limbo.txt")
     text = open("Limbo.txt", 'a+', encoding='utf-8')
     text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + "\n")
     text.close()
 
 def CheckLimbo(msg, chat_id):
+    wait_open("Limbo.txt")
     text = open("Limbo.txt", 'r', encoding='utf-8')
     lines = text.readlines()
     text.close()
@@ -192,6 +209,7 @@ def Upscaler(msg, chat_id):
         cookiebot.sendPhoto(chat_id, output_url, caption="Imagem ampliada".format(Area), reply_to_message_id=msg['message_id'])
 
 def Sticker_anti_spam(msg, chat_id):
+    wait_open("Stickers.txt")
     text_file = open("Stickers.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     text_file.close()
@@ -314,6 +332,7 @@ def Startup(msg, chat_id):
 
 def AtualizaBemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Welcome_" + str(chat_id)+".txt")
     text_file = open("Welcome_" + str(chat_id)+".txt", 'w', encoding='utf-8')
     text_file.write(msg['text'])
     cookiebot.sendMessage(chat_id, "Mensagem de Boas Vindas atualizada! ✅", reply_to_message_id=msg['message_id'])
@@ -326,6 +345,7 @@ def NovoBemvindo(msg, chat_id):
 
 def Bemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Welcome_" + str(chat_id)+".txt")
     if os.path.exists("Welcome_" + str(chat_id)+".txt"):
         with open("Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
@@ -335,6 +355,7 @@ def Bemvindo(msg, chat_id):
 
 def AtualizaRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Regras_" + str(chat_id)+".txt")
     text_file = open("Regras_" + str(chat_id)+".txt", 'w', encoding='utf-8')
     text_file.write(msg['text'])
     cookiebot.sendMessage(chat_id, "Mensagem de regras atualizada! ✅", reply_to_message_id=msg['message_id'])
@@ -347,6 +368,7 @@ def NovasRegras(msg, chat_id):
 
 def Regras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Regras_" + str(chat_id)+".txt")
     if os.path.exists("Regras_" + str(chat_id)+".txt"):
         with open("Regras_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
@@ -360,6 +382,7 @@ def RemoveEvento(msg, chat_id):
         cookiebot.sendMessage(chat_id, "Se vc é um admin, Mande o ID do evento pra remover\nExemplo: /removeevento 69420", reply_to_message_id=msg['message_id'])
     elif str(msg['from']['username']) in listaadmins:
         cookiebot.sendChatAction(chat_id, 'typing')
+        wait_open("Events.txt")
         text_file = open("Events.txt", "r", encoding='utf-8')
         lines = text_file.read().split("\n")
         text_file.close()
@@ -385,6 +408,7 @@ def AddEvento(msg, chat_id):
     elif str(msg['from']['username']) in listaadmins:
         try:
             time = datetime.datetime.strptime(msg['text'].replace("/addevento ", ''), '%d/%m/%Y %H:%M')
+            wait_open("Events.txt")
             text = open("Events.txt", 'a+', encoding='utf-8')
             event = str(chat_id) + " " + str(msg['reply_to_message']['message_id']) + " " + str(datetime.datetime.now()) + " " + str(time) + "\n"
             text.write(event)
@@ -399,6 +423,7 @@ def AddEvento(msg, chat_id):
 
 def Eventos(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Events.txt")
     text_file = open("Events.txt", "r+", encoding='utf-8')
     lines = text_file.read().split("\n")
     events = []
@@ -428,6 +453,7 @@ def Eventos(msg, chat_id):
     cookiebot.sendMessage(chat_id, answer, reply_to_message_id=msg['message_id'])
 
 def CheckEventos(msg, chat_id):
+    wait_open("Events.txt")
     text = open("Events.txt", 'r+', encoding='utf-8')
     lines = text.readlines()
     text.close()
@@ -457,6 +483,7 @@ def Everyone(msg, chat_id):
     if str(msg['from']['username']) not in listaadmins:
         cookiebot.sendMessage(chat_id, "Você não tem permissão para chamar todos os membros do grupo.", reply_to_message_id=msg['message_id'])
     else:
+        wait_open(str(chat_id)+".txt")
         text_file = open(str(chat_id)+".txt", "r+", encoding='utf8')
         lines = text_file.readlines()
         result = ""
@@ -469,6 +496,7 @@ def Everyone(msg, chat_id):
 
 def Comandos(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Cookiebot functions.txt")
     text_file = open("Cookiebot functions.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     string = ""
@@ -478,6 +506,7 @@ def Comandos(msg, chat_id):
 
 def Hoje(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Hoje.txt")
     text_file = open("Hoje.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
@@ -486,6 +515,7 @@ def Hoje(msg, chat_id):
 
 def Cheiro(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Cheiro.txt")
     text_file = open("Cheiro.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
@@ -494,6 +524,7 @@ def Cheiro(msg, chat_id):
 
 def QqEuFaço(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Hoje.txt")
     text_file = open("Hoje.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
@@ -535,6 +566,7 @@ def Numero(msg, chat_id):
 
 def DadJoke(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("DadJokes.txt")
     text_file = open("DadJokes.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
@@ -595,6 +627,7 @@ def QualquerCoisa(msg, chat_id):
 def Quem(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     LocucaoAdverbial = random.choice(["Com certeza o(a) ", "Sem sombra de dúvidas o(a) ", "Suponho que o(a) ", "Aposto que o(a) ", "Talvez o(a) ", "Quem sabe o(a) ", "Aparentemente o(a) "])
+    wait_open(str(chat_id)+".txt")
     text_file = open(str(chat_id)+".txt", "r+", encoding='utf-8')
     lines = text_file.readlines()
     target = None
@@ -610,6 +643,7 @@ def OnSay(msg, chat_id):
         for word in msg['text'].split():
             keyword_texts.append(unidecode.unidecode(''.join(filter(str.isalnum, word.lower()))))
         print(keyword_texts)
+        wait_open("Onsay_Dictionary.txt")
         text_file = open("Onsay_Dictionary.txt", 'r', encoding='utf8')
         lines = text_file.readlines()
         text_file.close()
@@ -658,6 +692,7 @@ def IdentificaMusica(msg, chat_id):
         cookiebot.sendAudio(chat_id, results['tracks']['items'][0]['preview_url'], caption=results['tracks']['items'][0]['name'], title=results['tracks']['items'][0]['name'], performer=names, reply_to_message_id=msg['message_id'])
 
 def AddtoStickerDatabase(msg, chat_id):
+    wait_open("Sticker_Database.txt")
     text = open("Sticker_Database.txt", 'r+', encoding='utf-8')
     lines = text.readlines()
     text.close()
@@ -675,6 +710,7 @@ def AddtoStickerDatabase(msg, chat_id):
     text.close()
 
 def ReplySticker(msg, chat_id):
+    wait_open("Sticker_Database.txt")
     text = open("Sticker_Database.txt", 'r+', encoding='utf-8')
     lines = text.readlines()
     text.close()
@@ -683,6 +719,7 @@ def ReplySticker(msg, chat_id):
 def Configurar(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     if str(msg['from']['username']) in listaadmins:
+        wait_open("Config_"+str(chat_id)+".txt")
         text = open("Config_"+str(chat_id)+".txt", 'r', encoding='utf-8')
         variables = text.read()
         text.close()
@@ -718,6 +755,7 @@ def ConfigurarSettar(msg, chat_id):
         elif "Este é o limite máximo de mensagens permitidas em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo." in msg['reply_to_message']['text']:
             variable_to_be_altered = "Message_Spam_Limit"
         chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
+        wait_open("Config_"+str(chat_to_alter)+".txt")
         text_file = open("Config_"+str(chat_to_alter)+".txt", 'r', encoding='utf-8')
         lines = text_file.readlines()
         text_file.close()
@@ -768,6 +806,7 @@ def thread_function(msg):
                     #BEGGINING OF ADMINISTRATORS GATHERING
                     if not os.path.exists("GranularAdmins_" + str(chat_id)+".txt"):
                         text = open("GranularAdmins_" + str(chat_id)+".txt", 'w').close()
+                    wait_open("GranularAdmins_" + str(chat_id)+".txt")
                     text_file = open("GranularAdmins_" + str(chat_id)+".txt", 'r', encoding='utf-8')
                     lines = text_file.readlines()
                     text_file.close()
@@ -786,6 +825,7 @@ def thread_function(msg):
                     #BEGGINING OF NEW NAME GATHERING
                     if not os.path.isfile(str(chat_id)+".txt"):
                         open(str(chat_id)+".txt", 'a', encoding='utf-8').close() 
+                    wait_open(str(chat_id)+".txt")
                     text_file = open(str(chat_id)+".txt", "r+", encoding='utf-8')
                     if 'username' in msg['from'] and (check_if_string_in_file(text_file, msg['from']['username']) == False):
                         text_file.write("\n"+msg['from']['username'])
@@ -797,6 +837,7 @@ def thread_function(msg):
                         text_file = open("Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
                         text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nMessage_Spam_Limit: 10\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 1\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1")
                         text_file.close()
+                    wait_open("Config_"+str(chat_id)+".txt")
                     text_file = open("Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
                     lines = text_file.readlines()
                     text_file.close()
@@ -821,6 +862,7 @@ def thread_function(msg):
                             funfunctions = int(line.split()[1])
                     #END OF CONFIG GATHERING
                     #BEGINNING OF CALENDAR SYNC AND FURBOTS CHECK
+                    wait_open(str(chat_id)+".txt")
                     text_file = open(str(chat_id)+".txt", "r", encoding='utf-8')
                     lines = text_file.read().split("\n")
                     text_file.close()
@@ -964,6 +1006,7 @@ def thread_function(msg):
                 if 'text' in msg:
                     if float(lastmessagetime)+60 < ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                         sentcooldownmessage = False
+                    wait_open("Stickers.txt")
                     text_file = open("Stickers.txt", "r+", encoding='utf8')
                     lines = text_file.readlines()
                     text_file.close()
