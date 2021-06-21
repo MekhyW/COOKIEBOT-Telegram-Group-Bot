@@ -913,7 +913,8 @@ def thread_function(msg):
                     CheckLimbo(msg, chat_id)
                     Upscaler(msg, chat_id)
                 elif content_type == "document":
-                    pass
+                    if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
+                        ReplySticker(msg, chat_id)
                 elif content_type == "sticker":
                     Sticker_anti_spam(msg, chat_id)
                     AddtoStickerDatabase(msg, chat_id)
