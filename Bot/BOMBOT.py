@@ -906,7 +906,8 @@ def thread_function(msg):
                         if captchatimespan > 0:
                             Captcha(msg, chat_id)
                 elif content_type == "voice":
-                    Speech_to_text(msg, chat_id)
+                    if funfunctions == True:
+                        Speech_to_text(msg, chat_id)
                 elif content_type == "audio":
                     pass
                 elif content_type == "photo":
