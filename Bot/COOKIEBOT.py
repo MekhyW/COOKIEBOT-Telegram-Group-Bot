@@ -51,6 +51,7 @@ intrometerminimumwords = 12
 lowresolutionarea = 10000
 funfunctions = 1
 
+
 #WAIT FOR ANOTHER THREAD/SCRIPT TO FINISH USING FILE
 def wait_open(filename):
     if os.path.exists(filename):
