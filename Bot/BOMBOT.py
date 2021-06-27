@@ -149,7 +149,7 @@ def SolveCaptcha(msg, chat_id, button):
                     cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!\nUse o /regras para ver as regras do grupo", reply_to_message_id=msg['message_id'])
                     cookiebot.deleteMessage((line.split()[0], line.split()[5]))
                 else:
-                    cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.", reply_to_message_id=msg['message_id'])
+                    cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.")
                     try:
                         cookiebot.deleteMessage(telepot.message_identifier(msg))
                     except:
