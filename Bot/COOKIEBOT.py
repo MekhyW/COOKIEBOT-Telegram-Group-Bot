@@ -51,7 +51,6 @@ intrometerminimumwords = 12
 lowresolutionarea = 10000
 funfunctions = 1
 
-
 #WAIT FOR ANOTHER THREAD/SCRIPT TO FINISH USING FILE
 def wait_open(filename):
     if os.path.exists(filename):
@@ -91,7 +90,7 @@ def CheckRaider(msg, chat_id):
     return False
 
 def Captcha(msg, chat_id):
-    caracters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    caracters = ['0', '2', '3', '4', '5', '6', '8', '9']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
     captcha.write(password, 'CAPTCHA.png')
     photo = open('CAPTCHA.png', 'rb')
@@ -151,6 +150,10 @@ def SolveCaptcha(msg, chat_id, button):
                     cookiebot.deleteMessage((line.split()[0], line.split()[5]))
                 else:
                     cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.", reply_to_message_id=msg['message_id'])
+                    try:
+                        cookiebot.deleteMessage(telepot.message_identifier(msg))
+                    except:
+                        pass
                     text.write(line)
             else:
                 text.write(line)
@@ -231,7 +234,7 @@ def Sticker_anti_spam(msg, chat_id):
             text_file.write(line)
     text_file.close()
     if counter_new == stickerspamlimit:
-        cookiebot.sendMessage(chat_id, "Flood de stickers detectado\nMantenha o chat com texto!", reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, "Cuidado com o flood de stickers.\nMantenham o chat com textos!")
     if counter_new > stickerspamlimit:
         cookiebot.deleteMessage(telepot.message_identifier(msg))
 
@@ -352,7 +355,7 @@ def Bemvindo(msg, chat_id):
             regras = file.read()
         cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(round(limbotimespan/60))), reply_to_message_id=msg['message_id'])
     else:    
-        cookiebot.sendMessage(chat_id, "Seja bem vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(round(limbotimespan/60))), reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(round(limbotimespan/60))), reply_to_message_id=msg['message_id'])
 
 def AtualizaRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
