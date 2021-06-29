@@ -143,11 +143,17 @@ def SolveCaptcha(msg, chat_id, button):
                 cookiebot.sendChatAction(chat_id, 'typing')
                 cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!\nUse o /regras para ver as regras do grupo")
                 cookiebot.deleteMessage((line.split()[0], line.split()[5]))
+                Bemvindo(msg, chat_id)
             elif str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
                 cookiebot.sendChatAction(chat_id, 'typing')
                 if "".join(msg['text'].upper().split()) == line.split()[4]:
-                    cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!\nUse o /regras para ver as regras do grupo", reply_to_message_id=msg['message_id'])
-                    cookiebot.deleteMessage((line.split()[0], line.split()[5]))
+                    cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!\nUse o /regras para ver as regras do grupo")
+                    try:
+                        cookiebot.deleteMessage((line.split()[0], line.split()[5]))
+                        cookiebot.deleteMessage(telepot.message_identifier(msg))
+                    except:
+                        pass
+                    Bemvindo(msg, chat_id)
                 else:
                     cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.")
                     try:
@@ -353,9 +359,9 @@ def Bemvindo(msg, chat_id):
     if os.path.exists("Welcome_" + str(chat_id)+".txt"):
         with open("Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
-        cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(round(limbotimespan/60))), reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(round(limbotimespan/60))))
     else:    
-        cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(round(limbotimespan/60))), reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(round(limbotimespan/60))))
 
 def AtualizaRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -905,10 +911,11 @@ def thread_function(msg):
                     #END OF CALENDAR SYNC AND FURBOTS CHECK
                 if content_type == "new_chat_member":
                     if CheckCAS(msg, chat_id) == False and CheckRaider(msg, chat_id) == False:
-                        Bemvindo(msg, chat_id)
                         Limbo(msg, chat_id)
                         if captchatimespan > 0:
                             Captcha(msg, chat_id)
+                        else:
+                            Bemvindo(msg, chat_id)
                 elif content_type == "voice":
                     if funfunctions == True:
                         Speech_to_text(msg, chat_id)
