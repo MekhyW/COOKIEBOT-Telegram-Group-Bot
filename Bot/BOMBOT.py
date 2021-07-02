@@ -504,6 +504,13 @@ def Everyone(msg, chat_id):
         text_file.close()
         cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
 
+def Adm(msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    response = ""
+    for admin in listaadmins:
+        response += ("@" + admin + " ")
+    cookiebot.sendMessage(chat_id, response, reply_to_message_id=msg['message_id'])
+
 def Comandos(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     wait_open("Cookiebot functions.txt")
@@ -700,6 +707,9 @@ def IdentificaMusica(msg, chat_id):
             names += ", {}".format(artist['name'])
         names = names[2:]
         cookiebot.sendAudio(chat_id, results['tracks']['items'][0]['preview_url'], caption=results['tracks']['items'][0]['name'], title=results['tracks']['items'][0]['name'], performer=names, reply_to_message_id=msg['message_id'])
+        return True
+    else:
+        return False
 
 def AddtoStickerDatabase(msg, chat_id):
     wait_open("Sticker_Database.txt")
@@ -968,6 +978,8 @@ def thread_function(msg):
                     TaVivo(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/everyone"):
                     Everyone(msg, chat_id)
+                elif 'text' in msg and msg['text'].startswith("/adm"):
+                    Adm(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/comandos"):
                     Comandos(msg, chat_id)
                 elif FurBots == False and 'text' in msg and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")) and funfunctions == True:
