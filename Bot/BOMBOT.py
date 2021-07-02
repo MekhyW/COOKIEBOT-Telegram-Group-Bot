@@ -700,7 +700,7 @@ def InteligenciaArtificial(msg, chat_id):
 
 def IdentificaMusica(msg, chat_id):
     spotify = spotipy.Spotify(spotipy.oauth2.SpotifyClientCredentials(client_id=spotipyCLIENT_ID, client_secret=spotipyCLIENT_SECRET).get_access_token())
-    results = spotify.search(q=msg['text'], type="track", limit=1, offset=0)
+    results = spotify.search(q=msg['text'].replace("musica", "").replace("música", "").replace("Musica", "").replace("Música", "").strip(), type="track", limit=1, offset=0)
     if results['tracks']['total']:
         names = ''
         for artist in results['tracks']['items'][0]['album']['artists']:
@@ -1019,7 +1019,7 @@ def thread_function(msg):
                 elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
                     if not OnSay(msg, chat_id):
                         InteligenciaArtificial(msg, chat_id)
-                elif 'text' in msg and len(msg['text'].split()) >= intrometerminimumwords and funfunctions == True:
+                elif 'text' in msg and (msg['text'].lower().startswith("música") or msg['text'].lower().startswith("musica")) and funfunctions == True:
                     if not OnSay(msg, chat_id):
                         IdentificaMusica(msg, chat_id)
                 elif 'text' in msg:

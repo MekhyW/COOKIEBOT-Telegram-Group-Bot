@@ -3,6 +3,7 @@ Comandos do Cookiebot!
 qualquercoisa - Uma foto doq vc quiser
 ideiadesenho - Chega de art block
 everyone - Admins podem chamar todos os membros do grupo
+adm - Chama os administradores do chat
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo
 novobemvindo - Atualiza a mensagem de boas vindas
@@ -61,6 +62,7 @@ tonnyrussel - tonnyrussel
 yoshiro - yoshiro
 
 PASSIVAS:
+Musica - digite "musica" e algo, ele irá mandar um pedaço da música
 Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem mexer nele. Fale com o Mekhy para implementar isso no seu chat
 IA de conversa - Responde mensagens
 IA assistente - Matemática, vocabulário, física, química, weather, etc
@@ -70,7 +72,6 @@ captcha - Impede que bots mandem mensagens e kicka eles se não provarem que sã
 limbo de imagem - Impede que novos membros mandem fotos, por um intervalo
 sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
 speech to text - Transcripta mensagens de voz
-identificador de musica - 6 ou mais palavras, ele manda uma musica correspondente se houver
 location to address - Manda o endereço correspondente a um location
 image upscaler - Amplia imagens de baixa resolução com inteligência artificial
 Mensagem customizada de boas vindas
