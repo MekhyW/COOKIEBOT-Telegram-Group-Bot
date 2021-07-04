@@ -122,6 +122,7 @@ def CheckCaptcha(msg, chat_id):
             if chat == chat_id and captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                 cookiebot.kickChatMember(chat, user)
                 cookiebot.sendMessage(chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user))
+                cookiebot.deleteMessage((line.split()[0], line.split()[5]))
             elif chat == chat_id and user == msg['from']['id']:
                 cookiebot.deleteMessage(telepot.message_identifier(msg))
                 text.write(line)
