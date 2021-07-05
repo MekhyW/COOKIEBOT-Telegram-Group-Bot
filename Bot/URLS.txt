@@ -1,66 +1,66 @@
 
-Item no.: 1 --> Item name = votekick
+Item no.: 1 --> Item name = DjudjuXD
 Evaluating...
 Getting URLs without downloading images...
-Image URL: https://static.wikia.nocookie.net/r2d/images/2/21/Thelord.png/revision/latest?cb=20180808161503
+Image URL: https://pbs.twimg.com/media/E4RmgsFWYAEr7rw.jpg
 Printed url without downloading
-Image URL: https://i.ytimg.com/vi/giBmGQjxl7s/maxresdefault.jpg
+Image URL: https://pbs.twimg.com/profile_images/1404792373700435969/KeUPQ1WK_400x400.jpg
 Printed url without downloading
-Image URL: https://external-preview.redd.it/uQhMDx9A2RkHr9HAXYqCQM901wvXwRUPF43oJqW2XrU.png?format=pjpg&auto=webp&s=563225d0bc00d4a5f95bbbd731daa0c27fdf1ae1
+Image URL: https://pbs.twimg.com/profile_images/1393002403969081347/xIF1WlXr.jpg
 Printed url without downloading
-Image URL: https://pbs.twimg.com/media/DzCmYQEXQAA0_m8.jpg
+Image URL: https://64.media.tumblr.com/34daf26df23887ea7a6873b5acdc2583/e49fa1aed9615242-28/s400x600/1b1d87cad65bdb8274ef1acdf12eb5e6b3556f9f.jpg
 Printed url without downloading
-Image URL: https://static.wikia.nocookie.net/cso/images/0/02/Csnzvotekick.jpg/revision/latest?cb=20150517154543
+Image URL: https://pbs.twimg.com/media/ExBcnjIXIAQZLPK.jpg
 Printed url without downloading
-Image URL: http://aceofspadeswiki.info/w/images/1/18/VotekickExample.png
+Image URL: https://64.media.tumblr.com/860a91f9478ce3b4aaef3ec953a1c997/35a06e89a851a8ea-28/s400x600/c1d3f3fb0bbde85f2effb3c80d7dba0751e902d1.jpg
 Printed url without downloading
-Image URL: https://steamuserimages-a.akamaihd.net/ugc/96108168474201443/D697C38D9FAD530AD9148661EE8FB482B9359F7F/?imw=637&imh=358&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=true
+Image URL: https://64.media.tumblr.com/1a031c6078f6ebd4f560b41e0a8df3f3/232bf3e0635ece31-d4/s1280x1920/daabe086a76fed4d004c330ff6a1810d80b93041.png
 Printed url without downloading
-Image URL: https://i.ytimg.com/vi/v7XPzyo0OFY/maxresdefault.jpg
+Image URL: https://64.media.tumblr.com/cddbaf585fc3040790729893cbee2518/fb9fb8fb830d778a-15/s400x600/0824741060527750c0e4ce55e1c40bb4a1091dcb.jpg
 Printed url without downloading
-Image URL: https://static.wikia.nocookie.net/tc2/images/3/3e/Vote_kick_feature.PNG/revision/latest/top-crop/width/360/height/450?cb=20191114032623
+Image URL: https://pm1.narvii.com/7837/380c970e52749f052416e046ff319006a0109dc8r1-768-960v2_00.jpg
 Printed url without downloading
-Image URL: https://www.spigotmc.org/attachments/2018-12-13_04-51-06-png.390662/
+Image URL: https://pbs.twimg.com/media/EvFxb_fXcAMWH1e.jpg
 Printed url without downloading
-Image URL: https://i.imgur.com/Z4fyyj9.jpg
+Image URL: https://pm1.narvii.com/7868/bc8a24e08867a7fdccb65c1a7731a82595cfd098r1-768-1024v2_00.jpg
 Printed url without downloading
-Image URL: https://www.noobs2pro.com/wp-content/uploads/2020/09/Self-votekick.jpg
+Image URL: https://64.media.tumblr.com/41fc875831a2dca8695e0fe9302abcff/47a8279ea51474f6-da/s400x600/9eb3401a19776826ac13559a54fc275ec20acbc2.png
 Printed url without downloading
-Image URL: https://i.redd.it/o09wkefkn2161.png
+Image URL: https://pbs.twimg.com/media/Ewhrrx6WgAA4gLT.jpg
 Printed url without downloading
-Image URL: https://gar.systems/uploads/gar/original/2X/f/f6bb774e0d8e0dab12a2e0bb45b9e30b5257466f.jpeg
+Image URL: https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3030d064-a9fd-47e2-afa4-1b9ec1334250/degrtbo-2395bff3-6d2d-4e0e-a70c-f1e0599a8881.jpg/v1/fill/w_768,h_1024,q_75,strp/comission_for_alusniper__by_djudjuxd49_degrtbo-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTAyNCIsInBhdGgiOiJcL2ZcLzMwMzBkMDY0LWE5ZmQtNDdlMi1hZmE0LTFiOWVjMTMzNDI1MFwvZGVncnRiby0yMzk1YmZmMy02ZDJkLTRlMGUtYTcwYy1mMWUwNTk5YTg4ODEuanBnIiwid2lkdGgiOiI8PTc2OCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.aRKXskEsV9D2ec-CLjL8xOq7pcj1SEkzTOym5xgyUKw
 Printed url without downloading
-Image URL: https://forums.alliedmods.net/image-proxy/e84b737c60d3738560ffe83f98838e06928e8c8e/687474703a2f2f6934312e70686f746f6275636b65742e636f6d2f616c62756d732f653236342f7368696e6967616d6963756f6e672f32322e706e67
+Image URL: https://64.media.tumblr.com/9e80544cf059d13db462070095033858/b054f7cb34ebf948-44/s400x600/aa225509425c6960945bc8b455619af3a64d1e60.jpg
 Printed url without downloading
-Image URL: https://i.ytimg.com/vi/CiYweqURCcU/hqdefault.jpg
+Image URL: http://pm1.narvii.com/7798/2a691e5feca512f94aa091f55b450b4287ac6f6ar1-1024-768v2_uhq.jpg
 Printed url without downloading
-Image URL: https://external-preview.redd.it/hSu44G6EfNKikbglFNNX_EXEiMcIbmsNbbmCkqjGRTE.jpg?auto=webp&s=34fb7160af339de76b1c75fa1de14ab4e7b2a72f
+Image URL: https://pbs.twimg.com/media/EpRWvVAW8AE7SWq.jpg
 Printed url without downloading
-Image URL: https://static.wikia.nocookie.net/tc2/images/3/3e/Vote_kick_feature.PNG/revision/latest?cb=20191114032623
+Image URL: https://64.media.tumblr.com/dfc667beb9b9bc134f58f2027e850076/ac35478ce48e68fe-26/s540x810/151949dae7973d7e3b9447335378510e23825b04.png
 Printed url without downloading
-Image URL: https://res.cloudinary.com/lmn/image/upload/c_limit,h_360,w_640/e_sharpen:100/f_auto,fl_lossy,q_auto/v1/gameskinnyc/v/o/t/vote-078b5.png
+Image URL: https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3030d064-a9fd-47e2-afa4-1b9ec1334250/dehmunv-28d5c049-bf6b-406f-b4f2-a92e6fce0d4e.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzMwMzBkMDY0LWE5ZmQtNDdlMi1hZmE0LTFiOWVjMTMzNDI1MFwvZGVobXVudi0yOGQ1YzA0OS1iZjZiLTQwNmYtYjRmMi1hOTJlNmZjZTBkNGUuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.NWe8gZwyzjmVfA3O0dG9IH6VhhcJDh89lIP2dvCk7e4
 Printed url without downloading
-Image URL: https://media.forgecdn.net/avatars/74/339/636164013409615087.png
+Image URL: https://64.media.tumblr.com/330d74cecfee4c63c3b446169a48b1a6/736ae6066586f7e4-37/s640x960/7f11e8a0c52e60105f54842a55c5fa094394a12c.jpg
 Printed url without downloading
-Image URL: https://steamuserimages-a.akamaihd.net/ugc/854976481391043379/34BC1F78DCF81749F521E83427C385BEB143DE5F/
+Image URL: http://pm1.narvii.com/7844/9eb2300230e8ccd246850a88bcce777ba64c2928r1-1821-2048v2_00.jpg
 Printed url without downloading
-Image URL: https://aq3d.com/media/5023/votekick.jpg?center=0.297,0.495&width=1170px&height=658px&mode=crop
+Image URL: https://pbs.twimg.com/media/E1mit5MXIAgQI6z.jpg
 Printed url without downloading
-Image URL: https://external-preview.redd.it/Geb0oHCqNNfKE130tyaYWps8jmS1FM1Neno58wkTImo.jpg?width=640&crop=smart&auto=webp&s=bec41f48a737f3b3efdbd29dffed28382f91d123
+Image URL: https://64.media.tumblr.com/1e1c68b7e719e72d87cc1bd44c3e3467/0eb7f896f8b4226b-7f/s640x960/84e386f6ff8e53c425e0e1ae9caafd45783b34c5.png
 Printed url without downloading
-Image URL: https://i1.sndcdn.com/artworks-000607992817-q43x40-t500x500.jpg
+Image URL: https://pbs.twimg.com/media/EMf-M_8XUAAbFNm.jpg:small
 Printed url without downloading
-Image URL: https://lookaside.fbsbx.com/lookaside/crawler/media/?media_id=108573382948290
+Image URL: https://pbs.twimg.com/media/EyOGpBWW8AI1vaa.jpg
 Printed url without downloading
-Image URL: https://imageproxy.ifunny.co/crop:x-20,resize:640x,quality:90x75/images/003545df4fc5fa817455bc38764797534f82b35cca5954c4d41f078b85307878_1.jpg
+Image URL: https://64.media.tumblr.com/b1a9f14f3e868c4e4cfd5dfbf3a14364/6c04a702bcef5fb3-aa/s500x750/98d88115bcd3c1ae2d19f78f4e7c6502ca70d5a9.jpg
 Printed url without downloading
-Image URL: https://dmarket.com/blog/kick-yourself-in-csgo/123_hu162c10caae02085852bfb0db391beb7c_189847_675x0_resize_q100_lanczos.jpg
+Image URL: https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3030d064-a9fd-47e2-afa4-1b9ec1334250/deg0ku7-3c1c2c40-2df0-4711-bd1b-7cb299c02eb0.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzMwMzBkMDY0LWE5ZmQtNDdlMi1hZmE0LTFiOWVjMTMzNDI1MFwvZGVnMGt1Ny0zYzFjMmM0MC0yZGYwLTQ3MTEtYmQxYi03Y2IyOTljMDJlYjAuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.YRiDYl7NbwZ_zxwfHzbyQ43H_zvXlcqVDchS5r4B5N8
 Printed url without downloading
-Image URL: https://i.ytimg.com/vi/oFzc3jkUIWY/maxresdefault.jpg
+Image URL: http://pm1.narvii.com/7146/bb678921bdc9526cbcfc1af10ebc35aaf96ca96cr1-1386-2048v2_uhq.jpg
 Printed url without downloading
-Image URL: https://static.wikia.nocookie.net/cso/images/e/e5/Kick.png/revision/latest/top-crop/width/360/height/450?cb=20111211144622
+Image URL: https://64.media.tumblr.com/163528f818e77606e71db8a0d8d26917/97075c9c5bedd5db-ea/s1280x1920/288fcaaef0f45ff93d06564df0123167818f1e4d.png
 Printed url without downloading
-Image URL: https://res.cloudinary.com/lmn/image/upload/c_limit,h_360,w_640/e_sharpen:100/f_auto,fl_lossy,q_auto/v1/gameskinnyc/f/r/i/friendly-a411b.png
+Image URL: https://64.media.tumblr.com/0afc76de409af4526d3170ec65f4d95c/d3cc664e8cd2cdf3-51/s640x960/69345ccf57ac7802c353fb24946da9a92cb7817d.jpg
 Printed url without downloading
 
 Errors: 0
