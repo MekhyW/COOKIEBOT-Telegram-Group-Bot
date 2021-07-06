@@ -109,7 +109,7 @@ def CheckCaptcha(msg, chat_id):
     text = open("Captcha.txt", 'w+', encoding='utf-8')
     for line in lines:
         if len(line.split()) >= 5:
-            #CHATID userID 2021-05-13 11:45:29.027116 password
+            #CHATID userID 2021-05-13 11:45:29.027116 password captcha_id
             year = int(line.split()[2].split("-")[0])
             month = int(line.split()[2].split("-")[1])
             day = int(line.split()[2].split("-")[2])
@@ -124,8 +124,11 @@ def CheckCaptcha(msg, chat_id):
                 cookiebot.sendMessage(chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user))
                 cookiebot.deleteMessage((line.split()[0], line.split()[5]))
             elif chat == chat_id and user == msg['from']['id']:
-                cookiebot.deleteMessage(telepot.message_identifier(msg))
                 text.write(line)
+                try:
+                    cookiebot.deleteMessage(telepot.message_identifier(msg))
+                except:
+                    pass
             else:    
                 text.write(line)
         else:
@@ -157,11 +160,11 @@ def SolveCaptcha(msg, chat_id, button):
                         pass
                 else:
                     cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.")
+                    text.write(line)
                     try:
                         cookiebot.deleteMessage(telepot.message_identifier(msg))
                     except:
                         pass
-                    text.write(line)
             else:
                 text.write(line)
     text.close()
