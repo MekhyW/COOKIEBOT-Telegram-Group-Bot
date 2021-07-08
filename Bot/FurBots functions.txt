@@ -11,13 +11,13 @@
 /rules@burrsobot
 /regras
 
-/aniversario
-/averageyiffometro
-/yiffometro
-/welcome
-/goodbye
-/ojogo
-/perdi
+/aniversario@TestBoybot
+/averageyiffometro@TestBoybot
+/yiffometro@TestBoybot
+/welcome@TestBoybot
+/goodbye@TestBoybot
+/ojogo@TestBoybot
+/perdi@TestBoybot
 
  /permissions@burrsobot  
  /chatscript@burrsobot  
