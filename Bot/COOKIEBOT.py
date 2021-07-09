@@ -214,7 +214,7 @@ def ModerateImage(msg, chat_id):
         r = requests.get("https://api.moderatecontent.com/moderate/?key={}&url={}".format(ModerateContentTOKEN, url))
         adult_percentage = float(json.loads(r.text)['predictions']['adult'])
         if adult_percentage > 75:
-            cookiebot.sendMessage(chat_id, "Imagem NSFW encontrada.\nChamando administradores...", reply_to_message_id=msg['message_id'])
+            cookiebot.sendMessage(chat_id, "Imagem NSFW detectada.\nChamando administradores...", reply_to_message_id=msg['message_id'])
             Adm(msg, chat_id)
     except:
         pass
