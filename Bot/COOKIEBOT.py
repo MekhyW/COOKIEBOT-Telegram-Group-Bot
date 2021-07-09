@@ -1,6 +1,5 @@
+ModerateContentTOKEN = ''
 DeepaiTOKEN = ''
-spotipyCLIENT_ID = ''
-spotipyCLIENT_SECRET = ''
 WolframAPP_ID = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
@@ -17,7 +16,6 @@ import threading
 from captcha.image import ImageCaptcha
 import googletrans
 from google_images_download import google_images_download
-import spotipy
 import speech_recognition
 import geopy
 import wolframalpha
@@ -29,7 +27,6 @@ from telepot.delegate import (per_chat_id, create_open, pave_event_space, includ
 captcha = ImageCaptcha()
 translator = googletrans.Translator()
 google_images_response = google_images_download.googleimagesdownload()
-spotify = spotipy.Spotify(spotipy.oauth2.SpotifyClientCredentials(client_id=spotipyCLIENT_ID, client_secret=spotipyCLIENT_SECRET).get_access_token())
 recognizer = speech_recognition.Recognizer()
 WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
 cookiebot = telepot.Bot(cookiebotTOKEN)
@@ -191,7 +188,7 @@ def CheckLimbo(msg, chat_id):
             minute = int(line.split()[3].split(":")[1])
             second = float(line.split()[3].split(":")[2])
             limbosettime = (hour*3600) + (minute*60) + (second)
-            if str(chat_id) != line.split()[0] or str(msg['new_chat_participant']['id']) != line.split()[1]:
+            if str(chat_id) != line.split()[0] or ('new_chat_participant' in msg and str(msg['new_chat_participant']['id']) != line.split()[1]):
                 text.write(line)
             elif datetime.date.today() == datetime.date(year, month, day) and limbosettime+limbotimespan >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                 cookiebot.deleteMessage(telepot.message_identifier(msg))
@@ -207,6 +204,21 @@ def left_chat_member(msg, chat_id):
     cookiebot.sendMessage(chat_id, "Perdemos um soldado\n\nF 😔", reply_to_message_id=msg['message_id'])
     photo = open('Brasil_flag.gif', 'rb')
     cookiebot.sendPhoto(chat_id, photo)
+
+def ModerateImage(msg, chat_id):
+    try:
+        for photo in msg['photo']:
+            Fileid = photo['file_id']
+        path = cookiebot.getFile(Fileid)['file_path']
+        url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
+        r = requests.get("https://api.moderatecontent.com/moderate/?key={}&url={}".format(ModerateContentTOKEN, url))
+        adult_percentage = float(json.loads(r.text)['predictions']['adult'])
+        if adult_percentage > 50:
+            cookiebot.sendMessage(chat_id, "Imagem NSFW encontrada.\nChamando administradores...", reply_to_message_id=msg['message_id'])
+            Adm(msg, chat_id)
+    except:
+        pass
+
 
 def Upscaler(msg, chat_id):
     Area = 0
@@ -702,19 +714,6 @@ def InteligenciaArtificial(msg, chat_id):
         Answer = translator.translate(Answer, dest='pt').text
         cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
 
-def IdentificaMusica(msg, chat_id):
-    spotify = spotipy.Spotify(spotipy.oauth2.SpotifyClientCredentials(client_id=spotipyCLIENT_ID, client_secret=spotipyCLIENT_SECRET).get_access_token())
-    results = spotify.search(q=msg['text'].replace("musica", "").replace("música", "").replace("Musica", "").replace("Música", "").strip(), type="track", limit=1, offset=0)
-    if results['tracks']['total']:
-        names = ''
-        for artist in results['tracks']['items'][0]['album']['artists']:
-            names += ", {}".format(artist['name'])
-        names = names[2:]
-        cookiebot.sendAudio(chat_id, results['tracks']['items'][0]['preview_url'], caption=results['tracks']['items'][0]['name'], title=results['tracks']['items'][0]['name'], performer=names, reply_to_message_id=msg['message_id'])
-        return True
-    else:
-        return False
-
 def AddtoStickerDatabase(msg, chat_id):
     wait_open("Sticker_Database.txt")
     text = open("Sticker_Database.txt", 'r+', encoding='utf-8')
@@ -937,6 +936,7 @@ def thread_function(msg):
                     pass
                 elif content_type == "photo":
                     CheckLimbo(msg, chat_id)
+                    ModerateImage(msg, chat_id)
                     Upscaler(msg, chat_id)
                 elif content_type == "document":
                     if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
@@ -976,8 +976,6 @@ def thread_function(msg):
                     AddEvento(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/eventos"):
                     Eventos(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/nada"):
-                    pass
                 elif 'text' in msg and msg['text'].startswith("/tavivo"):
                     TaVivo(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/everyone"):
@@ -1023,9 +1021,6 @@ def thread_function(msg):
                 elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
                     if not OnSay(msg, chat_id):
                         InteligenciaArtificial(msg, chat_id)
-                elif 'text' in msg and (msg['text'].lower().startswith("música") or msg['text'].lower().startswith("musica")) and funfunctions == True:
-                    if not OnSay(msg, chat_id):
-                        IdentificaMusica(msg, chat_id)
                 elif 'text' in msg:
                     CheckEventos(msg, chat_id)
                     SolveCaptcha(msg, chat_id, False)
