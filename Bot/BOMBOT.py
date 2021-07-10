@@ -262,25 +262,20 @@ def Location_to_text(msg, chat_id):
     cookiebot.sendMessage(chat_id, "Endereço: \n\n"+address, reply_to_message_id=msg['message_id'])
 
 def Speech_to_text(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    r = requests.get("https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, cookiebot.getFile(msg['voice']['file_id'])['file_path']), allow_redirects=True)
-    open('VOICEMESSAGE.oga', 'wb').write(r.content)
-    subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'panic', '-i', 'VOICEMESSAGE.oga', "VOICEMESSAGE.wav", '-y'])
-    AUDIO_FILE = "VOICEMESSAGE.wav"
-    with speech_recognition.AudioFile(AUDIO_FILE) as source:
-        audio = recognizer.record(source)
-    voicetext_ptbr = recognizer.recognize_google(audio, language="pt-BR", show_all=True)['alternative'][0]
-    voicetext_enus = recognizer.recognize_google(audio, language="en-US", show_all=True)['alternative'][0]
-    if 'confidence' in voicetext_ptbr and 'confidence' in voicetext_enus:
-        if voicetext_ptbr['confidence'] > voicetext_enus['confidence']:
-            Text = voicetext_ptbr['transcript'].capitalize()
-        else:
-            Text = voicetext_enus['transcript'].capitalize()
-    elif 'confidence' in voicetext_ptbr:
+    try:
+        cookiebot.sendChatAction(chat_id, 'typing')
+        r = requests.get("https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, cookiebot.getFile(msg['voice']['file_id'])['file_path']), allow_redirects=True)
+        open('VOICEMESSAGE.oga', 'wb').write(r.content)
+        subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'panic', '-i', 'VOICEMESSAGE.oga', "VOICEMESSAGE.wav", '-y'])
+        AUDIO_FILE = "VOICEMESSAGE.wav"
+        with speech_recognition.AudioFile(AUDIO_FILE) as source:
+            audio = recognizer.record(source)
+        voicetext_ptbr = recognizer.recognize_google(audio, language="pt-BR", show_all=True)['alternative'][0]
+        #voicetext_enus = recognizer.recognize_google(audio, language="en-US", show_all=True)['alternative'][0]
         Text = voicetext_ptbr['transcript'].capitalize()
-    else:
-        Text = voicetext_enus['transcript'].capitalize()
-    cookiebot.sendMessage(chat_id, "Texto: \n\n"+'"'+Text+'"', reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, "Texto: \n"+'"'+Text+'"', reply_to_message_id=msg['message_id'])
+    except:
+        pass
 
 def CooldownAction(msg, chat_id):
     global sentcooldownmessage
@@ -932,7 +927,7 @@ def thread_function(msg):
                         ReplySticker(msg, chat_id)
                 elif content_type == "location":
                     Location_to_text(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/") and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and 'username' in msg['from'] and str(msg['from']['username']) not in listaadmins:
+                elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and 'username' in msg['from'] and str(msg['from']['username']) not in listaadmins:
                     CooldownAction(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/escolha") and funfunctions == True:
                     Escolha(msg, chat_id)
