@@ -1,4 +1,3 @@
-ModerateContentTOKEN = ''
 DeepaiTOKEN = ''
 WolframAPP_ID = ''
 cookiebotTOKEN = ''
@@ -204,20 +203,6 @@ def left_chat_member(msg, chat_id):
     cookiebot.sendMessage(chat_id, "Perdemos um soldado\n\nF 😔", reply_to_message_id=msg['message_id'])
     photo = open('Brasil_flag.gif', 'rb')
     cookiebot.sendPhoto(chat_id, photo)
-
-def ModerateImage(msg, chat_id):
-    try:
-        for photo in msg['photo']:
-            Fileid = photo['file_id']
-        path = cookiebot.getFile(Fileid)['file_path']
-        url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
-        r = requests.get("https://api.moderatecontent.com/moderate/?key={}&url={}".format(ModerateContentTOKEN, url))
-        adult_percentage = float(json.loads(r.text)['predictions']['adult'])
-        if adult_percentage > 90:
-            cookiebot.sendMessage(chat_id, "Imagem NSFW detectada.\nChamando administradores...", reply_to_message_id=msg['message_id'])
-            Adm(msg, chat_id)
-    except:
-        pass
 
 
 def Upscaler(msg, chat_id):
@@ -936,7 +921,6 @@ def thread_function(msg):
                     pass
                 elif content_type == "photo":
                     CheckLimbo(msg, chat_id)
-                    ModerateImage(msg, chat_id)
                     Upscaler(msg, chat_id)
                 elif content_type == "document":
                     if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
