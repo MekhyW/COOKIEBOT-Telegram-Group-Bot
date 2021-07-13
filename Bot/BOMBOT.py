@@ -418,10 +418,10 @@ def AddEvento(msg, chat_id):
             text = open("Events.txt", 'a+', encoding='utf-8')
             event = str(chat_id) + " " + str(msg['reply_to_message']['message_id']) + " " + str(datetime.datetime.now()) + " " + str(time) + "\n"
             text.write(event)
-            while not str(time - datetime.datetime.now() - datetime.timedelta(hours=24)).startswith("-"):
-                time = time - datetime.timedelta(hours=24)
-                event = str(chat_id) + " " + str(msg['reply_to_message']['message_id']) + " " + str(datetime.datetime.now()) + " " + str(time) + " REPEAT" + "\n"
-                text.write(event)
+            #while not str(time - datetime.datetime.now() - datetime.timedelta(hours=24)).startswith("-"):
+            #    time = time - datetime.timedelta(hours=24)
+            #    event = str(chat_id) + " " + str(msg['reply_to_message']['message_id']) + " " + str(datetime.datetime.now()) + " " + str(time) + " REPEAT" + "\n"
+            #    text.write(event)
             cookiebot.sendMessage(chat_id, "Evento com ID {} adicionado!".format(str(msg['reply_to_message']['message_id'])), reply_to_message_id=msg['message_id'])
             text.close()
         except:

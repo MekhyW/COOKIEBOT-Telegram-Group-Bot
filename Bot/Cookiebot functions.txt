@@ -7,7 +7,7 @@ adm - Chama os administradores do chat
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo
 novobemvindo - Atualiza a mensagem de boas vindas
-portugues - Traduz texto para pr/br
+portugues - Traduz texto para pt/br
 ingles - Traduz texto para us/en
 hoje - DESATIVADO COM O BURRBOT
 cheiro - DESATIVADO COM O BURRBOT
@@ -21,9 +21,7 @@ idade - Te digo quantos anos vc tem
 genero - Sera que e menino ou menina
 completar - Faço lero lero a partir de uma frase
 dadjoke - Dor
-portal - Uma ratazana e um desejo
 escolha - Deixa o bot escolher pra vc
-nada - nada kkkk
 tavivo - Manda um ping de teste com data
 stop- Safe switch do mekhy
 contato - Usa esse comando nunca te pedi nada
@@ -62,8 +60,6 @@ tonnyrussel - tonnyrussel
 yoshiro - yoshiro
 
 PASSIVAS:
-Musica - digite "musica" e algo, ele irá mandar um pedaço da música
-Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem mexer nele. Fale com o Mekhy para implementar isso no seu chat
 IA de conversa - Responde mensagens
 IA assistente - Matemática, vocabulário, física, química, weather, etc
 IA customizada - Respostas automáticas para palavras-chave predefinidas
@@ -75,6 +71,7 @@ speech to text - Transcripta mensagens de voz
 location to address - Manda o endereço correspondente a um location
 image upscaler - Amplia imagens de baixa resolução com inteligência artificial
 Mensagem customizada de boas vindas
+Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem mexer nele. Fale com o Mekhy para implementar isso no seu chat
 
 
 Fale com o Mekhy para adicionar um comando seu ou ensinar algo ao bot!
