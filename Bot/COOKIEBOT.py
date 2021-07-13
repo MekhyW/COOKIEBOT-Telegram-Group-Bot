@@ -178,7 +178,7 @@ def CheckLimbo(msg, chat_id):
     text.close()
     text = open("Limbo.txt", 'w+', encoding='utf-8')
     for line in lines:
-        if len(line.split()) == 4:
+        if len(line.split()) >= 4:
             #CHATID userID 2021-05-13 11:45:29.027116
             year = int(line.split()[2].split("-")[0])
             month = int(line.split()[2].split("-")[1])
@@ -187,7 +187,7 @@ def CheckLimbo(msg, chat_id):
             minute = int(line.split()[3].split(":")[1])
             second = float(line.split()[3].split(":")[2])
             limbosettime = (hour*3600) + (minute*60) + (second)
-            if str(chat_id) != line.split()[0] or ('new_chat_participant' in msg and str(msg['new_chat_participant']['id']) != line.split()[1]):
+            if str(chat_id) != line.split()[0] or str(msg['from']['id']) != line.split()[1]:
                 text.write(line)
             elif datetime.date.today() == datetime.date(year, month, day) and limbosettime+limbotimespan >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                 cookiebot.deleteMessage(telepot.message_identifier(msg))
