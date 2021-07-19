@@ -355,9 +355,9 @@ def Bemvindo(msg, chat_id):
     if os.path.exists("Welcome_" + str(chat_id)+".txt"):
         with open("Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
-        cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(round(limbotimespan/60))))
+        cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS OU VÍDEOS no grupo".format(str(round(limbotimespan/60))))
     else:    
-        cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS no grupo".format(str(round(limbotimespan/60))))
+        cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS OU VÍDEOS no grupo".format(str(round(limbotimespan/60))))
 
 def AtualizaRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -917,6 +917,8 @@ def thread_function(msg):
                 elif content_type == "photo":
                     CheckLimbo(msg, chat_id)
                     Upscaler(msg, chat_id)
+                elif content_type == "video":
+                    CheckLimbo(msg, chat_id)
                 elif content_type == "document":
                     if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                         ReplySticker(msg, chat_id)
