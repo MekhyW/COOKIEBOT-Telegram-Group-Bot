@@ -7,23 +7,16 @@ adm - Chama os administradores do chat
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo
 novobemvindo - Atualiza a mensagem de boas vindas
-portugues - Traduz texto para pt/br
-ingles - Traduz texto para us/en
 hoje - DESATIVADO COM O BURRBOT
 cheiro - DESATIVADO COM O BURRBOT
 eventos - Proximos eventos registrados em mim
 addevento - Criar um evento
 removeevento - Deletar um evento
-startup - Qual o slogan da sua startup
-numero - Falo fatos sobre um numero
-insulto - Mando a real
 idade - Te digo quantos anos vc tem
 genero - Sera que e menino ou menina
 completar - Faço lero lero a partir de uma frase
-dadjoke - Dor
-escolha - Deixa o bot escolher pra vc
 tavivo - Manda um ping de teste com data
-stop- Safe switch do mekhy
+stop - Safe switch do mekhy
 contato - Usa esse comando nunca te pedi nada
 comandos - Lista os comandos do bot
 configurar - Configura o bot
@@ -62,15 +55,15 @@ yoshiro - yoshiro
 PASSIVAS:
 IA de conversa - Responde mensagens
 IA assistente - Matemática, vocabulário, física, química, weather, etc
-IA customizada - Respostas automáticas para palavras-chave predefinidas
-stickers - Responde um sticker com outro sticker
-captcha - Impede que bots mandem mensagens e kicka eles se não provarem que são humanos
-limbo de imagem - Impede que novos membros mandem fotos, por um intervalo
-sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
-speech to text - Transcripta mensagens de voz
-location to address - Manda o endereço correspondente a um location
-image upscaler - Amplia imagens de baixa resolução com inteligência artificial
-Mensagem customizada de boas vindas
+Dicionário customizado - Respostas automáticas para palavras-chave predefinidas
+Stickers - Responde um sticker com outro sticker
+Captcha - Impede que bots mandem mensagens e kicka eles se não provarem que são humanos
+Limbo de imagem - Impede que novos membros mandem fotos, por um intervalo
+Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
+Speech to text - Transcripta mensagens de voz
+Location to address - Manda o endereço correspondente a um location
+Image upscaler - Amplia imagens de baixa resolução com inteligência artificial
+Welcome - Mensagem customizada de boas vindas
 Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem mexer nele. Fale com o Mekhy para implementar isso no seu chat
 
 

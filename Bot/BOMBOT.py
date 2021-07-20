@@ -285,14 +285,6 @@ def CooldownAction(msg, chat_id):
     elif sentcooldownmessage == True:
         cookiebot.deleteMessage(telepot.message_identifier(msg))
 
-def Escolha(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if len(msg['text'].split()) == 1:
-        cookiebot.sendMessage(chat_id, "Envie os termos pra escolher\nEXEMPLO: '/escolher A, B, C'", reply_to_message_id=msg['message_id'])
-    else:
-        terms = msg['text'].split(",")
-        cookiebot.sendMessage(chat_id, terms[random.randint(1, len(terms)-1)].capitalize(), reply_to_message_id=msg['message_id'])
-
 def Idade(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     if not " " in msg['text']:
@@ -328,12 +320,6 @@ def Completar(msg, chat_id):
     r = requests.post("https://api.deepai.org/api/text-generator",data={'text': translator.translate(target, dest='en').pronunciation,},headers={'api-key': DeepaiTOKEN})
     Answer = translator.translate(r.json()['output'], dest='pt').text
     cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
-
-def Startup(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    r = requests.get("http://itsthisforthat.com/api.php?text")
-    startup = translator.translate(r.text, dest='pt').text
-    cookiebot.sendMessage(chat_id, "{} Criou uma startup!\nO slogan é:\n'{}'".format(msg['from']['username'], startup))
 
 
 def AtualizaBemvindo(msg, chat_id):
@@ -542,48 +528,6 @@ def QqEuFaço(msg, chat_id):
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
     cookiebot.sendMessage(chat_id, "Vai "+target, reply_to_message_id=msg['message_id'])
-    text_file.close()
-
-def Portugues(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if 'reply_to_message' not in msg:
-        cookiebot.sendMessage(chat_id, "Responda uma mensagem, vou traduzir ela para o português \n(FUNCIONA COM QUALQUER LINGUA)", reply_to_message_id=msg['message_id'])
-    else:
-        translation = translator.translate(msg['reply_to_message']['text'], dest='pt').text
-        cookiebot.sendMessage(chat_id, "Tradução para pt/br:\n\n'{}'".format(translation), reply_to_message_id=msg['message_id'])
-
-def Ingles(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if 'reply_to_message' not in msg:
-        cookiebot.sendMessage(chat_id, "Responda uma mensagem, vou traduzir ela para o inglês \n(FUNCIONA COM QUALQUER LINGUA)", reply_to_message_id=msg['message_id'])
-    else:
-        translation = translator.translate(msg['reply_to_message']['text'], dest='en').text
-        cookiebot.sendMessage(chat_id, "Tradução para inglês:\n\n'{}'".format(translation), reply_to_message_id=msg['message_id'])
-
-def Insulto(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    insult = json.loads(requests.get('https://evilinsult.com/generate_insult.php?lang=en&type=json').text)['insult']
-    insulto = translator.translate(insult, dest='pt').text
-    cookiebot.sendMessage(chat_id, insulto, reply_to_message_id=msg['message_id'])
-
-def Numero(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if len(msg['text'].split()) == 1:
-        cookiebot.sendMessage(chat_id, "Mande um número, vou dizer fatos sobre ele!\nExemplo: /numero 42", reply_to_message_id=msg['message_id'])
-    else:
-        number = msg['text'].replace("/numero ", '')
-        historical_fact = translator.translate(requests.get('http://numbersapi.com/{}'.format(number)).text, dest='pt').text
-        mathematical_fact = translator.translate(requests.get('http://numbersapi.com/{}/math'.format(number)).text, dest='pt').text
-        final_text = historical_fact+"\n\nAlém disso, "+mathematical_fact
-        cookiebot.sendMessage(chat_id, final_text, reply_to_message_id=msg['message_id'])
-
-def DadJoke(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("DadJokes.txt")
-    text_file = open("DadJokes.txt", "r+", encoding='utf8')
-    lines = text_file.readlines()
-    target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
-    cookiebot.sendMessage(chat_id, target, reply_to_message_id=msg['message_id'])
     text_file.close()
 
 def IdeiaDesenho(msg, chat_id):
@@ -931,16 +875,12 @@ def thread_function(msg):
                     Location_to_text(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and 'username' in msg['from'] and str(msg['from']['username']) not in listaadmins:
                     CooldownAction(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/escolha") and funfunctions == True:
-                    Escolha(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/idade") and funfunctions == True:
                     Idade(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/genero") and funfunctions == True:
                     Genero(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/completar") and funfunctions == True:
                     Completar(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/startup") and funfunctions == True:
-                    Startup(msg, chat_id)
                 elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo" and str(msg['from']['username']) in listaadmins:
                     AtualizaBemvindo(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/novobemvindo"):
@@ -971,16 +911,6 @@ def thread_function(msg):
                     Cheiro(msg, chat_id)
                 elif FurBots == False and 'text' in msg and ('eu faço' in msg['text'] or 'eu faco' in msg['text']) and '?' in msg['text'] and funfunctions == True:
                     QqEuFaço(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/portugues"):
-                    Portugues(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/ingles"):
-                    Ingles(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/insulto") and funfunctions == True:
-                    Insulto(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/numero") and funfunctions == True:
-                    Numero(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/dadjoke") and funfunctions == True:
-                    DadJoke(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/ideiadesenho") and funfunctions == True:
                     IdeiaDesenho(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/contato"):
