@@ -33,6 +33,7 @@ gummypuh - gummypuh
 haura - haura
 juuj - juuj
 kuark - kuark
+leeycarus - leeycarus
 loganartic - loganartic
 lukit - lukit
 matt - matt
@@ -47,6 +48,7 @@ purplegalaxy - purplegalaxy
 ralph - ralph
 ratenhas - ratenhas
 seive - seive
+shimano - shimano
 sopero - sopero
 tomecow - tomecow
 tonnyrussel - tonnyrussel
