@@ -873,8 +873,8 @@ def thread_function(msg):
                         ReplySticker(msg, chat_id)
                 elif content_type == "location":
                     Location_to_text(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and 'username' in msg['from'] and str(msg['from']['username']) not in listaadmins:
-                    CooldownAction(msg, chat_id)
+                #elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) and 'username' in msg['from'] and str(msg['from']['username']) not in listaadmins:
+                #    CooldownAction(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/idade") and funfunctions == True:
                     Idade(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/genero") and funfunctions == True:
