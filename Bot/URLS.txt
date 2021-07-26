@@ -1,603 +1,67 @@
 
-Item no.: 1 --> Item name = dildo
+Item no.: 1 --> Item name = comer
 Evaluating...
-list index out of range
-Image objects data unpacking failed. Please leave a comment with the above error at https://github.com/hardikvasa/google-images-download/pull/298
-text supergroup -1001266815314 9451 1082044057
-text supergroup -1001199092676 326933 1877861103
-['em', 'forcar', 'vc', 'a', 'ver', 'ou', 'em', 'saber', 'o', 'pq', 'vc', 'acha', 'ruim']
-sticker supergroup -1001199092676 326934 1877861103
-text supergroup -1001199092676 326935 1176128159
-text supergroup -1001266815314 9452 151548343
-text supergroup -1001266815314 9453 780875868
-text supergroup -1001266815314 9454 151548343
-text supergroup -1001199092676 326936 1877861103
-text supergroup -1001199092676 326937 1176128159
-text supergroup -1001281222737 338665 1308040492
-['feliz', 'dia', 'do', 'amigo', 'uwu']
-text supergroup -1001260031641 107741 1862710399
-text supergroup -1001199092676 326938 1877861103
-['alguma', 'fala', 'algum', 'app', 'pra', 'ler', 'manga', 'pelamor']
-photo supergroup -1001199092676 326939 1638812655
-text supergroup -1001281222737 338666 1308040492
-text supergroup -1001260031641 107742 1862710399
-['e', 'feliz', 'dia', 'do', 'zoroark', 'ekekek']
-text supergroup -1001199092676 326940 862783985
-['xd', 'yee', 'ksksk', 'oia', 'a', 'boca', 'do', 'tubarao']
-text supergroup -1001199092676 326941 1862710399
-text supergroup -1001266815314 9455 151548343
-text supergroup -1001281222737 338667 1011756108
-['feliz', 'dia', 'do', 'amigo']
-sticker supergroup -1001199092676 326942 1862710399
-text supergroup -1001266815314 9457 151548343
-text supergroup -1001199092676 326943 1862710399
-text supergroup -1001199092676 326944 1638812655
-['tu', 'entra', 'ele', 'e', 'add', 'na', 'tela', 'inicial', 'eu', 'li', 'a', 'maioria', 'de', 'beastars', 'ai']
-text supergroup -1001199092676 326945 1877861103
-text supergroup -1001199092676 326946 1638812655
-text supergroup -1001199092676 326947 1862710399
-text supergroup -1001266815314 9458 151548343
-text supergroup -1001199092676 326948 1638812655
-['preguica', 'de', 'terminar', 'legoshi', 'e', 'muito', 'corno', 'mds']
-text supergroup -1001199092676 326949 1638812655
-['chifre', 'maior', 'q', 'o', 'meu']
-text supergroup -1001199092676 326950 1877861103
-text supergroup -1001199092676 326951 1862710399
-text supergroup -1001199092676 326952 1877861103
-sticker supergroup -1001199092676 326953 1877861103
-text supergroup -1001199092676 326954 1862710399
-['fa', 'mais', 'raiva', 'ainda', 'lendo', 'o', 'manga']
-text supergroup -1001199092676 326955 1877861103
-text supergroup -1001199092676 326956 1877861103
-sticker supergroup -1001199092676 326957 1877861103
-text supergroup -1001199092676 326958 1862710399
-['so', 'queria', 'terminar', 'de', 'ler', 'o', 'cap', '320', 'de', 'bnha']
-text supergroup -1001199092676 326959 1176128159
-sticker supergroup -1001281222737 338668 1308040492
-text supergroup -1001199092676 326960 1176128159
-text supergroup -1001199092676 326961 1176128159
-text supergroup -1001199092676 326962 1877861103
-text supergroup -1001199092676 326963 1176128159
-text supergroup -1001199092676 326964 1877861103
-text supergroup -1001266815314 9460 151548343
-text supergroup -1001266815314 9461 780875868
-sticker supergroup -1001281222737 338669 1011756108
-text supergroup -1001199092676 326965 1176128159
-text supergroup -1001199092676 326966 1877861103
-sticker supergroup -1001199092676 326967 1877861103
-document supergroup -1001281222737 338670 1334902339
-sticker supergroup -1001281222737 338671 1308040492
-text supergroup -1001266815314 9464 780875868
-text supergroup -1001199092676 326968 117249887
-text supergroup -1001199092676 326969 1638812655
-['eo', 'bagui', 'q', 'mandei', 'n', 'serve']
-text supergroup -1001281222737 338672 1011756108
-text supergroup -1001281222737 338673 1308040492
-text supergroup -1001199092676 326970 1877861103
-text supergroup -1001281222737 338674 1308040492
-text supergroup -1001266815314 9466 780875868
-document supergroup -1001199092676 326971 862783985
-text supergroup -1001281222737 338675 1334902339
-text supergroup -1001266815314 9467 780875868
-text supergroup -1001199092676 326972 1862710399
-text supergroup -1001199092676 326973 1638812655
-['serve', 'pois', 'estou', 'desesperado']
-['eu', 'real', 'nao', 'entendi']
-text supergroup -1001199092676 326974 1893594038
-text supergroup -1001266815314 9468 151548343
-text supergroup -1001199092676 326975 1877861103
-text supergroup -1001199092676 326976 1893594038
-['achei', 'que', 'era', 'um', 'nsfe']
-text supergroup -1001266815314 9469 151548343
-text supergroup -1001266815314 9470 780875868
-text supergroup -1001199092676 326977 1893594038
-text supergroup -1001199092676 326978 862783985
-['xd', 'ele', 'nao', 'curte', 'beijo']
-text supergroup -1001199092676 326979 862783985
-text supergroup -1001266815314 9471 151548343
-document supergroup -1001199092676 326980 862783985
-text supergroup -1001199092676 326981 1893594038
-document supergroup -1001199092676 326982 117249887
-text supergroup -1001266815314 9472 1082044057
-text supergroup -1001266815314 9473 780875868
-document supergroup -1001199092676 326983 1877861103
-text supergroup -1001199092676 326984 1877861103
-text supergroup -1001266815314 9475 151548343
-text supergroup -1001266815314 9476 1082044057
-text supergroup -1001199092676 326985 1877861103
-text supergroup -1001199092676 326986 117249887
-sticker supergroup -1001199092676 326987 1877861103
-text supergroup -1001266815314 9477 780875868
-['o', 'genero', 'ta', 'quebrado', 'fuck']
-text supergroup -1001199092676 326988 862783985
-text supergroup -1001266815314 9478 151548343
-text supergroup -1001266815314 9480 151548343
-text supergroup -1001266815314 9481 780875868
-['vou', 'consertar', 'isso', 'amanha']
-text supergroup -1001199092676 326989 117249887
-text supergroup -1001199092676 326990 862783985
-['ahh', 'saudades', 'da', 'minha', 'coelha', 'qwp']
-text supergroup -1001266815314 9482 780875868
-text supergroup -1001266815314 9483 151548343
-text supergroup -1001266815314 9484 1082044057
-text supergroup -1001266815314 9486 780875868
-text supergroup -1001199092676 326991 1877861103
-text supergroup -1001199092676 326992 1877861103
-sticker supergroup -1001199092676 326993 1877861103
-text supergroup -1001266815314 9489 151548343
-text supergroup -1001199092676 326994 862783985
-text supergroup -1001266815314 9490 1082044057
-['x3', 'e', 'muito', 'fofo']
-sticker supergroup -1001199092676 326995 1877861103
-text supergroup -1001266815314 9491 151548343
-document supergroup -1001199092676 326996 1877861103
-text supergroup -1001199092676 326997 1893594038
-['entao', 'da', 'um', 'beijin']
-text supergroup -1001266815314 9493 1082044057
-text supergroup -1001199092676 326998 1877861103
-['saudade', 'do', 'meu', 'guaxinim', '']
-text supergroup -1001266815314 9494 676164336
-text supergroup -1001266815314 9495 1082044057
-sticker supergroup -1001199092676 326999 862783985
-text supergroup -1001281222737 338676 1308040492
-text supergroup -1001199092676 327000 1893594038
-text supergroup -1001199092676 327001 1877861103
-photo supergroup -1001281222737 338677 943108997
-text supergroup -1001266815314 9497 151548343
-['me', 'joga', 'na', 'parede', 'e', 'me', 'chama', 'de', 'largatixa', '']
-text supergroup -1001199092676 327002 1893594038
-text supergroup -1001199092676 327003 862783985
-text supergroup -1001266815314 9499 1082044057
-text supergroup -1001266815314 9500 151548343
-text supergroup -1001266815314 9501 1082044057
-sticker supergroup -1001199092676 327004 1893594038
-document supergroup -1001199092676 327005 862783985
-text supergroup -1001281222737 338678 395161740
-text supergroup -1001266815314 9502 780875868
-document supergroup -1001281222737 338679 395161740
-text supergroup -1001266815314 9504 151548343
-text supergroup -1001266815314 9505 151548343
-text supergroup -1001266815314 9506 676164336
-text supergroup -1001199092676 327006 1877861103
-['achei', 'que', 'tinha', 'sido', 'hackeado']
-sticker supergroup -1001199092676 327007 1877861103
-text supergroup -1001266815314 9508 676164336
-['hdhehdwhxj', 'q', 'poha', 'e', 'essa']
-text supergroup -1001266815314 9509 151548343
-text supergroup -1001266815314 9510 780875868
-['acho', 'que', 'o', 'filtro', 'falhou', 'rs']
-['sirigueijo', 'depois', 'do', 'rivotril']
-text supergroup -1001266815314 9513 676164336
-['carai', 'o', 'bot', 'tem', 'vida', 'propria']
-text supergroup -1001266815314 9514 676164336
-text supergroup -1001266815314 9515 780875868
-sticker supergroup -1001266815314 9516 151548343
-text supergroup -1001199092676 327008 1877861103
-['vejam', 'o', 'picapau', 'dancando']
-video supergroup -1001199092676 327009 1877861103
-text supergroup -1001266815314 9518 676164336
-['a', 'revolucao', 'das', 'maquinas', 'comecou']
-text supergroup -1001266815314 9519 1082044057
-text supergroup -1001199092676 327010 1862710399
-text supergroup -1001199092676 327011 1862710399
-text supergroup -1001199092676 327012 1862710399
-text supergroup -1001199092676 327013 1877861103
-text supergroup -1001266815314 9520 780875868
-['vc', 'ainda', 'nn', 'viu', 'oq', 'eu', 'to', 'querendo', 'fazer', 'nele']
-sticker supergroup -1001199092676 327014 1862710399
-text supergroup -1001266815314 9521 1082044057
-sticker supergroup -1001199092676 327015 1877861103
-text supergroup -1001266815314 9522 676164336
-['mekhy', 'vai', 'criar', 'algo', 'q', 'dominara', 'o', 'mundo']
-text supergroup -1001266815314 9524 676164336
-text supergroup -1001266815314 9525 676164336
-text supergroup -1001266815314 9526 1082044057
-text supergroup -1001266815314 9527 151548343
-text supergroup -1001266815314 9528 780875868
-text supergroup -1001281222737 338680 1308040492
-sticker supergroup -1001281222737 338681 1308040492
-text supergroup -1001266815314 9529 1082044057
-text supergroup -1001281222737 338682 1308040492
-text supergroup -1001266815314 9530 780875868
-['rachel', 'comedora', 'de', 'casado', 'oia']
-text supergroup -1001281222737 338683 395161740
-text supergroup -1001266815314 9531 1082044057
-['ele', 'manda', 'rola', 'do', 'bob', 'esponja']
-sticker supergroup -1001266815314 9532 780875868
-text supergroup -1001266815314 9533 1082044057
-['manda', 'ele', 'pra', 'um', 'psicologo']
-text supergroup -1001266815314 9534 1082044057
-text supergroup -1001281222737 338684 1308040492
-text supergroup -1001266815314 9535 676164336
-['tem', 'q', 'ser', 'internado', 'logo']
-sticker supergroup -1001281222737 338685 395161740
-sticker supergroup -1001266815314 9536 676164336
-text supergroup -1001199092676 327016 1638812655
-text supergroup -1001199092676 327017 1638812655
-photo supergroup -1001199092676 327018 1308040492
-text supergroup -1001266815314 9537 780875868
-text supergroup -1001199092676 327019 1862710399
-['cookiemwbot', 'filho', 'eu', 'vou', 'te', 'botar', 'de', 'castigo', 'dnv']
-sticker supergroup -1001199092676 327020 1862710399
-text supergroup -1001281222737 338686 943108997
-text supergroup -1001199092676 327021 1638812655
-text supergroup -1001199092676 327022 1638812655
-text supergroup -1001266815314 9539 780875868
-text supergroup -1001266815314 9540 151548343
-text supergroup -1001199092676 327023 1308040492
-text supergroup -1001266815314 9542 676164336
-text supergroup -1001266815314 9543 151548343
-['que', 'incesto', 'e', 'esse']
-sticker supergroup -1001281222737 338687 1308040492
-text supergroup -1001281222737 338688 1308040492
-text supergroup -1001199092676 327024 1862710399
-text supergroup -1001266815314 9544 780875868
-['qual', 'o', 'nome', 'da', 'minha', 'mae']
-text supergroup -1001281222737 338689 943108997
-text supergroup -1001199092676 327025 1638812655
-text supergroup -1001266815314 9546 676164336
-text supergroup -1001266815314 9547 780875868
-text supergroup -1001199092676 327026 1638812655
-['eu', 'so', 'vi', 'uns', '4', 'ou', '5', 'animes', 'na', 'vida']
-text supergroup -1001266815314 9548 780875868
-text supergroup -1001281222737 338690 395161740
-text supergroup -1001199092676 327027 1862710399
-text supergroup -1001199092676 327028 1638812655
-text supergroup -1001266815314 9549 1082044057
-['bna', 'beastars', 'madoka', 'pokemon', 'castlevania', 'e', 'provavelmente', 'outros', 'ai', 'q', 'nao', 'lembro']
-text supergroup -1001199092676 327029 1638812655
-sticker supergroup -1001199092676 327030 1877861103
-text supergroup -1001199092676 327031 1638812655
-['prefiro', 'filme', 'q', 'e', 'de', 'uma', 'vez']
-text supergroup -1001199092676 327032 1862710399
-sticker supergroup -1001266815314 9551 151548343
-['eu', 'to', 'triste', 'com', 'oq', 'to', 'vendo', 'do', 'manga']
-sticker supergroup -1001199092676 327033 1877861103
-sticker supergroup -1001199092676 327034 1862710399
-text supergroup -1001266815314 9553 676164336
-text supergroup -1001281222737 338691 943108997
-sticker supergroup -1001266815314 9554 1082044057
-text supergroup -1001281222737 338692 395161740
-sticker supergroup -1001266815314 9555 151548343
-text supergroup -1001199092676 327035 1638812655
-['beastars', 'so', 'vi', 'a', 'primeira', 'temporada', 'pq', 'vi', 'tanto', 'do', 'manga', 'q', 'ja', 'sei', 'oq', 'acontece', 'na', 'segunda', 'temporada']
-text supergroup -1001281222737 338693 1308040492
-text supergroup -1001281222737 338694 1308040492
-['w', 'porque', 'estamos', 'se', 'encarando']
-text supergroup -1001281222737 338695 943108997
-sticker supergroup -1001281222737 338696 943108997
-sticker supergroup -1001260031641 107743 840882569
-sticker supergroup -1001281222737 338697 1308040492
-text supergroup -1001199092676 327036 1638812655
-['e', 'castlevania', 'pra', 'mim', 'acabou', 'quando', 'o', 'dracula', 'morreu']
-text supergroup -1001199092676 327037 1638812655
-['bna', 'teve', 'um', 'final', 'broxante', 'e', 'corrido']
-text supergroup -1001199092676 327038 1638812655
-['madoka', 'nem', 'terminei', 'e', 'pokemon', 'nao', 'lembro']
-sticker supergroup -1001281222737 338698 943108997
-sticker supergroup -1001281222737 338699 395161740
-text supergroup -1001260031641 107744 1877861103
-text supergroup -1001199092676 327039 1862710399
-text supergroup -1001260031641 107745 1877861103
-text supergroup -1001199092676 327040 1862710399
-sticker supergroup -1001260031641 107746 1862710399
-sticker supergroup -1001281222737 338700 1308040492
-text supergroup -1001199092676 327041 1854408934
-['recomendo', 'violet', 'evergaden', 'konosuba', 'e', 'nishijou', 'se', 'amar', 'uma', 'zueira', 'retardada', 'ore', 'monogatari', 'se', 'curte', 'uma', 'historia', 'fofa', 'e', 'romantica', 'e', 'gugure', 'kokuresan', 'fora', 'esses', 'himouto', 'umaruchan', 'e', 'maid', 'dragon', 'sao', 'bons']
-text supergroup -1001199092676 327042 1854408934
-sticker supergroup -1001260031641 107747 1877861103
-text supergroup -1001199092676 327043 862783985
-['violet', 'e', 'top', 'uwu']
-document supergroup -1001199092676 327044 862783985
-text supergroup -1001199092676 327045 1854408934
-['desnecessario', 'aquilo', 'de', 'um', 'boss', 'overpower']
-text supergroup -1001199092676 327046 1638812655
-['o', 'ogami', 'deveria', 'ter', 'matado', 'o', 'cara']
-text supergroup -1001199092676 327047 1854408934
-['uma', 'obra', 'de', 'arte']
-text supergroup -1001199092676 327048 1638812655
-['sim', 'e', 'perder', 'super', 'facil']
-text supergroup -1001199092676 327049 1877861103
-text supergroup -1001199092676 327050 1854408934
-text supergroup -1001199092676 327051 1877861103
-text supergroup -1001199092676 327052 1877861103
-text supergroup -1001199092676 327053 1638812655
-['um', 'anime', 'de', 'furro', 'onde', 'tem', 'um', 'batman', 'lobo', 'basicamente', 'so', 'q', 'ele', 'mata']
-text supergroup -1001199092676 327054 1877861103
-['e', 'da', 'menina', 'tanuki']
-text supergroup -1001199092676 327055 1877861103
-sticker supergroup -1001199092676 327056 862783985
-video supergroup -1001260031641 107748 1862710399
-video supergroup -1001260031641 107749 1862710399
-text supergroup -1001199092676 327057 1877861103
-['que', 'a', 'menina', 'tanuki', 'quer', 'voltar', 'a', 'virar', 'humana']
-text supergroup -1001199092676 327058 1877861103
-text supergroup -1001199092676 327059 1877861103
-text supergroup -1001199092676 327060 1877861103
-['e', 'tambem', 'nao', 'quer']
-text supergroup -1001199092676 327061 1638812655
-text supergroup -1001199092676 327062 862783985
-['top', 'tambem', '', 'assiti', 'em', 'japa', 'pq', 'a', 'dublagem', 'demorou', 'pra', 'sair', 'e', 'eu', 'nao', 'queria', 'levar', 'spolier', 'dos', 'fdp']
-text supergroup -1001199092676 327063 1877861103
-['com', 'a', 'cidade', 'dos', 'furru', 'afastada', 'da', 'cidade', 'dos', 'humano', 'cujo', 'o', 'prefeito', 'dos', 'humanos', 'e', 'furry']
-text supergroup -1001199092676 327064 1854408934
-text supergroup -1001199092676 327065 1638812655
-text supergroup -1001199092676 327066 1877861103
-sticker supergroup -1001199092676 327067 1877861103
-text supergroup -1001199092676 327068 1854408934
-['tinha', 'um', 'q', 'era', 'furry', 'e', 'era', 'abem', 'doido']
-text supergroup -1001199092676 327069 1638812655
-['um', 'jogo', 'q', 'seria', 'mt', 'foda', 'ter', 'anime', 'e', 'okami']
-sticker supergroup -1001199092676 327070 1862710399
-text supergroup -1001199092676 327071 862783985
-['ahh', 'esse', 'sim', 'owo', 'e', 'otimo']
-text supergroup -1001199092676 327072 1638812655
-text supergroup -1001199092676 327073 1877861103
-text supergroup -1001199092676 327074 1854408934
-['era', 'um', 'q', 'praticamentr', 'se', 'resume', 'a', 'uma', 'versao', 'anime', 'de', 'meu', 'amigo', 'da', 'escola', 'e', 'um', 'macaco', 'caco', 'caco', 'caco', 'sim', 'voce', 'que', 'viu', 'leu', 'com', 'a', 'voz', 'do', 'adao', 'leao', 'e', 'nao', 'minta']
-document supergroup -1001199092676 327075 862783985
-text supergroup -1001199092676 327076 1638812655
-['certeza', 'se', 'bna', 'tiver', 'segunda', 'temporada', 'o', 'dio', 'furro', 'de', '3', 'cabecas', 'vai', 'voltar', 'querendo', 'vinganca']
-text supergroup -1001199092676 327077 1877861103
-text supergroup -1001266815314 9556 780875868
-text private 780875868 849 780875868
-text supergroup -1001199092676 327078 1854408934
-text supergroup -1001199092676 327079 1810039310
-['foi', 'tao', 'viajado', 'disso', 'do', 'cara', 'ser', 'um', 'lobo', 'com', 'a', 'alma', 'de', 'um', 'povo', 'todo']
-photo supergroup -1001266815314 9558 676164336
-text supergroup -1001199092676 327080 1638812655
-['sla', 'e', 'so', 'uma', 'previsao', 'xd']
-text supergroup -1001199092676 327081 1854408934
-['custava', 'so', 'serem', 'animais', 'vivendo', 'numa', 'cidade', 'muito', 'louca']
-text supergroup -1001266815314 9559 676164336
-text supergroup -1001266815314 9560 780875868
-['esses', 'caras', 'desenham', 'bem', 'demais', 'affff']
-text supergroup -1001199092676 327082 1638812655
-['zuado', 'foi', 'o', 'motivo', 'do', 'sylvasta', 'la', 'ser', 'overpower']
-text supergroup -1001199092676 327083 1638812655
-text supergroup -1001199092676 327084 1854408934
-['qual', 'era', 'mesmo', 'faz', 'taanto', 'tempo', 'q', 'eu', 'vi']
-text supergroup -1001199092676 327085 1877861103
-text supergroup -1001199092676 327086 1854408934
-text supergroup -1001199092676 327087 1854408934
-sticker supergroup -1001199092676 327088 1877861103
-sticker supergroup -1001281222737 338701 395161740
-text supergroup -1001266815314 9561 780875868
-['afffs', 'ngm', 'merece', 'esses', 'divos', 'talentosos']
-text supergroup -1001199092676 327089 1854408934
-['nao', 'e', 'possivel', 'q', 'esse', 'seja', 'o', 'motivo', 'naao']
-sticker supergroup -1001281222737 338702 1308040492
-sticker supergroup -1001199092676 327090 1854408934
-document supergroup -1001484736823 49612 769587175
-text supergroup -1001199092676 327091 1638812655
-sticker supergroup -1001199092676 327092 1854408934
-text supergroup -1001266815314 9562 676164336
-text supergroup -1001199092676 327093 862783985
-text supergroup -1001199092676 327094 1638812655
-['bna', 'e', 'legal', 'mas', 'o', 'final', 'foi', 'tao', 'broxante', 'quanto', 'star', 'wars', '9']
-text supergroup -1001266815314 9563 1082044057
-text supergroup -1001199092676 327095 1877861103
-text supergroup -1001199092676 327096 862783985
-['nah', 'foi', 'aleatorio', 'ksks']
-text supergroup -1001153106099 70353 1123738195
-['to', 'chorando', 'vei', 'com', '2', 'episodios', 'de', 'boku', 'no', 'hero']
-text supergroup -1001199092676 327097 862783985
-text supergroup -1001281222737 338703 395161740
-['verdade', 'achei', 'o', 'final', 'meio', 'meh', 'engracado', 'e', 'que', 'todo', 'mundo', 'imaginou', 'o', 'ogami', 'todo', 'bombado', 'xd', 'quando', 'ele', 'apareceu', 'sem', 'roupa', 'era', 'super', 'fofo']
-text supergroup -1001266815314 9564 676164336
-['sim', 'ficou', 'tao', 'lindao', 'e', 'brilhoso', '']
-photo supergroup -1001199092676 327098 1854408934
-text supergroup -1001199092676 327099 1638812655
-['vdd', 'ele', 'ficou', 'mt', 'cute', 'xd']
-text supergroup -1001199092676 327100 1854408934
-['esse', 'tb', 'e', 'muito', 'bom', 'e', 'tem', 'furrys']
-document supergroup -1001484736823 49613 921129841
-photo supergroup -1001199092676 327101 862783985
-text supergroup -1001199092676 327102 1862710399
-['nem', 'sei', 'quem', 'sao']
-text supergroup -1001199092676 327103 862783985
-['sabia', 'ja', 'previa', 'que', 'iria', 'ter', 'munhe', 'peituda']
-text supergroup -1001199092676 327104 1638812655
-text supergroup -1001199092676 327105 1877861103
-['olhando', 'assim', 'agr', 'q', 'reparei', 'q', 'parece', 'um', 'pokemon']
-text supergroup -1001199092676 327107 1877861103
-text supergroup -1001199092676 327108 862783985
-text supergroup -1001199092676 327109 862783985
-['oia', 'o', 'fisico', 'do', 'cara', 'xd']
-text supergroup -1001199092676 327110 1854408934
-['so', '1', 'e', 'tb', 'n', 'tem', 'muita', 'graca']
-text supergroup -1001153106099 70354 1270261126
-text supergroup -1001199092676 327111 1854408934
-['a', 'graca', 'sao', 'o', 'trio', 'de', 'bichinhos']
-text supergroup -1001153106099 70355 1270261126
-text supergroup -1001199092676 327112 1862710399
-['n', 'e', 'pra', 'falar', 'pq', 'eu', 'tbm', 'quero', 'chorar', 'quando', 'eu', 'ver']
-['a', 'tanuki', 'virou', 'o', 'luffy']
-text supergroup -1001199092676 327113 1854408934
-['isso', 'ta', 'e', 'comigo', 'demais', 'kkkkkk', 'mas', 'fofo']
-text supergroup -1001153106099 70356 946956785
-text supergroup -1001199092676 327114 862783985
-['xd', 'tendi', 'isso', 'e', 'bom', 'sinal', 'de', 'que', 'nao', 'vai', 'aparecer', 'peito', 'a', 'cada', 'segundo']
-text supergroup -1001199092676 327115 1854408934
-['nas', 'fanarts', 'deram', 'mais', 'credibilidade']
-text supergroup -1001153106099 70357 1792694686
-photo supergroup -1001199092676 327116 676164336
-text supergroup -1001199092676 327117 1854408934
-text supergroup -1001199092676 327118 1877861103
-text supergroup -1001199092676 327119 862783985
-['xd', 'tem', 'uma', 'dele', 'que', 'eu', 'amo']
-text supergroup -1001199092676 327120 1877861103
-['mas', 'ja', 'viram', 'jojo']
-sticker supergroup -1001199092676 327121 1877861103
-sticker supergroup -1001199092676 327122 1862710399
-text supergroup -1001199092676 327123 1854408934
-['o', 'anime', 'e', 'sobre', 'pessoaa', 'de', 'um', 'mundo', 'magico', 'salvarem', 'o', 'unico', 'lugar', 'q', 'restou', 'pra', 'eles', 'um', 'parque', 'em', 'decadencia']
-text supergroup -1001199092676 327124 1854408934
-['mano', 'o', 'relacionameto', 'complicado', 'q', 'eu', 'tenho', 'com', 'jojo']
-text supergroup -1001484736823 49614 769587175
-['acho', 'que', 'consegue', 'o', 'focinho', 'so']
-text supergroup -1001199092676 327125 1862710399
-text supergroup -1001199092676 327126 1638812655
-['vai', 'ter', 'um', 'anime', 'de', 'furro', 'novo']
-sticker supergroup -1001484736823 49615 769587175
-text supergroup -1001199092676 327127 1862710399
-text supergroup -1001199092676 327128 1638812655
-['so', 'nao', 'lembro', 'o', 'nome', 'pera']
-text supergroup -1001199092676 327129 1854408934
-['de', 'um', 'lado', 'eu', 'acho', 'jojo', 'bem', 'comigo', 'e', 'divertido', 'do', 'lado', 'eu', 'tive', 'q', 'parar', 'de', 'usar', 'meu', 'apelido', 'd', 'einfancia', 'pra', 'ninguem', 'ficar', 'me', 'enchendo', 'perguntando', 'se', 'eu', 'era', 'fa']
-text supergroup -1001199092676 327130 1854408934
-text supergroup -1001199092676 327131 1862710399
-text supergroup -1001199092676 327132 1862710399
-['so', 'fazer', 'jojo', 'pose']
-sticker supergroup -1001199092676 327133 1862710399
-text supergroup -1001199092676 327134 1854408934
-['pelo', 'menos', 'nasci', 'com', 'o', 'nome', 'do', 'meu', 'segundo', 'joestar', 'favorito', 'kkkkk']
-text supergroup -1001199092676 327135 1862710399
-text supergroup -1001199092676 327136 1854408934
-text supergroup -1001199092676 327137 1862710399
-text supergroup -1001199092676 327138 1854408934
-text supergroup -1001199092676 327139 1862710399
-['joseph', 'ta', 'em', 'primeiro']
-text supergroup -1001199092676 327140 1854408934
-text supergroup -1001199092676 327141 1854408934
-['depois', 'do', 'stardust', 'a', 'fumacao', 'de', 'banana', 'so', 'piorou']
-text supergroup -1001199092676 327142 588042788
-photo supergroup -1001199092676 327143 862783985
-photo supergroup -1001199092676 327144 1638812655
-text supergroup -1001199092676 327145 1862710399
-['ate', 'que', 'eu', 'gosto', 'da', 'parte', '4']
-text supergroup -1001199092676 327146 1862710399
-['quero', 'a', 'parte', '6', 'pra', 'ontem']
-text supergroup -1001199092676 327147 1854408934
-text supergroup -1001199092676 327148 1862710399
-['pro', 'ano', 'passado', 'na', 'vrdd']
-text supergroup -1001199092676 327149 1854408934
-['mas', 'q', 'e', 'muita', 'doideira', 'e']
-text supergroup -1001199092676 327150 588042788
-['muitas', 'gente', 'fala', 'que', 'hoje', 'esta', 'frio', 'pra', 'porra']
-text supergroup -1001199092676 327151 1862710399
-text supergroup -1001199092676 327152 588042788
-text supergroup -1001199092676 327153 1877861103
-text supergroup -1001199092676 327154 588042788
-['n', 'e', 'esse', 'que', 'vai', 'ter', 'live', 'action']
-text supergroup -1001199092676 327155 1638812655
-text supergroup -1001199092676 327156 1862710399
-['troque', 'de', 'lugar', 'xmg']
-text supergroup -1001199092676 327157 1862710399
-text supergroup -1001199092676 327158 1638812655
-text supergroup -1001199092676 327159 862783985
-['nao', 'esse', 'e', 'anime', 'msm']
-['ahh', 'esse', 'ai', 'eu', 'tava', 'sabendo', 'esse', 'cara', 'e', 'furry', 'e', 'ele', 'vai', 'ter', 'um', 'anime', 'de', 'si', 'proprio']
-text supergroup -1001199092676 327160 1862710399
-text supergroup -1001199092676 327161 1862710399
-['mas', 'ja', 'viram', 'odd', 'taxi']
-photo supergroup -1001199092676 327162 1877861103
-photo supergroup -1001199092676 327163 588042788
-text supergroup -1001199092676 327164 1877861103
-text supergroup -1001199092676 327165 1854408934
-text supergroup -1001199092676 327166 1854408934
-text supergroup -1001199092676 327167 1638812655
-['pse', 'e', 'na', 'maior', 'cagada', 'pq', 'ele', 'pediu', 'pra', 'uma', 'empresa', 'fazer', 'abertura', 'do', 'canal', 'dele', 'ai', 'a', 'empresa', 'veio', 'e', 'perguntou', 'se', 'podia', 'fazer', 'anime', 'dele']
-text supergroup -1001199092676 327168 862783985
-['ainda', 'nao', 'owo', 'quero', 'ver']
-text supergroup -1001199092676 327169 1862710399
-['como', 'assim', 'vc', 'ainda', 'n', 'viu']
-sticker supergroup -1001199092676 327170 1862710399
-photo supergroup -1001199092676 327171 862783985
-sticker supergroup -1001199092676 327172 1877861103
-sticker supergroup -1001199092676 327173 862783985
-text supergroup -1001199092676 327174 862783985
-text supergroup -1001199092676 327175 1854408934
-['no', 'xd', 'falta', 'de', 'tempo']
-['epico', 'isso', 'sim', 'e', 'algo', 'muito', 'epico', 'de', 'acontecer', 'na', 'sua', 'vida']
-text supergroup -1001199092676 327176 1862710399
-text supergroup -1001199092676 327177 1877861103
-['pra', 'no', 'final', 'todos', 'eles', 'serem', 'humanos']
-text supergroup -1001199092676 327178 1854408934
-['um', 'dia', 'ainda', 'faco', 'uma', 'obra', 'com', 'meu', 'sona']
-sticker supergroup -1001199092676 327179 1877861103
-text supergroup -1001199092676 327180 862783985
-sticker supergroup -1001199092676 327181 1862710399
-sticker supergroup -1001484736823 49616 1085601285
-text supergroup -1001199092676 327182 862783985
-text supergroup -1001199092676 327183 1580071435
-['pretendo', 'talvez', 'eu', 'comece', 'a', 'ler', 'dps', 'q', 'assistir', 'a', '2', 'temp']
-text supergroup -1001199092676 327184 1638812655
-['to', 'tentando', 'fazer', 'um', 'livro', 'tentando']
-text supergroup -1001199092676 327185 1877861103
-photo supergroup -1001199092676 327186 918070070
-document supergroup -1001199092676 327187 862783985
-text supergroup -1001199092676 327188 1862710399
-['eu', 'to', 'lendo', 'a', 'partir', 'dai']
-text supergroup -1001199092676 327189 1862710399
-document supergroup -1001199092676 327190 862783985
-text supergroup -1001199092676 327191 1877861103
-text supergroup -1001199092676 327192 1862710399
-text supergroup -1001199092676 327193 1877861103
-['mo', 'demora', 'pra', 'sair']
-text supergroup -1001199092676 327194 862783985
-text supergroup -1001199092676 327195 1580071435
-['era', 'um', 'furao', 'recebendo', 'carinho']
-['acabei', 'de', 'entrar', '', 'estou', 'ansioso', 'para', 'as', 'novidades', 'xd']
-sticker supergroup -1001199092676 327196 1877861103
-text supergroup -1001199092676 327197 918070070
-['como', 'vai', 'a', 'noite', 'de', 'vcs', '']
-text supergroup -1001199092676 327198 1877861103
-sticker supergroup -1001199092676 327199 1877861103
-text supergroup -1001199092676 327200 862783985
-['otima', '', 'e', 'a', 'sua', '']
-sticker supergroup -1001199092676 327201 1580071435
-text supergroup -1001199092676 327202 918070070
-text supergroup -1001199092676 327203 862783985
-['aee', 'ainda', 'bem', '']
-document supergroup -1001199092676 327204 862783985
-document supergroup -1001199092676 327205 918070070
-text supergroup -1001199092676 327206 1854408934
-['mais', 'um', 'q', 'sabe', 'oq', 'e', 'luta', 'kkkkk']
-text supergroup -1001199092676 327207 918070070
-text supergroup -1001199092676 327208 862783985
-['fzd', 'o', 'que', 'de', 'bom', '']
-text supergroup -1001199092676 327209 862783985
-['oto', 'indo', 'me', 'preparar', 'pra', 'mimir']
-text supergroup -1001199092676 327210 918070070
-text supergroup -1001199092676 327211 1877861103
-sticker supergroup -1001199092676 327212 1877861103
-text supergroup -1001199092676 327213 918070070
-['eu', 'passei', 'so', 'pra', 've', 'como', 'vai', 'o', 'grupo']
-text supergroup -1001199092676 327214 918070070
-text supergroup -1001199092676 327215 1854408934
-['de', 'que', 'adianta', 'eu', 'querer', 'termina', 'um', 'livro', 'quando', 'do', 'nada', 'vem', 'eu', 'querendo', 'fazer', 'um', 'romance', 'em', 'mundo', 'de', 'fantasia', 'um', 'visual', 'novel', 'de', 'terror', 'mais', 'um', 'romance', 'so', 'q', 'agora', 'com', 'casais', 'mais', 'diferenciados', 'um', 'game', 'sobre', 'uma', 'aranha', 'muito', 'fofa', 'e', 'oq', 'essa', 'mente', 'doida', 'e', 'sem', 'limites', 'me', 'forca', 'a', 'querer', 'produzir', 'e', 'nunca', 'terminar', 'algo', 'kkkkkkkk']
-text supergroup -1001199092676 327216 1854408934
-document supergroup -1001199092676 327217 862783985
-text supergroup -1001199092676 327218 918070070
-['vdd', 'e', 'fofo', 'esse', 'gif']
-text supergroup -1001199092676 327219 1580071435
-['castlevania', 'e', 'muito', 'bom', '1010']
-text supergroup -1001199092676 327220 918070070
-text supergroup -1001199092676 327221 1638812655
-['eu', 'queria', 'mostrar', 'meio', 'q', 'uma', 'au', 'do', 'meu', 'sona', 'ai', 'meio', 'q', 'ia', 'ser', 'ficcao', 'cientifica', 'acao', 'tragedia', 'e', 'fantasia']
-text supergroup -1001199092676 327222 1854408934
-['ta', 'mais', 'para', 'um', '810', 'tiro', 'uns', 'pontinhos', 'pela', 'terceira', 'temporada']
-sticker supergroup -1001199092676 327223 862783985
-text supergroup -1001199092676 327224 918070070
-['olha', 'so', 'que', 'arte', 'linda', 'kamy']
-photo supergroup -1001199092676 327225 918070070
-text supergroup -1001199092676 327226 1580071435
-['vou', 'esperar', 'sair', 'a', '2', 'temp', 'ai', 'eu', 'fico', 'tendo', 'a', 'beleza', 'da', 'animacao', 'e', 'a', 'surpresa', 'da', 'temp', 'kkkk']
-photo supergroup -1001156012214 63365 1895498765
-photo supergroup -1001156012214 63366 1895498765
-text supergroup -1001199092676 327227 1854408934
-['desnecessaria', 'aquela', 'parte', 'do', 'alucard', 'enquanto', 'rola', 'uma', 'baita', 'de', 'uma', 'batalha', 'insana', 'do', 'isac', 'com', 'o', 'legiao', 'e', 'o', 'hector', 'se', 'entregando', 'de', 'vez', 'a', 'vampira']
-text supergroup -1001199092676 327228 214844958
-text supergroup -1001199092676 327229 1862710399
-['mas', 'c', 'sabe', 'que', 'a', 'empresa', 'vai', 'mudar', 'ne']
-text supergroup -1001199092676 327230 1862710399
-text supergroup -1001199092676 327231 1580071435
-sticker supergroup -1001199092676 327232 1854408934
-['espero', 'que', 'continue', 'com', 'o', 'mesmo', 'grafico']
-['muito', 'calma', 'obg', 'por', 'perguntar', '']
-text supergroup -1001199092676 327233 1638812655
-['o', 'dracula', 'foi', 'idiota', 'de', 'querer', 'seguir', 'o', 'conselho', 'de', 'uma', 'vampira', 'nada', 'suspeita', 'recem', 'chegada']
-text supergroup -1001199092676 327234 918070070
-text supergroup -1001199092676 327235 1580071435
-['eita', 'n', 'sabia', 'tomara', 'mesmo']
+Getting URLs without downloading images...
+Image URL: https://clinicabrunovargas.com.br/wp-content/uploads/2017/06/Comer-exageradamente-ou-pouco-demais-pode-ser-sinal-de-transtorno-.jpg
+Printed url without downloading
+Image URL: https://www.jornaldaorla.com.br/arquivos/noticia/2018_5_18_18_45_18_8759.jpg
+Printed url without downloading
+Image URL: https://www.dicasdemulher.com.br/wp-content/uploads/2013/05/8-conselhos-para-voce-parar-de-comer-mais-do-que-precisa.jpg
+Printed url without downloading
+Image URL: https://s3.amazonaws.com/blog.dentrodahistoria.com.br/wp-content/uploads/2018/09/06145851/thumb_comer_bem.png
+Printed url without downloading
+Image URL: https://www.adrianalauffer.com.br/wp-content/uploads/2019/11/comer-normal.jpg
+Printed url without downloading
+Image URL: https://catracalivre.com.br/wp-content/uploads/2018/10/comer-mais.jpg
+Printed url without downloading
+Image URL: https://img.ibxk.com.br/2011/12/materias/16816209440.jpg?w=1120&h=420&mode=crop&scale=both
+Printed url without downloading
+Image URL: https://www.cren.org.br/novosite/wp-content/uploads/2017/10/food-2375468_1280-1.jpg
+Printed url without downloading
+Image URL: https://i0.wp.com/blog.dietbox.me/wp-content/uploads/2017/08/comer-por-depresion-1080x720-1024x682.jpeg?fit=1024%2C682&ssl=1
+Printed url without downloading
+Image URL: https://saude.abril.com.br/wp-content/uploads/2021/02/comer-Photo-by-Marcel-Heil-on-Unsplash.jpg
+Printed url without downloading
+Image URL: https://i2.wp.com/blog-pt.kinedu.com/wp-content/uploads/2019/08/shutterstock_631322687.jpg?resize=760%2C543&ssl=1
+Printed url without downloading
+Image URL: https://saude.abril.com.br/wp-content/uploads/2019/08/crianc3a7a-alimentacao2.jpg
+Printed url without downloading
+Image URL: https://uploads.metropoles.com/wp-content/uploads/2020/02/07133658/sander-dalhuisen-nA6Xhnq2Od8-unsplash-600x400.jpg
+Printed url without downloading
+Image URL: https://www.altoastral.com.br/media/_versions/legacy/2018/03/mulher-comendo-hamburguer_widexl.jpg
+Printed url without downloading
+Image URL: https://static1.conquistesuavida.com.br/articles//6/11/32/6/@/29863-para-incentivar-seu-filho-a-comer-arroz-article_block_media-2.jpg
+Printed url without downloading
+Image URL: http://www.euvejo.vc/homolog/wp-content/uploads/2018/06/Parardecomermenor.jpg
+Printed url without downloading
+Image URL: https://womenshealthbrasil.com.br/wp-content/uploads/sites/6/2018/06/vontade-de-comer-doce.jpg
+Printed url without downloading
+Image URL: https://www.qualityrefeicoes.com.br/assets/img/saude/Dica1-7regras-para-comer-melhor.png
+Printed url without downloading
+Image URL: https://blog.paulatostes.com.br/wp-content/uploads/2018/04/crian%C3%A7a-comer-frutas.jpg
+Printed url without downloading
+Image URL: https://www.promedmg.com.br/wp-content/uploads/2020/07/comer-bem-quarentena.jpg
+Printed url without downloading
+Image URL: https://www.rbsdirect.com.br/imagesrc/25467048.jpg?w=700
+Printed url without downloading
+Image URL: https://www.abc.med.br/fmfiles/index.asp/::places::/abcmed/O-comer-compulsivo.jpg
+Printed url without downloading
+Image URL: http://blog.iberomagistral.com.br/wp-content/uploads/2020/02/comer-sem-fome.png
+Printed url without downloading
+Image URL: https://www.treinus.com.br/blog/wp-content/uploads/2021/04/Como-comer-bem-gastando-pouco.jpg
+Printed url without downloading
+Image URL: https://media-manager.noticiasaominuto.com.br/1920/naom_5e0498d5b4e2a.jpg
+Printed url without downloading
+Image URL: https://rsaude.com.br/img/noticias/g/voce-sente-vontade-de-comer-o-tempo-todo-e-nao-consegue-se-controlar-14022020150703.png
+Printed url without downloading
+Image URL: https://www.ocirurgiaovascular.com.br/backend/wp-content/uploads/2017/10/5-dicas-para-voce-comer-melhor-dr-daniel-benitti-cirurgiao-vascular-campinas-sao-paulo-sp-2-1024x720.jpg
+Printed url without downloading
+Image URL: https://www.embrapa.br/ainfo_images/1115996/RevistinhaTurmadaMonicaSemDesperdicio.pdf.jpg
+Printed url without downloading
+Image URL: https://hypescience.com/wp-content/uploads/2018/11/dicas-evitar-comer-excessivamente-compulsao-alimentar-2-838x440.jpg
+Printed url without downloading
+Image URL: https://maeemdia.com/wp-content/uploads/2019/01/porque-seu-filho-no-pode-comer-vendo-tv.jpeg
+Printed url without downloading
+
+Errors: 0
+

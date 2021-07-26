@@ -1,5 +1,5 @@
 FurBots: 0
-Sticker_Spam_Limit: 10
+Sticker_Spam_Limit: 3
 Message_Spam_Limit: 9
 Tempo_sem_poder_mandar_imagem: 600
 Tempo_Captcha: 180
