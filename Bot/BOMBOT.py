@@ -199,10 +199,14 @@ def CheckLimbo(msg, chat_id):
     text.close()
 
 def left_chat_member(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "Perdemos um soldado\n\nF 😔", reply_to_message_id=msg['message_id'])
-    photo = open('Brasil_flag.gif', 'rb')
-    cookiebot.sendPhoto(chat_id, photo)
+    wait_open("Captcha.txt")
+    text = open("Captcha.txt", 'r', encoding='utf-8')
+    lines = text.readlines()
+    text.close()
+    text = open("Limbo.txt", 'w+', encoding='utf-8')
+    for line in lines:
+        if line.split()[0] != str(chat_id) or line.split()[1] != msg['left_chat_member']['id']:
+            text.write(line)
 
 
 def Upscaler(msg, chat_id):
@@ -223,16 +227,14 @@ def Sticker_anti_spam(msg, chat_id):
     wait_open("Stickers.txt")
     text_file = open("Stickers.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
+    if str(chat_id) not in text_file.read():
+        lines.append("\n"+str(chat_id)+" 0")
     text_file.close()
     counter_new = 0
     for line in lines:
         if str(chat_id) in line:
             counter_new = int(line.split()[1])+1
             break
-        elif line == lines[len(lines)-1]:
-            text_file = open("Stickers.txt", "a+", encoding='utf8')
-            text_file.write("\n"+str(chat_id)+" 0")
-            text_file.close()
     text_file = open("Stickers.txt", "w", encoding='utf8')
     for line in lines:
         if str(chat_id) in line:
@@ -853,6 +855,8 @@ def thread_function(msg):
                             Captcha(msg, chat_id)
                         else:
                             Bemvindo(msg, chat_id)
+                elif content_type == "left_chat_member":
+                    left_chat_member(msg, chat_id)
                 elif content_type == "voice":
                     if funfunctions == True:
                         Speech_to_text(msg, chat_id)
