@@ -1,5 +1,21 @@
-Comandos do Cookiebot!
+Funcionalidades do Cookiebot!
 
+PASSIVAS:
+IA de conversa - Responde qualquer mensagem de texto
+IA assistente - Matemática, vocabulário, física/química, weather, etc
+Stickers - Responde um sticker com outro sticker
+Captcha - Impede que bots mandem mensagens e kicka eles se não provarem que são humanos
+Limbo de imagem - Impede que novos membros mandem fotos, por um intervalo
+Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
+Voz para texto - Transcripta mensagens de voz
+Localização para endereço - Manda o endereço correspondente a um location
+Upscaler de imagem - Amplia imagens de baixa resolução com inteligência artificial
+Welcome - Mensagem customizada de boas vindas
+Dicionário customizado - Respostas automáticas para palavras-chave predefinidas
+Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem mexer nele. Fale com o Mekhy para implementar isso no seu chat
+Backup de Participantes - Caso o grupo seja hackeado ou apagado por engano, posso ajudar a recuperar seus participantes ativos
+
+COMANDOS:
 qualquercoisa - Uma foto doq vc quiser
 ideiadesenho - Chega de art block
 everyone - Admins podem chamar todos os membros do grupo
@@ -9,9 +25,6 @@ novasregras - Atualiza as regras do grupo
 novobemvindo - Atualiza a mensagem de boas vindas
 hoje - DESATIVADO COM O BURRBOT
 cheiro - DESATIVADO COM O BURRBOT
-eventos - Proximos eventos registrados em mim
-addevento - Criar um evento
-removeevento - Deletar um evento
 idade - Te digo quantos anos vc tem
 genero - Sera que e menino ou menina
 completar - Faço lero lero a partir de uma frase
@@ -53,20 +66,6 @@ sopero - sopero
 tomecow - tomecow
 tonnyrussel - tonnyrussel
 yoshiro - yoshiro
-
-PASSIVAS:
-IA de conversa - Responde mensagens
-IA assistente - Matemática, vocabulário, física, química, weather, etc
-Dicionário customizado - Respostas automáticas para palavras-chave predefinidas
-Stickers - Responde um sticker com outro sticker
-Captcha - Impede que bots mandem mensagens e kicka eles se não provarem que são humanos
-Limbo de imagem - Impede que novos membros mandem fotos, por um intervalo
-Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
-Speech to text - Transcripta mensagens de voz
-Location to address - Manda o endereço correspondente a um location
-Image upscaler - Amplia imagens de baixa resolução com inteligência artificial
-Welcome - Mensagem customizada de boas vindas
-Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem mexer nele. Fale com o Mekhy para implementar isso no seu chat
 
 
 Fale com o Mekhy para adicionar um comando seu ou ensinar algo ao bot!

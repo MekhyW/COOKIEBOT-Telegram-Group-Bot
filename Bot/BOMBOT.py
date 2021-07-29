@@ -1,5 +1,6 @@
 DeepaiTOKEN = ''
 WolframAPP_ID = ''
+OpenAIkey = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
 import os
@@ -18,6 +19,7 @@ from google_images_download import google_images_download
 import speech_recognition
 import geopy
 import wolframalpha
+import openai
 import unidecode
 import telepot
 from telepot.loop import MessageLoop
@@ -28,6 +30,7 @@ translator = googletrans.Translator()
 google_images_response = google_images_download.googleimagesdownload()
 recognizer = speech_recognition.Recognizer()
 WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
+openai.api_key = OpenAIkey
 cookiebot = telepot.Bot(cookiebotTOKEN)
 threads = list()
 firstpass = True
@@ -640,6 +643,34 @@ def InteligenciaArtificial(msg, chat_id):
         Answer = translator.translate(Answer, dest='pt').text
         cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
 
+def InteligenciaArtificial2(msg, chat_id):
+    message = msg['text'].capitalize()
+    message_eng = translator.translate(message, dest='en').text
+    if "you" in message_eng:
+        return False
+    try:
+        r = openai.Completion.create(
+            engine="davinci",
+            prompt="If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with \"Unknown\".\n\nQ: What is human life expectancy in the United States?\nA: Human life expectancy in the United States is 78 years.\n\nQ: What is the square root of banana?\nA: Unknown\n\nQ: How does a telescope work?\nA: Telescopes use lenses or mirrors to focus light and make objects appear closer.\n\nQ: Where were the 1992 Olympics held?\nA: The 1992 Olympics were held in Barcelona, Spain.\n\nQ: How many squigs are in a bonk?\nA: Unknown\n\nQ: {}\nA:".format(message_eng),
+            temperature=0,
+            max_tokens=100,
+            top_p=1,
+            frequency_penalty=0.0,
+            presence_penalty=0.0,
+            stop=["\n"]
+        )
+        Answer = r["choices"][0]["text"]
+        if "Unknown" in Answer:
+            return False
+        else:
+            cookiebot.sendChatAction(chat_id, 'typing')
+            Answer = translator.translate(Answer, dest='pt').text.capitalize()
+            cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
+            return True
+    except:
+        return False
+
+
 def AddtoStickerDatabase(msg, chat_id):
     wait_open("Sticker_Database.txt")
     text = open("Sticker_Database.txt", 'r+', encoding='utf-8')
@@ -936,6 +967,8 @@ def thread_function(msg):
                 elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
                     if not OnSay(msg, chat_id):
                         InteligenciaArtificial(msg, chat_id)
+                elif 'text' in msg and "?" in msg['text'] and len(msg['text'].split()) >= 3 and funfunctions == True and InteligenciaArtificial2(msg, chat_id):
+                    pass
                 elif 'text' in msg:
                     CheckEventos(msg, chat_id)
                     SolveCaptcha(msg, chat_id, False)
