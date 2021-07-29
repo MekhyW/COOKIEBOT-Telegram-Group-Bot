@@ -644,7 +644,10 @@ def InteligenciaArtificial(msg, chat_id):
         cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
 
 def InteligenciaArtificial2(msg, chat_id):
-    message = msg['text'].capitalize()
+    if 'reply_to_message' in msg and 'text' in msg['reply_to_message']:
+        message = msg['reply_to_message']['text'].capitalize() + ". " + msg['text'].capitalize()
+    else:
+        message = msg['text'].capitalize()
     message_eng = translator.translate(message, dest='en').text
     if "you" in message_eng:
         return False
