@@ -230,7 +230,9 @@ def Sticker_anti_spam(msg, chat_id):
     wait_open("Stickers.txt")
     text_file = open("Stickers.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
-    if str(chat_id) not in text_file.read():
+    if any(str(chat_id) in string for string in lines):
+        pass
+    else:
         lines.append("\n"+str(chat_id)+" 0")
     text_file.close()
     counter_new = 0
