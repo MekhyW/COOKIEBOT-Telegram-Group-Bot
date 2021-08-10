@@ -656,7 +656,7 @@ def InteligenciaArtificial2(msg, chat_id):
     try:
         r = openai.Completion.create(
             engine="davinci",
-            prompt="If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with \"Unknown\".\n\nQ: What is human life expectancy in the United States?\nA: Human life expectancy in the United States is 78 years.\n\nQ: What is the square root of banana?\nA: Unknown\n\nQ: How does a telescope work?\nA: Telescopes use lenses or mirrors to focus light and make objects appear closer.\n\nQ: Where were the 1992 Olympics held?\nA: The 1992 Olympics were held in Barcelona, Spain.\n\nQ: How many squigs are in a bonk?\nA: Unknown\n\nQ: {}\nA:".format(message_eng),
+            prompt="I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with 'Unknown'.\n\nQ: What is human life expectancy in the United States?\nA: Human life expectancy in the United States is 78 years.\nQ: Who was president of the United States in 1955?\nA: Dwight D. Eisenhower was president of the United States in 1955.\nQ: Which party did he belong to?\nA: He belonged to the Republican Party.\n\nQ: What is the square root of banana?\nA: Unknown\n\nQ: How does a telescope work?\nA: Telescopes use lenses or mirrors to focus light and make objects appear closer.\n\nQ: Where were the 1992 Olympics held?\nA: The 1992 Olympics were held in Barcelona, Spain.\n\nQ: How many squigs are in a bonk?\nA: Unknown\n\nQ: {}\nA: ".format(message_eng),
             temperature=0,
             max_tokens=100,
             top_p=1,
@@ -772,10 +772,10 @@ def thread_function(msg):
                 if msg['text'] == "/stop" and 'username' in msg['from'] and msg['from']['username'] == 'MekhyW':
                     os._exit(0)
                 cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
-            elif chat_type != 'private' and "MekhyW" not in str(cookiebot.getChatAdministrators(chat_id)):
-                cookiebot.sendMessage(chat_id, "Posso apenas ficar no grupo se o @MekhyW estiver nele, e for um admin!\n\nIsso é feito para evitar spam e raids, me desculpem")
-                cookiebot.leaveChat(chat_id)
-            elif chat_type == 'private' or "CookieMWbot" in str(cookiebot.getChatAdministrators(chat_id)) or "MekhysBombot" in str(cookiebot.getChatAdministrators(chat_id)):
+            #elif chat_type != 'private' and "MekhyW" not in str(cookiebot.getChatAdministrators(chat_id)):
+            #    cookiebot.sendMessage(chat_id, "Posso apenas ficar no grupo se o @MekhyW estiver nele, e for um admin!\n\nIsso é feito para evitar spam e raids, me desculpem")
+            #    cookiebot.leaveChat(chat_id)
+            else:
                 global listaadmins
                 global listaadmins_id
                 global FurBots
@@ -820,7 +820,7 @@ def thread_function(msg):
                     if not os.path.isfile("Config_"+str(chat_id)+".txt"):
                         open("Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
                         text_file = open("Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-                        text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nMessage_Spam_Limit: 10\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 1\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1")
+                        text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nMessage_Spam_Limit: 10\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 0\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1")
                         text_file.close()
                     wait_open("Config_"+str(chat_id)+".txt")
                     text_file = open("Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
@@ -887,7 +887,7 @@ def thread_function(msg):
                 if content_type == "new_chat_member":
                     if CheckCAS(msg, chat_id) == False and CheckRaider(msg, chat_id) == False:
                         Limbo(msg, chat_id)
-                        if captchatimespan > 0:
+                        if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                             Captcha(msg, chat_id)
                         else:
                             Bemvindo(msg, chat_id)
@@ -1041,8 +1041,8 @@ def handle_query(msg):
         for admin in cookiebot.getChatAdministrators(msg['message']['reply_to_message']['chat']['id']):
             listaadmins_id.append(str(admin['user']['id']))
         if query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
-            cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
             SolveCaptcha(msg, msg['message']['reply_to_message']['chat']['id'], True)
+            cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         
 
 MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
