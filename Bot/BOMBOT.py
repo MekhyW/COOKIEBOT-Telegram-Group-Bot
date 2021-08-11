@@ -703,7 +703,7 @@ def ReplySticker(msg, chat_id):
 
 def Configurar(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    if str(msg['from']['username']) in listaadmins:
+    if str(msg['from']['username']) in listaadmins or str(msg['from']['username']) == "MekhyW":
         wait_open("Config_"+str(chat_id)+".txt")
         text = open("Config_"+str(chat_id)+".txt", 'r', encoding='utf-8')
         variables = text.read()
