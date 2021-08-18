@@ -3,24 +3,11 @@ WolframAPP_ID = ''
 OpenAIkey = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
-import os
-import subprocess
-import sys
-import random
-import json
-import requests
-import datetime
-import time
-import logging
-import threading
+import os, subprocess, sys, random, json, requests, datetime, time, pytube, re, threading
 from captcha.image import ImageCaptcha
 import googletrans
 from google_images_download import google_images_download
-import speech_recognition
-import geopy
-import wolframalpha
-import openai
-import unidecode
+import speech_recognition, geopy, wolframalpha, openai, unidecode
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
@@ -50,6 +37,7 @@ intrometerminimumwords = 12
 lowresolutionarea = 10000
 funfunctions = 1
 
+
 #WAIT FOR ANOTHER THREAD/SCRIPT TO FINISH USING FILE
 def wait_open(filename):
     if os.path.exists(filename):
@@ -68,6 +56,12 @@ def check_if_string_in_file(file_name, string_to_search):
             return True
     return False
 
+#LINK IN STRING CHECKER
+def findlinks(string):
+    regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+    url = re.findall(regex,string)      
+    return [x[0] for x in url]
+    
 
 def CheckCAS(msg, chat_id):
     r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']))
@@ -284,6 +278,34 @@ def Speech_to_text(msg, chat_id):
     except:
         pass
 
+def VideoFromLink(msg, chat_id):
+    html = requests.get(msg['text']).text
+    links = [msg['text']] + findlinks(html)
+    for link in links:
+        if 'youtu' in link:
+            try:
+                youtube = pytube.YouTube(link)
+                video = youtube.streams.get_lowest_resolution()
+                video.download(filename="LINKEDVIDEOMESSAGE.mp4")
+                cookiebot.sendChatAction(chat_id, 'upload_video')
+                video = open('LINKEDVIDEOMESSAGE.mp4', 'rb')
+                cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
+                video.close()
+                break
+            except:
+                pass
+        elif '.mp4' in link:
+            try:
+                r = requests.get(link, allow_redirects=True)
+                video = open('LINKEDVIDEOMESSAGE.mp4', 'wb')
+                video.write(r.content)
+                cookiebot.sendChatAction(chat_id, 'upload_video')
+                cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
+                video.close()
+                break
+            except:
+                pass
+
 def CooldownAction(msg, chat_id):
     global sentcooldownmessage
     if sentcooldownmessage == False:
@@ -375,104 +397,6 @@ def Regras(msg, chat_id):
     else:    
         cookiebot.sendMessage(chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", reply_to_message_id=msg['message_id'])
 
-def RemoveEvento(msg, chat_id):
-    if msg['text'] == "/removeevento" or msg['text'] == "/removeevento@CookieMWbot":
-        cookiebot.sendChatAction(chat_id, 'typing')
-        cookiebot.sendMessage(chat_id, "Se vc é um admin, Mande o ID do evento pra remover\nExemplo: /removeevento 69420", reply_to_message_id=msg['message_id'])
-    elif str(msg['from']['username']) in listaadmins:
-        cookiebot.sendChatAction(chat_id, 'typing')
-        wait_open("Events.txt")
-        text_file = open("Events.txt", "r", encoding='utf-8')
-        lines = text_file.read().split("\n")
-        text_file.close()
-        text_file = open("Events.txt", "w", encoding='utf-8')
-        query = msg['text'].replace("/removeevento ", '')
-        found = False
-        for line in lines:
-            if len(line.split()) >= 6:
-                if query == line.split()[1]:
-                    if "REPEAT" not in line:
-                        cookiebot.sendMessage(chat_id, "Evento com ID "+line.split()[1]+" Removido!", reply_to_message_id=msg['message_id'])
-                    found = True
-                else:
-                    text_file.write(line+"\n")
-        if found == False:
-            cookiebot.sendMessage(chat_id, "Não foi possível encontrar o evento com ID "+query, reply_to_message_id=msg['message_id'])
-        text_file.close()
-
-def AddEvento(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if not 'reply_to_message' in msg:
-        cookiebot.sendMessage(chat_id, "Se vc é um admin, Responda a uma mensagem e diga uma data e hora\n\nExemplo: '31/02/2077 16:21'", reply_to_message_id=msg['message_id'])
-    elif str(msg['from']['username']) in listaadmins:
-        try:
-            time = datetime.datetime.strptime(msg['text'].replace("/addevento ", ''), '%d/%m/%Y %H:%M')
-            wait_open("Events.txt")
-            text = open("Events.txt", 'a+', encoding='utf-8')
-            event = str(chat_id) + " " + str(msg['reply_to_message']['message_id']) + " " + str(datetime.datetime.now()) + " " + str(time) + "\n"
-            text.write(event)
-            #while not str(time - datetime.datetime.now() - datetime.timedelta(hours=24)).startswith("-"):
-            #    time = time - datetime.timedelta(hours=24)
-            #    event = str(chat_id) + " " + str(msg['reply_to_message']['message_id']) + " " + str(datetime.datetime.now()) + " " + str(time) + " REPEAT" + "\n"
-            #    text.write(event)
-            cookiebot.sendMessage(chat_id, "Evento com ID {} adicionado!".format(str(msg['reply_to_message']['message_id'])), reply_to_message_id=msg['message_id'])
-            text.close()
-        except:
-            cookiebot.sendMessage(chat_id, "Formato incorreto, deveria ser /addevento DIA/MES/ANO HORA:MINUTO", reply_to_message_id=msg['message_id'])
-
-def Eventos(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Events.txt")
-    text_file = open("Events.txt", "r+", encoding='utf-8')
-    lines = text_file.read().split("\n")
-    events = []
-    dates = []
-    def bubbleSort(sorterlist, sortedlist):
-        for passnum in range(len(sorterlist)-1,0,-1):
-            for i in range(passnum):
-                if datetime.date(int(sorterlist[i][0]), int(sorterlist[i][1]), int(sorterlist[i][2])) > datetime.date(int(sorterlist[i+1][0]), int(sorterlist[i+1][1]), int(sorterlist[i+1][2])):
-                    temp = sorterlist[i]
-                    sorterlist[i] = sorterlist[i+1]
-                    sorterlist[i+1] = temp
-                    temp = sortedlist[i]
-                    sortedlist[i] = sortedlist[i+1]
-                    sortedlist[i+1] = temp
-    for line in lines:
-        if len(line.split()) == 6:
-            events.append(line)
-            year, month, day = line.split(" ")[4].split("-")
-            dates.append([year, month, day])
-    text_file.close()
-    bubbleSort(dates, events)
-    answer = "📅 PROXIMOS EVENTOS REGISTRADOS: 📅\n\n"
-    x = 1
-    for event in events:
-        answer += (str(x) + ") " + "ID " + event.split()[1] + " --> " + event.split()[4] + " " + event.split()[5] + "\n")
-        x += 1
-    cookiebot.sendMessage(chat_id, answer, reply_to_message_id=msg['message_id'])
-
-def CheckEventos(msg, chat_id):
-    wait_open("Events.txt")
-    text = open("Events.txt", 'r+', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    text = open("Events.txt", 'w', encoding='utf-8')
-    for line in lines:
-        if len(line.split()) >= 6:
-            year, month, day = line.split()[4].split("-")
-            hour, minute, second = line.split()[5].split(":")
-            if datetime.datetime.now() < datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second)):
-                text.write(line+"\n")
-            else:
-                for file in os.listdir():
-                    if file.startswith("-"):
-                        chatid = file.split(".txt")[0]
-                        if chatid.split("-")[1].isdigit():
-                            hojeID = cookiebot.forwardMessage(chatid, line.split()[0], line.split()[1])['message_id']
-                            if chatid == line.split()[0] and "REPEAT" not in line:
-                                cookiebot.pinChatMessage(chatid, hojeID, True)
-    text.close()
-
 def TaVivo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "Estou vivo\n\nPing enviado em:\n" + str(datetime.datetime.now()))
@@ -543,6 +467,7 @@ def IdeiaDesenho(msg, chat_id):
     ideiaID = random.randint(0, len(ideiasdesenho)-1)
     photo = open('IdeiaDesenho'+'/'+ideiasdesenho[ideiaID], 'rb')
     cookiebot.sendPhoto(chat_id, photo, caption="Referência com ID {}\n\nNão trace sem dar créditos! (use a busca reversa do google images)".format(ideiaID), reply_to_message_id=msg['message_id'])
+    photo.close()
 
 def Contato(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -563,6 +488,7 @@ def CustomCommand(msg, chat_id):
     imageID = random.randint(0, len(images)-1)
     photo = open(msg['text'].replace('/', '').replace("@CookieMWbot", '')+'/'+images[imageID], 'rb')
     cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
+    photo.close()
 
 def QualquerCoisa(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
@@ -931,12 +857,6 @@ def thread_function(msg):
                     NovasRegras(msg, chat_id)
                 elif FurBots == False and 'text' in msg and msg['text'].startswith("/regras"):
                     Regras(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/removeevento"):
-                    RemoveEvento(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/addevento"):
-                    AddEvento(msg, chat_id)
-                elif 'text' in msg and msg['text'].startswith("/eventos"):
-                    Eventos(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/tavivo"):
                     TaVivo(msg, chat_id)
                 elif 'text' in msg and msg['text'].startswith("/everyone"):
@@ -975,7 +895,12 @@ def thread_function(msg):
                 elif 'text' in msg and "?" in msg['text'] and len(msg['text'].split()) >= intrometerminimumwords and funfunctions == True and InteligenciaArtificial2(msg, chat_id):
                     pass
                 elif 'text' in msg:
-                    CheckEventos(msg, chat_id)
+                    if funfunctions == True:
+                        try:
+                            requests.get(msg['text'])
+                            VideoFromLink(msg, chat_id)
+                        except:
+                            pass
                     SolveCaptcha(msg, chat_id, False)
                     CheckCaptcha(msg, chat_id)
                     OnSay(msg, chat_id)
