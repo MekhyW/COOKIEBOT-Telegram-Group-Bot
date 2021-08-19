@@ -668,7 +668,6 @@ def ConfigurarSettar(msg, chat_id):
             variable_to_be_altered = "Low_resolution_area"
         elif "Use 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento." in msg['reply_to_message']['text']:
             variable_to_be_altered = "Funções_Diversão"
-        elif "Este é o limite máximo de mensagens permitidas em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo." in msg['reply_to_message']['text']:
         chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
         wait_open("Config_"+str(chat_to_alter)+".txt")
         text_file = open("Config_"+str(chat_to_alter)+".txt", 'r', encoding='utf-8')
