@@ -1,6 +1,5 @@
 FurBots: 1
 Sticker_Spam_Limit: 5
-Message_Spam_Limit: 10
 Tempo_sem_poder_mandar_imagem: 600
 Tempo_Captcha: 300
 Intrometer_Percentage: 1

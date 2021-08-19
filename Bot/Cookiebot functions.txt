@@ -7,6 +7,7 @@ Stickers - Responde um sticker com outro sticker
 Captcha - Impede que bots mandem mensagens e kicka eles se não provarem que são humanos
 Limbo de imagem - Impede que novos membros mandem fotos, por um intervalo
 Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
+Video Downloader - Baixa vídeos do YouTube ou crus
 Voz para texto - Transcripta mensagens de voz
 Localização para endereço - Manda o endereço correspondente a um location
 Upscaler de imagem - Amplia imagens de baixa resolução com inteligência artificial
