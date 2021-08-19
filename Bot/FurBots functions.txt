@@ -9,7 +9,9 @@
 /mix
 /rules
 /rules@burrsobot
-/regras
+/regras@burrsobot
+/comer@burrsobot
+/eat@burrsobot
 
 /aniversario@TestBoybot
 /averageyiffometro@TestBoybot
