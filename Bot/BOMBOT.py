@@ -29,7 +29,6 @@ listaadmins = []
 listaadmins_id = []
 FurBots = 0
 stickerspamlimit = 5
-messagespamlimit = 10
 limbotimespan = 600
 captchatimespan = 300
 intrometerpercentage = 1
@@ -635,8 +634,14 @@ def Configurar(msg, chat_id):
         variables = text.read()
         text.close()
         cookiebot.sendMessage(msg['from']['id'],"Configuração atual:\n\n" + variables + '\n\nEscolha a variável que vc gostaria de alterar', reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-                                   [InlineKeyboardButton(text="FurBots",callback_data='a CONFIG {}'.format(str(chat_id))), InlineKeyboardButton(text="Lim Stickers",callback_data='b CONFIG {}'.format(str(chat_id))), InlineKeyboardButton(text="Lim Msgs",callback_data='i CONFIG {}'.format(str(chat_id))),InlineKeyboardButton(text="🕒 Limbo",callback_data='c CONFIG {}'.format(str(chat_id))), InlineKeyboardButton(text="🕒 CAPTCHA",callback_data='d CONFIG {}'.format(str(chat_id)))],
-                                   [InlineKeyboardButton(text="% Intrometer",callback_data='e CONFIG {}'.format(str(chat_id))), InlineKeyboardButton(text="N Intrometer",callback_data='f CONFIG {}'.format(str(chat_id))), InlineKeyboardButton(text="Área Ampliar",callback_data='g CONFIG {}'.format(str(chat_id))), InlineKeyboardButton(text="Diversão",callback_data='h CONFIG {}'.format(str(chat_id)))]
+                                   [InlineKeyboardButton(text="FurBots",callback_data='a CONFIG {}'.format(str(chat_id)))], 
+                                   [InlineKeyboardButton(text="Limite Stickers",callback_data='b CONFIG {}'.format(str(chat_id)))],
+                                   [InlineKeyboardButton(text="🕒 Limbo",callback_data='c CONFIG {}'.format(str(chat_id)))], 
+                                   [InlineKeyboardButton(text="🕒 CAPTCHA",callback_data='d CONFIG {}'.format(str(chat_id)))],
+                                   [InlineKeyboardButton(text="% Intrometer",callback_data='e CONFIG {}'.format(str(chat_id)))], 
+                                   [InlineKeyboardButton(text="Mínimo palavras Intrometer",callback_data='f CONFIG {}'.format(str(chat_id)))], 
+                                   [InlineKeyboardButton(text="Área considerada Low Resolution",callback_data='g CONFIG {}'.format(str(chat_id)))], 
+                                   [InlineKeyboardButton(text="Funções Diversão",callback_data='h CONFIG {}'.format(str(chat_id)))]
                                ]
                            ))
         cookiebot.sendMessage(chat_id,"Te mandei uma mensagem no chat privado para configurar" , reply_to_message_id=msg['message_id'])
@@ -664,7 +669,6 @@ def ConfigurarSettar(msg, chat_id):
         elif "Use 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento." in msg['reply_to_message']['text']:
             variable_to_be_altered = "Funções_Diversão"
         elif "Este é o limite máximo de mensagens permitidas em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Message_Spam_Limit"
         chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
         wait_open("Config_"+str(chat_to_alter)+".txt")
         text_file = open("Config_"+str(chat_to_alter)+".txt", 'r', encoding='utf-8')
@@ -746,7 +750,7 @@ def thread_function(msg):
                     if not os.path.isfile("Config_"+str(chat_id)+".txt"):
                         open("Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
                         text_file = open("Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-                        text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nMessage_Spam_Limit: 10\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 0\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1")
+                        text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 0\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1")
                         text_file.close()
                     wait_open("Config_"+str(chat_id)+".txt")
                     text_file = open("Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
@@ -757,8 +761,6 @@ def thread_function(msg):
                             FurBots = int(line.split()[1])
                         elif line.split()[0] == "Sticker_Spam_Limit:":
                             stickerspamlimit = int(line.split()[1])
-                        elif line.split()[0] == "Message_Spam_Limit:":
-                            messagespamlimit = int(line.split()[1])
                         elif line.split()[0] == "Tempo_sem_poder_mandar_imagem:":
                             limbotimespan = int(line.split()[1])
                         elif line.split()[0] == "Tempo_Captcha:":
