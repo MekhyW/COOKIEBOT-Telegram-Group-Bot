@@ -125,8 +125,8 @@ def CheckCaptcha(msg, chat_id):
                 text.write(line)
                 try:
                     cookiebot.deleteMessage(telepot.message_identifier(msg))
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
             else:    
                 text.write(line)
         else:
@@ -154,15 +154,15 @@ def SolveCaptcha(msg, chat_id, button):
                     try:
                         cookiebot.deleteMessage((line.split()[0], line.split()[5]))
                         cookiebot.deleteMessage(telepot.message_identifier(msg))
-                    except:
-                        pass
+                    except Exception as e:
+                        print(e)
                 else:
                     cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.")
                     text.write(line)
                     try:
                         cookiebot.deleteMessage(telepot.message_identifier(msg))
-                    except:
-                        pass
+                    except Exception as e:
+                        print(e)
             else:
                 text.write(line)
     text.close()
@@ -280,8 +280,8 @@ def Speech_to_text(msg, chat_id):
         #voicetext_enus = recognizer.recognize_google(audio, language="en-US", show_all=True)['alternative'][0]
         Text = voicetext_ptbr['transcript'].capitalize()
         cookiebot.sendMessage(chat_id, "Texto: \n"+'"'+Text+'"', reply_to_message_id=msg['message_id'])
-    except:
-        pass
+    except Exception as e:
+        print(e)
 
 def VideoFromLink(msg, chat_id):
     html = requests.get(msg['text']).text
@@ -297,8 +297,8 @@ def VideoFromLink(msg, chat_id):
                 cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
                 video.close()
                 break
-            except:
-                pass
+            except Exception as e:
+                print(e)
         elif '.mp4' in link:
             try:
                 r = requests.get(link, allow_redirects=True)
@@ -308,8 +308,8 @@ def VideoFromLink(msg, chat_id):
                 cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
                 video.close()
                 break
-            except:
-                pass
+            except Exception as e:
+                print(e)
 
 def CooldownAction(msg, chat_id):
     global sentcooldownmessage
@@ -908,8 +908,8 @@ def thread_function(msg):
                 try:
                     requests.get(msg['text'])
                     VideoFromLink(msg, chat_id)
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
             SolveCaptcha(msg, chat_id, False)
             CheckCaptcha(msg, chat_id)
             OnSay(msg, chat_id)
