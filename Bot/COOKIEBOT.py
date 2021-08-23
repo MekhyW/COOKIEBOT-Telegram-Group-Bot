@@ -375,9 +375,9 @@ def Bemvindo(msg, chat_id):
     if os.path.exists("Welcome_" + str(chat_id)+".txt"):
         with open("Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
-        cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS OU VÍDEOS no grupo".format(str(round(limbotimespan/60))))
+        cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Você está com funções limitadas por pelo menos {} minutos. As restrições poderão ser removidas após esse tempo se você se apresentar e se enturmar na conversa com os demais membros.".format(str(round(limbotimespan/60))))
     else:    
-        cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Nos primeiros {} minutos, você NÃO PODERÁ MANDAR IMAGENS OU VÍDEOS no grupo".format(str(round(limbotimespan/60))))
+        cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Você está com funções limitadas por pelo menos {} minutos. As restrições poderão ser removidas após esse tempo se você se apresentar e se enturmar na conversa com os demais membros.".format(str(round(limbotimespan/60))))
 
 def AtualizaRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -842,6 +842,7 @@ def thread_function(msg):
             if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                 ReplySticker(msg, chat_id)
         elif content_type == "sticker":
+            CheckLimbo(msg, chat_id)
             Sticker_anti_spam(msg, chat_id)
             AddtoStickerDatabase(msg, chat_id)
             if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
