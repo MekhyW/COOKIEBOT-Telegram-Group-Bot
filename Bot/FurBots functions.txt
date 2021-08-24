@@ -21,6 +21,7 @@
 /goodbye@TestBoybot
 /ojogo@TestBoybot
 /perdi@TestBoybot
+/gaydar@TestBoybot
 
  /permissions@burrsobot  
  /chatscript@burrsobot  

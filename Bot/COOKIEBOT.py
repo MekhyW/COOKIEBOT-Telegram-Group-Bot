@@ -902,8 +902,8 @@ def thread_function(msg):
         elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
             if not OnSay(msg, chat_id):
                 InteligenciaArtificial(msg, chat_id)
-        elif 'text' in msg and "?" in msg['text'] and len(msg['text'].split()) >= intrometerminimumwords and funfunctions == True and InteligenciaArtificial2(msg, chat_id):
-            pass
+        #elif 'text' in msg and "?" in msg['text'] and len(msg['text'].split()) >= intrometerminimumwords and funfunctions == True and InteligenciaArtificial2(msg, chat_id):
+        #    pass
         elif 'text' in msg:
             if utilityfunctions == True:
                 try:
