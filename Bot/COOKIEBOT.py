@@ -908,7 +908,7 @@ def thread_function(msg):
             if utilityfunctions == True:
                 try:
                     requests.get(msg['text'])
-                    VideoFromLink(msg, chat_id)
+                    #VideoFromLink(msg, chat_id)
                 except Exception as e:
                     print(e)
             SolveCaptcha(msg, chat_id, False)

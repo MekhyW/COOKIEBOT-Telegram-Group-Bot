@@ -12,6 +12,7 @@
 /regras@burrsobot
 /comer@burrsobot
 /eat@burrsobot
+/delete@burrsobot
 
 /aniversario@TestBoybot
 /averageyiffometro@TestBoybot
