@@ -358,8 +358,8 @@ def Completar(msg, chat_id):
 
 def AtualizaBemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Welcome_" + str(chat_id)+".txt")
-    text_file = open("Welcome_" + str(chat_id)+".txt", 'w', encoding='utf-8')
+    wait_open("Welcome/Welcome_" + str(chat_id)+".txt")
+    text_file = open("Welcome/Welcome_" + str(chat_id)+".txt", 'w', encoding='utf-8')
     text_file.write(msg['text'])
     cookiebot.sendMessage(chat_id, "Mensagem de Boas Vindas atualizada! ✅", reply_to_message_id=msg['message_id'])
     text_file.close()
@@ -371,9 +371,9 @@ def NovoBemvindo(msg, chat_id):
 
 def Bemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Welcome_" + str(chat_id)+".txt")
-    if os.path.exists("Welcome_" + str(chat_id)+".txt"):
-        with open("Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
+    wait_open("Welcome/Welcome_" + str(chat_id)+".txt")
+    if os.path.exists("Welcome/Welcome_" + str(chat_id)+".txt"):
+        with open("Welcome/Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
         cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Você está com funções limitadas por pelo menos {} minutos. As restrições poderão ser removidas após esse tempo se você se apresentar e se enturmar na conversa com os demais membros.".format(str(round(limbotimespan/60))))
     else:    
@@ -381,8 +381,8 @@ def Bemvindo(msg, chat_id):
 
 def AtualizaRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Regras_" + str(chat_id)+".txt")
-    text_file = open("Regras_" + str(chat_id)+".txt", 'w', encoding='utf-8')
+    wait_open("Rules/Regras_" + str(chat_id)+".txt")
+    text_file = open("Rules/Regras_" + str(chat_id)+".txt", 'w', encoding='utf-8')
     text_file.write(msg['text'])
     cookiebot.sendMessage(chat_id, "Mensagem de regras atualizada! ✅", reply_to_message_id=msg['message_id'])
     text_file.close()
@@ -394,9 +394,9 @@ def NovasRegras(msg, chat_id):
 
 def Regras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Regras_" + str(chat_id)+".txt")
-    if os.path.exists("Regras_" + str(chat_id)+".txt"):
-        with open("Regras_" + str(chat_id)+".txt", encoding='utf-8') as file:
+    wait_open("Rules/Regras_" + str(chat_id)+".txt")
+    if os.path.exists("Rules/Regras_" + str(chat_id)+".txt"):
+        with open("Rules/Regras_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
         cookiebot.sendMessage(chat_id, regras+"\n\nDúvidas em relação ao bot? Mande para @MekhyW", reply_to_message_id=msg['message_id'])
     else:    
@@ -411,8 +411,8 @@ def Everyone(msg, chat_id):
     if str(msg['from']['username']) not in listaadmins:
         cookiebot.sendMessage(chat_id, "Você não tem permissão para chamar todos os membros do grupo.", reply_to_message_id=msg['message_id'])
     else:
-        wait_open(str(chat_id)+".txt")
-        text_file = open(str(chat_id)+".txt", "r+", encoding='utf8')
+        wait_open("Registers/"+str(chat_id)+".txt")
+        text_file = open("Registers/"+str(chat_id)+".txt", "r+", encoding='utf8')
         lines = text_file.readlines()
         result = ""
         for line in lines:
@@ -489,9 +489,9 @@ def PromptQualquerCoisa(msg, chat_id):
 
 def CustomCommand(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
-    images = os.listdir(msg['text'].replace('/', '').replace("@CookieMWbot", ''))
+    images = os.listdir("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", ''))
     imageID = random.randint(0, len(images)-1)
-    photo = open(msg['text'].replace('/', '').replace("@CookieMWbot", '')+'/'+images[imageID], 'rb')
+    photo = open("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')+'/'+images[imageID], 'rb')
     cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
     photo.close()
 
@@ -522,8 +522,8 @@ def QualquerCoisa(msg, chat_id):
 def Quem(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     LocucaoAdverbial = random.choice(["Com certeza o(a) ", "Sem sombra de dúvidas o(a) ", "Suponho que o(a) ", "Aposto que o(a) ", "Talvez o(a) ", "Quem sabe o(a) ", "Aparentemente o(a) "])
-    wait_open(str(chat_id)+".txt")
-    text_file = open(str(chat_id)+".txt", "r+", encoding='utf-8')
+    wait_open("Registers/"+str(chat_id)+".txt")
+    text_file = open("Registers/"+str(chat_id)+".txt", "r+", encoding='utf-8')
     lines = text_file.readlines()
     target = None
     while len(lines)>1 and (target in (None, '') or target.startswith("EVENT")):
@@ -635,8 +635,8 @@ def ReplySticker(msg, chat_id):
 def Configurar(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     if str(msg['from']['username']) in listaadmins or str(msg['from']['username']) == "MekhyW":
-        wait_open("Config_"+str(chat_id)+".txt")
-        text = open("Config_"+str(chat_id)+".txt", 'r', encoding='utf-8')
+        wait_open("Configs/Config_"+str(chat_id)+".txt")
+        text = open("Configs/Config_"+str(chat_id)+".txt", 'r', encoding='utf-8')
         variables = text.read()
         text.close()
         cookiebot.sendMessage(msg['from']['id'],"Configuração atual:\n\n" + variables + '\n\nEscolha a variável que vc gostaria de alterar', reply_markup = InlineKeyboardMarkup(inline_keyboard=[
@@ -678,11 +678,11 @@ def ConfigurarSettar(msg, chat_id):
         elif "Use 1 para permitir comandos e funcionalidades de utilidade, ou 0 para desligá-las." in msg['reply_to_message']['text']:
             variable_to_be_altered = "Funções_Utilidade"   
         chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
-        wait_open("Config_"+str(chat_to_alter)+".txt")
-        text_file = open("Config_"+str(chat_to_alter)+".txt", 'r', encoding='utf-8')
+        wait_open("Configs/Config_"+str(chat_to_alter)+".txt")
+        text_file = open("Configs/Config_"+str(chat_to_alter)+".txt", 'r', encoding='utf-8')
         lines = text_file.readlines()
         text_file.close()
-        text_file = open("Config_"+str(chat_to_alter)+".txt", 'w', encoding='utf-8')
+        text_file = open("Configs/Config_"+str(chat_to_alter)+".txt", 'w', encoding='utf-8')
         for line in lines:
             if variable_to_be_altered in line:
                 text_file.write(variable_to_be_altered + ": " + msg['text'] + "\n")
@@ -724,10 +724,10 @@ def thread_function(msg):
         global utilityfunctions
         if chat_type != 'private':
             #BEGGINING OF ADMINISTRATORS GATHERING
-            if not os.path.exists("GranularAdmins_" + str(chat_id)+".txt"):
-                text = open("GranularAdmins_" + str(chat_id)+".txt", 'w').close()
-            wait_open("GranularAdmins_" + str(chat_id)+".txt")
-            text_file = open("GranularAdmins_" + str(chat_id)+".txt", 'r', encoding='utf-8')
+            if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt"):
+                text = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'w').close()
+            wait_open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt")
+            text_file = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'r', encoding='utf-8')
             lines = text_file.readlines()
             text_file.close()
             if lines != []:
@@ -743,22 +743,22 @@ def thread_function(msg):
                     listaadmins_id.append(str(admin['user']['id']))
             #END OF ADMINISTRATORS GATHERING
             #BEGGINING OF NEW NAME GATHERING
-            if not os.path.isfile(str(chat_id)+".txt"):
-                open(str(chat_id)+".txt", 'a', encoding='utf-8').close() 
-            wait_open(str(chat_id)+".txt")
-            text_file = open(str(chat_id)+".txt", "r+", encoding='utf-8')
+            if not os.path.isfile("Registers/"+str(chat_id)+".txt"):
+                open("Registers/"+str(chat_id)+".txt", 'a', encoding='utf-8').close() 
+            wait_open("Registers/"+str(chat_id)+".txt")
+            text_file = open("Registers/"+str(chat_id)+".txt", "r+", encoding='utf-8')
             if 'username' in msg['from'] and (check_if_string_in_file(text_file, msg['from']['username']) == False):
                 text_file.write("\n"+msg['from']['username'])
             text_file.close()
             #END OF NEW NAME GATHERING
             #BEGGINNING OF CONFIG GATHERING
-            if not os.path.isfile("Config_"+str(chat_id)+".txt"):
-                open("Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
-                text_file = open("Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
+            if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
+                open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
+                text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
                 text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 0\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1\nFunções_Utilidade: 1")
                 text_file.close()
-            wait_open("Config_"+str(chat_id)+".txt")
-            text_file = open("Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
+            wait_open("Configs/Config_"+str(chat_id)+".txt")
+            text_file = open("Configs/Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
             lines = text_file.readlines()
             text_file.close()
             for line in lines:
@@ -782,11 +782,11 @@ def thread_function(msg):
                     utilityfunctions = int(line.split()[1])
             #END OF CONFIG GATHERING
             #BEGINNING OF CALENDAR SYNC AND FURBOTS CHECK
-            wait_open(str(chat_id)+".txt")
-            text_file = open(str(chat_id)+".txt", "r", encoding='utf-8')
+            wait_open("Registers/"+str(chat_id)+".txt")
+            text_file = open("Registers/"+str(chat_id)+".txt", "r", encoding='utf-8')
             lines = text_file.read().split("\n")
             text_file.close()
-            text_file = open(str(chat_id)+".txt", "w", encoding='utf-8')
+            text_file = open("Registers/"+str(chat_id)+".txt", "w", encoding='utf-8')
             for line in lines:
                 if line == '':
                     pass
@@ -891,7 +891,7 @@ def thread_function(msg):
             Configurar(msg, chat_id)
         elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "Responda ESTA mensagem com o novo valor da variável" in msg['reply_to_message']['text']:
             ConfigurarSettar(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists(msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
+        elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
             CustomCommand(msg, chat_id)
         elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:
             QualquerCoisa(msg, chat_id)

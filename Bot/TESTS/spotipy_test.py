@@ -1,5 +1,5 @@
 import spotipy
-spotify = spotipy.Spotify(spotipy.oauth2.SpotifyClientCredentials(client_id='CLIENT_ID', client_secret='CLIENT_SECRET').get_access_token())
+spotify = spotipy.Spotify(spotipy.oauth2.SpotifyClientCredentials(client_id='', client_secret='').get_access_token())
 
 #lz_uri = 'spotify:artist:36QJpDe2go2KgaRleHCDTp'
 #results = spotify.artist_top_tracks(lz_uri)
@@ -12,7 +12,7 @@ spotify = spotipy.Spotify(spotipy.oauth2.SpotifyClientCredentials(client_id='CLI
     #print(track)
 
 
-query = "Shining justice burning in me"
+query = "track:bolo"
 results = spotify.search(q=query, type="track", limit=1, offset=0)
 
 names = ''
