@@ -30,7 +30,6 @@ FurBots = 0
 stickerspamlimit = 5
 limbotimespan = 600
 captchatimespan = 300
-intrometerpercentage = 1
 intrometerminimumwords = 12
 lowresolutionarea = 10000
 funfunctions = 1
@@ -717,7 +716,6 @@ def thread_function(msg):
         global messagespamlimit
         global limbotimespan
         global captchatimespan
-        global intrometerpercentage
         global intrometerminimumwords
         global lowresolutionarea
         global funfunctions
@@ -770,8 +768,6 @@ def thread_function(msg):
                     limbotimespan = int(line.split()[1])
                 elif line.split()[0] == "Tempo_Captcha:":
                     captchatimespan = int(line.split()[1])
-                elif line.split()[0] == "Intrometer_Percentage:":
-                    intrometerpercentage = int(line.split()[1])
                 elif line.split()[0] == "Intrometer_minimum_words:":
                     intrometerminimumwords = int(line.split()[1])
                 elif line.split()[0] == "Low_resolution_area:":
@@ -899,7 +895,7 @@ def thread_function(msg):
             Quem(msg, chat_id)
         elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60))):
             SolveCaptcha(msg, chat_id, False)
-        elif 'text' in msg and ((random.randint(1, 100)<=intrometerpercentage and len(msg['text'].split())>=intrometerminimumwords) or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
+        elif 'text' in msg and (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
             if not OnSay(msg, chat_id):
                 InteligenciaArtificial(msg, chat_id)
         #elif 'text' in msg and "?" in msg['text'] and len(msg['text'].split()) >= intrometerminimumwords and funfunctions == True and InteligenciaArtificial2(msg, chat_id):
