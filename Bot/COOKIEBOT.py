@@ -1,21 +1,23 @@
 DeepaiTOKEN = ''
 WolframAPP_ID = ''
 OpenAIkey = ''
+googleAPIkey = ''
+searchEngineCX = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
-import os, subprocess, sys, random, json, requests, datetime, pytube, re, threading
+import os, subprocess, sys, random, json, requests, datetime, re, threading
 from captcha.image import ImageCaptcha
 import googletrans
-from google_images_download import google_images_download
+import google_images_search, io, PIL
 import speech_recognition, geopy, wolframalpha, openai, unidecode
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
-#install telepota instead of telepot, googletrans==3.1.0a0 instead of googletrans, and Joeclinton1 pull request of google_images_download
+#install telepota instead of telepot, googletrans==3.1.0a0 instead of googletrans
 captcha = ImageCaptcha()
 translator = googletrans.Translator()
-google_images_response = google_images_download.googleimagesdownload()
+googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
 recognizer = speech_recognition.Recognizer()
 WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
 openai.api_key = OpenAIkey
@@ -497,26 +499,18 @@ def CustomCommand(msg, chat_id):
 def QualquerCoisa(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     searchterm = msg['text'].split("@")[0].replace("/", '').replace("@CookieMWbot", '')
-    orig_stdout = sys.stdout
-    f = open('URLS.txt', 'w')
-    sys.stdout = f
-    arguments = {"keywords":searchterm, "limit":30, "print_urls":True, "no_download":True,  "safe_search":True}
-    paths = google_images_download.googleimagesdownload().download(arguments)
-    sys.stdout = orig_stdout
-    f.close()
-    with open('URLS.txt') as f:
-        content = f.readlines()
-    f.close()
-    urls = []
-    for j in range(len(content)):
-        if content[j][:7] == 'Printed':
-            urls.append(content[j-1][11:-1])
+    googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'high', 'filetype':'jpg|png'})
     try:
-        index = random.randint(0, len(urls)-1)
-        cookiebot.sendPhoto(chat_id, urls[index], reply_to_message_id=msg['message_id'])
+        image = googleimagesearcher.results()[random.randint(0, len(googleimagesearcher.results())-1)]
+        my_bytes_io = io.BytesIO()
+        image.copy_to(my_bytes_io)
+        my_bytes_io.seek(0)
+        temp_img = PIL.Image.open(my_bytes_io)
+        temp_img.save(my_bytes_io, 'PNG')
+        my_bytes_io.seek(0)
+        cookiebot.sendPhoto(chat_id, my_bytes_io, reply_to_message_id=msg['message_id'])
     except:
-        index = random.randint(0, len(urls)-1)
-        cookiebot.sendPhoto(chat_id, urls[index], reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", reply_to_message_id=msg['message_id'])
 
 def Quem(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
