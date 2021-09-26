@@ -1,19 +1,20 @@
-from google_images_download import google_images_download 
-import sys
-orig_stdout = sys.stdout
-f = open('URLS.txt', 'w')
-sys.stdout = f
-response = google_images_download.googleimagesdownload()
-arguments = {"keywords":'stackoverflow', "limit":100, "print_urls":True, "no_download":True}
-paths = response.download(arguments)
-sys.stdout = orig_stdout
-f.close()
-with open('URLS.txt') as f:
-    content = f.readlines()
-f.close()
-urls = []
-for j in range(len(content)):
-    if content[j][:7] == 'Printed':
-        urls.append(content[j-1][11:-1])   
-print(urls)
-print(type(urls))
+import random
+import google_images_search
+import io
+import PIL
+googleAPIkey = ''
+searchEngineCX = ''
+
+gis = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
+my_bytes_io = io.BytesIO()
+
+gis.search({'q': 'e621', 'num': 10, 'safe':'high', 'filetype':'jpg|png'})
+try:
+    image = gis.results()[random.randint(0, len(gis.results())-1)]
+    my_bytes_io.seek(0)
+    image.copy_to(my_bytes_io, image.get_raw_data())
+    my_bytes_io.seek(0)
+    temp_img = PIL.Image.open(my_bytes_io)
+    temp_img.show()
+except:
+    print("Não consegui achar uma imagem (ou era NSFW e eu filtrei)")
