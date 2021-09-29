@@ -508,7 +508,10 @@ def QualquerCoisa(msg, chat_id):
         temp_img = PIL.Image.open(my_bytes_io)
         temp_img.save(my_bytes_io, 'PNG')
         my_bytes_io.seek(0)
-        cookiebot.sendPhoto(chat_id, ('x.png', my_bytes_io), reply_to_message_id=msg['message_id'])
+        try:
+            cookiebot.sendPhoto(chat_id, ('x.png', my_bytes_io), reply_to_message_id=msg['message_id'])
+        except:
+            cookiebot.sendPhoto(chat_id, ('x.jpg', my_bytes_io), reply_to_message_id=msg['message_id'])
     except Exception as e:
         print(e)
         cookiebot.sendMessage(chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", reply_to_message_id=msg['message_id'])
