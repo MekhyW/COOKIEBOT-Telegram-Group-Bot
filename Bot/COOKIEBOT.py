@@ -552,7 +552,7 @@ def InteligenciaArtificial(msg, chat_id):
         else:
             cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
     except:
-        r = requests.get('https://api.simsimi.net/v1/?text={}&lang=pt&cf=true'.format(message))
+        r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message))
         try:
             Answer = json.loads(r.text)['messages'][0]['response'].capitalize()
         except:
