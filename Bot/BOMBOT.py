@@ -313,7 +313,10 @@ def Idade(msg, chat_id):
         response = json.loads(requests.get("https://api.agify.io?name={}".format(Nome)).text)
         Idade = response['age']
         Contagem = response['count']
-        cookiebot.sendMessage(chat_id, "Sua idade é {} anos! 👴\nRegistrado {} vezes".format(Idade, Contagem), reply_to_message_id=msg['message_id'])
+        if Contagem == 0:
+            cookiebot.sendMessage(chat_id, "Não conheço esse nome!", reply_to_message_id=msg['message_id'])
+        else:
+            cookiebot.sendMessage(chat_id, "Sua idade é {} anos! 👴\nRegistrado {} vezes".format(Idade, Contagem), reply_to_message_id=msg['message_id'])
 
 def Genero(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -325,7 +328,9 @@ def Genero(msg, chat_id):
         Genero = response['gender']
         Probabilidade = response['probability']
         Contagem = response['count']
-        if Genero == 'male':
+        if Contagem == 0:
+            cookiebot.sendMessage(chat_id, "Não conheço esse nome!", reply_to_message_id=msg['message_id'])
+        elif Genero == 'male':
             cookiebot.sendMessage(chat_id, "É um menino! 👨\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), reply_to_message_id=msg['message_id'])
         elif Genero == 'female':
             cookiebot.sendMessage(chat_id, "É uma menina! 👩\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), reply_to_message_id=msg['message_id'])
