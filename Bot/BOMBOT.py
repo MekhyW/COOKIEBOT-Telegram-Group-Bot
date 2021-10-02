@@ -1,6 +1,5 @@
 DeepaiTOKEN = ''
 WolframAPP_ID = ''
-OpenAIkey = ''
 googleAPIkey = ''
 searchEngineCX = ''
 cookiebotTOKEN = ''
@@ -9,7 +8,7 @@ import os, subprocess, sys, random, json, requests, datetime, re, threading
 from captcha.image import ImageCaptcha
 import googletrans
 import google_images_search, io, PIL
-import speech_recognition, wolframalpha, openai, unidecode
+import speech_recognition, wolframalpha, unidecode
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
@@ -20,7 +19,6 @@ translator = googletrans.Translator()
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
 recognizer = speech_recognition.Recognizer()
 WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
-openai.api_key = OpenAIkey
 cookiebot = telepot.Bot(cookiebotTOKEN)
 threads = list()
 lastmessagedate = "1-1-1"
@@ -304,6 +302,23 @@ def CooldownAction(msg, chat_id):
     elif sentcooldownmessage == True:
         cookiebot.deleteMessage(telepot.message_identifier(msg))
 
+def Dado(msg, chat_id):
+    if msg['text'].startswith("/dado"):
+        cookiebot.sendMessage(chat_id, "Rodo um dado de 1 até x, n vezes\nEXEMPLO: /d20 5")
+    else:
+        if len(msg['text'].split()) == 1:
+            vezes = 1
+        else:
+            vezes = int(msg['text'].replace("@CookieMWbot", '').split()[1])
+        limite = int(msg['text'].replace("@CookieMWbot", '').split()[0][2:])
+        resposta = "(d{}) ".format(limite)
+        if vezes == 1:
+            resposta += "🎲 -> {}".format(random.randint(1, limite))
+        else:
+            for vez in range(vezes):
+                resposta += "\n{}º Lançamento: 🎲 -> {}".format(vez+1, random.randint(1, limite))
+        cookiebot.sendMessage(chat_id, resposta, reply_to_message_id=msg['message_id'])
+
 def Idade(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     if not " " in msg['text']:
@@ -562,36 +577,6 @@ def InteligenciaArtificial(msg, chat_id):
         Answer = translator.translate(Answer, dest='pt').text
         cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
 
-def InteligenciaArtificial2(msg, chat_id):
-    if 'reply_to_message' in msg and 'text' in msg['reply_to_message']:
-        message = msg['reply_to_message']['text'].capitalize() + ". " + msg['text'].capitalize()
-    else:
-        message = msg['text'].capitalize()
-    message_eng = translator.translate(message, dest='en').text
-    if "you" in message_eng:
-        return False
-    try:
-        r = openai.Completion.create(
-            engine="davinci",
-            prompt="I am a highly intelligent question answering bot. If you ask me a question that is rooted in truth, I will give you the answer. If you ask me a question that is nonsense, trickery, or has no clear answer, I will respond with 'Unknown'.\n\nQ: What is human life expectancy in the United States?\nA: Human life expectancy in the United States is 78 years.\nQ: Who was president of the United States in 1955?\nA: Dwight D. Eisenhower was president of the United States in 1955.\nQ: Which party did he belong to?\nA: He belonged to the Republican Party.\n\nQ: What is the square root of banana?\nA: Unknown\n\nQ: How does a telescope work?\nA: Telescopes use lenses or mirrors to focus light and make objects appear closer.\n\nQ: Where were the 1992 Olympics held?\nA: The 1992 Olympics were held in Barcelona, Spain.\n\nQ: How many squigs are in a bonk?\nA: Unknown\n\nQ: {}\nA:".format(message_eng),
-            temperature=0,
-            max_tokens=100,
-            top_p=1,
-            frequency_penalty=0.0,
-            presence_penalty=0.0,
-            stop=["\n"]
-        )
-        Answer = r["choices"][0]["text"]
-        if "Unknown" in Answer:
-            return False
-        else:
-            cookiebot.sendChatAction(chat_id, 'typing')
-            Answer = translator.translate(Answer, dest='pt').text.capitalize()
-            cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
-            return True
-    except:
-        return False
-
 
 def AddtoStickerDatabase(msg, chat_id):
     wait_open("Sticker_Database.txt")
@@ -832,6 +817,8 @@ def thread_function(msg):
                 ReplySticker(msg, chat_id)
         elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
             CooldownAction(msg, chat_id)
+        elif 'text' in msg and (msg['text'].startswith("/dado") or (msg['text'].startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
+            Dado(msg, chat_id)
         elif 'text' in msg and msg['text'].startswith("/idade") and funfunctions == True:
             Idade(msg, chat_id)
         elif 'text' in msg and msg['text'].startswith("/genero") and funfunctions == True:
@@ -883,8 +870,6 @@ def thread_function(msg):
         elif 'text' in msg and (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
             if not OnSay(msg, chat_id):
                 InteligenciaArtificial(msg, chat_id)
-        #elif 'text' in msg and "?" in msg['text'] and len(msg['text'].split()) >= intrometerminimumwords and funfunctions == True and InteligenciaArtificial2(msg, chat_id):
-        #    pass
         elif 'text' in msg:
             if utilityfunctions == True:
                 try:

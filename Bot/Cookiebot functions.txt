@@ -8,10 +8,8 @@ Captcha - Impede que bots mandem mensagens e kicka eles se não provarem que sã
 Limbo de imagem - Impede que novos membros mandem fotos, por um intervalo
 Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
 Voz para texto - Transcripta mensagens de voz
-Localização para endereço - Manda o endereço correspondente a um location
 Upscaler de imagem - Amplia imagens de baixa resolução com inteligência artificial
 Welcome - Mensagem customizada de boas vindas
-Dicionário customizado - Respostas automáticas para palavras-chave predefinidas
 Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem mexer nele. Fale com o Mekhy para implementar isso no seu chat
 Backup de Participantes - Caso o grupo seja hackeado ou apagado por engano, posso ajudar a recuperar seus participantes ativos
 
@@ -25,6 +23,7 @@ novasregras - Atualiza as regras do grupo
 novobemvindo - Atualiza a mensagem de boas vindas
 hoje - DESATIVADO COM O BURRBOT
 cheiro - DESATIVADO COM O BURRBOT
+dado - Roda um ou mais dados quaisquer
 idade - Te digo quantos anos vc tem
 genero - Sera que e menino ou menina
 completar - Faço lero lero a partir de uma frase
