@@ -9,7 +9,7 @@ import os, subprocess, sys, random, json, requests, datetime, re, threading
 from captcha.image import ImageCaptcha
 import googletrans
 import google_images_search, io, PIL
-import speech_recognition, geopy, wolframalpha, openai, unidecode
+import speech_recognition, wolframalpha, openai, unidecode
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
@@ -251,22 +251,6 @@ def Sticker_anti_spam(msg, chat_id):
         cookiebot.sendMessage(chat_id, "Cuidado com o flood de stickers.\nMantenham o chat com textos!")
     if counter_new > stickerspamlimit:
         cookiebot.deleteMessage(telepot.message_identifier(msg))
-
-def Location_to_text(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    Latitude = str(msg['location']['latitude'])
-    Longitude = str(msg['location']['longitude'])
-    Coordinate = Latitude + ", " + Longitude
-    location = geopy.geocoders.Nominatim(user_agent="Cookiebot").reverse(Coordinate)
-    address = ""
-    vector = location.address.split(",")
-    i = 0
-    while i < len(vector)-7:
-        address += vector[i]
-        address += ","
-        i += 1
-    address = address[:-1]
-    cookiebot.sendMessage(chat_id, "Endereço: \n\n"+address, reply_to_message_id=msg['message_id'])
 
 def Speech_to_text(msg, chat_id):
     try:
@@ -841,8 +825,6 @@ def thread_function(msg):
             AddtoStickerDatabase(msg, chat_id)
             if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                 ReplySticker(msg, chat_id)
-        elif content_type == "location" and utilityfunctions == True:
-            Location_to_text(msg, chat_id)
         #elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
         #    CooldownAction(msg, chat_id)
         elif 'text' in msg and msg['text'].startswith("/idade") and funfunctions == True:
