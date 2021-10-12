@@ -4,7 +4,7 @@ googleAPIkey = ''
 searchEngineCX = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
-import os, subprocess, sys, random, json, requests, datetime, re, threading
+import os, subprocess, sys, random, json, requests, datetime, re, threading, traceback
 from captcha.image import ImageCaptcha
 import googletrans
 import google_images_search, io, PIL
@@ -20,12 +20,11 @@ googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, sear
 recognizer = speech_recognition.Recognizer()
 WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
 cookiebot = telepot.Bot(cookiebotTOKEN)
+mekhyID = 780875868
 threads = list()
 lastmessagedate = "1-1-1"
 lastmessagetime = "0"
 sentcooldownmessage = False
-listaadmins = []
-listaadmins_id = []
 FurBots = 0
 stickerspamlimit = 5
 limbotimespan = 600
@@ -34,6 +33,8 @@ intrometerminimumwords = 12
 lowresolutionarea = 10000
 funfunctions = 1
 utilityfunctions = 1
+listaadmins = []
+listaadmins_id = []
 
 
 #IGNORE UPDATES PRIOR TO BOT ACTIVATION
@@ -304,12 +305,13 @@ def CooldownAction(msg, chat_id):
 
 def Dado(msg, chat_id):
     if msg['text'].startswith("/dado"):
-        cookiebot.sendMessage(chat_id, "Rodo um dado de 1 até x, n vezes\nEXEMPLO: /d20 5")
+        cookiebot.sendMessage(chat_id, "Rodo um dado de 1 até x, n vezes\nEXEMPLO: /d20 5\n(Roda um d20 5 vezes)")
     else:
         if len(msg['text'].split()) == 1:
             vezes = 1
         else:
             vezes = int(msg['text'].replace("@CookieMWbot", '').split()[1])
+            vezes = max(min(20, vezes), 1)
         limite = int(msg['text'].replace("@CookieMWbot", '').split()[0][2:])
         resposta = "(d{}) ".format(limite)
         if vezes == 1:
@@ -671,231 +673,225 @@ def ConfigurarSettar(msg, chat_id):
 
 #MAIN THREAD FUNCTION
 def thread_function(msg):
-    content_type, chat_type, chat_id = telepot.glance(msg)
-    print(content_type, chat_type, chat_id, msg['message_id'], msg['from']['id'])
-    if chat_type == 'private' and 'reply_to_message' not in msg:
-        if msg['text'] == "/stop" and 'username' in msg['from'] and msg['from']['username'] == 'MekhyW':
-            os._exit(0)
-        cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
-    #elif chat_type != 'private' and "MekhyW" not in str(cookiebot.getChatAdministrators(chat_id)):
-    #    cookiebot.sendMessage(chat_id, "Posso apenas ficar no grupo se o @MekhyW estiver nele, e for um admin!\n\nIsso é feito para evitar spam e raids, me desculpem")
-    #    cookiebot.leaveChat(chat_id)
-    else:
-        global listaadmins
-        global listaadmins_id
-        global FurBots
-        global stickerspamlimit
-        global messagespamlimit
-        global limbotimespan
-        global captchatimespan
-        global intrometerminimumwords
-        global lowresolutionarea
-        global funfunctions
-        global utilityfunctions
-        if chat_type != 'private':
-            #BEGGINING OF ADMINISTRATORS GATHERING
-            if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt"):
-                text = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'w').close()
-            wait_open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt")
-            text_file = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'r', encoding='utf-8')
-            lines = text_file.readlines()
-            text_file.close()
-            if lines != []:
-                listaadmins = []
-                for username in lines:
-                    listaadmins.append(username.replace("\n", ''))
-            else:
-                listaadmins = []
-                listaadmins_id = []
-                for admin in cookiebot.getChatAdministrators(chat_id):
-                    if 'username' in admin['user']:
-                        listaadmins.append(str(admin['user']['username']))
-                    listaadmins_id.append(str(admin['user']['id']))
-            #END OF ADMINISTRATORS GATHERING
-            #BEGGINING OF NEW NAME GATHERING
-            if not os.path.isfile("Registers/"+str(chat_id)+".txt"):
-                open("Registers/"+str(chat_id)+".txt", 'a', encoding='utf-8').close() 
-            wait_open("Registers/"+str(chat_id)+".txt")
-            text_file = open("Registers/"+str(chat_id)+".txt", "r+", encoding='utf-8')
-            if 'username' in msg['from'] and (check_if_string_in_file(text_file, msg['from']['username']) == False):
-                text_file.write("\n"+msg['from']['username'])
-            text_file.close()
-            #END OF NEW NAME GATHERING
-            #BEGGINNING OF CONFIG GATHERING
-            if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
-                open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
-                text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-                text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 0\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1\nFunções_Utilidade: 1")
+    try:
+        content_type, chat_type, chat_id = telepot.glance(msg)
+        print(content_type, chat_type, chat_id, msg['message_id'], msg['from']['id'])
+        if chat_type == 'private' and 'reply_to_message' not in msg:
+            if msg['text'] == "/stop" and 'username' in msg['from'] and msg['from']['username'] == 'MekhyW':
+                os._exit(0)
+            cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
+        else:
+            global listaadmins
+            global listaadmins_id
+            global FurBots
+            global stickerspamlimit
+            global messagespamlimit
+            global limbotimespan
+            global captchatimespan
+            global intrometerminimumwords
+            global lowresolutionarea
+            global funfunctions
+            global utilityfunctions
+            if chat_type != 'private':
+                #BEGGINING OF ADMINISTRATORS GATHERING
+                if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt"):
+                    text = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'w').close()
+                wait_open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt")
+                text_file = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'r', encoding='utf-8')
+                lines = text_file.readlines()
                 text_file.close()
-            wait_open("Configs/Config_"+str(chat_id)+".txt")
-            text_file = open("Configs/Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
-            lines = text_file.readlines()
-            text_file.close()
-            for line in lines:
-                if line.split()[0] == "FurBots:":
-                    FurBots = int(line.split()[1])
-                elif line.split()[0] == "Sticker_Spam_Limit:":
-                    stickerspamlimit = int(line.split()[1])
-                elif line.split()[0] == "Tempo_sem_poder_mandar_imagem:":
-                    limbotimespan = int(line.split()[1])
-                elif line.split()[0] == "Tempo_Captcha:":
-                    captchatimespan = int(line.split()[1])
-                elif line.split()[0] == "Intrometer_minimum_words:":
-                    intrometerminimumwords = int(line.split()[1])
-                elif line.split()[0] == "Low_resolution_area:":
-                    lowresolutionarea = int(line.split()[1])
-                elif line.split()[0] == "Funções_Diversão:":
-                    funfunctions = int(line.split()[1])
-                elif line.split()[0] == "Funções_Utilidade:":
-                    utilityfunctions = int(line.split()[1])
-            #END OF CONFIG GATHERING
-            #BEGINNING OF CALENDAR SYNC AND FURBOTS CHECK
-            wait_open("Registers/"+str(chat_id)+".txt")
-            text_file = open("Registers/"+str(chat_id)+".txt", "r", encoding='utf-8')
-            lines = text_file.read().split("\n")
-            text_file.close()
-            text_file = open("Registers/"+str(chat_id)+".txt", "w", encoding='utf-8')
-            for line in lines:
-                if line == '':
-                    pass
-                elif 'username' in msg['from'] and line.startswith(msg['from']['username']):
-                    global lastmessagedate
-                    global lastmessagetime
-                    global sentcooldownmessage
-                    entry = line.split()
-                    if 'text' in msg:
-                        if msg['text'].startswith("/"):
-                            if len(entry) == 3:
-                                now = entry[2].split(":")
-                                lastmessagedate = entry[1]
-                                lastmessagetime = (float(now[0])*3600)+(float(now[1])*60)+(float(now[2])*1)
-                            else:
-                                lastmessagedate = "1-1-1"
-                                lastmessagedate = "0"
-                            if lines.index(line) == len(lines)-1:
-                                text_file.write(entry[0]+" "+str(datetime.datetime.now()))
-                            else:
-                                text_file.write(entry[0]+" "+str(datetime.datetime.now())+"\n")
-                        else:
-                            if lines.index(line) == len(lines)-1:
-                                text_file.write(line)
-                            else:
-                                text_file.write(line+"\n")
-                elif lines.index(line) == len(lines)-1:
-                    text_file.write(line)
+                if lines != []:
+                    listaadmins = []
+                    for username in lines:
+                        listaadmins.append(username.replace("\n", ''))
                 else:
-                    text_file.write(line+"\n")
-            text_file.close()
-            #END OF CALENDAR SYNC AND FURBOTS CHECK
-        if content_type == "new_chat_member":
-            if CheckCAS(msg, chat_id) == False and CheckRaider(msg, chat_id) == False:
-                Limbo(msg, chat_id)
-                if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
-                    Captcha(msg, chat_id)
-                else:
-                    Bemvindo(msg, chat_id)
-        elif content_type == "left_chat_member":
-            left_chat_member(msg, chat_id)
-        elif content_type == "voice":
-            if utilityfunctions == True:
-                Speech_to_text(msg, chat_id)
-        elif content_type == "audio":
-            pass
-        elif content_type == "photo":
-            CheckLimbo(msg, chat_id)
-            Upscaler(msg, chat_id)
-        elif content_type == "video":
-            CheckLimbo(msg, chat_id)
-        elif content_type == "document":
-            if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
-                ReplySticker(msg, chat_id)
-        elif content_type == "sticker":
-            CheckLimbo(msg, chat_id)
-            Sticker_anti_spam(msg, chat_id)
-            AddtoStickerDatabase(msg, chat_id)
-            if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
-                ReplySticker(msg, chat_id)
-        #elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-        #    CooldownAction(msg, chat_id)
-        elif 'text' in msg and (msg['text'].startswith("/dado") or (msg['text'].startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
-            Dado(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/idade") and funfunctions == True:
-            Idade(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/genero") and funfunctions == True:
-            Genero(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/completar") and funfunctions == True:
-            Completar(msg, chat_id)
-        elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo" and str(msg['from']['username']) in listaadmins:
-            AtualizaBemvindo(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/novobemvindo"):
-            NovoBemvindo(msg, chat_id)
-        elif FurBots == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras" and str(msg['from']['username']) in listaadmins:
-            AtualizaRegras(msg, chat_id)
-        elif FurBots == False and 'text' in msg and msg['text'].startswith("/novasregras"):
-            NovasRegras(msg, chat_id)
-        elif FurBots == False and 'text' in msg and msg['text'].startswith("/regras"):
-            Regras(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/tavivo"):
-            TaVivo(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/everyone"):
-            Everyone(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/adm"):
-            Adm(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/comandos"):
-            Comandos(msg, chat_id)
-        elif FurBots == False and 'text' in msg and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")) and funfunctions == True:
-            Hoje(msg, chat_id)
-        elif FurBots == False and 'text' in msg and (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
-            Cheiro(msg, chat_id)
-        elif FurBots == False and 'text' in msg and ('eu faço' in msg['text'] or 'eu faco' in msg['text']) and '?' in msg['text'] and funfunctions == True:
-            QqEuFaço(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/ideiadesenho") and utilityfunctions == True:
-            IdeiaDesenho(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/contato"):
-            Contato(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/qualquercoisa") and utilityfunctions == True:
-            PromptQualquerCoisa(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/configurar"):
-            Configurar(msg, chat_id)
-        elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "Responda ESTA mensagem com o novo valor da variável" in msg['reply_to_message']['text']:
-            ConfigurarSettar(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
-            CustomCommand(msg, chat_id)
-        elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:
-            QualquerCoisa(msg, chat_id)
-        elif 'text' in msg and (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
-            Quem(msg, chat_id)
-        elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60))):
-            SolveCaptcha(msg, chat_id, False)
-        elif 'text' in msg and (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
-            if not OnSay(msg, chat_id):
-                InteligenciaArtificial(msg, chat_id)
-        elif 'text' in msg:
-            if utilityfunctions == True:
-                try:
-                    requests.get(msg['text'])
-                    #VideoFromLink(msg, chat_id)
-                except Exception as e:
-                    print(e)
-            SolveCaptcha(msg, chat_id, False)
-            CheckCaptcha(msg, chat_id)
-            OnSay(msg, chat_id)
-        #BEGGINNING OF COOLDOWN UPDATES
-        if 'text' in msg:
-            if float(lastmessagetime)+60 < ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                sentcooldownmessage = False
-            wait_open("Stickers.txt")
-            text_file = open("Stickers.txt", "r+", encoding='utf8')
-            lines = text_file.readlines()
-            text_file.close()
-            text_file = open("Stickers.txt", "w", encoding='utf8')
-            for line in lines:
-                if str(chat_id) in line:
-                    text_file.write(line.split()[0] + " " + "0" + "\n")
-                else:
-                    text_file.write(line)
-            text_file.close()
-        #END OF COOLDOWN UPDATES
+                    listaadmins = []
+                    listaadmins_id = []
+                    for admin in cookiebot.getChatAdministrators(chat_id):
+                        if 'username' in admin['user']:
+                            listaadmins.append(str(admin['user']['username']))
+                        listaadmins_id.append(str(admin['user']['id']))
+                #END OF ADMINISTRATORS GATHERING
+                #BEGGINING OF NEW NAME GATHERING
+                if not os.path.isfile("Registers/"+str(chat_id)+".txt"):
+                    open("Registers/"+str(chat_id)+".txt", 'a', encoding='utf-8').close() 
+                wait_open("Registers/"+str(chat_id)+".txt")
+                text_file = open("Registers/"+str(chat_id)+".txt", "r+", encoding='utf-8')
+                if 'username' in msg['from'] and (check_if_string_in_file(text_file, msg['from']['username']) == False):
+                    text_file.write("\n"+msg['from']['username'])
+                text_file.close()
+                #END OF NEW NAME GATHERING
+                #BEGGINNING OF CONFIG GATHERING
+                if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
+                    open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
+                    text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
+                    text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 0\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1\nFunções_Utilidade: 1")
+                    text_file.close()
+                wait_open("Configs/Config_"+str(chat_id)+".txt")
+                text_file = open("Configs/Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
+                lines = text_file.readlines()
+                text_file.close()
+                for line in lines:
+                    if line.split()[0] == "FurBots:":
+                        FurBots = int(line.split()[1])
+                    elif line.split()[0] == "Sticker_Spam_Limit:":
+                        stickerspamlimit = int(line.split()[1])
+                    elif line.split()[0] == "Tempo_sem_poder_mandar_imagem:":
+                        limbotimespan = int(line.split()[1])
+                    elif line.split()[0] == "Tempo_Captcha:":
+                        captchatimespan = int(line.split()[1])
+                    elif line.split()[0] == "Intrometer_minimum_words:":
+                        intrometerminimumwords = int(line.split()[1])
+                    elif line.split()[0] == "Low_resolution_area:":
+                        lowresolutionarea = int(line.split()[1])
+                    elif line.split()[0] == "Funções_Diversão:":
+                        funfunctions = int(line.split()[1])
+                    elif line.split()[0] == "Funções_Utilidade:":
+                        utilityfunctions = int(line.split()[1])
+                #END OF CONFIG GATHERING
+                #BEGINNING OF CALENDAR SYNC AND FURBOTS CHECK
+                wait_open("Registers/"+str(chat_id)+".txt")
+                text_file = open("Registers/"+str(chat_id)+".txt", "r", encoding='utf-8')
+                lines = text_file.read().split("\n")
+                text_file.close()
+                text_file = open("Registers/"+str(chat_id)+".txt", "w", encoding='utf-8')
+                for line in lines:
+                    if line == '':
+                        pass
+                    elif 'username' in msg['from'] and line.startswith(msg['from']['username']):
+                        global lastmessagedate
+                        global lastmessagetime
+                        global sentcooldownmessage
+                        entry = line.split()
+                        if 'text' in msg:
+                            if msg['text'].startswith("/"):
+                                if len(entry) == 3:
+                                    now = entry[2].split(":")
+                                    lastmessagedate = entry[1]
+                                    lastmessagetime = (float(now[0])*3600)+(float(now[1])*60)+(float(now[2])*1)
+                                else:
+                                    lastmessagedate = "1-1-1"
+                                    lastmessagedate = "0"
+                                if lines.index(line) == len(lines)-1:
+                                    text_file.write(entry[0]+" "+str(datetime.datetime.now()))
+                                else:
+                                    text_file.write(entry[0]+" "+str(datetime.datetime.now())+"\n")
+                            else:
+                                if lines.index(line) == len(lines)-1:
+                                    text_file.write(line)
+                                else:
+                                    text_file.write(line+"\n")
+                    elif lines.index(line) == len(lines)-1:
+                        text_file.write(line)
+                    else:
+                        text_file.write(line+"\n")
+                text_file.close()
+                #END OF CALENDAR SYNC AND FURBOTS CHECK
+            if content_type == "new_chat_member":
+                if CheckCAS(msg, chat_id) == False and CheckRaider(msg, chat_id) == False:
+                    Limbo(msg, chat_id)
+                    if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
+                        Captcha(msg, chat_id)
+                    else:
+                        Bemvindo(msg, chat_id)
+            elif content_type == "left_chat_member":
+                left_chat_member(msg, chat_id)
+            elif content_type == "voice":
+                if utilityfunctions == True:
+                    Speech_to_text(msg, chat_id)
+            elif content_type == "audio":
+                pass
+            elif content_type == "photo":
+                CheckLimbo(msg, chat_id)
+                Upscaler(msg, chat_id)
+            elif content_type == "video":
+                CheckLimbo(msg, chat_id)
+            elif content_type == "document":
+                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
+                    ReplySticker(msg, chat_id)
+            elif content_type == "sticker":
+                CheckLimbo(msg, chat_id)
+                Sticker_anti_spam(msg, chat_id)
+                AddtoStickerDatabase(msg, chat_id)
+                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
+                    ReplySticker(msg, chat_id)
+            #elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
+            #    CooldownAction(msg, chat_id)
+            elif 'text' in msg and (msg['text'].startswith("/dado") or (msg['text'].startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
+                Dado(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/idade") and funfunctions == True:
+                Idade(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/genero") and funfunctions == True:
+                Genero(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/completar") and funfunctions == True:
+                Completar(msg, chat_id)
+            elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo" and str(msg['from']['username']) in listaadmins:
+                AtualizaBemvindo(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/novobemvindo"):
+                NovoBemvindo(msg, chat_id)
+            elif FurBots == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras" and str(msg['from']['username']) in listaadmins:
+                AtualizaRegras(msg, chat_id)
+            elif FurBots == False and 'text' in msg and msg['text'].startswith("/novasregras"):
+                NovasRegras(msg, chat_id)
+            elif FurBots == False and 'text' in msg and msg['text'].startswith("/regras"):
+                Regras(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/tavivo"):
+                TaVivo(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/everyone"):
+                Everyone(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/adm"):
+                Adm(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/comandos"):
+                Comandos(msg, chat_id)
+            elif FurBots == False and 'text' in msg and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")) and funfunctions == True:
+                Hoje(msg, chat_id)
+            elif FurBots == False and 'text' in msg and (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
+                Cheiro(msg, chat_id)
+            elif FurBots == False and 'text' in msg and ('eu faço' in msg['text'] or 'eu faco' in msg['text']) and '?' in msg['text'] and funfunctions == True:
+                QqEuFaço(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/ideiadesenho") and utilityfunctions == True:
+                IdeiaDesenho(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/contato"):
+                Contato(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/qualquercoisa") and utilityfunctions == True:
+                PromptQualquerCoisa(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/configurar"):
+                Configurar(msg, chat_id)
+            elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "Responda ESTA mensagem com o novo valor da variável" in msg['reply_to_message']['text']:
+                ConfigurarSettar(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
+                CustomCommand(msg, chat_id)
+            elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:
+                QualquerCoisa(msg, chat_id)
+            elif 'text' in msg and (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
+                Quem(msg, chat_id)
+            elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60))):
+                SolveCaptcha(msg, chat_id, False)
+            elif 'text' in msg and (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
+                if not OnSay(msg, chat_id):
+                    InteligenciaArtificial(msg, chat_id)
+            elif 'text' in msg:
+                SolveCaptcha(msg, chat_id, False)
+                CheckCaptcha(msg, chat_id)
+                OnSay(msg, chat_id)
+            #BEGGINNING OF COOLDOWN UPDATES
+            if 'text' in msg:
+                if float(lastmessagetime)+60 < ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
+                    sentcooldownmessage = False
+                wait_open("Stickers.txt")
+                text_file = open("Stickers.txt", "r+", encoding='utf8')
+                lines = text_file.readlines()
+                text_file.close()
+                text_file = open("Stickers.txt", "w", encoding='utf8')
+                for line in lines:
+                    if str(chat_id) in line:
+                        text_file.write(line.split()[0] + " " + "0" + "\n")
+                    else:
+                        text_file.write(line)
+                text_file.close()
+            #END OF COOLDOWN UPDATES
+    except:
+        cookiebot.sendMessage(mekhyID, traceback.format_exc())
 
 #MESSAGE HANDLER
 def handle(msg):
@@ -905,7 +901,7 @@ def handle(msg):
         threads.append(messagehandle)
         messagehandle.start()
     except:
-        pass
+        cookiebot.sendMessage(mekhyID, traceback.format_exc())
 
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
