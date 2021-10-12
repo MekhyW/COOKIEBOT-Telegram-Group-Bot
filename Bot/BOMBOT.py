@@ -26,6 +26,7 @@ lastmessagedate = "1-1-1"
 lastmessagetime = "0"
 sentcooldownmessage = False
 FurBots = 0
+sfw = 1
 stickerspamlimit = 5
 limbotimespan = 600
 captchatimespan = 300
@@ -621,7 +622,8 @@ def Configurar(msg, chat_id):
                                    [InlineKeyboardButton(text="Mínimo palavras Intrometer",callback_data='f CONFIG {}'.format(str(chat_id)))], 
                                    [InlineKeyboardButton(text="Área considerada Low Resolution",callback_data='g CONFIG {}'.format(str(chat_id)))], 
                                    [InlineKeyboardButton(text="Funções Diversão",callback_data='h CONFIG {}'.format(str(chat_id)))],
-                                   [InlineKeyboardButton(text="Funções Utilidade",callback_data='i CONFIG {}'.format(str(chat_id)))]
+                                   [InlineKeyboardButton(text="Funções Utilidade",callback_data='i CONFIG {}'.format(str(chat_id)))],
+                                   [InlineKeyboardButton(text="Chat SFW",callback_data='j CONFIG {}'.format(str(chat_id)))]
                                ]
                            ))
         cookiebot.sendMessage(chat_id,"Te mandei uma mensagem no chat privado para configurar" , reply_to_message_id=msg['message_id'])
@@ -649,7 +651,9 @@ def ConfigurarSettar(msg, chat_id):
         elif "Use 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento." in msg['reply_to_message']['text']:
             variable_to_be_altered = "Funções_Diversão"
         elif "Use 1 para permitir comandos e funcionalidades de utilidade, ou 0 para desligá-las." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Funções_Utilidade"   
+            variable_to_be_altered = "Funções_Utilidade"
+        elif "Use 1 para indicar que o chat é SFW, ou 0 para NSFW." in msg['reply_to_message']['text']:
+            variable_to_be_altered = "SFW"
         chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
         wait_open("Configs/Config_"+str(chat_to_alter)+".txt")
         text_file = open("Configs/Config_"+str(chat_to_alter)+".txt", 'r', encoding='utf-8')
@@ -725,7 +729,7 @@ def thread_function(msg):
                 if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
                     open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
                     text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-                    text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 0\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1\nFunções_Utilidade: 1")
+                    text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 0\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1")
                     text_file.close()
                 wait_open("Configs/Config_"+str(chat_id)+".txt")
                 text_file = open("Configs/Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
@@ -748,6 +752,8 @@ def thread_function(msg):
                         funfunctions = int(line.split()[1])
                     elif line.split()[0] == "Funções_Utilidade:":
                         utilityfunctions = int(line.split()[1])
+                    elif line.split()[0] == "SFW:":
+                        sfw = int(line.split()[1])
                 #END OF CONFIG GATHERING
                 #BEGINNING OF CALENDAR SYNC AND FURBOTS CHECK
                 wait_open("Registers/"+str(chat_id)+".txt")
@@ -812,7 +818,8 @@ def thread_function(msg):
             elif content_type == "sticker":
                 CheckLimbo(msg, chat_id)
                 Sticker_anti_spam(msg, chat_id)
-                AddtoStickerDatabase(msg, chat_id)
+                if sfw == 1:
+                    AddtoStickerDatabase(msg, chat_id)
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                     ReplySticker(msg, chat_id)
             elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
@@ -905,33 +912,28 @@ def handle(msg):
 
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
-    if query_data.startswith('a CONFIG'):
+    if 'CONFIG' in query_data:
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
-    elif query_data.startswith('b CONFIG'):
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
-    elif query_data.startswith('c CONFIG'):
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo pelo qual novos usuários no grupo não poderão mandar imagens (o bot apaga automaticamente).\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
-    elif query_data.startswith('d CONFIG'):
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo que novos usuários dispõem para resolver o Captcha. USE 0 PARA DESLIGAR O CAPTCHA!\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
-    elif query_data.startswith('e CONFIG'):
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEsta é a porcentagem de chance em porcentagem de eu responder a uma mensagem aleatoriamente, se ela for grande o suficiente.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
-    elif query_data.startswith('f CONFIG'):
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o mínimo de termos necessários em uma mensagem para eu responder de forma aleatória.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
-    elif query_data.startswith('g CONFIG'):
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEsta é a área máxima, em píxeis quadrados, que eu vou levar em consideração ao ampliar imagens de baixa resolução.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
-    elif query_data.startswith('h CONFIG'):
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
-    elif query_data.startswith('i CONFIG'):
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de utilidade, ou 0 para desligá-las.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
+        if query_data.startswith('a'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+        elif query_data.startswith('b'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+        elif query_data.startswith('c'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo pelo qual novos usuários no grupo não poderão mandar imagens (o bot apaga automaticamente).\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+        elif query_data.startswith('d'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo que novos usuários dispõem para resolver o Captcha. USE 0 PARA DESLIGAR O CAPTCHA!\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+        elif query_data.startswith('e'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEsta é a porcentagem de chance em porcentagem de eu responder a uma mensagem aleatoriamente, se ela for grande o suficiente.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+        elif query_data.startswith('f'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o mínimo de termos necessários em uma mensagem para eu responder de forma aleatória.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+        elif query_data.startswith('g'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEsta é a área máxima, em píxeis quadrados, que eu vou levar em consideração ao ampliar imagens de baixa resolução.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+        elif query_data.startswith('h'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
+        elif query_data.startswith('i'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de utilidade, ou 0 para desligá-las.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
+        elif query_data.startswith('j'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para indicar que o chat é SFW, ou 0 para NSFW.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
     else:
         global listaadmins_id
         listaadmins_id = []
