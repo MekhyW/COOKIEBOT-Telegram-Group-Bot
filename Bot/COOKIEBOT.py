@@ -4,7 +4,7 @@ googleAPIkey = ''
 searchEngineCX = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
-import os, subprocess, sys, random, json, requests, datetime, re, threading, traceback
+import os, subprocess, sys, random, json, requests, datetime, time, re, threading, traceback
 from captcha.image import ImageCaptcha
 import googletrans
 import google_images_search, io, PIL
@@ -907,6 +907,7 @@ def handle(msg):
         messagehandle = threading.Thread(target=thread_function, args=(msg,))
         threads.append(messagehandle)
         messagehandle.start()
+        time.sleep(0.01)
     except:
         cookiebot.sendMessage(mekhyID, traceback.format_exc())
 
