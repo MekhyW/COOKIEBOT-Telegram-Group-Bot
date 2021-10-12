@@ -353,16 +353,6 @@ def Genero(msg, chat_id):
         elif Genero == 'female':
             cookiebot.sendMessage(chat_id, "É uma menina! 👩\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), reply_to_message_id=msg['message_id'])
 
-def Completar(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if 'reply_to_message' in msg and 'text' in msg['reply_to_message']:
-        target = msg['reply_to_message']['text']
-    else:
-        target = msg['text'].replace("/completar ", '')
-    r = requests.post("https://api.deepai.org/api/text-generator",data={'text': translator.translate(target, dest='en').pronunciation,},headers={'api-key': DeepaiTOKEN})
-    Answer = translator.translate(r.json()['output'], dest='pt').text
-    cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
-
 
 def AtualizaBemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -831,8 +821,6 @@ def thread_function(msg):
                 Idade(msg, chat_id)
             elif 'text' in msg and msg['text'].startswith("/genero") and funfunctions == True:
                 Genero(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/completar") and funfunctions == True:
-                Completar(msg, chat_id)
             elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo" and str(msg['from']['username']) in listaadmins:
                 AtualizaBemvindo(msg, chat_id)
             elif 'text' in msg and msg['text'].startswith("/novobemvindo"):

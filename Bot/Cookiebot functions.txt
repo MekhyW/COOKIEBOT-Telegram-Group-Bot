@@ -26,7 +26,6 @@ cheiro - DESATIVADO COM O BURRBOT
 dado - Roda um ou mais dados quaisquer
 idade - Te digo quantos anos vc tem
 genero - Sera que e menino ou menina
-completar - Faço lero lero a partir de uma frase
 tavivo - Manda um ping de teste com data
 contato - Usa esse comando nunca te pedi nada
 comandos - Lista os comandos do bot
