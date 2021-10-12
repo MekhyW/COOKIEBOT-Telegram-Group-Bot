@@ -14,7 +14,8 @@ Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem 
 Backup de Participantes - Caso o grupo seja hackeado ou apagado por engano, posso ajudar a recuperar seus participantes
 
 COMANDOS:
-qualquercoisa - Uma foto doq vc quiser
+qualquercoisa - Manda uma foto do que vc quiser
+aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
 everyone - Admins podem chamar todos os membros do grupo
 adm - Chama os administradores do chat

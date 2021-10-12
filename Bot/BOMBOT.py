@@ -572,6 +572,32 @@ def InteligenciaArtificial(msg, chat_id):
         cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
 
 
+def AddtoRandomDatabase(msg, chat_id):
+    wait_open("Random_Database.txt")
+    text = open("Random_Database.txt", 'r+', encoding='utf-8')
+    lines = text.readlines()
+    text.close()
+    text = open("Random_Database.txt", 'w', encoding='utf-8')
+    if len(lines) > 1000:
+        i = len(lines) - 1000
+    else:
+        i = 0
+    while i < len(lines):
+        if not lines[i] == "\n":
+            text.write(lines[i])
+        i += 1
+    i = 0
+    text.write(str(chat_id) + " " + str(msg['message_id']) + "\n")
+    text.close()
+
+def ReplyAleatorio(msg, chat_id):
+    wait_open("Random_Database.txt")
+    text = open("Random_Database.txt", 'r+', encoding='utf-8')
+    lines = text.readlines()
+    text.close()
+    target = random.choice(lines).replace("\n", '')
+    cookiebot.forwardMessage(chat_id, int(target.split()[0]), int(target.split()[1]))
+
 def AddtoStickerDatabase(msg, chat_id):
     wait_open("Sticker_Database.txt")
     text = open("Sticker_Database.txt", 'r+', encoding='utf-8')
@@ -799,9 +825,13 @@ def thread_function(msg):
             elif content_type == "audio":
                 pass
             elif content_type == "photo":
+                if sfw == 1:
+                    AddtoRandomDatabase(msg, chat_id)
                 CheckLimbo(msg, chat_id)
                 Upscaler(msg, chat_id)
             elif content_type == "video":
+                if sfw == 1:
+                    AddtoRandomDatabase(msg, chat_id)
                 CheckLimbo(msg, chat_id)
             elif content_type == "document":
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
@@ -815,6 +845,8 @@ def thread_function(msg):
                     ReplySticker(msg, chat_id)
             elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                 CooldownAction(msg, chat_id)
+            elif 'text' in msg and (msg['text'].startswith("/aleatorio") or msg['text'].startswith("/aleatório")) and funfunctions == True:
+                ReplyAleatorio(msg, chat_id)
             elif 'text' in msg and (msg['text'].startswith("/dado") or (msg['text'].startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
                 Dado(msg, chat_id)
             elif 'text' in msg and msg['text'].startswith("/idade") and funfunctions == True:
