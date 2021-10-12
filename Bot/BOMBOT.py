@@ -268,34 +268,6 @@ def Speech_to_text(msg, chat_id):
     except Exception as e:
         print(e)
 
-def VideoFromLink(msg, chat_id):
-    html = requests.get(msg['text']).text
-    links = [msg['text']] + findlinks(html)
-    for link in links:
-        if 'youtu' in link:
-            try:
-                youtube = pytube.YouTube(link)
-                video = youtube.streams.get_lowest_resolution()
-                video.download(filename="LINKEDVIDEOMESSAGE.mp4")
-                cookiebot.sendChatAction(chat_id, 'upload_video')
-                video = open('LINKEDVIDEOMESSAGE.mp4', 'rb')
-                cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
-                video.close()
-                break
-            except Exception as e:
-                print(e)
-        elif '.mp4' in link:
-            try:
-                r = requests.get(link, allow_redirects=True)
-                video = open('LINKEDVIDEOMESSAGE.mp4', 'wb')
-                video.write(r.content)
-                cookiebot.sendChatAction(chat_id, 'upload_video')
-                cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
-                video.close()
-                break
-            except Exception as e:
-                print(e)
-
 def CooldownAction(msg, chat_id):
     global sentcooldownmessage
     if sentcooldownmessage == False:
@@ -575,22 +547,24 @@ def InteligenciaArtificial(msg, chat_id):
 def AddtoRandomDatabase(msg, chat_id):
     wait_open("Random_Database.txt")
     text = open("Random_Database.txt", 'r+', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    text = open("Random_Database.txt", 'w', encoding='utf-8')
-    if len(lines) > 1000:
-        i = len(lines) - 1000
-    else:
+    if str(msg['message_id']) not in text.read():
+        lines = text.readlines()
+        text.close()
+        text = open("Random_Database.txt", 'w', encoding='utf-8')
+        if len(lines) > 1000:
+            i = len(lines) - 1000
+        else:
+            i = 0
+        while i < len(lines):
+            if not lines[i] == "\n":
+                text.write(lines[i])
+            i += 1
         i = 0
-    while i < len(lines):
-        if not lines[i] == "\n":
-            text.write(lines[i])
-        i += 1
-    i = 0
-    text.write(str(chat_id) + " " + str(msg['message_id']) + "\n")
+        text.write(str(chat_id) + " " + str(msg['message_id']) + "\n")
     text.close()
 
 def ReplyAleatorio(msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'upload_photo')
     wait_open("Random_Database.txt")
     text = open("Random_Database.txt", 'r+', encoding='utf-8')
     lines = text.readlines()
