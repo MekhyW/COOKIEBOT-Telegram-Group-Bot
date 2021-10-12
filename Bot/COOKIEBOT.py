@@ -679,7 +679,7 @@ def ConfigurarSettar(msg, chat_id):
 def thread_function(msg):
     try:
         content_type, chat_type, chat_id = telepot.glance(msg)
-        print(content_type, chat_type, chat_id, msg['message_id'], msg['from']['id'])
+        print(content_type, chat_type, chat_id, msg['message_id'])
         if chat_type == 'private' and 'reply_to_message' not in msg:
             if msg['text'] == "/stop" and 'username' in msg['from'] and msg['from']['username'] == 'MekhyW':
                 os._exit(0)
