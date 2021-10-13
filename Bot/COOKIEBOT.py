@@ -547,20 +547,19 @@ def InteligenciaArtificial(msg, chat_id):
 def AddtoRandomDatabase(msg, chat_id):
     wait_open("Random_Database.txt")
     text = open("Random_Database.txt", 'r+', encoding='utf-8')
-    if str(msg['message_id']) not in text.read():
-        lines = text.readlines()
-        text.close()
-        text = open("Random_Database.txt", 'w', encoding='utf-8')
-        if len(lines) > 1000:
-            i = len(lines) - 1000
-        else:
-            i = 0
-        while i < len(lines):
-            if not lines[i] == "\n":
-                text.write(lines[i])
-            i += 1
+    lines = text.readlines()
+    text.close()
+    text = open("Random_Database.txt", 'w', encoding='utf-8')
+    if len(lines) > 1000:
+        i = len(lines) - 1000
+    else:
         i = 0
-        text.write(str(chat_id) + " " + str(msg['message_id']) + "\n")
+    while i < len(lines):
+        if not lines[i] == "\n":
+            text.write(lines[i])
+        i += 1
+    i = 0
+    text.write(str(chat_id) + " " + str(msg['message_id']) + "\n")
     text.close()
 
 def ReplyAleatorio(msg, chat_id):
