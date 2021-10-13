@@ -674,6 +674,8 @@ def ConfigurarSettar(msg, chat_id):
 #MAIN THREAD FUNCTION
 def thread_function(msg):
     try:
+        if 'dice' in msg:
+            return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
         if chat_type == 'private' and 'reply_to_message' not in msg:
@@ -901,6 +903,7 @@ def thread_function(msg):
             #END OF COOLDOWN UPDATES
     except:
         cookiebot.sendMessage(mekhyID, traceback.format_exc())
+        cookiebot.sendMessage(mekhyID, "{} {} {}".format(content_type, chat_type, chat_id))
 
 #MESSAGE HANDLER
 def handle(msg):
