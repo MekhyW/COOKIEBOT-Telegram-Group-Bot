@@ -814,6 +814,8 @@ def thread_function(msg):
                     AddtoRandomDatabase(msg, chat_id)
                 CheckLimbo(msg, chat_id)
             elif content_type == "document":
+                if sfw == 1:
+                    AddtoRandomDatabase(msg, chat_id)
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                     ReplySticker(msg, chat_id)
             elif content_type == "sticker":
