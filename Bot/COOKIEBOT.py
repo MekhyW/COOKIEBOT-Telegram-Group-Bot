@@ -686,6 +686,7 @@ def thread_function(msg):
             global listaadmins
             global listaadmins_id
             global FurBots
+            global sfw
             global stickerspamlimit
             global messagespamlimit
             global limbotimespan
