@@ -569,8 +569,14 @@ def ReplyAleatorio(msg, chat_id):
     text = open("Random_Database.txt", 'r+', encoding='utf-8')
     lines = text.readlines()
     text.close()
-    target = random.choice(lines).replace("\n", '')
-    cookiebot.forwardMessage(chat_id, int(target.split()[0]), int(target.split()[1]))
+    while True:
+        try:
+            target = random.choice(lines).replace("\n", '')
+            cookiebot.forwardMessage(chat_id, int(target.split()[0]), int(target.split()[1]))
+            break
+        except Exception as e:
+            print(str(e))
+        
 
 def AddtoStickerDatabase(msg, chat_id):
     wait_open("Sticker_Database.txt")
@@ -821,7 +827,7 @@ def thread_function(msg):
                 CooldownAction(msg, chat_id)
             elif 'text' in msg and (msg['text'].startswith("/aleatorio") or msg['text'].startswith("/aleatório")) and funfunctions == True:
                 ReplyAleatorio(msg, chat_id)
-            elif 'text' in msg and (msg['text'].startswith("/dado") or (msg['text'].startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
+            elif 'text' in msg and (msg['text'].startswith("/dado") or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
                 Dado(msg, chat_id)
             elif 'text' in msg and msg['text'].startswith("/idade") and funfunctions == True:
                 Idade(msg, chat_id)
