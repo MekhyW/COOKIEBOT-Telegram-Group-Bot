@@ -674,7 +674,7 @@ def ConfigurarSettar(msg, chat_id):
 #MAIN THREAD FUNCTION
 def thread_function(msg):
     try:
-        if 'dice' in msg:
+        if 'dice' in msg or 'poll' in msg:
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
