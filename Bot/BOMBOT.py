@@ -674,12 +674,12 @@ def ConfigurarSettar(msg, chat_id):
 #MAIN THREAD FUNCTION
 def thread_function(msg):
     try:
-        if 'dice' in msg or 'poll' in msg:
+        if 'dice' in msg or 'poll' in msg or 'from' not in msg:
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
         if chat_type == 'private' and 'reply_to_message' not in msg:
-            if msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == mekhyID:
+            if msg['text'] == "/stop" and msg['from']['id'] == mekhyID:
                 os._exit(0)
             cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
         else:
