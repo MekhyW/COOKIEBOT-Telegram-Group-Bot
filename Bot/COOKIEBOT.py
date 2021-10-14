@@ -69,6 +69,12 @@ def findlinks(string):
     return [x[0] for x in url]
     
 
+def ReceivePublisher(msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    cookiebot.forwardMessage(mekhyID, chat_id, msg['message_id'])
+    cookiebot.sendMessage(chat_id, "➡️ Sua mensagem foi enviada para aprovação! ➡️\n\n--> Isto é feito para evitar conteúdo NSFW em chats SFW e abuso do sistema\n--> Por favor NÃO APAGUE a sua mensagem", reply_to_message_id=msg['message_id'])
+
+
 def CheckCAS(msg, chat_id):
     r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']))
     in_banlist = json.loads(r.text)['ok']
@@ -682,8 +688,8 @@ def thread_function(msg):
         if chat_type == 'private' and 'reply_to_message' not in msg:
             if 'text' in msg and msg['text'] == "/stop" and msg['from']['id'] == mekhyID:
                 os._exit(0)
-            if content_type in ['photo', 'video', 'document']:
-                pass
+            elif content_type in ['photo', 'video', 'document']:
+                ReceivePublisher(msg, chat_id)
             else:
                 cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
         else:
