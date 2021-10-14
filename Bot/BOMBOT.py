@@ -210,6 +210,7 @@ def left_chat_member(msg, chat_id):
     for line in lines:
         if line.split()[0] != str(chat_id) or line.split()[1] != msg['left_chat_member']['id']:
             text.write(line)
+    text.close()
 
 
 def Upscaler(msg, chat_id):
@@ -679,9 +680,12 @@ def thread_function(msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
         if chat_type == 'private' and 'reply_to_message' not in msg:
-            if msg['text'] == "/stop" and msg['from']['id'] == mekhyID:
+            if 'text' in msg and msg['text'] == "/stop" and msg['from']['id'] == mekhyID:
                 os._exit(0)
-            cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
+            if content_type in ['photo', 'video', 'document']:
+                pass
+            else:
+                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
         else:
             global listaadmins
             global listaadmins_id
