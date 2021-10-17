@@ -681,7 +681,7 @@ def ConfigurarSettar(msg, chat_id):
 #MAIN THREAD FUNCTION
 def thread_function(msg):
     try:
-        if 'dice' in msg or 'poll' in msg or 'from' not in msg:
+        if any(key in msg for key in ['dice', 'poll', 'voice_chat_started', 'voice_chat_ended']) or 'from' not in msg:
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
