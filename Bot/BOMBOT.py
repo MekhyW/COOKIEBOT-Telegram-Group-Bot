@@ -913,8 +913,9 @@ def thread_function(msg):
                 text_file.close()
             #END OF COOLDOWN UPDATES
     except:
-        cookiebot.sendMessage(mekhyID, traceback.format_exc())
-        cookiebot.sendMessage(mekhyID, "{} {} {}".format(content_type, chat_type, chat_id))
+        if 'ConnectionResetError' not in traceback.format_exc():
+            cookiebot.sendMessage(mekhyID, traceback.format_exc())
+            cookiebot.sendMessage(mekhyID, "{} {} {}".format(content_type, chat_type, chat_id))
 
 #MESSAGE HANDLER
 def handle(msg):
