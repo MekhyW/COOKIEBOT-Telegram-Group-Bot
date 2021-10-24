@@ -477,21 +477,27 @@ def QualquerCoisa(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     searchterm = msg['text'].split("@")[0].replace("/", '').replace("@CookieMWbot", '')
     googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'medium', 'filetype':'jpg|png'})
-    try:
-        image = googleimagesearcher.results()[random.randint(0, len(googleimagesearcher.results())-1)]
-        my_bytes_io = io.BytesIO()
-        image.copy_to(my_bytes_io)
-        my_bytes_io.seek(0)
-        temp_img = PIL.Image.open(my_bytes_io)
-        temp_img.save(my_bytes_io, 'PNG')
-        my_bytes_io.seek(0)
+    for attempt in range(10):
         try:
-            cookiebot.sendPhoto(chat_id, ('x.png', my_bytes_io), reply_to_message_id=msg['message_id'])
-        except:
-            cookiebot.sendPhoto(chat_id, ('x.jpg', my_bytes_io), reply_to_message_id=msg['message_id'])
-    except Exception as e:
-        print(e)
-        cookiebot.sendMessage(chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", reply_to_message_id=msg['message_id'])
+            image = googleimagesearcher.results()[random.randint(0, len(googleimagesearcher.results())-1)]
+            my_bytes_io = io.BytesIO()
+            image.copy_to(my_bytes_io)
+            my_bytes_io.seek(0)
+            temp_img = PIL.Image.open(my_bytes_io)
+            try:
+                temp_img.save(my_bytes_io, format="png")
+                my_bytes_io.flush()
+                my_bytes_io.seek(0)
+                cookiebot.sendPhoto(chat_id, ('x.png', my_bytes_io), reply_to_message_id=msg['message_id'])
+            except:
+                temp_img.save(my_bytes_io, format="jpg")
+                my_bytes_io.flush()
+                my_bytes_io.seek(0)
+                cookiebot.sendPhoto(chat_id, ('x.jpg', my_bytes_io), reply_to_message_id=msg['message_id'])
+            return 1
+        except Exception as e:
+            print(e)
+    cookiebot.sendMessage(chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", reply_to_message_id=msg['message_id'])
 
 def Quem(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
