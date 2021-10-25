@@ -37,7 +37,6 @@ utilityfunctions = 1
 listaadmins = []
 listaadmins_id = []
 
-
 #IGNORE UPDATES PRIOR TO BOT ACTIVATION
 updates = cookiebot.getUpdates()
 if updates:
@@ -394,8 +393,7 @@ def Everyone(msg, chat_id):
         result = ""
         for line in lines:
             username = line.split()[0]
-            if username != "EVENT":
-                result += ("@"+username+" ")
+            result += ("@"+username+" ")
         text_file.close()
         cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
 
@@ -501,7 +499,7 @@ def Quem(msg, chat_id):
     text_file = open("Registers/"+str(chat_id)+".txt", "r+", encoding='utf-8')
     lines = text_file.readlines()
     target = None
-    while len(lines)>1 and (target in (None, '') or target.startswith("EVENT")):
+    while len(lines)>1 and target in (None, ''):
         target = lines[random.randint(0, len(lines)-1)].replace("\n", '')
         target = target.split()[0]
     cookiebot.sendMessage(chat_id, LocucaoAdverbial+"@"+target, reply_to_message_id=msg['message_id'])
