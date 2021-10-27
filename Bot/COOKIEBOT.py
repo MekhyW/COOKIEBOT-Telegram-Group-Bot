@@ -469,7 +469,10 @@ def CustomCommand(msg, chat_id):
 def QualquerCoisa(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     searchterm = msg['text'].split("@")[0].replace("/", '').replace("@CookieMWbot", '')
-    googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'medium', 'filetype':'jpg|png'})
+    if sfw == 0:
+        googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'off', 'filetype':'jpg|png'})
+    else:
+        googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'medium', 'filetype':'jpg|png'})
     for attempt in range(10):
         try:
             image = googleimagesearcher.results()[random.randint(0, len(googleimagesearcher.results())-1)]
