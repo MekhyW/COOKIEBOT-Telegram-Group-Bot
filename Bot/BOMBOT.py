@@ -30,7 +30,6 @@ sfw = 1
 stickerspamlimit = 5
 limbotimespan = 600
 captchatimespan = 300
-intrometerminimumwords = 12
 lowresolutionarea = 10000
 funfunctions = 1
 utilityfunctions = 1
@@ -627,9 +626,7 @@ def Configurar(msg, chat_id):
                                    [InlineKeyboardButton(text="FurBots",callback_data='a CONFIG {}'.format(str(chat_id)))], 
                                    [InlineKeyboardButton(text="Limite Stickers",callback_data='b CONFIG {}'.format(str(chat_id)))],
                                    [InlineKeyboardButton(text="🕒 Limbo",callback_data='c CONFIG {}'.format(str(chat_id)))], 
-                                   [InlineKeyboardButton(text="🕒 CAPTCHA",callback_data='d CONFIG {}'.format(str(chat_id)))],
-                                   [InlineKeyboardButton(text="% Intrometer",callback_data='e CONFIG {}'.format(str(chat_id)))], 
-                                   [InlineKeyboardButton(text="Mínimo palavras Intrometer",callback_data='f CONFIG {}'.format(str(chat_id)))], 
+                                   [InlineKeyboardButton(text="🕒 CAPTCHA",callback_data='d CONFIG {}'.format(str(chat_id)))], 
                                    [InlineKeyboardButton(text="Área considerada Low Resolution",callback_data='g CONFIG {}'.format(str(chat_id)))], 
                                    [InlineKeyboardButton(text="Funções Diversão",callback_data='h CONFIG {}'.format(str(chat_id)))],
                                    [InlineKeyboardButton(text="Funções Utilidade",callback_data='i CONFIG {}'.format(str(chat_id)))],
@@ -652,10 +649,6 @@ def ConfigurarSettar(msg, chat_id):
             variable_to_be_altered = "Tempo_sem_poder_mandar_imagem"
         elif "Este é o tempo que novos usuários dispõem para resolver o Captcha. USE 0 PARA DESLIGAR O CAPTCHA!" in msg['reply_to_message']['text']:
             variable_to_be_altered = "Tempo_Captcha"
-        elif "Esta é a porcentagem de chance em porcentagem de eu responder a uma mensagem aleatoriamente, se ela for grande o suficiente." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Intrometer_Percentage"
-        elif "Este é o mínimo de termos necessários em uma mensagem para eu responder de forma aleatória." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Intrometer_minimum_words"
         elif "Esta é a área máxima, em píxeis quadrados, que eu vou levar em consideração ao ampliar imagens de baixa resolução." in msg['reply_to_message']['text']:
             variable_to_be_altered = "Low_resolution_area"
         elif "Use 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento." in msg['reply_to_message']['text']:
@@ -707,7 +700,6 @@ def thread_function(msg):
             global stickerspamlimit
             global limbotimespan
             global captchatimespan
-            global intrometerminimumwords
             global lowresolutionarea
             global funfunctions
             global utilityfunctions
@@ -744,7 +736,7 @@ def thread_function(msg):
                 if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
                     open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
                     text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-                    text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nIntrometer_Percentage: 0\nIntrometer_minimum_words: 12\nLow_resolution_area: 10000\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1")
+                    text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nLow_resolution_area: 10000\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1")
                     text_file.close()
                 wait_open("Configs/Config_"+str(chat_id)+".txt")
                 text_file = open("Configs/Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
@@ -759,8 +751,6 @@ def thread_function(msg):
                         limbotimespan = int(line.split()[1])
                     elif line.split()[0] == "Tempo_Captcha:":
                         captchatimespan = int(line.split()[1])
-                    elif line.split()[0] == "Intrometer_minimum_words:":
-                        intrometerminimumwords = int(line.split()[1])
                     elif line.split()[0] == "Low_resolution_area:":
                         lowresolutionarea = int(line.split()[1])
                     elif line.split()[0] == "Funções_Diversão:":
