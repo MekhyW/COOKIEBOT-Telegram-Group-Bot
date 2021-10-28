@@ -11,7 +11,7 @@ import google_images_search, io, PIL
 import speech_recognition, wolframalpha, unidecode
 import telepot
 from telepot.loop import MessageLoop
-from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
 #install telepota instead of telepot, googletrans==3.1.0a0 instead of googletrans
 captcha = ImageCaptcha()
@@ -70,8 +70,13 @@ def findlinks(string):
 
 def ReceivePublisher(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.forwardMessage(mekhyID, chat_id, msg['message_id'])
-    cookiebot.sendMessage(chat_id, "➡️ Sua mensagem foi enviada para aprovação! ➡️\n\n--> Isto é feito para evitar conteúdo NSFW em chats SFW e abuso do sistema\n--> Por favor NÃO APAGUE a sua mensagem", reply_to_message_id=msg['message_id'])
+    cookiebot.sendMessage(chat_id, "Por quantos dias vc gostaria que a sua messagem fosse enviada?\nCertifique-se de que o seu contato está na mensagem!", reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+                                   [InlineKeyboardButton(text="0 (É URGENTE!)",callback_data='0 PUBLISHER {}'.format(str(msg['message_id'])))], 
+                                   [InlineKeyboardButton(text="1 Dia (Amanhã)",callback_data='1 PUBLISHER {}'.format(str(msg['message_id'])))],
+                                   [InlineKeyboardButton(text="3 Dias",callback_data='3 PUBLISHER {}'.format(str(msg['message_id'])))], 
+                                   [InlineKeyboardButton(text="5 Dias",callback_data='5 PUBLISHER {}'.format(str(msg['message_id'])))],
+                                   [InlineKeyboardButton(text="Uma Semana",callback_data='7 PUBLISHER {}'.format(str(msg['message_id'])))]
+                               ]))
 
 
 def CheckCAS(msg, chat_id):
@@ -693,14 +698,13 @@ def thread_function(msg):
             elif content_type in ['photo', 'video', 'document']:
                 ReceivePublisher(msg, chat_id)
             else:
-                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com AI de conversa, de assistência, conteúdo infinito e conteúdo customizado.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW\n\nSe está procurando o bot de controle da minha fursuit, use o @mekhybot")
+                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\n**Para agendar uma postagem, envie a sua mensagem por aqui (lembrando que deve conter uma foto, vídeo, gif ou documento)**\n\nSou um bot com IA de conversa, conteúdo infinito, conteúdo customizado e speech-to-text.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW")
         else:
             global listaadmins
             global listaadmins_id
             global FurBots
             global sfw
             global stickerspamlimit
-            global messagespamlimit
             global limbotimespan
             global captchatimespan
             global intrometerminimumwords
@@ -954,6 +958,21 @@ def handle_query(msg):
             cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de utilidade, ou 0 para desligá-las.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
         elif query_data.startswith('j'):
             cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para indicar que o chat é SFW, ou 0 para NSFW.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
+    elif 'PUBLISHER' in query_data:
+        forwarded = cookiebot.forwardMessage(mekhyID, msg['message']['chat']['id'], query_data.split()[2])
+        cookiebot.sendMessage(mekhyID, "Group post - Days: {}".format(query_data.split()[0]), reply_to_message_id=forwarded, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Aprovar", callback_data='Approve PUBLISH {} {}'.format(telepot.message_identifier(msg['message']), query_data.split()[0]).replace("(", '').replace(",", '').replace(")", ''))], [InlineKeyboardButton(text="Recusar", callback_data='Refuse PUBLISH')]]))
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+        cookiebot.sendChatAction(msg['message']['chat']['id'], 'typing')
+        cookiebot.sendMessage(msg['message']['chat']['id'], "➡️ Sua mensagem foi enviada para aprovação ➡️\n\n--> Isto é feito para evitar conteúdo NSFW em chats SFW e abuso do sistema\n--> Por favor NÃO APAGUE a sua mensagem", reply_to_message_id=query_data.split()[2])
+    elif 'PUBLISH' in query_data:
+        if query_data.startswith('Approve'):
+            wait_open("Publish_Queue.txt")
+            text = open("Publish_Queue.txt", 'a+', encoding='utf-8')
+            text.write(query_data.split()[3] + " " + query_data.split()[4] + "\n")
+            text.close()
+            cookiebot.sendMessage(query_data.split()[2], "✅ Sua mensagem foi Aprovada! ✅\nDeixe ela aqui e pode relaxar, eu vou divulgar por vc :)")
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+        cookiebot.sendMessage(msg['message']['chat']['id'], query_data)
     else:
         global listaadmins_id
         listaadmins_id = []
