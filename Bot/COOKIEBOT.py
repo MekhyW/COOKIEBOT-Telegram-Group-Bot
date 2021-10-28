@@ -917,7 +917,7 @@ def thread_function(msg):
     except:
         if 'ConnectionResetError' not in traceback.format_exc():
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
-            cookiebot.sendMessage(mekhyID, "{} {} {}".format(content_type, chat_type, chat_id))
+            cookiebot.sendMessage(mekhyID, str(msg))
 
 #MESSAGE HANDLER
 def handle(msg):
