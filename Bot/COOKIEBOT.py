@@ -529,6 +529,8 @@ def OnSay(msg, chat_id):
 
 def InteligenciaArtificial(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    message = ""
+    Answer = ""
     if "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']:
         message = msg['text'].replace("Cookiebot", '').replace("cookiebot", '').replace("@CookieMWbot", '').replace("COOKIEBOT", '').replace("CookieBot", '').replace("\n", '').capitalize()
     else:
@@ -545,9 +547,10 @@ def InteligenciaArtificial(msg, chat_id):
         try:
             Answer = json.loads(r.text)['messages'][0]['response'].capitalize()
         except:
-            Answer = str(r.text).split("{")[1]
-            Answer = "{" + Answer
-            Answer = json.loads(Answer)['messages'][0]['response'].capitalize()
+            if len(str(r.text).split("{")) > 1:
+                Answer = str(r.text).split("{")[1]
+                Answer = "{" + Answer
+                Answer = json.loads(Answer)['messages'][0]['response'].capitalize()
         Answer = translator.translate(Answer, dest='pt').text
         cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
 
