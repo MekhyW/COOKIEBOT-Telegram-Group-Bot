@@ -25,6 +25,7 @@ threads = list()
 lastmessagedate = "1-1-1"
 lastmessagetime = "0"
 sentcooldownmessage = False
+publisher = 1
 FurBots = 0
 sfw = 1
 stickerspamlimit = 5
@@ -59,12 +60,6 @@ def check_if_string_in_file(file_name, string_to_search):
         if string_to_search in line:
             return True
     return False
-
-#LINK IN STRING CHECKER
-def findlinks(string):
-    regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
-    url = re.findall(regex,string)      
-    return [x[0] for x in url]
     
 
 def ReceivePublisher(msg, chat_id):
@@ -623,6 +618,7 @@ def Configurar(msg, chat_id):
         variables = text.read()
         text.close()
         cookiebot.sendMessage(msg['from']['id'],"Configuração atual:\n\n" + variables + '\n\nEscolha a variável que vc gostaria de alterar', reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+                                   [InlineKeyboardButton(text="Compartilhamento de Posts",callback_data='k CONFIG {}'.format(str(chat_id)))],
                                    [InlineKeyboardButton(text="FurBots",callback_data='a CONFIG {}'.format(str(chat_id)))], 
                                    [InlineKeyboardButton(text="Limite Stickers",callback_data='b CONFIG {}'.format(str(chat_id)))],
                                    [InlineKeyboardButton(text="🕒 Limbo",callback_data='c CONFIG {}'.format(str(chat_id)))], 
@@ -641,7 +637,9 @@ def ConfigurarSettar(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     if msg['text'].isdigit():
         variable_to_be_altered = ""
-        if "Use 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único." in msg['reply_to_message']['text']:
+        if "Use 1 para permitir que eu encaminhe publicações de artistas e avisos no grupo, ou 0 para impedir isso." in msg['reply_to_message']['text']:
+            variable_to_be_altered = publisher
+        elif "Use 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único." in msg['reply_to_message']['text']:
             variable_to_be_altered = "FurBots"
         elif "Este é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo." in msg['reply_to_message']['text']:
             variable_to_be_altered = "Sticker_Spam_Limit"
@@ -693,16 +691,7 @@ def thread_function(msg):
             else:
                 cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\n**Para agendar uma postagem, envie a sua mensagem por aqui (lembrando que deve conter uma foto, vídeo, gif ou documento)**\n\nSou um bot com IA de conversa, conteúdo infinito, conteúdo customizado e speech-to-text.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW")
         else:
-            global listaadmins
-            global listaadmins_id
-            global FurBots
-            global sfw
-            global stickerspamlimit
-            global limbotimespan
-            global captchatimespan
-            global lowresolutionarea
-            global funfunctions
-            global utilityfunctions
+            global listaadmins, listaadmins_id, publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, lowresolutionarea, funfunctions, utilityfunctions
             if chat_type != 'private':
                 #BEGGINING OF ADMINISTRATORS GATHERING
                 if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt"):
@@ -736,14 +725,16 @@ def thread_function(msg):
                 if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
                     open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
                     text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-                    text_file.write("FurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nLow_resolution_area: 10000\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1")
+                    text_file.write("Publicador: 1\nFurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nLow_resolution_area: 10000\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1")
                     text_file.close()
                 wait_open("Configs/Config_"+str(chat_id)+".txt")
                 text_file = open("Configs/Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
                 lines = text_file.readlines()
                 text_file.close()
                 for line in lines:
-                    if line.split()[0] == "FurBots:":
+                    if line.split()[0] == "Publicador:":
+                        publisher = int(line.split()[1])
+                    elif line.split()[0] == "FurBots:":
                         FurBots = int(line.split()[1])
                     elif line.split()[0] == "Sticker_Spam_Limit:":
                         stickerspamlimit = int(line.split()[1])
@@ -928,6 +919,8 @@ def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     if 'CONFIG' in query_data:
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+        if query_data.startswith('k'):
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para permitir que eu encaminhe publicações de artistas e avisos no grupo, ou 0 para impedir isso.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
         if query_data.startswith('a'):
             cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
         elif query_data.startswith('b'):
