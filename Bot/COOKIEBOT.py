@@ -704,7 +704,7 @@ def thread_function(msg):
                 todaytext = open("GroupActivity/Activity_today_" + str(chat_id) + ".txt", 'r')
                 lines = todaytext.readlines()
                 todaytext.close()
-                if len(lines) == 0 or (len(lines) > 0 and lines[0].split()[0] != str(datetime.date.today())):
+                if len(lines) > 0 and lines[0].split()[0] != str(datetime.date.today()):
                     with open("GroupActivity/Activity_yesterday_" + str(chat_id)+".txt", 'w') as yesterdaytext:
                         for line in lines:
                             yesterdaytext.write(line)
@@ -714,6 +714,17 @@ def thread_function(msg):
                 with open("GroupActivity/Activity_today_" + str(chat_id)+".txt", 'a') as todaytext:
                     todaytext.write(str(datetime.datetime.now()) + "\n")
                 todaytext.close()
+                wait_open("Publish_Queue.txt")
+                publishqueue = open("Publish_Queue.txt", 'r')
+                publishqueue_lines = publishqueue.readlines()
+                publishqueue.close()
+                if publishqueue_lines[0] != str(datetime.date.today())+"\n":
+                    with open("Publish_Queue.txt", 'w') as publishqueue:
+                        publishqueue.write(str(datetime.date.today()) + "\n")
+                        for line in publishqueue_lines[1:]:
+                            if len(line.split()) > 1:
+                                publishqueue.write(line.split()[0] + " " + str(int(line.split()[1]) - 1) + "\n")
+                    publishqueue.close()
                 #END OF GROUP ACTIVITY GATHERING
                 #BEGGINING OF ADMINISTRATORS GATHERING
                 if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id) + ".txt"):
