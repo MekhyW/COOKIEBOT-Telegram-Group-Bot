@@ -1,4 +1,3 @@
-DeepaiTOKEN = ''
 WolframAPP_ID = ''
 googleAPIkey = ''
 searchEngineCX = ''
@@ -216,20 +215,6 @@ def left_chat_member(msg, chat_id):
             text.write(line)
     text.close()
 
-
-def Upscaler(msg, chat_id):
-    Area = 0
-    for photo in msg['photo']:
-        if photo['width'] * photo['height'] > Area:
-            Area = photo['width'] * photo['height']
-            Fileid = photo['file_id']
-    if Area < lowresolutionarea:
-        cookiebot.sendChatAction(chat_id, 'upload_photo')
-        path = cookiebot.getFile(Fileid)['file_path']
-        url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
-        r = requests.post("https://api.deepai.org/api/torch-srgan", data={'image': '{}'.format(url),},headers={'Api-Key': '{}'.format(DeepaiTOKEN)})
-        output_url = r.json()['output_url']
-        cookiebot.sendPhoto(chat_id, output_url, caption="Imagem ampliada".format(Area), reply_to_message_id=msg['message_id'])
 
 def Sticker_anti_spam(msg, chat_id):
     wait_open("Stickers.txt")
@@ -721,9 +706,10 @@ def thread_function(msg):
                 if publishqueue_lines[0] != str(datetime.date.today())+"\n":
                     with open("Publish_Queue.txt", 'w') as publishqueue:
                         publishqueue.write(str(datetime.date.today()) + "\n")
-                        for line in publishqueue_lines[1:]:
-                            if len(line.split()) > 1:
-                                publishqueue.write(line.split()[0] + " " + str(int(line.split()[1]) - 1) + "\n")
+                        if len(publishqueue_lines) > 1:
+                            for line in publishqueue_lines[1:]:
+                                if len(line.split()) > 1:
+                                    publishqueue.write(line.split()[0] + " " + str(int(line.split()[1]) - 1) + "\n")
                     publishqueue.close()
                 #END OF GROUP ACTIVITY GATHERING
                 #BEGGINING OF ADMINISTRATORS GATHERING
@@ -840,7 +826,6 @@ def thread_function(msg):
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
                 CheckLimbo(msg, chat_id)
-                Upscaler(msg, chat_id)
             elif content_type == "video":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
