@@ -693,8 +693,27 @@ def thread_function(msg):
         else:
             global listaadmins, listaadmins_id, publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, lowresolutionarea, funfunctions, utilityfunctions
             if chat_type != 'private':
+                #BEGGINING OF GROUP ACTIVITY GATHERING
+                wait_open("GroupActivity/Activity_today_" + str(chat_id) + ".txt")
+                wait_open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt")
+                open("GroupActivity/Activity_today_" + str(chat_id) + ".txt", 'a').close()
+                open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt", 'a').close()
+                todaytext = open("GroupActivity/Activity_today_" + str(chat_id) + ".txt", 'r')
+                lines = todaytext.readlines()
+                todaytext.close()
+                if len(lines) == 0 or (len(lines) > 0 and lines[0].split()[0] != str(datetime.date.today())):
+                    with open("GroupActivity/Activity_yesterday_" + str(chat_id)+".txt", 'w') as yesterdaytext:
+                        for line in lines:
+                            yesterdaytext.write(line)
+                    yesterdaytext.close()
+                    todaytext = open("GroupActivity/Activity_today_" + str(chat_id)+".txt", 'w')
+                    todaytext.close()
+                with open("GroupActivity/Activity_today_" + str(chat_id)+".txt", 'a') as todaytext:
+                    todaytext.write(str(datetime.datetime.now()) + "\n")
+                todaytext.close()
+                #END OF GROUP ACTIVITY GATHERING
                 #BEGGINING OF ADMINISTRATORS GATHERING
-                if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt"):
+                if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id) + ".txt"):
                     text = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'w').close()
                 wait_open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt")
                 text_file = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'r', encoding='utf-8')
