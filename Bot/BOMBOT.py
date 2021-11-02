@@ -3,7 +3,7 @@ googleAPIkey = ''
 searchEngineCX = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
-import math, os, subprocess, sys, random, ast, json, requests, datetime, time, re, threading, traceback
+import math, os, subprocess, sys, random, json, requests, datetime, time, re, threading, traceback
 from captcha.image import ImageCaptcha
 import googletrans
 import google_images_search, io, PIL
@@ -557,12 +557,13 @@ def InteligenciaArtificial(msg, chat_id):
     except:
         r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message))
         try:
-            Answer = ast.literal_eval(r.text)['messages'][0]['response'].capitalize()
+            Answer = json.loads(r.text)['messages'][0]['response'].capitalize()
         except:
+            cookiebot.sendMessage(mekhyID, str(r.text))
             if len(str(r.text).split("{")) > 1:
                 Answer = str(r.text).split("{")[1]
                 Answer = "{" + Answer
-                Answer = ast.literal_eval(Answer)['messages'][0]['response'].capitalize()
+                Answer = json.loads(Answer)['messages'][0]['response'].capitalize()
         Answer = translator.translate(Answer, dest='pt').text
         cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
 
