@@ -559,7 +559,7 @@ def InteligenciaArtificial(msg, chat_id):
         try:
             Answer = json.loads(r.text)['messages'][0]['response'].capitalize()
         except:
-            cookiebot.sendMessage(mekhyID, str(r.text))
+            print(r.text)
             if len(str(r.text).split("{")) > 1:
                 Answer = str(r.text).split("{")[1]
                 Answer = "{" + Answer
