@@ -3,7 +3,7 @@ googleAPIkey = ''
 searchEngineCX = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
-import os, subprocess, sys, random, json, requests, datetime, time, re, threading, traceback
+import math, os, subprocess, sys, random, json, requests, datetime, time, re, threading, traceback
 from captcha.image import ImageCaptcha
 import googletrans
 import google_images_search, io, PIL
@@ -23,6 +23,7 @@ mekhyID = 780875868
 threads = list()
 lastmessagedate, lastmessagetime = "1-1-1", "0"
 sentcooldownmessage = False
+publisher_threads, publisher_minimum_msggap = {}, 100
 publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = 1, 0, 1, 5, 600, 300, 1, 1
 listaadmins, listaadmins_id = [], []
 
@@ -51,6 +52,12 @@ def check_if_string_in_file(file_name, string_to_search):
     return False
     
 
+def PublishPublisher(msg_id, chat_id, sender_id):
+    publisher_threads[chat_id].remove(msg_id)
+    if chat_id == -1001499400382:
+        cookiebot.forwardMessage(chat_id, sender_id, msg_id)
+        cookiebot.sendMessage(sender_id, "--Mensagem {} enviada para grupo {}--".format(msg_id, chat_id))
+
 def ReceivePublisher(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "Por quantos dias vc gostaria que a sua messagem fosse enviada?\nCertifique-se de que o seu contato está na mensagem!", reply_markup = InlineKeyboardMarkup(inline_keyboard=[
@@ -61,6 +68,28 @@ def ReceivePublisher(msg, chat_id):
                                    [InlineKeyboardButton(text="Uma Semana",callback_data='7 PUBLISHER {}'.format(str(msg['message_id'])))]
                                ]))
 
+def SpawnThreadsPublisher(chat_id):
+    wait_open("Publish_Queue.txt")
+    wait_open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt")
+    with open("Publish_Queue.txt", 'r') as publish_queue:
+        with open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt", 'r') as yesterdaytext:
+            messages_yesterday = yesterdaytext.readlines()
+            posts_in_queue = publish_queue.readlines()[1:]
+            number_posts = math.floor(len(messages_yesterday)/publisher_minimum_msggap) - 1
+            if number_posts <= 0 and len(messages_yesterday) > 0:
+                number_posts = 1
+            for n in range(min(number_posts, len(posts_in_queue))):
+                msg_id = int(posts_in_queue[n].split()[0])
+                sender_id = int(posts_in_queue[n].split()[1])
+                x = datetime.datetime.now()
+                y = datetime.datetime.strptime(messages_yesterday[round((n + 1) * (math.floor(len(messages_yesterday)/(number_posts+1))))], "%Y-%m-%d %H:%M:%S.%f\n")
+                y = y + datetime.timedelta(days=1)
+                delta_t = (y - x).seconds
+                publisher_threads[chat_id].append(msg_id)
+                threading.Timer(delta_t, PublishPublisher, args=(msg_id, chat_id, sender_id)).start()
+                print("Publisher thread on group {} set to {} seconds from now".format(chat_id, delta_t))
+        yesterdaytext.close()
+    publish_queue.close()
 
 def CheckCAS(msg, chat_id):
     r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']))
@@ -668,37 +697,6 @@ def thread_function(msg):
         else:
             global listaadmins, listaadmins_id, publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions
             if chat_type != 'private':
-                #BEGGINING OF GROUP ACTIVITY GATHERING
-                wait_open("GroupActivity/Activity_today_" + str(chat_id) + ".txt")
-                wait_open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt")
-                open("GroupActivity/Activity_today_" + str(chat_id) + ".txt", 'a').close()
-                open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt", 'a').close()
-                todaytext = open("GroupActivity/Activity_today_" + str(chat_id) + ".txt", 'r')
-                lines = todaytext.readlines()
-                todaytext.close()
-                if len(lines) > 0 and lines[0].split()[0] != str(datetime.date.today()):
-                    with open("GroupActivity/Activity_yesterday_" + str(chat_id)+".txt", 'w') as yesterdaytext:
-                        for line in lines:
-                            yesterdaytext.write(line)
-                    yesterdaytext.close()
-                    todaytext = open("GroupActivity/Activity_today_" + str(chat_id)+".txt", 'w')
-                    todaytext.close()
-                with open("GroupActivity/Activity_today_" + str(chat_id)+".txt", 'a') as todaytext:
-                    todaytext.write(str(datetime.datetime.now()) + "\n")
-                todaytext.close()
-                wait_open("Publish_Queue.txt")
-                publishqueue = open("Publish_Queue.txt", 'r')
-                publishqueue_lines = publishqueue.readlines()
-                publishqueue.close()
-                if publishqueue_lines[0] != str(datetime.date.today())+"\n":
-                    with open("Publish_Queue.txt", 'w') as publishqueue:
-                        publishqueue.write(str(datetime.date.today()) + "\n")
-                        if len(publishqueue_lines) > 1:
-                            for line in publishqueue_lines[1:]:
-                                if len(line.split()) > 1:
-                                    publishqueue.write(line.split()[0] + " " + str(int(line.split()[1]) - 1) + "\n")
-                    publishqueue.close()
-                #END OF GROUP ACTIVITY GATHERING
                 #BEGGINING OF ADMINISTRATORS GATHERING
                 if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id) + ".txt"):
                     text = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'w').close()
@@ -755,6 +753,44 @@ def thread_function(msg):
                     elif line.split()[0] == "SFW:":
                         sfw = int(line.split()[1])
                 #END OF CONFIG GATHERING
+                #BEGGINING OF GROUP ACTIVITY GATHERING
+                wait_open("GroupActivity/Activity_today_" + str(chat_id) + ".txt")
+                wait_open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt")
+                open("GroupActivity/Activity_today_" + str(chat_id) + ".txt", 'a').close()
+                open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt", 'a').close()
+                todaytext = open("GroupActivity/Activity_today_" + str(chat_id) + ".txt", 'r')
+                lines = todaytext.readlines()
+                todaytext.close()
+                if len(lines) > 0 and lines[0].split()[0] != str(datetime.date.today()):
+                    with open("GroupActivity/Activity_yesterday_" + str(chat_id)+".txt", 'w') as yesterdaytext:
+                        for line in lines:
+                            yesterdaytext.write(line)
+                    yesterdaytext.close()
+                    todaytext = open("GroupActivity/Activity_today_" + str(chat_id)+".txt", 'w')
+                    todaytext.close()
+                with open("GroupActivity/Activity_today_" + str(chat_id)+".txt", 'a') as todaytext:
+                    todaytext.write(str(datetime.datetime.now()) + "\n")
+                todaytext.close()
+                #END OF GROUP ACTIVITY GATHERING
+                #BEGINNING OF PUBLISHER SETUP
+                wait_open("Publish_Queue.txt")
+                publishqueue = open("Publish_Queue.txt", 'r')
+                publishqueue_lines = publishqueue.readlines()
+                publishqueue.close()
+                if publishqueue_lines[0] != str(datetime.date.today())+"\n":
+                    with open("Publish_Queue.txt", 'w') as publishqueue:
+                        publishqueue.write(str(datetime.date.today()) + "\n")
+                        if len(publishqueue_lines) > 1:
+                            for line in publishqueue_lines[1:]:
+                                if len(line.split()) > 1 and int(line.split()[1]) > 1:
+                                    publishqueue.write(line.split()[0] + " " + line.split()[1] + str(int(line.split()[2]) - 1) + "\n")
+                    publishqueue.close()
+                global publisher_threads
+                if chat_id not in publisher_threads:
+                    publisher_threads[chat_id] = []
+                if publisher == True and len(publisher_threads[chat_id]) == 0:
+                    SpawnThreadsPublisher(chat_id)
+                #END OF PUBLISHER SETUP
                 #BEGINNING OF CALENDAR SYNC AND FURBOTS CHECK
                 wait_open("Registers/"+str(chat_id)+".txt")
                 text_file = open("Registers/"+str(chat_id)+".txt", "r", encoding='utf-8')
@@ -940,7 +976,7 @@ def handle_query(msg):
             cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para indicar que o chat é SFW, ou 0 para NSFW.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
     elif 'PUBLISHER' in query_data:
         forwarded = cookiebot.forwardMessage(mekhyID, msg['message']['chat']['id'], query_data.split()[2])
-        cookiebot.sendMessage(mekhyID, "Group post - Days: {}".format(query_data.split()[0]), reply_to_message_id=forwarded, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Aprovar", callback_data='Approve PUBLISH {} {}'.format(telepot.message_identifier(msg['message']), query_data.split()[0]).replace("(", '').replace(",", '').replace(")", ''))], [InlineKeyboardButton(text="Recusar", callback_data='Refuse PUBLISH')]]))
+        cookiebot.sendMessage(mekhyID, "Group post - Days: {}".format(query_data.split()[0]), reply_to_message_id=forwarded, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Aprovar", callback_data='Approve PUBLISH {} {} {}'.format(query_data.split()[2], msg['message']['chat']['id'], query_data.split()[0]).replace("(", '').replace(",", '').replace(")", ''))], [InlineKeyboardButton(text="Recusar", callback_data='Refuse PUBLISH')]]))
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         cookiebot.sendChatAction(msg['message']['chat']['id'], 'typing')
         cookiebot.sendMessage(msg['message']['chat']['id'], "➡️ Sua mensagem foi enviada para aprovação ➡️\n\n--> Isto é feito para evitar conteúdo NSFW em chats SFW e abuso do sistema\n--> Por favor NÃO APAGUE a sua mensagem", reply_to_message_id=query_data.split()[2])
@@ -948,9 +984,9 @@ def handle_query(msg):
         if query_data.startswith('Approve'):
             wait_open("Publish_Queue.txt")
             text = open("Publish_Queue.txt", 'a+', encoding='utf-8')
-            text.write(query_data.split()[3] + " " + query_data.split()[4] + "\n")
+            text.write(query_data.split()[2] + " " + query_data.split()[3] + " " + query_data.split()[4] + "\n")
             text.close()
-            cookiebot.sendMessage(query_data.split()[2], "✅ Sua mensagem foi Aprovada! ✅\nDeixe ela aqui e pode relaxar, eu vou divulgar por vc :)")
+            cookiebot.sendMessage(query_data.split()[3], "✅ Sua mensagem foi Aprovada! ✅\nDeixe ela aqui e pode relaxar, eu vou divulgar por vc :)")
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         cookiebot.sendMessage(msg['message']['chat']['id'], query_data)
     else:
