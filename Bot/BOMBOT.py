@@ -7,7 +7,7 @@ import math, os, subprocess, sys, random, ast, json, requests, datetime, time, r
 from captcha.image import ImageCaptcha
 import googletrans
 import google_images_search, io, PIL
-import speech_recognition, wolframalpha, unidecode
+import speech_recognition, ShazamAPI, wolframalpha, unidecode
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
@@ -261,13 +261,20 @@ def Sticker_anti_spam(msg, chat_id):
     if counter_new > stickerspamlimit:
         cookiebot.deleteMessage(telepot.message_identifier(msg))
 
+def Identify_music(msg, chat_id, AUDIO_FILE):
+    shazam = ShazamAPI.Shazam(open(AUDIO_FILE, 'rb').read())
+    recognize_generator = shazam.recognizeSong()
+    response = next(recognize_generator)
+    if('track' in response[1]):
+        cookiebot.sendMessage(chat_id, "MÚSICA: 🎵 " + response[1]['track']['title'] + " - " + response[1]['track']['subtitle'] + " 🎵", reply_to_message_id=msg['message_id'])
+
 def Speech_to_text(msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    r = requests.get("https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, cookiebot.getFile(msg['voice']['file_id'])['file_path']), allow_redirects=True)
+    open('VOICEMESSAGE.oga', 'wb').write(r.content)
+    subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'panic', '-i', 'VOICEMESSAGE.oga', "VOICEMESSAGE.wav", '-y'])
+    AUDIO_FILE = "VOICEMESSAGE.wav"
     try:
-        cookiebot.sendChatAction(chat_id, 'typing')
-        r = requests.get("https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, cookiebot.getFile(msg['voice']['file_id'])['file_path']), allow_redirects=True)
-        open('VOICEMESSAGE.oga', 'wb').write(r.content)
-        subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'panic', '-i', 'VOICEMESSAGE.oga', "VOICEMESSAGE.wav", '-y'])
-        AUDIO_FILE = "VOICEMESSAGE.wav"
         with speech_recognition.AudioFile(AUDIO_FILE) as source:
             audio = recognizer.record(source)
         voicetext_ptbr = recognizer.recognize_google(audio, language="pt-BR", show_all=True)['alternative'][0]
@@ -276,6 +283,7 @@ def Speech_to_text(msg, chat_id):
         cookiebot.sendMessage(chat_id, "Texto: \n"+'"'+Text+'"', reply_to_message_id=msg['message_id'])
     except Exception as e:
         print(e)
+    Identify_music(msg, chat_id, AUDIO_FILE)
 
 def CooldownAction(msg, chat_id):
     global sentcooldownmessage
