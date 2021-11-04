@@ -557,13 +557,13 @@ def InteligenciaArtificial(msg, chat_id):
     except:
         r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message))
         try:
-            Answer = json.loads(r.text)['success'].capitalize()
+            Answer = json.loads(r.text)['messages'][0]['response'].capitalize()
         except:
             print(r.text)
             if len(str(r.text).split("{")) > 1:
                 Answer = str(r.text).split("{")[1]
                 Answer = "{" + Answer
-                Answer = json.loads(Answer)['success'].capitalize()
+                Answer = json.loads(Answer)['messages'][0]['response'].capitalize()
         Answer = translator.translate(Answer, dest='pt').text
         cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
 
