@@ -62,7 +62,7 @@ def ReceivePublisher(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "Por quantos dias vc gostaria que a sua messagem fosse enviada?\nCertifique-se de que o seu contato está na mensagem!", reply_markup = InlineKeyboardMarkup(inline_keyboard=[
                                    [InlineKeyboardButton(text="0 (É URGENTE!)",callback_data='0 PUBLISHER {}'.format(str(msg['message_id'])))], 
-                                   [InlineKeyboardButton(text="1 Dia (Amanhã)",callback_data='1 PUBLISHER {}'.format(str(msg['message_id'])))],
+                                   [InlineKeyboardButton(text="1 Dia (Mais tarde ou Amanhã)",callback_data='1 PUBLISHER {}'.format(str(msg['message_id'])))],
                                    [InlineKeyboardButton(text="3 Dias",callback_data='3 PUBLISHER {}'.format(str(msg['message_id'])))], 
                                    [InlineKeyboardButton(text="5 Dias",callback_data='5 PUBLISHER {}'.format(str(msg['message_id'])))],
                                    [InlineKeyboardButton(text="Uma Semana",callback_data='7 PUBLISHER {}'.format(str(msg['message_id'])))]
@@ -791,7 +791,7 @@ def thread_function(msg):
                         publishqueue.write(str(datetime.date.today()) + "\n")
                         if len(publishqueue_lines) > 1:
                             for line in publishqueue_lines[1:]:
-                                if len(line.split()) > 1 and int(line.split()[1]) > 1:
+                                if len(line.split()) > 2 and int(line.split()[2]) > 1:
                                     publishqueue.write(line.split()[0] + " " + line.split()[1] + str(int(line.split()[2]) - 1) + "\n")
                     publishqueue.close()
                 global publisher_threads
