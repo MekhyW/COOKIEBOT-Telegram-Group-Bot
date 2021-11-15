@@ -24,7 +24,6 @@ KetoPagano
 patsypepper
 Mad_Marco2
 Akenius
-boto025
 CarcinoBeast
 DannyLauderdale 2021-11-02 22:07:09.735998
 Prisma_Arco_iris
@@ -36,11 +35,9 @@ Eduardotakeoarai
 Sethzerr
 KanixStudios
 Isafoxy
-Focads
 pedrothebunny
 MTOFKigu
 SallyLauderdale
 NeedySmile
-Barrionovsky
 SnowAdala_05
-Ratoruja
+Focads
