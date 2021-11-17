@@ -3,7 +3,7 @@ googleAPIkey = ''
 searchEngineCX = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
-import math, os, subprocess, sys, random, json, requests, datetime, time, re, threading, traceback
+import math, os, subprocess, random, json, requests, datetime, time, threading, traceback, gc
 from captcha.image import ImageCaptcha
 import googletrans
 import google_images_search, io, PIL
@@ -166,13 +166,11 @@ def SolveCaptcha(msg, chat_id, button):
         if len(line.split()) >= 5:
             if str(chat_id) == line.split()[0] and button == True:
                 cookiebot.sendChatAction(chat_id, 'typing')
-                cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!\nUse o /regras para ver as regras do grupo")
                 Bemvindo(msg, chat_id)
                 cookiebot.deleteMessage((line.split()[0], line.split()[5]))
             elif str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
                 cookiebot.sendChatAction(chat_id, 'typing')
                 if "".join(msg['text'].upper().split()) == line.split()[4]:
-                    cookiebot.sendMessage(chat_id, "Parabéns, você não é um robô!\nDivirta-se no chat!!\nUse o /regras para ver as regras do grupo")
                     Bemvindo(msg, chat_id)
                     try:
                         cookiebot.deleteMessage((line.split()[0], line.split()[5]))
@@ -354,7 +352,7 @@ def AtualizaBemvindo(msg, chat_id):
 
 def NovoBemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo", reply_to_message_id=msg['message_id'])
+    cookiebot.sendMessage(chat_id, "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém entrar no grupo", reply_to_message_id=msg['message_id'])
 
 def Bemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -362,9 +360,15 @@ def Bemvindo(msg, chat_id):
     if os.path.exists("Welcome/Welcome_" + str(chat_id)+".txt"):
         with open("Welcome/Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
-        cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Você está com funções limitadas por pelo menos {} minutos. As restrições poderão ser removidas após esse tempo se você se apresentar e se enturmar na conversa com os demais membros.".format(str(round(limbotimespan/60))))
-    else:    
-        cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Você está com funções limitadas por pelo menos {} minutos. As restrições poderão ser removidas após esse tempo se você se apresentar e se enturmar na conversa com os demais membros.".format(str(round(limbotimespan/60))))
+        if limbotimespan > 0:
+            cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Você está com limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
+        else:
+            cookiebot.sendMessage(chat_id, regras)
+    else:
+        if limbotimespan > 0:
+            cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Você está com limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
+        else:
+            cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!")
 
 def AtualizaRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -377,7 +381,7 @@ def AtualizaRegras(msg, chat_id):
 
 def NovasRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras", reply_to_message_id=msg['message_id'])
+    cookiebot.sendMessage(chat_id, "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida com o /regras", reply_to_message_id=msg['message_id'])
 
 def Regras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -501,6 +505,8 @@ def QualquerCoisa(msg, chat_id):
                 my_bytes_io.flush()
                 my_bytes_io.seek(0)
                 cookiebot.sendPhoto(chat_id, ('x.jpg', my_bytes_io), reply_to_message_id=msg['message_id'])
+            my_bytes_io.close()
+            temp_img.close()
             return 1
         except Exception as e:
             print(e)
@@ -882,11 +888,11 @@ def thread_function(msg):
                 Idade(msg, chat_id)
             elif 'text' in msg and msg['text'].startswith("/genero") and funfunctions == True:
                 Genero(msg, chat_id)
-            elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida quando alguém entrar no grupo" and str(msg['from']['username']) in listaadmins:
+            elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém entrar no grupo" and str(msg['from']['username']) in listaadmins:
                 AtualizaBemvindo(msg, chat_id)
             elif 'text' in msg and msg['text'].startswith("/novobemvindo"):
                 NovoBemvindo(msg, chat_id)
-            elif FurBots == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, responda ESTA mensagem com a mensagem que será exibida com o /regras" and str(msg['from']['username']) in listaadmins:
+            elif FurBots == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida com o /regras" and str(msg['from']['username']) in listaadmins:
                 AtualizaRegras(msg, chat_id)
             elif FurBots == False and 'text' in msg and msg['text'].startswith("/novasregras"):
                 NovasRegras(msg, chat_id)
@@ -914,7 +920,7 @@ def thread_function(msg):
                 PromptQualquerCoisa(msg, chat_id)
             elif 'text' in msg and msg['text'].startswith("/configurar"):
                 Configurar(msg, chat_id)
-            elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "Responda ESTA mensagem com o novo valor da variável" in msg['reply_to_message']['text']:
+            elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "DÊ REPLY NESTA MENSAGEM com o novo valor da variável" in msg['reply_to_message']['text']:
                 ConfigurarSettar(msg, chat_id)
             elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
                 CustomCommand(msg, chat_id)
@@ -960,6 +966,7 @@ def handle(msg):
         threads.append(messagehandle)
         messagehandle.start()
         time.sleep(0.01)
+        gc.collect()
     except:
         cookiebot.sendMessage(mekhyID, traceback.format_exc())
 
@@ -968,21 +975,21 @@ def handle_query(msg):
     if 'CONFIG' in query_data:
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
         if query_data.startswith('k'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para permitir que eu encaminhe publicações de artistas e avisos no grupo, ou 0 para impedir isso.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para permitir que eu encaminhe publicações de artistas e avisos no grupo, ou 0 para impedir isso.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
         if query_data.startswith('a'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
         elif query_data.startswith('b'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo.\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
         elif query_data.startswith('c'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo pelo qual novos usuários no grupo não poderão mandar imagens (o bot apaga automaticamente).\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo pelo qual novos usuários no grupo não poderão mandar imagens (o bot apaga automaticamente).\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
         elif query_data.startswith('d'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo que novos usuários dispõem para resolver o Captcha. USE 0 PARA DESLIGAR O CAPTCHA!\nResponda ESTA mensagem com o novo valor da variável'.format(query_data.split()[2]))
+            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo que novos usuários dispõem para resolver o Captcha. USE 0 PARA DESLIGAR O CAPTCHA!\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
         elif query_data.startswith('h'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
+            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável".format(query_data.split()[2]))
         elif query_data.startswith('i'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de utilidade, ou 0 para desligá-las.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
+            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de utilidade, ou 0 para desligá-las.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável".format(query_data.split()[2]))
         elif query_data.startswith('j'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para indicar que o chat é SFW, ou 0 para NSFW.\nResponda ESTA mensagem com o novo valor da variável".format(query_data.split()[2]))
+            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para indicar que o chat é SFW, ou 0 para NSFW.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável".format(query_data.split()[2]))
     elif 'PUBLISHER' in query_data:
         forwarded = cookiebot.forwardMessage(mekhyID, msg['message']['chat']['id'], query_data.split()[2])
         cookiebot.sendMessage(mekhyID, "Group post - Days: {}".format(query_data.split()[0]), reply_to_message_id=forwarded, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Aprovar", callback_data='Approve PUBLISH {} {} {}'.format(query_data.split()[2], msg['message']['chat']['id'], query_data.split()[0]).replace("(", '').replace(",", '').replace(")", ''))], [InlineKeyboardButton(text="Recusar", callback_data='Refuse PUBLISH')]]))
