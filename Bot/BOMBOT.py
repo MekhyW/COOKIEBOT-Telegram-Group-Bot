@@ -53,7 +53,8 @@ def check_if_string_in_file(file_name, string_to_search):
     
 
 def PublishPublisher(msg_id, chat_id, sender_id):
-    publisher_threads[chat_id].remove(msg_id)
+    if chat_id in publisher_threads and msg_id in publisher_threads[chat_id]:
+        publisher_threads[chat_id].remove(msg_id)
     if chat_id == -1001499400382:
         cookiebot.forwardMessage(chat_id, sender_id, msg_id)
         cookiebot.sendMessage(sender_id, "--Mensagem {} enviada para grupo {}--".format(msg_id, chat_id))
@@ -998,13 +999,18 @@ def handle_query(msg):
         cookiebot.sendMessage(msg['message']['chat']['id'], "➡️ Sua mensagem foi enviada para aprovação ➡️\n\n--> Isto é feito para evitar conteúdo NSFW em chats SFW e abuso do sistema\n--> Por favor NÃO APAGUE a sua mensagem", reply_to_message_id=query_data.split()[2])
     elif 'PUBLISH' in query_data:
         if query_data.startswith('Approve'):
-            wait_open("Publish_Queue.txt")
-            text = open("Publish_Queue.txt", 'a+', encoding='utf-8')
-            text.write(query_data.split()[2] + " " + query_data.split()[3] + " " + query_data.split()[4] + "\n")
-            text.close()
-            cookiebot.sendMessage(query_data.split()[3], "✅ Sua mensagem foi Aprovada! ✅\nDeixe ela aqui e pode relaxar, eu vou divulgar por vc :)")
+            if int(query_data.split()[4]) == 0:
+                for grouptxt in os.listdir("Registers"):
+                    PublishPublisher(int(query_data.split()[2]), int(grouptxt.replace(".txt", '')), int(query_data.split()[3]))
+                cookiebot.sendMessage(msg['message']['chat']['id'], "Publicado URGENTE (lembrar de dar forward para o bot irmão)")
+            else:
+                wait_open("Publish_Queue.txt")
+                text = open("Publish_Queue.txt", 'a+', encoding='utf-8')
+                text.write(query_data.split()[2] + " " + query_data.split()[3] + " " + query_data.split()[4] + "\n")
+                text.close()
+                cookiebot.sendMessage(msg['message']['chat']['id'], query_data)
+                cookiebot.sendMessage(query_data.split()[3], "✅ Sua mensagem foi Aprovada! ✅\nDeixe ela aqui e pode relaxar, eu vou divulgar por vc :)")
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendMessage(msg['message']['chat']['id'], query_data)
     else:
         global listaadmins_id
         listaadmins_id = []
