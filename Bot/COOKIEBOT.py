@@ -489,29 +489,37 @@ def QualquerCoisa(msg, chat_id):
         googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'off', 'filetype':'jpg|png'})
     else:
         googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'medium', 'filetype':'jpg|png'})
-    for attempt in range(10):
+    images = googleimagesearcher.results()
+    random.shuffle(images)
+    my_bytes_io = io.BytesIO()
+    for image in images:
+        my_bytes_io.seek(0)
+        my_bytes_io.truncate(0)
+        image.copy_to(my_bytes_io)
+        my_bytes_io.seek(0)
+        temp_img = PIL.Image.open(my_bytes_io)
         try:
-            image = googleimagesearcher.results()[random.randint(0, len(googleimagesearcher.results())-1)]
-            my_bytes_io = io.BytesIO()
-            image.copy_to(my_bytes_io)
+            temp_img.save(my_bytes_io, format="png")
             my_bytes_io.seek(0)
-            temp_img = PIL.Image.open(my_bytes_io)
-            try:
-                temp_img.save(my_bytes_io, format="png")
-                my_bytes_io.flush()
-                my_bytes_io.seek(0)
-                cookiebot.sendPhoto(chat_id, ('x.png', my_bytes_io), reply_to_message_id=msg['message_id'])
-            except:
-                temp_img.save(my_bytes_io, format="jpg")
-                my_bytes_io.flush()
-                my_bytes_io.seek(0)
-                cookiebot.sendPhoto(chat_id, ('x.jpg', my_bytes_io), reply_to_message_id=msg['message_id'])
+            cookiebot.sendPhoto(chat_id, ('x.png', my_bytes_io), reply_to_message_id=msg['message_id'])
             my_bytes_io.close()
             temp_img.close()
             return 1
-        except Exception as e:
-            print(e)
+        except:
+            try:
+                my_bytes_io.seek(0)
+                my_bytes_io.truncate(0)
+                temp_img.save(my_bytes_io, format="jpg")
+                my_bytes_io.seek(0)
+                cookiebot.sendPhoto(chat_id, ('x.jpg', my_bytes_io), reply_to_message_id=msg['message_id'])
+                my_bytes_io.close()
+                temp_img.close()
+                return 1
+            except Exception as e:
+                print(e)
     cookiebot.sendMessage(chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", reply_to_message_id=msg['message_id'])
+    my_bytes_io.close()
+    temp_img.close()
 
 def Quem(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
