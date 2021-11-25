@@ -3,6 +3,7 @@ googleAPIkey = ''
 searchEngineCX = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
+from logging import exception
 import math, os, subprocess, random, json, requests, datetime, time, threading, traceback, gc
 from captcha.image import ImageCaptcha
 import googletrans
@@ -55,9 +56,12 @@ def check_if_string_in_file(file_name, string_to_search):
 def PublishPublisher(msg_id, chat_id, sender_id):
     if chat_id in publisher_threads and msg_id in publisher_threads[chat_id]:
         publisher_threads[chat_id].remove(msg_id)
-    if chat_id == -1001499400382:
-        cookiebot.forwardMessage(chat_id, sender_id, msg_id)
-        cookiebot.sendMessage(sender_id, "--Mensagem {} enviada para grupo {}--".format(msg_id, chat_id))
+    try:
+        if chat_id == -1001499400382:
+            cookiebot.forwardMessage(chat_id, sender_id, msg_id)
+            cookiebot.sendMessage(sender_id, "--Mensagem {} enviada para grupo {}--".format(msg_id, chat_id))
+    except Exception as e:
+        print(e)
 
 def ReceivePublisher(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -497,8 +501,8 @@ def QualquerCoisa(msg, chat_id):
         my_bytes_io.truncate(0)
         image.copy_to(my_bytes_io)
         my_bytes_io.seek(0)
-        temp_img = PIL.Image.open(my_bytes_io)
         try:
+            temp_img = PIL.Image.open(my_bytes_io)
             temp_img.save(my_bytes_io, format="png")
             my_bytes_io.seek(0)
             cookiebot.sendPhoto(chat_id, ('x.png', my_bytes_io), reply_to_message_id=msg['message_id'])
@@ -509,6 +513,7 @@ def QualquerCoisa(msg, chat_id):
             try:
                 my_bytes_io.seek(0)
                 my_bytes_io.truncate(0)
+                temp_img = PIL.Image.open(my_bytes_io)
                 temp_img.save(my_bytes_io, format="jpg")
                 my_bytes_io.seek(0)
                 cookiebot.sendPhoto(chat_id, ('x.jpg', my_bytes_io), reply_to_message_id=msg['message_id'])
@@ -613,7 +618,7 @@ def ReplyAleatorio(msg, chat_id):
             cookiebot.forwardMessage(chat_id, int(target.split()[0]), int(target.split()[1]))
             break
         except Exception as e:
-            print(str(e))
+            print(e)
         
 
 def AddtoStickerDatabase(msg, chat_id):
