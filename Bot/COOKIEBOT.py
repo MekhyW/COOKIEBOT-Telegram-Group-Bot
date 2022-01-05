@@ -858,7 +858,7 @@ def thread_function(msg):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(msg, chat_id, captchatimespan)
                     else:
-                        Bemvindo(msg, chat_id)
+                        Bemvindo(msg, chat_id, limbotimespan)
             elif content_type == "left_chat_member":
                 left_chat_member(msg, chat_id)
             elif content_type == "voice":
@@ -968,27 +968,33 @@ def thread_function(msg):
                         text_file.write(line)
                 text_file.close()
             #END OF COOLDOWN UPDATES
+            run_unnatendedthreads()
     except:
         if 'ConnectionResetError' not in traceback.format_exc():
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
             cookiebot.sendMessage(mekhyID, str(msg))
 
-#MESSAGE HANDLER
+def run_unnatendedthreads():
+    global unnatended_threads
+    num_running_threads = threading.active_count()
+    num_max_threads = 10
+    for unnatended_thread in unnatended_threads:
+        if unnatended_thread.is_alive():
+            unnatended_threads.remove(unnatended_thread)
+        elif num_running_threads < num_max_threads:
+            unnatended_thread.start()
+            num_running_threads += 1
+            unnatended_threads.remove(unnatended_thread)
+    if len(unnatended_threads) > 0:
+        print("{} threads are still unnatended".format(len(unnatended_threads)))
+    gc.collect()
+
 def handle(msg):
     try:
         global unnatended_threads
-        num_running_threads = threading.active_count()
-        num_max_threads = 10
         new_thread = threading.Thread(target=thread_function, args=(msg,))
         unnatended_threads.append(new_thread)
-        for unnatended_thread in unnatended_threads:
-            if unnatended_thread.is_alive():
-                unnatended_threads.remove(unnatended_thread)
-            elif num_running_threads < num_max_threads:
-                unnatended_thread.start()
-                num_running_threads += 1
-                unnatended_threads.remove(unnatended_thread)
-        gc.collect()
+        run_unnatendedthreads()
     except:
         if 'ConnectionResetError' not in traceback.format_exc():
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
@@ -1041,6 +1047,7 @@ def handle_query(msg):
         if query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
             SolveCaptcha(msg, msg['message']['reply_to_message']['chat']['id'], True)
             DeleteMessage(telepot.message_identifier(msg['message']))
+    run_unnatendedthreads()
         
 
 MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
