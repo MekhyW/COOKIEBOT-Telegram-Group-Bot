@@ -1,0 +1,8 @@
+Publicador: 1
+FurBots: 0
+Sticker_Spam_Limit: 5
+Tempo_sem_poder_mandar_imagem: 600
+Tempo_Captcha: 300
+Funções_Diversão: 1
+Funções_Utilidade: 1
+SFW: 0
