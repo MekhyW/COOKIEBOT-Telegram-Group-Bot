@@ -3,7 +3,6 @@ googleAPIkey = ''
 searchEngineCX = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
-from logging import exception
 import math, os, subprocess, random, json, requests, datetime, time, threading, traceback, gc
 from captcha.image import ImageCaptcha
 import googletrans
@@ -13,7 +12,6 @@ import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
-#install telepota instead of telepot, googletrans==3.1.0a0 instead of googletrans
 captcha = ImageCaptcha()
 translator = googletrans.Translator()
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
@@ -21,12 +19,10 @@ recognizer = speech_recognition.Recognizer()
 WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
 cookiebot = telepot.Bot(cookiebotTOKEN)
 mekhyID = 780875868
-threads = list()
+unnatended_threads = list()
 lastmessagedate, lastmessagetime = "1-1-1", "0"
 sentcooldownmessage = False
 publisher_threads, publisher_minimum_msggap = {}, 100
-publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = 1, 0, 1, 5, 600, 300, 1, 1
-listaadmins, listaadmins_id = [], []
 
 #IGNORE UPDATES PRIOR TO BOT ACTIVATION
 updates = cookiebot.getUpdates()
@@ -51,7 +47,13 @@ def check_if_string_in_file(file_name, string_to_search):
         if string_to_search in line:
             return True
     return False
-    
+
+#DELETE MESSAGE WITH TRY/EXCEPT
+def DeleteMessage(identifier):
+    try:
+        cookiebot.deleteMessage(identifier)
+    except Exception as e:
+        print(e)
 
 def PublishPublisher(msg_id, chat_id, sender_id):
     if chat_id in publisher_threads and msg_id in publisher_threads[chat_id]:
@@ -115,7 +117,7 @@ def CheckRaider(msg, chat_id):
         return True
     return False
 
-def Captcha(msg, chat_id):
+def Captcha(msg, chat_id, captchatimespan):
     caracters = ['0', '2', '3', '4', '5', '6', '8', '9']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
     captcha.write(password, 'CAPTCHA.png')
@@ -127,7 +129,7 @@ def Captcha(msg, chat_id):
     text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + " " + password + " " + str(captchaspawnID) + "\n")
     text.close()
 
-def CheckCaptcha(msg, chat_id):
+def CheckCaptcha(msg, chat_id, captchatimespan):
     wait_open("Captcha.txt")
     text = open("Captcha.txt", 'r', encoding='utf-8')
     lines = text.readlines()
@@ -148,20 +150,17 @@ def CheckCaptcha(msg, chat_id):
             if chat == chat_id and captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                 cookiebot.kickChatMember(chat, user)
                 cookiebot.sendMessage(chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user))
-                cookiebot.deleteMessage((line.split()[0], line.split()[5]))
+                DeleteMessage((line.split()[0], line.split()[5]))
             elif chat == chat_id and user == msg['from']['id']:
                 text.write(line)
-                try:
-                    cookiebot.deleteMessage(telepot.message_identifier(msg))
-                except Exception as e:
-                    print(e)
+                DeleteMessage(telepot.message_identifier(msg))
             else:    
                 text.write(line)
         else:
             pass
     text.close()
 
-def SolveCaptcha(msg, chat_id, button):
+def SolveCaptcha(msg, chat_id, button, limbotimespan=0):
     wait_open("Captcha.txt")
     text = open("Captcha.txt", 'r', encoding='utf-8')
     lines = text.readlines()
@@ -171,24 +170,21 @@ def SolveCaptcha(msg, chat_id, button):
         if len(line.split()) >= 5:
             if str(chat_id) == line.split()[0] and button == True:
                 cookiebot.sendChatAction(chat_id, 'typing')
-                Bemvindo(msg, chat_id)
-                cookiebot.deleteMessage((line.split()[0], line.split()[5]))
+                Bemvindo(msg, chat_id, limbotimespan)
+                DeleteMessage((line.split()[0], line.split()[5]))
             elif str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
                 cookiebot.sendChatAction(chat_id, 'typing')
                 if "".join(msg['text'].upper().split()) == line.split()[4]:
-                    Bemvindo(msg, chat_id)
+                    Bemvindo(msg, chat_id, limbotimespan)
                     try:
-                        cookiebot.deleteMessage((line.split()[0], line.split()[5]))
-                        cookiebot.deleteMessage(telepot.message_identifier(msg))
+                        DeleteMessage((line.split()[0], line.split()[5]))
+                        DeleteMessage(telepot.message_identifier(msg))
                     except Exception as e:
                         print(e)
                 else:
                     cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.")
                     text.write(line)
-                    try:
-                        cookiebot.deleteMessage(telepot.message_identifier(msg))
-                    except Exception as e:
-                        print(e)
+                    DeleteMessage(telepot.message_identifier(msg))
             else:
                 text.write(line)
     text.close()
@@ -199,7 +195,7 @@ def Limbo(msg, chat_id):
     text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + "\n")
     text.close()
 
-def CheckLimbo(msg, chat_id):
+def CheckLimbo(msg, chat_id, limbotimespan):
     wait_open("Limbo.txt")
     text = open("Limbo.txt", 'r', encoding='utf-8')
     lines = text.readlines()
@@ -218,7 +214,7 @@ def CheckLimbo(msg, chat_id):
             if str(chat_id) != line.split()[0] or str(msg['from']['id']) != line.split()[1]:
                 text.write(line)
             elif datetime.date.today() == datetime.date(year, month, day) and limbosettime+limbotimespan >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                cookiebot.deleteMessage(telepot.message_identifier(msg))
+                DeleteMessage(telepot.message_identifier(msg))
                 text.write(line)
             else:
                 pass
@@ -238,7 +234,7 @@ def left_chat_member(msg, chat_id):
     text.close()
 
 
-def Sticker_anti_spam(msg, chat_id):
+def Sticker_anti_spam(msg, chat_id, stickerspamlimit):
     wait_open("Stickers.txt")
     text_file = open("Stickers.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
@@ -262,7 +258,7 @@ def Sticker_anti_spam(msg, chat_id):
     if counter_new == stickerspamlimit:
         cookiebot.sendMessage(chat_id, "Cuidado com o flood de stickers.\nMantenham o chat com textos!")
     if counter_new > stickerspamlimit:
-        cookiebot.deleteMessage(telepot.message_identifier(msg))
+        DeleteMessage(telepot.message_identifier(msg))
 
 def Identify_music(msg, chat_id, AUDIO_FILE):
     shazam = ShazamAPI.Shazam(open(AUDIO_FILE, 'rb').read())
@@ -294,7 +290,7 @@ def CooldownAction(msg, chat_id):
         cookiebot.sendMessage(chat_id, "Você está em Cooldown!\nApenas use um comando '/' por minuto\nIsso é feito como medida de anti-spam :c\n(OBS: o cooldown foi resetado agora)", reply_to_message_id=msg['message_id'])
         sentcooldownmessage = True
     elif sentcooldownmessage == True:
-        cookiebot.deleteMessage(telepot.message_identifier(msg))
+        DeleteMessage(telepot.message_identifier(msg))
 
 def Dado(msg, chat_id):
     if msg['text'].startswith("/dado"):
@@ -353,13 +349,13 @@ def AtualizaBemvindo(msg, chat_id):
     text_file.write(msg['text'])
     cookiebot.sendMessage(chat_id, "Mensagem de Boas Vindas atualizada! ✅", reply_to_message_id=msg['message_id'])
     text_file.close()
-    cookiebot.deleteMessage(telepot.message_identifier(msg['reply_to_message']))
+    DeleteMessage(telepot.message_identifier(msg['reply_to_message']))
 
 def NovoBemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém entrar no grupo", reply_to_message_id=msg['message_id'])
 
-def Bemvindo(msg, chat_id):
+def Bemvindo(msg, chat_id, limbotimespan):
     cookiebot.sendChatAction(chat_id, 'typing')
     wait_open("Welcome/Welcome_" + str(chat_id)+".txt")
     if os.path.exists("Welcome/Welcome_" + str(chat_id)+".txt"):
@@ -382,7 +378,7 @@ def AtualizaRegras(msg, chat_id):
     text_file.write(msg['text'])
     cookiebot.sendMessage(chat_id, "Mensagem de regras atualizada! ✅", reply_to_message_id=msg['message_id'])
     text_file.close()
-    cookiebot.deleteMessage(telepot.message_identifier(msg['reply_to_message']))
+    DeleteMessage(telepot.message_identifier(msg['reply_to_message']))
 
 def NovasRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -402,7 +398,7 @@ def TaVivo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "Estou vivo\n\nPing enviado em:\n" + str(datetime.datetime.now()))
 
-def Everyone(msg, chat_id):
+def Everyone(msg, chat_id, listaadmins):
     cookiebot.sendChatAction(chat_id, 'typing')
     if str(msg['from']['username']) not in listaadmins:
         cookiebot.sendMessage(chat_id, "Você não tem permissão para chamar todos os membros do grupo.", reply_to_message_id=msg['message_id'])
@@ -417,7 +413,7 @@ def Everyone(msg, chat_id):
         text_file.close()
         cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
 
-def Adm(msg, chat_id):
+def Adm(msg, chat_id, listaadmins):
     cookiebot.sendChatAction(chat_id, 'typing')
     response = ""
     for admin in listaadmins:
@@ -486,7 +482,7 @@ def CustomCommand(msg, chat_id):
     cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
     photo.close()
 
-def QualquerCoisa(msg, chat_id):
+def QualquerCoisa(msg, chat_id, sfw):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     searchterm = msg['text'].split("@")[0].replace("/", '').replace("@CookieMWbot", '')
     if sfw == 0:
@@ -646,7 +642,7 @@ def ReplySticker(msg, chat_id):
     text.close()
     cookiebot.sendSticker(chat_id, random.choice(lines).replace("\n", ''), reply_to_message_id=msg['message_id'])
 
-def Configurar(msg, chat_id):
+def Configurar(msg, chat_id, listaadmins):
     cookiebot.sendChatAction(chat_id, 'typing')
     if str(msg['from']['username']) in listaadmins or str(msg['from']['username']) == "MekhyW":
         wait_open("Configs/Config_"+str(chat_id)+".txt")
@@ -673,7 +669,7 @@ def ConfigurarSettar(msg, chat_id):
     if msg['text'].isdigit():
         variable_to_be_altered = ""
         if "Use 1 para permitir que eu encaminhe publicações de artistas e avisos no grupo, ou 0 para impedir isso." in msg['reply_to_message']['text']:
-            variable_to_be_altered = publisher
+            variable_to_be_altered = "Publicador"
         elif "Use 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único." in msg['reply_to_message']['text']:
             variable_to_be_altered = "FurBots"
         elif "Este é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo." in msg['reply_to_message']['text']:
@@ -698,8 +694,8 @@ def ConfigurarSettar(msg, chat_id):
             if variable_to_be_altered in line:
                 text_file.write(variable_to_be_altered + ": " + msg['text'] + "\n")
                 cookiebot.sendMessage(chat_id, "Variável configurada! ✔️\nPode retornar ao chat")
-                cookiebot.deleteMessage(telepot.message_identifier(msg['reply_to_message']))
-                cookiebot.deleteMessage(telepot.message_identifier(msg))
+                DeleteMessage(telepot.message_identifier(msg['reply_to_message']))
+                DeleteMessage(telepot.message_identifier(msg))
             elif len(line.split()) > 1:
                 text_file.write(line)
         text_file.close()
@@ -724,9 +720,9 @@ def thread_function(msg):
             else:
                 cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\n**Para agendar uma postagem, envie a sua mensagem por aqui (lembrando que deve conter uma foto, vídeo, gif ou documento)**\n\nSou um bot com IA de conversa, conteúdo infinito, conteúdo customizado e speech-to-text.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW")
         else:
-            global listaadmins, listaadmins_id, publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions
             if chat_type != 'private':
                 #BEGGINING OF ADMINISTRATORS GATHERING
+                listaadmins, listaadmins_id = [], []
                 if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id) + ".txt"):
                     text = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'w').close()
                 wait_open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt")
@@ -734,12 +730,9 @@ def thread_function(msg):
                 lines = text_file.readlines()
                 text_file.close()
                 if lines != []:
-                    listaadmins = []
                     for username in lines:
                         listaadmins.append(username.replace("\n", ''))
                 else:
-                    listaadmins = []
-                    listaadmins_id = []
                     for admin in cookiebot.getChatAdministrators(chat_id):
                         if 'username' in admin['user']:
                             listaadmins.append(str(admin['user']['username']))
@@ -755,6 +748,7 @@ def thread_function(msg):
                 text_file.close()
                 #END OF NEW NAME GATHERING
                 #BEGGINNING OF CONFIG GATHERING
+                publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = 1, 0, 1, 5, 600, 300, 1, 1
                 if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
                     open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
                     text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
@@ -862,7 +856,7 @@ def thread_function(msg):
                 if CheckCAS(msg, chat_id) == False and CheckRaider(msg, chat_id) == False:
                     Limbo(msg, chat_id)
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
-                        Captcha(msg, chat_id)
+                        Captcha(msg, chat_id, captchatimespan)
                     else:
                         Bemvindo(msg, chat_id)
             elif content_type == "left_chat_member":
@@ -875,82 +869,89 @@ def thread_function(msg):
             elif content_type == "photo":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
-                CheckLimbo(msg, chat_id)
+                CheckLimbo(msg, chat_id, limbotimespan)
             elif content_type == "video":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
-                CheckLimbo(msg, chat_id)
+                CheckLimbo(msg, chat_id, limbotimespan)
             elif content_type == "document":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                     ReplySticker(msg, chat_id)
             elif content_type == "sticker":
-                CheckLimbo(msg, chat_id)
-                Sticker_anti_spam(msg, chat_id)
+                CheckLimbo(msg, chat_id, limbotimespan)
+                Sticker_anti_spam(msg, chat_id, stickerspamlimit)
                 if sfw == 1:
                     AddtoStickerDatabase(msg, chat_id)
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                     ReplySticker(msg, chat_id)
-            #elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-            #    CooldownAction(msg, chat_id)
-            elif 'text' in msg and (msg['text'].startswith("/aleatorio") or msg['text'].startswith("/aleatório")) and funfunctions == True:
-                ReplyAleatorio(msg, chat_id)
-            elif 'text' in msg and (msg['text'].startswith("/dado") or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
-                Dado(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/idade") and funfunctions == True:
-                Idade(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/genero") and funfunctions == True:
-                Genero(msg, chat_id)
-            elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém entrar no grupo" and str(msg['from']['username']) in listaadmins:
-                AtualizaBemvindo(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/novobemvindo"):
-                NovoBemvindo(msg, chat_id)
-            elif FurBots == False and 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida com o /regras" and str(msg['from']['username']) in listaadmins:
-                AtualizaRegras(msg, chat_id)
-            elif FurBots == False and 'text' in msg and msg['text'].startswith("/novasregras"):
-                NovasRegras(msg, chat_id)
-            elif FurBots == False and 'text' in msg and msg['text'].startswith("/regras"):
-                Regras(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/tavivo"):
-                TaVivo(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/everyone"):
-                Everyone(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/adm"):
-                Adm(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/comandos"):
-                Comandos(msg, chat_id)
-            elif FurBots == False and 'text' in msg and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")) and funfunctions == True:
-                Hoje(msg, chat_id)
-            elif FurBots == False and 'text' in msg and (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
-                Cheiro(msg, chat_id)
-            elif FurBots == False and 'text' in msg and ('eu faço' in msg['text'] or 'eu faco' in msg['text']) and '?' in msg['text'] and funfunctions == True:
-                QqEuFaço(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/ideiadesenho") and utilityfunctions == True:
-                IdeiaDesenho(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/contato"):
-                Contato(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/qualquercoisa") and utilityfunctions == True:
-                PromptQualquerCoisa(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/configurar"):
-                Configurar(msg, chat_id)
-            elif 'text' in msg and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "DÊ REPLY NESTA MENSAGEM com o novo valor da variável" in msg['reply_to_message']['text']:
-                ConfigurarSettar(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
-                CustomCommand(msg, chat_id)
-            elif 'text' in msg and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:
-                QualquerCoisa(msg, chat_id)
-            elif 'text' in msg and (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
-                Quem(msg, chat_id)
-            elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60))):
-                SolveCaptcha(msg, chat_id, False)
-            elif 'text' in msg and (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
-                if not OnSay(msg, chat_id):
-                    InteligenciaArtificial(msg, chat_id)
             elif 'text' in msg:
-                SolveCaptcha(msg, chat_id, False)
-                CheckCaptcha(msg, chat_id)
-                OnSay(msg, chat_id)
+                if (msg['text'].startswith("/aleatorio") or msg['text'].startswith("/aleatório")) and funfunctions == True:
+                    ReplyAleatorio(msg, chat_id)
+                #elif msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
+                #    CooldownAction(msg, chat_id)
+                elif (msg['text'].startswith("/dado") or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
+                    Dado(msg, chat_id)
+                elif msg['text'].startswith("/idade") and funfunctions == True:
+                    Idade(msg, chat_id)
+                elif msg['text'].startswith("/genero") and funfunctions == True:
+                    Genero(msg, chat_id)
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém entrar no grupo":
+                    if str(msg['from']['username']) in listaadmins:
+                        AtualizaBemvindo(msg, chat_id)
+                    else:
+                        cookiebot.sendMessage(chat_id, "Você não é um admin do grupo!", reply_to_message_id=msg['message_id'])
+                elif msg['text'].startswith("/novobemvindo"):
+                    NovoBemvindo(msg, chat_id)
+                elif FurBots == False and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida com o /regras":
+                    if str(msg['from']['username']) in listaadmins:
+                        AtualizaRegras(msg, chat_id)
+                    else:
+                        cookiebot.sendMessage(chat_id, "Você não é um admin do grupo!", reply_to_message_id=msg['message_id'])
+                elif FurBots == False and msg['text'].startswith("/novasregras"):
+                    NovasRegras(msg, chat_id)
+                elif FurBots == False and msg['text'].startswith("/regras"):
+                    Regras(msg, chat_id)
+                elif msg['text'].startswith("/tavivo"):
+                    TaVivo(msg, chat_id)
+                elif msg['text'].startswith("/everyone"):
+                    Everyone(msg, chat_id, listaadmins)
+                elif msg['text'].startswith("/adm"):
+                    Adm(msg, chat_id, listaadmins)
+                elif msg['text'].startswith("/comandos"):
+                    Comandos(msg, chat_id)
+                elif FurBots == False and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")) and funfunctions == True:
+                    Hoje(msg, chat_id)
+                elif FurBots == False and (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
+                    Cheiro(msg, chat_id)
+                elif FurBots == False and ('eu faço' in msg['text'] or 'eu faco' in msg['text']) and '?' in msg['text'] and funfunctions == True:
+                    QqEuFaço(msg, chat_id)
+                elif msg['text'].startswith("/ideiadesenho") and utilityfunctions == True:
+                    IdeiaDesenho(msg, chat_id)
+                elif msg['text'].startswith("/contato"):
+                    Contato(msg, chat_id)
+                elif msg['text'].startswith("/qualquercoisa") and utilityfunctions == True:
+                    PromptQualquerCoisa(msg, chat_id)
+                elif msg['text'].startswith("/configurar"):
+                    Configurar(msg, chat_id, listaadmins)
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "DÊ REPLY NESTA MENSAGEM com o novo valor da variável" in msg['reply_to_message']['text']:
+                    ConfigurarSettar(msg, chat_id)
+                elif msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
+                    CustomCommand(msg, chat_id)
+                elif msg['text'].startswith("/") and " " not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:
+                    QualquerCoisa(msg, chat_id, sfw)
+                elif (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
+                    Quem(msg, chat_id)
+                elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60))):
+                    SolveCaptcha(msg, chat_id, False, limbotimespan)
+                elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
+                    if not OnSay(msg, chat_id):
+                        InteligenciaArtificial(msg, chat_id)
+                else:
+                    SolveCaptcha(msg, chat_id, False, limbotimespan)
+                    CheckCaptcha(msg, chat_id, captchatimespan)
+                    OnSay(msg, chat_id)
             #BEGGINNING OF COOLDOWN UPDATES
             if 'text' in msg:
                 if float(lastmessagetime)+60 < ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
@@ -975,19 +976,28 @@ def thread_function(msg):
 #MESSAGE HANDLER
 def handle(msg):
     try:
-        global threads
-        messagehandle = threading.Thread(target=thread_function, args=(msg,))
-        threads.append(messagehandle)
-        messagehandle.start()
-        time.sleep(0.01)
+        global unnatended_threads
+        num_running_threads = threading.active_count()
+        num_max_threads = 10
+        new_thread = threading.Thread(target=thread_function, args=(msg,))
+        unnatended_threads.append(new_thread)
+        for unnatended_thread in unnatended_threads:
+            if unnatended_thread.is_alive():
+                unnatended_threads.remove(unnatended_thread)
+            elif num_running_threads < num_max_threads:
+                unnatended_thread.start()
+                num_running_threads += 1
+                unnatended_threads.remove(unnatended_thread)
         gc.collect()
     except:
-        cookiebot.sendMessage(mekhyID, traceback.format_exc())
+        if 'ConnectionResetError' not in traceback.format_exc():
+            cookiebot.sendMessage(mekhyID, traceback.format_exc())
+            cookiebot.sendMessage(mekhyID, str(msg))
 
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     if 'CONFIG' in query_data:
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+        DeleteMessage(telepot.message_identifier(msg['message']))
         if query_data.startswith('k'):
             cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para permitir que eu encaminhe publicações de artistas e avisos no grupo, ou 0 para impedir isso.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
         if query_data.startswith('a'):
@@ -1007,7 +1017,7 @@ def handle_query(msg):
     elif 'PUBLISHER' in query_data:
         forwarded = cookiebot.forwardMessage(mekhyID, msg['message']['chat']['id'], query_data.split()[2])
         cookiebot.sendMessage(mekhyID, "Group post - Days: {}".format(query_data.split()[0]), reply_to_message_id=forwarded, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Aprovar", callback_data='Approve PUBLISH {} {} {}'.format(query_data.split()[2], msg['message']['chat']['id'], query_data.split()[0]).replace("(", '').replace(",", '').replace(")", ''))], [InlineKeyboardButton(text="Recusar", callback_data='Refuse PUBLISH')]]))
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+        DeleteMessage(telepot.message_identifier(msg['message']))
         cookiebot.sendChatAction(msg['message']['chat']['id'], 'typing')
         cookiebot.sendMessage(msg['message']['chat']['id'], "➡️ Sua mensagem foi enviada para aprovação ➡️\n\n--> Isto é feito para evitar conteúdo NSFW em chats SFW e abuso do sistema\n--> Por favor NÃO APAGUE a sua mensagem", reply_to_message_id=query_data.split()[2])
     elif 'PUBLISH' in query_data:
@@ -1023,15 +1033,14 @@ def handle_query(msg):
                 text.close()
                 cookiebot.sendMessage(msg['message']['chat']['id'], query_data)
                 cookiebot.sendMessage(query_data.split()[3], "✅ Sua mensagem foi Aprovada! ✅\nDeixe ela aqui e pode relaxar, eu vou divulgar por vc :)")
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+        DeleteMessage(telepot.message_identifier(msg['message']))
     else:
-        global listaadmins_id
         listaadmins_id = []
         for admin in cookiebot.getChatAdministrators(msg['message']['reply_to_message']['chat']['id']):
             listaadmins_id.append(str(admin['user']['id']))
         if query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
             SolveCaptcha(msg, msg['message']['reply_to_message']['chat']['id'], True)
-            cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+            DeleteMessage(telepot.message_identifier(msg['message']))
         
 
 MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
