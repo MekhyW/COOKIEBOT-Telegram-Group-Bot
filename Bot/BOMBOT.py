@@ -3,8 +3,10 @@ googleAPIkey = ''
 searchEngineCX = ''
 cookiebotTOKEN = ''
 #bombotTOKEN = ''
+from Configurations import *
+from GroupShield import *
+from Publisher import *
 import math, os, subprocess, random, json, requests, datetime, time, threading, traceback, gc
-from captcha.image import ImageCaptcha
 import googletrans
 import google_images_search, io, PIL
 import speech_recognition, ShazamAPI, wolframalpha, unidecode
@@ -12,7 +14,6 @@ import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
-captcha = ImageCaptcha()
 translator = googletrans.Translator()
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
 recognizer = speech_recognition.Recognizer()
@@ -22,7 +23,6 @@ mekhyID = 780875868
 unnatended_threads = list()
 lastmessagedate, lastmessagetime = "1-1-1", "0"
 sentcooldownmessage = False
-publisher_threads, publisher_minimum_msggap = {}, 100
 
 #IGNORE UPDATES PRIOR TO BOT ACTIVATION
 updates = cookiebot.getUpdates()
@@ -30,7 +30,6 @@ if updates:
     last_update_id = updates[-1]['update_id']
     cookiebot.getUpdates(offset=last_update_id+1)
 
-#WAIT FOR ANOTHER THREAD/SCRIPT TO FINISH USING FILE
 def wait_open(filename):
     if os.path.exists(filename):
         while True:
@@ -41,197 +40,18 @@ def wait_open(filename):
             except IOError:
                 pass
 
-#STRING IN FILE CHECKER
+
 def check_if_string_in_file(file_name, string_to_search):
     for line in file_name:
         if string_to_search in line:
             return True
     return False
 
-#DELETE MESSAGE WITH TRY/EXCEPT
 def DeleteMessage(identifier):
     try:
         cookiebot.deleteMessage(identifier)
     except Exception as e:
         print(e)
-
-def PublishPublisher(msg_id, chat_id, sender_id):
-    if chat_id in publisher_threads and msg_id in publisher_threads[chat_id]:
-        publisher_threads[chat_id].remove(msg_id)
-    try:
-        if chat_id == -1001499400382:
-            cookiebot.forwardMessage(chat_id, sender_id, msg_id)
-            cookiebot.sendMessage(sender_id, "--Mensagem {} enviada para grupo {}--".format(msg_id, chat_id))
-    except Exception as e:
-        print(e)
-
-def ReceivePublisher(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "Por quantos dias vc gostaria que a sua messagem fosse enviada?\nCertifique-se de que o seu contato está na mensagem!", reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-                                   [InlineKeyboardButton(text="0 (É URGENTE!)",callback_data='0 PUBLISHER {}'.format(str(msg['message_id'])))], 
-                                   [InlineKeyboardButton(text="1 Dia (Mais tarde ou Amanhã)",callback_data='1 PUBLISHER {}'.format(str(msg['message_id'])))],
-                                   [InlineKeyboardButton(text="3 Dias",callback_data='3 PUBLISHER {}'.format(str(msg['message_id'])))], 
-                                   [InlineKeyboardButton(text="5 Dias",callback_data='5 PUBLISHER {}'.format(str(msg['message_id'])))],
-                                   [InlineKeyboardButton(text="Uma Semana",callback_data='7 PUBLISHER {}'.format(str(msg['message_id'])))]
-                               ]))
-
-def SpawnThreadsPublisher(chat_id):
-    wait_open("Publish_Queue.txt")
-    wait_open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt")
-    with open("Publish_Queue.txt", 'r') as publish_queue:
-        with open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt", 'r') as yesterdaytext:
-            messages_yesterday = yesterdaytext.readlines()
-            posts_in_queue = publish_queue.readlines()[1:]
-            number_posts = math.floor(len(messages_yesterday)/publisher_minimum_msggap) - 1
-            if number_posts <= 0 and len(messages_yesterday) > 0:
-                number_posts = 1
-            for n in range(min(number_posts, len(posts_in_queue))):
-                msg_id = int(posts_in_queue[n].split()[0])
-                sender_id = int(posts_in_queue[n].split()[1])
-                x = datetime.datetime.now()
-                y = datetime.datetime.strptime(messages_yesterday[round((n + 1) * (math.floor(len(messages_yesterday)/(number_posts+1))))], "%Y-%m-%d %H:%M:%S.%f\n")
-                y = y + datetime.timedelta(days=1)
-                delta_t = (y - x).seconds
-                publisher_threads[chat_id].append(msg_id)
-                threading.Timer(delta_t, PublishPublisher, args=(msg_id, chat_id, sender_id)).start()
-                print("Publisher thread on group {} set to {} seconds from now".format(chat_id, delta_t))
-        yesterdaytext.close()
-    publish_queue.close()
-
-def CheckCAS(msg, chat_id):
-    r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']))
-    in_banlist = json.loads(r.text)['ok']
-    if in_banlist == True:
-        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        cookiebot.sendMessage(chat_id, "Bani o usuário recém-chegado por ser flagrado pelo sistema anti-ban CAS https://cas.chat/")
-        return True
-    return False
-
-
-def CheckRaider(msg, chat_id):
-    r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])})
-    is_raider = json.loads(r.text)['raider']
-    if is_raider == True:
-        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        cookiebot.sendMessage(chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.")
-        return True
-    return False
-
-def Captcha(msg, chat_id, captchatimespan):
-    caracters = ['0', '2', '3', '4', '5', '6', '8', '9']
-    password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
-    captcha.write(password, 'CAPTCHA.png')
-    photo = open('CAPTCHA.png', 'rb')
-    captchaspawnID = cookiebot.sendPhoto(chat_id, photo, caption="Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60))), reply_to_message_id=msg['message_id'], reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Aprovar",callback_data='CAPTCHA')]]))['message_id']
-    photo.close()
-    wait_open("Captcha.txt")
-    text = open("Captcha.txt", 'a+', encoding='utf-8')
-    text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + " " + password + " " + str(captchaspawnID) + "\n")
-    text.close()
-
-def CheckCaptcha(msg, chat_id, captchatimespan):
-    wait_open("Captcha.txt")
-    text = open("Captcha.txt", 'r', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    text = open("Captcha.txt", 'w+', encoding='utf-8')
-    for line in lines:
-        if len(line.split()) >= 5:
-            #CHATID userID 2021-05-13 11:45:29.027116 password captcha_id
-            year = int(line.split()[2].split("-")[0])
-            month = int(line.split()[2].split("-")[1])
-            day = int(line.split()[2].split("-")[2])
-            hour = int(line.split()[3].split(":")[0])
-            minute = int(line.split()[3].split(":")[1])
-            second = float(line.split()[3].split(":")[2])
-            captchasettime = (hour*3600) + (minute*60) + (second)
-            chat = int(line.split()[0])
-            user = int(line.split()[1])
-            if chat == chat_id and captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                cookiebot.kickChatMember(chat, user)
-                cookiebot.sendMessage(chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user))
-                DeleteMessage((line.split()[0], line.split()[5]))
-            elif chat == chat_id and user == msg['from']['id']:
-                text.write(line)
-                DeleteMessage(telepot.message_identifier(msg))
-            else:    
-                text.write(line)
-        else:
-            pass
-    text.close()
-
-def SolveCaptcha(msg, chat_id, button, limbotimespan=0):
-    wait_open("Captcha.txt")
-    text = open("Captcha.txt", 'r', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    text = open("Captcha.txt", 'w+', encoding='utf-8')
-    for line in lines:
-        if len(line.split()) >= 5:
-            if str(chat_id) == line.split()[0] and button == True:
-                cookiebot.sendChatAction(chat_id, 'typing')
-                Bemvindo(msg, chat_id, limbotimespan)
-                DeleteMessage((line.split()[0], line.split()[5]))
-            elif str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
-                cookiebot.sendChatAction(chat_id, 'typing')
-                if "".join(msg['text'].upper().split()) == line.split()[4]:
-                    Bemvindo(msg, chat_id, limbotimespan)
-                    try:
-                        DeleteMessage((line.split()[0], line.split()[5]))
-                        DeleteMessage(telepot.message_identifier(msg))
-                    except Exception as e:
-                        print(e)
-                else:
-                    cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.")
-                    text.write(line)
-                    DeleteMessage(telepot.message_identifier(msg))
-            else:
-                text.write(line)
-    text.close()
-
-def Limbo(msg, chat_id):
-    wait_open("Limbo.txt")
-    text = open("Limbo.txt", 'a+', encoding='utf-8')
-    text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + "\n")
-    text.close()
-
-def CheckLimbo(msg, chat_id, limbotimespan):
-    wait_open("Limbo.txt")
-    text = open("Limbo.txt", 'r', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    text = open("Limbo.txt", 'w+', encoding='utf-8')
-    for line in lines:
-        if len(line.split()) >= 4:
-            #CHATID userID 2021-05-13 11:45:29.027116
-            year = int(line.split()[2].split("-")[0])
-            month = int(line.split()[2].split("-")[1])
-            day = int(line.split()[2].split("-")[2])
-            hour = int(line.split()[3].split(":")[0])
-            minute = int(line.split()[3].split(":")[1])
-            second = float(line.split()[3].split(":")[2])
-            limbosettime = (hour*3600) + (minute*60) + (second)
-            if str(chat_id) != line.split()[0] or str(msg['from']['id']) != line.split()[1]:
-                text.write(line)
-            elif datetime.date.today() == datetime.date(year, month, day) and limbosettime+limbotimespan >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                DeleteMessage(telepot.message_identifier(msg))
-                text.write(line)
-            else:
-                pass
-        else:
-            pass
-    text.close()
-
-def left_chat_member(msg, chat_id):
-    wait_open("Captcha.txt")
-    text = open("Captcha.txt", 'r', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    text = open("Limbo.txt", 'w+', encoding='utf-8')
-    for line in lines:
-        if line.split()[0] != str(chat_id) or line.split()[1] != msg['left_chat_member']['id']:
-            text.write(line)
-    text.close()
 
 
 def Sticker_anti_spam(msg, chat_id, stickerspamlimit):
@@ -354,22 +174,6 @@ def AtualizaBemvindo(msg, chat_id):
 def NovoBemvindo(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém entrar no grupo", reply_to_message_id=msg['message_id'])
-
-def Bemvindo(msg, chat_id, limbotimespan):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Welcome/Welcome_" + str(chat_id)+".txt")
-    if os.path.exists("Welcome/Welcome_" + str(chat_id)+".txt"):
-        with open("Welcome/Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
-            regras = file.read()
-        if limbotimespan > 0:
-            cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Você está com limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
-        else:
-            cookiebot.sendMessage(chat_id, regras)
-    else:
-        if limbotimespan > 0:
-            cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Você está com limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
-        else:
-            cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!")
 
 def AtualizaRegras(msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -642,66 +446,6 @@ def ReplySticker(msg, chat_id):
     text.close()
     cookiebot.sendSticker(chat_id, random.choice(lines).replace("\n", ''), reply_to_message_id=msg['message_id'])
 
-def Configurar(msg, chat_id, listaadmins):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if str(msg['from']['username']) in listaadmins or str(msg['from']['username']) == "MekhyW":
-        wait_open("Configs/Config_"+str(chat_id)+".txt")
-        text = open("Configs/Config_"+str(chat_id)+".txt", 'r', encoding='utf-8')
-        variables = text.read()
-        text.close()
-        cookiebot.sendMessage(msg['from']['id'],"Configuração atual:\n\n" + variables + '\n\nEscolha a variável que vc gostaria de alterar', reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-                                   [InlineKeyboardButton(text="Compartilhamento de Posts",callback_data='k CONFIG {}'.format(str(chat_id)))],
-                                   [InlineKeyboardButton(text="FurBots",callback_data='a CONFIG {}'.format(str(chat_id)))], 
-                                   [InlineKeyboardButton(text="Limite Stickers",callback_data='b CONFIG {}'.format(str(chat_id)))],
-                                   [InlineKeyboardButton(text="🕒 Limbo",callback_data='c CONFIG {}'.format(str(chat_id)))], 
-                                   [InlineKeyboardButton(text="🕒 CAPTCHA",callback_data='d CONFIG {}'.format(str(chat_id)))],
-                                   [InlineKeyboardButton(text="Funções Diversão",callback_data='h CONFIG {}'.format(str(chat_id)))],
-                                   [InlineKeyboardButton(text="Funções Utilidade",callback_data='i CONFIG {}'.format(str(chat_id)))],
-                                   [InlineKeyboardButton(text="Chat SFW",callback_data='j CONFIG {}'.format(str(chat_id)))]
-                               ]
-                           ))
-        cookiebot.sendMessage(chat_id,"Te mandei uma mensagem no chat privado para configurar" , reply_to_message_id=msg['message_id'])
-    else:
-        cookiebot.sendMessage(chat_id, "Você não tem permissão para configurar o bot!", reply_to_message_id=msg['message_id'])
-
-def ConfigurarSettar(msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if msg['text'].isdigit():
-        variable_to_be_altered = ""
-        if "Use 1 para permitir que eu encaminhe publicações de artistas e avisos no grupo, ou 0 para impedir isso." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Publicador"
-        elif "Use 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "FurBots"
-        elif "Este é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Sticker_Spam_Limit"
-        elif "Este é o tempo pelo qual novos usuários no grupo não poderão mandar imagens (o bot apaga automaticamente)." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Tempo_sem_poder_mandar_imagem"
-        elif "Este é o tempo que novos usuários dispõem para resolver o Captcha. USE 0 PARA DESLIGAR O CAPTCHA!" in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Tempo_Captcha"
-        elif "Use 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Funções_Diversão"
-        elif "Use 1 para permitir comandos e funcionalidades de utilidade, ou 0 para desligá-las." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Funções_Utilidade"
-        elif "Use 1 para indicar que o chat é SFW, ou 0 para NSFW." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "SFW"
-        chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
-        wait_open("Configs/Config_"+str(chat_to_alter)+".txt")
-        text_file = open("Configs/Config_"+str(chat_to_alter)+".txt", 'r', encoding='utf-8')
-        lines = text_file.readlines()
-        text_file.close()
-        text_file = open("Configs/Config_"+str(chat_to_alter)+".txt", 'w', encoding='utf-8')
-        for line in lines:
-            if variable_to_be_altered in line:
-                text_file.write(variable_to_be_altered + ": " + msg['text'] + "\n")
-                cookiebot.sendMessage(chat_id, "Variável configurada! ✔️\nPode retornar ao chat")
-                DeleteMessage(telepot.message_identifier(msg['reply_to_message']))
-                DeleteMessage(telepot.message_identifier(msg))
-            elif len(line.split()) > 1:
-                text_file.write(line)
-        text_file.close()
-    else:
-        cookiebot.sendMessage(chat_id, "Apenas números naturais são aceitos!", reply_to_message_id=msg['message_id'])
-
 
 
 
@@ -712,11 +456,12 @@ def thread_function(msg):
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
+        publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = 1, 0, 1, 5, 600, 300, 1, 1
         if chat_type == 'private' and 'reply_to_message' not in msg:
             if 'text' in msg and msg['text'] == "/stop" and msg['from']['id'] == mekhyID:
                 os._exit(0)
             elif content_type in ['photo', 'video', 'document']:
-                ReceivePublisher(msg, chat_id)
+                ReceivePublisher(cookiebot, msg, chat_id)
             else:
                 cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\n**Para agendar uma postagem, envie a sua mensagem por aqui (lembrando que deve conter uma foto, vídeo, gif ou documento)**\n\nSou um bot com IA de conversa, conteúdo infinito, conteúdo customizado e speech-to-text.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW")
         else:
@@ -747,73 +492,7 @@ def thread_function(msg):
                     text_file.write("\n"+msg['from']['username'])
                 text_file.close()
                 #END OF NEW NAME GATHERING
-                #BEGGINNING OF CONFIG GATHERING
-                publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = 1, 0, 1, 5, 600, 300, 1, 1
-                if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
-                    open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
-                    text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-                    text_file.write("Publicador: 1\nFurBots: 0\nSticker_Spam_Limit: 5\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1")
-                    text_file.close()
-                wait_open("Configs/Config_"+str(chat_id)+".txt")
-                text_file = open("Configs/Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
-                lines = text_file.readlines()
-                text_file.close()
-                for line in lines:
-                    if line.split()[0] == "Publicador:":
-                        publisher = int(line.split()[1])
-                    elif line.split()[0] == "FurBots:":
-                        FurBots = int(line.split()[1])
-                    elif line.split()[0] == "Sticker_Spam_Limit:":
-                        stickerspamlimit = int(line.split()[1])
-                    elif line.split()[0] == "Tempo_sem_poder_mandar_imagem:":
-                        limbotimespan = int(line.split()[1])
-                    elif line.split()[0] == "Tempo_Captcha:":
-                        captchatimespan = int(line.split()[1])
-                    elif line.split()[0] == "Funções_Diversão:":
-                        funfunctions = int(line.split()[1])
-                    elif line.split()[0] == "Funções_Utilidade:":
-                        utilityfunctions = int(line.split()[1])
-                    elif line.split()[0] == "SFW:":
-                        sfw = int(line.split()[1])
-                #END OF CONFIG GATHERING
-                #BEGGINING OF GROUP ACTIVITY GATHERING
-                wait_open("GroupActivity/Activity_today_" + str(chat_id) + ".txt")
-                wait_open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt")
-                open("GroupActivity/Activity_today_" + str(chat_id) + ".txt", 'a').close()
-                open("GroupActivity/Activity_yesterday_" + str(chat_id) + ".txt", 'a').close()
-                todaytext = open("GroupActivity/Activity_today_" + str(chat_id) + ".txt", 'r')
-                lines = todaytext.readlines()
-                todaytext.close()
-                if len(lines) > 0 and lines[0].split()[0] != str(datetime.date.today()):
-                    with open("GroupActivity/Activity_yesterday_" + str(chat_id)+".txt", 'w') as yesterdaytext:
-                        for line in lines:
-                            yesterdaytext.write(line)
-                    yesterdaytext.close()
-                    todaytext = open("GroupActivity/Activity_today_" + str(chat_id)+".txt", 'w')
-                    todaytext.close()
-                with open("GroupActivity/Activity_today_" + str(chat_id)+".txt", 'a') as todaytext:
-                    todaytext.write(str(datetime.datetime.now()) + "\n")
-                todaytext.close()
-                #END OF GROUP ACTIVITY GATHERING
-                #BEGINNING OF PUBLISHER SETUP
-                wait_open("Publish_Queue.txt")
-                publishqueue = open("Publish_Queue.txt", 'r')
-                publishqueue_lines = publishqueue.readlines()
-                publishqueue.close()
-                if publishqueue_lines[0] != str(datetime.date.today())+"\n":
-                    with open("Publish_Queue.txt", 'w') as publishqueue:
-                        publishqueue.write(str(datetime.date.today()) + "\n")
-                        if len(publishqueue_lines) > 1:
-                            for line in publishqueue_lines[1:]:
-                                if len(line.split()) > 2 and int(line.split()[2]) > 1:
-                                    publishqueue.write(line.split()[0] + " " + line.split()[1] + str(int(line.split()[2]) - 1) + "\n")
-                    publishqueue.close()
-                global publisher_threads
-                if chat_id not in publisher_threads:
-                    publisher_threads[chat_id] = []
-                if publisher == True and len(publisher_threads[chat_id]) == 0:
-                    SpawnThreadsPublisher(chat_id)
-                #END OF PUBLISHER SETUP
+                publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = GetConfig(chat_id)
                 #BEGINNING OF CALENDAR SYNC AND FURBOTS CHECK
                 wait_open("Registers/"+str(chat_id)+".txt")
                 text_file = open("Registers/"+str(chat_id)+".txt", "r", encoding='utf-8')
@@ -852,13 +531,14 @@ def thread_function(msg):
                         text_file.write(line+"\n")
                 text_file.close()
                 #END OF CALENDAR SYNC AND FURBOTS CHECK
+                PublisherController(msg, chat_id, publisher)
             if content_type == "new_chat_member":
-                if CheckCAS(msg, chat_id) == False and CheckRaider(msg, chat_id) == False:
+                if CheckCAS(cookiebot, msg, chat_id) == False and CheckRaider(cookiebot, msg, chat_id) == False:
                     Limbo(msg, chat_id)
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
-                        Captcha(msg, chat_id, captchatimespan)
+                        Captcha(cookiebot, msg, chat_id, captchatimespan)
                     else:
-                        Bemvindo(msg, chat_id, limbotimespan)
+                        Bemvindo(cookiebot, msg, chat_id, limbotimespan)
             elif content_type == "left_chat_member":
                 left_chat_member(msg, chat_id)
             elif content_type == "voice":
@@ -934,9 +614,9 @@ def thread_function(msg):
                 elif msg['text'].startswith("/qualquercoisa") and utilityfunctions == True:
                     PromptQualquerCoisa(msg, chat_id)
                 elif msg['text'].startswith("/configurar"):
-                    Configurar(msg, chat_id, listaadmins)
+                    Configurar(cookiebot, msg, chat_id, listaadmins)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "DÊ REPLY NESTA MENSAGEM com o novo valor da variável" in msg['reply_to_message']['text']:
-                    ConfigurarSettar(msg, chat_id)
+                    ConfigurarSettar(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
                     CustomCommand(msg, chat_id)
                 elif msg['text'].startswith("/") and " " not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:
@@ -944,13 +624,13 @@ def thread_function(msg):
                 elif (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
                     Quem(msg, chat_id)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60))):
-                    SolveCaptcha(msg, chat_id, False, limbotimespan)
+                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan)
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
                     if not OnSay(msg, chat_id):
                         InteligenciaArtificial(msg, chat_id)
                 else:
-                    SolveCaptcha(msg, chat_id, False, limbotimespan)
-                    CheckCaptcha(msg, chat_id, captchatimespan)
+                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan)
+                    CheckCaptcha(cookiebot, msg, chat_id, captchatimespan)
                     OnSay(msg, chat_id)
             #BEGGINNING OF COOLDOWN UPDATES
             if 'text' in msg:
@@ -1003,49 +683,17 @@ def handle(msg):
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     if 'CONFIG' in query_data:
-        DeleteMessage(telepot.message_identifier(msg['message']))
-        if query_data.startswith('k'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para permitir que eu encaminhe publicações de artistas e avisos no grupo, ou 0 para impedir isso.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
-        if query_data.startswith('a'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nUse 1 para não interferir com outros furbots caso eles estejam no grupo, ou 0 se eu for o único.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
-        elif query_data.startswith('b'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o limite máximo de stickers permitidos em uma sequência pelo bot. Os próximos além desse serão deletados para evitar spam. Vale para todo mundo.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
-        elif query_data.startswith('c'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo pelo qual novos usuários no grupo não poderão mandar imagens (o bot apaga automaticamente).\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
-        elif query_data.startswith('d'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], 'Chat = {}\nEste é o tempo que novos usuários dispõem para resolver o Captcha. USE 0 PARA DESLIGAR O CAPTCHA!\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável'.format(query_data.split()[2]))
-        elif query_data.startswith('h'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de diversão, ou 0 para apenas as funções de controle/gerenciamento.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável".format(query_data.split()[2]))
-        elif query_data.startswith('i'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de utilidade, ou 0 para desligá-las.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável".format(query_data.split()[2]))
-        elif query_data.startswith('j'):
-            cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para indicar que o chat é SFW, ou 0 para NSFW.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável".format(query_data.split()[2]))
+        ConfigVariableButton(cookiebot, msg, query_data)
     elif 'PUBLISHER' in query_data:
-        forwarded = cookiebot.forwardMessage(mekhyID, msg['message']['chat']['id'], query_data.split()[2])
-        cookiebot.sendMessage(mekhyID, "Group post - Days: {}".format(query_data.split()[0]), reply_to_message_id=forwarded, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Aprovar", callback_data='Approve PUBLISH {} {} {}'.format(query_data.split()[2], msg['message']['chat']['id'], query_data.split()[0]).replace("(", '').replace(",", '').replace(")", ''))], [InlineKeyboardButton(text="Recusar", callback_data='Refuse PUBLISH')]]))
-        DeleteMessage(telepot.message_identifier(msg['message']))
-        cookiebot.sendChatAction(msg['message']['chat']['id'], 'typing')
-        cookiebot.sendMessage(msg['message']['chat']['id'], "➡️ Sua mensagem foi enviada para aprovação ➡️\n\n--> Isto é feito para evitar conteúdo NSFW em chats SFW e abuso do sistema\n--> Por favor NÃO APAGUE a sua mensagem", reply_to_message_id=query_data.split()[2])
+        PublisherQuery(cookiebot, msg, query_data, mekhyID)
     elif 'PUBLISH' in query_data:
-        if query_data.startswith('Approve'):
-            if int(query_data.split()[4]) == 0:
-                for grouptxt in os.listdir("Registers"):
-                    PublishPublisher(int(query_data.split()[2]), int(grouptxt.replace(".txt", '')), int(query_data.split()[3]))
-                cookiebot.sendMessage(msg['message']['chat']['id'], "Publicado URGENTE (lembrar de dar forward para o bot irmão)")
-            else:
-                wait_open("Publish_Queue.txt")
-                text = open("Publish_Queue.txt", 'a+', encoding='utf-8')
-                text.write(query_data.split()[2] + " " + query_data.split()[3] + " " + query_data.split()[4] + "\n")
-                text.close()
-                cookiebot.sendMessage(msg['message']['chat']['id'], query_data)
-                cookiebot.sendMessage(query_data.split()[3], "✅ Sua mensagem foi Aprovada! ✅\nDeixe ela aqui e pode relaxar, eu vou divulgar por vc :)")
-        DeleteMessage(telepot.message_identifier(msg['message']))
+        PublishQuery(cookiebot, msg, query_data, mekhyID)
     else:
         listaadmins_id = []
         for admin in cookiebot.getChatAdministrators(msg['message']['reply_to_message']['chat']['id']):
             listaadmins_id.append(str(admin['user']['id']))
         if query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
-            SolveCaptcha(msg, msg['message']['reply_to_message']['chat']['id'], True)
+            SolveCaptcha(cookiebot, msg, msg['message']['reply_to_message']['chat']['id'], True)
             DeleteMessage(telepot.message_identifier(msg['message']))
     run_unnatendedthreads()
         
