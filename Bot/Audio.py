@@ -25,4 +25,4 @@ def Speech_to_text(cookiebot, msg, chat_id):
         cookiebot.sendMessage(chat_id, "Texto: \n"+'"'+Text+'"', reply_to_message_id=msg['message_id'])
     except Exception as e:
         print(e)
-    Identify_music(msg, chat_id, AUDIO_FILE)
+    Identify_music(cookiebot, msg, chat_id, AUDIO_FILE)
