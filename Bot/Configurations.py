@@ -1,24 +1,22 @@
-import os
-import telepot
-from telepot.loop import MessageLoop
-from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
-from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
+from universal_funcs import *
 
-def wait_open(filename):
-    if os.path.exists(filename):
-        while True:
-            try:
-                text = open(filename, 'r')
-                text.close()
-                break
-            except IOError:
-                pass
-
-def DeleteMessage(cookiebot, identifier):
-    try:
-        cookiebot.deleteMessage(identifier)
-    except Exception as e:
-        print(e)
+def GetAdmins(cookiebot, msg, chat_id):
+    listaadmins, listaadmins_id = [], []
+    if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id) + ".txt"):
+        text = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'w').close()
+    wait_open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt")
+    text_file = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'r', encoding='utf-8')
+    lines = text_file.readlines()
+    text_file.close()
+    if lines != []:
+        for username in lines:
+            listaadmins.append(username.replace("\n", ''))
+    else:
+        for admin in cookiebot.getChatAdministrators(chat_id):
+            if 'username' in admin['user']:
+                listaadmins.append(str(admin['user']['username']))
+            listaadmins_id.append(str(admin['user']['id']))
+    return listaadmins, listaadmins_id
 
 def GetConfig(chat_id):
     publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = 1, 0, 1, 5, 600, 300, 1, 1
@@ -128,3 +126,39 @@ def ConfigVariableButton(cookiebot, msg, query_data):
         cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para permitir comandos e funcionalidades de utilidade, ou 0 para desligá-las.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável".format(query_data.split()[2]))
     elif query_data.startswith('j'):
         cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 para indicar que o chat é SFW, ou 0 para NSFW.\nDÊ REPLY NESTA MENSAGEM com o novo valor da variável".format(query_data.split()[2]))
+
+def AtualizaBemvindo(cookiebot, msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Welcome/Welcome_" + str(chat_id)+".txt")
+    text_file = open("Welcome/Welcome_" + str(chat_id)+".txt", 'w', encoding='utf-8')
+    text_file.write(msg['text'])
+    cookiebot.sendMessage(chat_id, "Mensagem de Boas Vindas atualizada! ✅", reply_to_message_id=msg['message_id'])
+    text_file.close()
+    DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
+
+def NovoBemvindo(cookiebot, msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    cookiebot.sendMessage(chat_id, "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém entrar no grupo", reply_to_message_id=msg['message_id'])
+
+def AtualizaRegras(cookiebot, msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Rules/Regras_" + str(chat_id)+".txt")
+    text_file = open("Rules/Regras_" + str(chat_id)+".txt", 'w', encoding='utf-8')
+    text_file.write(msg['text'])
+    cookiebot.sendMessage(chat_id, "Mensagem de regras atualizada! ✅", reply_to_message_id=msg['message_id'])
+    text_file.close()
+    DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
+
+def NovasRegras(cookiebot, msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    cookiebot.sendMessage(chat_id, "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida com o /regras", reply_to_message_id=msg['message_id'])
+
+def Regras(cookiebot, msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    wait_open("Rules/Regras_" + str(chat_id)+".txt")
+    if os.path.exists("Rules/Regras_" + str(chat_id)+".txt"):
+        with open("Rules/Regras_" + str(chat_id)+".txt", encoding='utf-8') as file:
+            regras = file.read()
+        cookiebot.sendMessage(chat_id, regras+"\n\nDúvidas em relação ao bot? Mande para @MekhyW", reply_to_message_id=msg['message_id'])
+    else:    
+        cookiebot.sendMessage(chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", reply_to_message_id=msg['message_id'])

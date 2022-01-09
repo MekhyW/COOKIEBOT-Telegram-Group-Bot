@@ -1,26 +1,7 @@
+from universal_funcs import *
 from captcha.image import ImageCaptcha
 captcha = ImageCaptcha()
-import json, requests, random, os, datetime, time
-import telepot
-from telepot.loop import MessageLoop
-from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
-from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
-
-def wait_open(filename):
-    if os.path.exists(filename):
-        while True:
-            try:
-                text = open(filename, 'r')
-                text.close()
-                break
-            except IOError:
-                pass
-
-def DeleteMessage(cookiebot, identifier):
-    try:
-        cookiebot.deleteMessage(identifier)
-    except Exception as e:
-        print(e)
+import json, requests
 
 def Bemvindo(cookiebot, msg, chat_id, limbotimespan):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -29,12 +10,12 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan):
         with open("Welcome/Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
         if limbotimespan > 0:
-            cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Você está com limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
+            cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Você está limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
         else:
             cookiebot.sendMessage(chat_id, regras)
     else:
         if limbotimespan > 0:
-            cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Você está com limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
+            cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Você está limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
         else:
             cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!")
 
@@ -135,7 +116,7 @@ def Limbo(msg, chat_id):
     text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + "\n")
     text.close()
 
-def CheckLimbo(msg, chat_id, limbotimespan):
+def CheckLimbo(cookiebot, msg, chat_id, limbotimespan):
     wait_open("Limbo.txt")
     text = open("Limbo.txt", 'r', encoding='utf-8')
     lines = text.readlines()
@@ -154,7 +135,7 @@ def CheckLimbo(msg, chat_id, limbotimespan):
             if str(chat_id) != line.split()[0] or str(msg['from']['id']) != line.split()[1]:
                 text.write(line)
             elif datetime.date.today() == datetime.date(year, month, day) and limbosettime+limbotimespan >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                DeleteMessage(telepot.message_identifier(msg))
+                DeleteMessage(cookiebot, telepot.message_identifier(msg))
                 text.write(line)
             else:
                 pass

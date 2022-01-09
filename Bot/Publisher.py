@@ -1,25 +1,6 @@
-import datetime, math, threading, os
-import telepot
-from telepot.loop import MessageLoop
-from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
-from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
+from universal_funcs import *
+import threading
 publisher_threads, publisher_minimum_msggap = {}, 100
-
-def wait_open(filename):
-    if os.path.exists(filename):
-        while True:
-            try:
-                text = open(filename, 'r')
-                text.close()
-                break
-            except IOError:
-                pass
-
-def DeleteMessage(cookiebot, identifier):
-    try:
-        cookiebot.deleteMessage(identifier)
-    except Exception as e:
-        print(e)
 
 def PublishPublisher(cookiebot, msg_id, chat_id, sender_id):
     if chat_id in publisher_threads and msg_id in publisher_threads[chat_id]:
@@ -107,7 +88,7 @@ def PublisherController(msg, chat_id, publisher):
 def PublisherQuery(cookiebot, msg, query_data, mekhyID):
     forwarded = cookiebot.forwardMessage(mekhyID, msg['message']['chat']['id'], query_data.split()[2])
     cookiebot.sendMessage(mekhyID, "Group post - Days: {}".format(query_data.split()[0]), reply_to_message_id=forwarded, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Aprovar", callback_data='Approve PUBLISH {} {} {}'.format(query_data.split()[2], msg['message']['chat']['id'], query_data.split()[0]).replace("(", '').replace(",", '').replace(")", ''))], [InlineKeyboardButton(text="Recusar", callback_data='Refuse PUBLISH')]]))
-    DeleteMessage(telepot.message_identifier(msg['message']))
+    DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
     cookiebot.sendChatAction(msg['message']['chat']['id'], 'typing')
     cookiebot.sendMessage(msg['message']['chat']['id'], "➡️ Sua mensagem foi enviada para aprovação ➡️\n\n--> Isto é feito para evitar conteúdo NSFW em chats SFW e abuso do sistema\n--> Por favor NÃO APAGUE a sua mensagem", reply_to_message_id=query_data.split()[2])
 
@@ -124,4 +105,4 @@ def PublishQuery(cookiebot, msg, query_data, mekhyID):
             text.close()
             cookiebot.sendMessage(msg['message']['chat']['id'], query_data)
             cookiebot.sendMessage(query_data.split()[3], "✅ Sua mensagem foi Aprovada! ✅\nDeixe ela aqui e pode relaxar, eu vou divulgar por vc :)")
-    DeleteMessage(telepot.message_identifier(msg['message']))
+    DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
