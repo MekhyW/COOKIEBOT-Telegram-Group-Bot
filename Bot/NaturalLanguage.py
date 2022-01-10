@@ -1,8 +1,14 @@
 from universal_funcs import *
-import wolframalpha, unidecode
+import unidecode
 import googletrans
 translator = googletrans.Translator()
-WolframCLIENT = wolframalpha.Client(WolframAPP_ID)
+from chatterbot import ChatBot
+from chatterbot.trainers import ListTrainer
+from chatterbot.trainers import ChatterBotCorpusTrainer
+chatbot = ChatBot('Cookiebot', storage_adapter='chatterbot.storage.SQLStorageAdapter', database_uri='sqlite:///database.sqlite3', logic_adapters=['chatterbot.logic.BestMatch'])
+conversa = ChatterBotCorpusTrainer(chatbot)
+conversa.train('chatterbot.corpus.portuguese')
+conversa = ListTrainer(chatbot)
 
 def OnSay(cookiebot, msg, chat_id):
     if len(msg['text'].split()) > 3:
@@ -24,6 +30,9 @@ def OnSay(cookiebot, msg, chat_id):
                     return True
     return False
 
+def ChatterbotAbsorb(msg):
+    conversa.train([msg['reply_to_message']['text'], msg['text']])
+
 def InteligenciaArtificial(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
     message = ""
@@ -32,22 +41,22 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
         message = msg['text'].replace("Cookiebot", '').replace("cookiebot", '').replace("@CookieMWbot", '').replace("COOKIEBOT", '').replace("CookieBot", '').replace("\n", '').capitalize()
     else:
         message = msg['text'].replace("\n", '').capitalize()
+    Answer1 = ''
+    r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message))
     try:
-        r = WolframCLIENT.query(translator.translate(message, dest='en').text)
-        Answer = translator.translate(next(r.results).text, dest='pt').text.capitalize()
-        if len(Answer) > 200:
-            raise "Flood"
-        else:
-            cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
+        Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
+        Answer1 = translator.translate(Answer1, dest='pt').text
     except:
-        r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message))
-        try:
-            Answer = json.loads(r.text)['messages'][0]['response'].capitalize()
-        except:
-            print(r.text)
-            if len(str(r.text).split("{")) > 1:
-                Answer = str(r.text).split("{")[1]
-                Answer = "{" + Answer
-                Answer = json.loads(Answer)['messages'][0]['response'].capitalize()
-        Answer = translator.translate(Answer, dest='pt').text
-        cookiebot.sendMessage(chat_id, Answer, reply_to_message_id=msg['message_id'])
+        print(r.text)
+        if len(str(r.text).split("{")) > 1:
+            Answer1 = str(r.text).split("{")[1]
+            Answer1 = "{" + Answer
+            Answer1 = json.loads(Answer)['messages'][0]['response'].capitalize()
+            Answer1 = translator.translate(Answer1, dest='pt').text
+    Answer2 = chatbot.get_response(message)
+    Answer2_text = Answer2.text.capitalize()
+    if Answer1 and Answer2.confidence < 0.5:
+        AnswerFinal = Answer1
+    else:
+        AnswerFinal = Answer2_text
+    cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])

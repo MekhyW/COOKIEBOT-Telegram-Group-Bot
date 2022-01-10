@@ -1,5 +1,5 @@
-WolframAPP_ID = ''
 googleAPIkey = ''
+newsAPIkey = ''
 searchEngineCX = ''
 cookiebotTOKEN = ''
 bombotTOKEN = ''
