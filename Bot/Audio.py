@@ -28,19 +28,20 @@ def Speech_to_text(cookiebot, msg, chat_id):
             content = audio_file.read()
             audio_file.close()
         audio = speech.RecognitionAudio(content=content)
-        config = speech.RecognitionConfig(language_code="pt-BR", enable_automatic_punctuation=True)
+        config = speech.RecognitionConfig(language_code="pt-BR", enable_automatic_punctuation=True, use_enhanced=True,)
         response = client.recognize(config=config, audio=audio)
         Text = ''
         for i, result in enumerate(response.results):
             alternative = result.alternatives[0]
             if alternative.confidence < confidence_threshold:
+                print("Audio confidence too low: {}".format(alternative.confidence))
                 return
             Text += alternative.transcript.capitalize()
             if i < len(response.results) - 1:
                 Text += '\n'
         if len(Text.split()) >= minimum_words_STT:
             cookiebot.sendChatAction(chat_id, 'typing')
-            cookiebot.sendMessage(chat_id, 'Texto:\n"{}"'.format(Text), reply_to_message_id=msg['message_id'])
+            cookiebot.sendMessage(chat_id, '(2.0) Texto:\n"{}"'.format(Text), reply_to_message_id=msg['message_id'])
     except Exception as e:
         print(e)
     Identify_music(cookiebot, msg, chat_id, AUDIO_FILE)
