@@ -55,7 +55,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
             Answer1 = translator.translate(Answer1, dest='pt').text
     Answer2 = chatbot.get_response(message)
     Answer2_text = Answer2.text.capitalize()
-    if Answer1 and Answer2.confidence < 0.5:
+    if Answer1 and "Eu não resposta." not in Answer1 and Answer2.confidence < 0.5:
         AnswerFinal = Answer1
     else:
         AnswerFinal = Answer2_text
