@@ -9,7 +9,9 @@ minimum_words_STT = 4
 confidence_threshold = 0.75
 
 def Identify_music(cookiebot, msg, chat_id, AUDIO_FILE):
-    shazam = ShazamAPI.Shazam(open(AUDIO_FILE, 'rb').read())
+    audio_file = open(AUDIO_FILE, 'rb')
+    shazam = ShazamAPI.Shazam(audio_file.read())
+    audio_file.close()
     recognize_generator = shazam.recognizeSong()
     response = next(recognize_generator)
     if('track' in response[1]):
@@ -19,7 +21,9 @@ def Speech_to_text(cookiebot, msg, chat_id):
     global minimum_words_STT
     global confidence_threshold
     r = requests.get("https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, cookiebot.getFile(msg['voice']['file_id'])['file_path']), allow_redirects=True)
-    open('VOICEMESSAGE.oga', 'wb').write(r.content)
+    audio_file = open('VOICEMESSAGE.oga', 'wb')
+    audio_file.write(r.content)
+    audio_file.close()
     subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'panic', '-i', 'VOICEMESSAGE.oga', "VOICEMESSAGE.wav", '-y'])
     AUDIO_FILE = "VOICEMESSAGE.wav"
     try:
