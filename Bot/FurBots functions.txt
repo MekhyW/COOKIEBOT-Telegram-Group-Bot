@@ -13,6 +13,7 @@
 /comer@burrsobot
 /eat@burrsobot
 /delete@burrsobot
+/termo@burrsobot
 
 /aniversario@TestBoybot
 /averageyiffometro@TestBoybot

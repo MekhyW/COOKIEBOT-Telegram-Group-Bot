@@ -20,23 +20,24 @@ aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
 everyone - Admins podem chamar todos os membros do grupo
 adm - Chama os administradores do chat
-regras - Mostra as regras do grupo
-novasregras - Atualiza as regras do grupo
-novobemvindo - Atualiza a mensagem de boas vindas
-hoje - DESATIVADO COM O BURRBOT
-cheiro - DESATIVADO COM O BURRBOT
 dado - Roda um ou mais dados quaisquer
 idade - Te digo quantos anos vc tem
 genero - Sera que e menino ou menina
 tavivo - Manda um ping de teste com data
+regras - Mostra as regras do grupo
+novasregras - Atualiza as regras do grupo
+novobemvindo - Atualiza a mensagem de boas vindas
 comandos - Lista os comandos do bot
 configurar - Configura o bot
 contato - Usa esse comando nunca te pedi nada
+hoje - DESATIVADO COM O BURRBOT
+cheiro - DESATIVADO COM O BURRBOT
 
 COMANDOS CUSTOMIZADOS:
 allen - allen
 aly - aly
 arsen - arsen
+blackout - blackout
 bobfirrer - bobfirrer
 cloretodeodio - cloretodeodio
 deltasnep - deltasnep
@@ -47,11 +48,13 @@ gummypuh - gummypuh
 haura - haura
 juuj - juuj
 kuark - kuark
+kurokkuru - kurokkuru
 leeycarus - leeycarus
 loganartic - loganartic
 lukit - lukit
 matt - matt
 mekhy - mekhy
+mirai - mirai
 momo - momo
 mousse - mousse
 mrnatmax - mrnatmax
