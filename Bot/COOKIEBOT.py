@@ -75,8 +75,6 @@ def thread_function(msg):
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                     ReplySticker(cookiebot, msg, chat_id)
             elif 'text' in msg:
-                if 'reply_to_message' in msg and 'text' in msg['reply_to_message']:
-                    ChatterbotAbsorb(msg)
                 if cookiebot.getMe()['username'] == "MekhysBombot" and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                     CooldownAction(cookiebot, msg, chat_id)
                 elif (msg['text'].startswith("/aleatorio") or msg['text'].startswith("/aleatório")) and funfunctions == True:
@@ -139,6 +137,8 @@ def thread_function(msg):
                     if not OnSay(cookiebot, msg, chat_id):
                         InteligenciaArtificial(cookiebot, msg, chat_id)
                 else:
+                    if 'reply_to_message' in msg and 'text' in msg['reply_to_message']:
+                        ChatterbotAbsorb(msg)
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan)
                     OnSay(cookiebot, msg, chat_id)
