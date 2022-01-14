@@ -1,7 +1,7 @@
 As Funcionalidades do Cookiebot!
 
 PASSIVAS:
-Autopublicador - Ajudo a divulgar artistas e comunicados/avisos, nos melhores horários para cada grupo
+(EM DESENVOLVIMENTO) Autopublicador - Ajudo a divulgar artistas e comunicados/avisos, nos melhores horários para cada grupo
 IA de conversa - Responde qualquer mensagem de texto
 IA assistente - Matemática, vocabulário, física/química, weather, etc
 Stickers - Responde um sticker com outro sticker
