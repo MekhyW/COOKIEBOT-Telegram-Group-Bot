@@ -9,6 +9,7 @@ chatbot = ChatBot('Cookiebot', storage_adapter='chatterbot.storage.SQLStorageAda
 conversa = ChatterBotCorpusTrainer(chatbot)
 conversa.train('chatterbot.corpus.portuguese')
 conversa = ListTrainer(chatbot)
+confidence_threshold = 0.75
 
 def OnSay(cookiebot, msg, chat_id):
     if len(msg['text'].split()) > 3:
@@ -34,6 +35,7 @@ def ChatterbotAbsorb(msg):
     conversa.train([msg['reply_to_message']['text'], msg['text']])
 
 def InteligenciaArtificial(cookiebot, msg, chat_id):
+    global confidence_threshold
     cookiebot.sendChatAction(chat_id, 'typing')
     message = ""
     Answer = ""
@@ -55,7 +57,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
             Answer1 = translator.translate(Answer1, dest='pt').text
     Answer2 = chatbot.get_response(message)
     Answer2_text = Answer2.text.capitalize()
-    if Answer1 and "Eu não resposta." not in Answer1 and Answer2.confidence < 0.5:
+    if Answer1 and "Eu não resposta." not in Answer1 and Answer2.confidence < confidence_threshold:
         AnswerFinal = Answer1
     else:
         AnswerFinal = Answer2_text
