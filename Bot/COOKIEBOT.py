@@ -136,6 +136,8 @@ def thread_function(msg):
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
                     if not OnSay(cookiebot, msg, chat_id):
                         InteligenciaArtificial(cookiebot, msg, chat_id)
+                        if 'reply_to_message' in msg and 'text' in msg['reply_to_message']:
+                            ChatterbotAbsorb(msg)
                 else:
                     if 'reply_to_message' in msg and 'text' in msg['reply_to_message']:
                         ChatterbotAbsorb(msg)
