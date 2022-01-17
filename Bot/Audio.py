@@ -1,12 +1,11 @@
 from universal_funcs import *
-import subprocess
 import ShazamAPI
 from google.cloud import speech
 from google.oauth2 import service_account
 credentials = service_account.Credentials.from_service_account_file('cookiebot_cloudserviceaccount.json')
 client = speech.SpeechClient(credentials=credentials)
 minimum_words_STT = 4
-confidence_threshold = 0.75
+confidence_threshold = 0.5
 
 def Identify_music(cookiebot, msg, chat_id, AUDIO_FILE):
     audio_file = open(AUDIO_FILE, 'rb')
@@ -24,7 +23,7 @@ def Speech_to_text(cookiebot, msg, chat_id):
     audio_file = open('VOICEMESSAGE.oga', 'wb')
     audio_file.write(r.content)
     audio_file.close()
-    subprocess.run(['ffmpeg', '-hide_banner', '-loglevel', 'panic', '-i', 'VOICEMESSAGE.oga', "VOICEMESSAGE.wav", '-y'])
+    os.system("ffmpeg -i VOICEMESSAGE.oga VOICEMESSAGE.wav -y")
     AUDIO_FILE = "VOICEMESSAGE.wav"
     try:
         cookiebot.sendChatAction(chat_id, 'typing')
