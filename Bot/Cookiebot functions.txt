@@ -18,6 +18,7 @@ COMANDOS LIVRES:
 qualquercoisa - Manda uma foto do que vc quiser
 aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
+hoje - O que está acontecendo hoje?
 everyone - Admins podem chamar todos os membros do grupo
 adm - Chama os administradores do chat
 dado - Roda um ou mais dados quaisquer
@@ -30,8 +31,6 @@ novobemvindo - Atualiza a mensagem de boas vindas
 comandos - Lista os comandos do bot
 configurar - Configura o bot
 contato - Usa esse comando nunca te pedi nada
-hoje - DESATIVADO COM O BURRBOT
-cheiro - DESATIVADO COM O BURRBOT
 
 COMANDOS CUSTOMIZADOS:
 allen - allen

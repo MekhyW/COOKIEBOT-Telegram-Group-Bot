@@ -1,4 +1,9 @@
 from universal_funcs import *
+import googletrans
+translator = googletrans.Translator()
+
+def decapitalize(s, upper_rest = False):
+  return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
 
 def TaVivo(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -17,12 +22,17 @@ def Comandos(cookiebot, msg, chat_id):
 
 def Hoje(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Hoje.txt")
-    text_file = open("Hoje.txt", "r+", encoding='utf8')
-    lines = text_file.readlines()
-    target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
-    cookiebot.sendMessage(chat_id, "Hoje pra você é dia de "+target, reply_to_message_id=msg['message_id'])
-    text_file.close()
+    today = datetime.date.today()
+    yesterday = today - datetime.timedelta(days=1)
+    category = random.choice(['entertainment', 'general', 'science', 'technology'])
+    lang = random.choice(['pt', 'en'])
+    r = requests.get('https://newsapi.org/v2/top-headlines?language={}&from={}&to={}&category={}&apiKey={}'.format(lang, str(yesterday), str(today), category, newsAPIkey))
+    dictionary = json.loads(r.text)
+    article = dictionary['articles'][random.randint(0, len(dictionary['articles'])-1)]
+    title = article['title'].split(' - ')[0]
+    title = translator.translate(title, dest='pt').text
+    source = article['url']
+    cookiebot.sendMessage(chat_id, "Hoje {}\nFonte: {}".format(decapitalize(title), source), reply_to_message_id=msg['message_id'])
 
 def Cheiro(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -35,8 +45,8 @@ def Cheiro(cookiebot, msg, chat_id):
 
 def QqEuFaço(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Hoje.txt")
-    text_file = open("Hoje.txt", "r+", encoding='utf8')
+    wait_open("QqEuFaço.txt")
+    text_file = open("QqEuFaço.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
     cookiebot.sendMessage(chat_id, "Vai "+target, reply_to_message_id=msg['message_id'])
