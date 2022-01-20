@@ -19,7 +19,7 @@ def Identify_music(cookiebot, msg, chat_id, AUDIO_FILE):
 def Speech_to_text(cookiebot, msg, chat_id):
     global minimum_words_STT
     global confidence_threshold
-    r = requests.get("https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, cookiebot.getFile(msg['voice']['file_id'])['file_path']), allow_redirects=True)
+    r = requests.get("https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, cookiebot.getFile(msg['voice']['file_id'])['file_path']), allow_redirects=True, timeout=10)
     audio_file = open('VOICEMESSAGE.oga', 'wb')
     audio_file.write(r.content)
     audio_file.close()

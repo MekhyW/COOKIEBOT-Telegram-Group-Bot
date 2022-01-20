@@ -26,7 +26,7 @@ def Hoje(cookiebot, msg, chat_id):
     yesterday = today - datetime.timedelta(days=1)
     category = random.choice(['entertainment', 'general', 'science', 'technology'])
     lang = random.choice(['pt', 'en'])
-    r = requests.get('https://newsapi.org/v2/top-headlines?language={}&from={}&to={}&category={}&apiKey={}'.format(lang, str(yesterday), str(today), category, newsAPIkey))
+    r = requests.get('https://newsapi.org/v2/top-headlines?language={}&from={}&to={}&category={}&apiKey={}'.format(lang, str(yesterday), str(today), category, newsAPIkey), timeout=10)
     dictionary = json.loads(r.text)
     article = dictionary['articles'][random.randint(0, len(dictionary['articles'])-1)]
     title = article['title'].split(' - ')[0]
@@ -96,7 +96,7 @@ def Idade(cookiebot, msg, chat_id):
         cookiebot.sendMessage(chat_id, "Digite um nome, vou dizer a sua idade!\n\nEx: '/idade Mekhy'\n(obs: só o primeiro nome conta)", reply_to_message_id=msg['message_id'])
     else:
         Nome = msg['text'].replace("/idade ", '').split()[0]
-        response = json.loads(requests.get("https://api.agify.io?name={}".format(Nome)).text)
+        response = json.loads(requests.get("https://api.agify.io?name={}".format(Nome), timeout=10).text)
         Idade = response['age']
         Contagem = response['count']
         if Contagem == 0:
@@ -110,7 +110,7 @@ def Genero(cookiebot, msg, chat_id):
         cookiebot.sendMessage(chat_id, "Digite um nome, vou dizer o seu gênero!\n\nEx: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)", reply_to_message_id=msg['message_id'])
     else:
         Nome = msg['text'].replace("/genero ", '').split()[0]
-        response = json.loads(requests.get("https://api.genderize.io?name={}".format(Nome)).text)
+        response = json.loads(requests.get("https://api.genderize.io?name={}".format(Nome), timeout=10).text)
         Genero = response['gender']
         Probabilidade = response['probability']
         Contagem = response['count']

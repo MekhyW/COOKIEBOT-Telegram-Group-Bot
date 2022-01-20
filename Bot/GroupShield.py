@@ -20,7 +20,7 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan):
             cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!")
 
 def CheckCAS(cookiebot, msg, chat_id):
-    r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']))
+    r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
     in_banlist = json.loads(r.text)['ok']
     if in_banlist == True:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
@@ -30,7 +30,7 @@ def CheckCAS(cookiebot, msg, chat_id):
 
 
 def CheckRaider(cookiebot, msg, chat_id):
-    r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])})
+    r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])}, timeout=10)
     is_raider = json.loads(r.text)['raider']
     if is_raider == True:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])

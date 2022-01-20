@@ -44,7 +44,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
     else:
         message = msg['text'].replace("\n", '').capitalize()
     Answer1 = ''
-    r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message))
+    r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10)
     try:
         Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
         Answer1 = translator.translate(Answer1, dest='pt').text
