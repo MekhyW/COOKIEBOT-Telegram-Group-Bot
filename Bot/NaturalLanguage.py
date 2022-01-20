@@ -49,12 +49,14 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
         Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
         Answer1 = translator.translate(Answer1, dest='pt').text
     except:
-        print(r.text)
-        if len(str(r.text).split("{")) > 1:
-            Answer1 = str(r.text).split("{")[1]
-            Answer1 = "{" + Answer
-            Answer1 = json.loads(Answer)['messages'][0]['response'].capitalize()
-            Answer1 = translator.translate(Answer1, dest='pt').text
+        try:
+            if len(str(r.text).split("{")) > 1:
+                Answer1 = str(r.text).split("{")[1]
+                Answer1 = "{" + Answer
+                Answer1 = json.loads(Answer)['messages'][0]['response'].capitalize()
+                Answer1 = translator.translate(Answer1, dest='pt').text
+        except:
+            Answer1 = "Eu não resposta."
     Answer2 = chatbot.get_response(message)
     Answer2_text = Answer2.text.capitalize()
     if Answer1 and "Eu não resposta." not in Answer1 and Answer2.confidence < confidence_threshold:
