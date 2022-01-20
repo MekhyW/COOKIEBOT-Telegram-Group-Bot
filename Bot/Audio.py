@@ -15,6 +15,7 @@ def Identify_music(cookiebot, msg, chat_id, AUDIO_FILE):
     response = next(recognize_generator)
     if('track' in response[1]):
         cookiebot.sendMessage(chat_id, "MÚSICA: 🎵 " + response[1]['track']['title'] + " - " + response[1]['track']['subtitle'] + " 🎵", reply_to_message_id=msg['message_id'])
+    os.remove(AUDIO_FILE)
 
 def Speech_to_text(cookiebot, msg, chat_id):
     global minimum_words_STT
@@ -27,9 +28,9 @@ def Speech_to_text(cookiebot, msg, chat_id):
     AUDIO_FILE = "VOICEMESSAGE.wav"
     try:
         cookiebot.sendChatAction(chat_id, 'typing')
-        with open('VOICEMESSAGE.wav', "rb") as audio_file:
+        with open(AUDIO_FILE, "rb") as audio_file:
             content = audio_file.read()
-            audio_file.close()
+        audio_file.close()
         audio = speech.RecognitionAudio(content=content)
         config = speech.RecognitionConfig(language_code="pt-BR", enable_automatic_punctuation=True, use_enhanced=True,)
         response = client.recognize(config=config, audio=audio)
