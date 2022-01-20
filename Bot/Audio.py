@@ -4,7 +4,7 @@ from google.cloud import speech
 from google.oauth2 import service_account
 credentials = service_account.Credentials.from_service_account_file('cookiebot_cloudserviceaccount.json')
 client = speech.SpeechClient(credentials=credentials)
-minimum_words_STT = 4
+minimum_words_STT = 3
 confidence_threshold = 0.5
 
 def Identify_music(cookiebot, msg, chat_id, AUDIO_FILE):
