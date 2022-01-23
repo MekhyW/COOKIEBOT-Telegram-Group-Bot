@@ -12,13 +12,11 @@ from telepot.delegate import (per_chat_id, create_open, pave_event_space, includ
 
 def wait_open(filename):
     if os.path.exists(filename):
-        while True:
-            try:
-                text = open(filename, 'r')
-                text.close()
-                break
-            except IOError:
-                pass
+        try:
+            text = open(filename, 'r')
+            text.close()
+        except IOError:
+            time.sleep(1)
 
 def DeleteMessage(cookiebot, identifier):
     try:
