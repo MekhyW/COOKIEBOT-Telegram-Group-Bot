@@ -154,7 +154,7 @@ def thread_function(msg):
 def run_unnatendedthreads():
     global unnatended_threads
     num_running_threads = threading.active_count()
-    num_max_threads = 5
+    num_max_threads = 10
     for unnatended_thread in unnatended_threads:
         if unnatended_thread.is_alive():
             unnatended_threads.remove(unnatended_thread)
