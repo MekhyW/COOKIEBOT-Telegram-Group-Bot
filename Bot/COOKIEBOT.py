@@ -144,7 +144,8 @@ def thread_function(msg):
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan)
                     OnSay(cookiebot, msg, chat_id)
-            CooldownUpdates(msg, chat_id, lastmessagetime)
+            if chat_type != 'private':
+                CooldownUpdates(msg, chat_id, lastmessagetime)
             run_unnatendedthreads()
     except:
         if 'ConnectionResetError' not in traceback.format_exc():
@@ -161,7 +162,10 @@ def run_unnatendedthreads():
         elif num_running_threads < num_max_threads:
             unnatended_thread.start()
             num_running_threads += 1
-            unnatended_threads.remove(unnatended_thread)
+            try:
+                unnatended_threads.remove(unnatended_thread)
+            except:
+                pass
     if len(unnatended_threads) > 0:
         print("{} threads are still unnatended".format(len(unnatended_threads)))
     gc.collect()
