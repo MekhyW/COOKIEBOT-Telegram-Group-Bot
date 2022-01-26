@@ -99,3 +99,4 @@
  /pinpls@burrsobot 
  /gay@burrsobot 
  /tts@burrsobot 
+ /wah@burrsobot
