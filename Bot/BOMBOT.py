@@ -51,7 +51,7 @@ def thread_function(msg):
                 left_chat_member(msg, chat_id)
             elif content_type == "voice":
                 if utilityfunctions == True:
-                    Speech_to_text(cookiebot, msg, chat_id)
+                    Speech_to_text(cookiebot, msg, chat_id, sfw)
             elif content_type == "audio":
                 pass
             elif content_type == "photo":
