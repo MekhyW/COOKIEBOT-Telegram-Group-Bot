@@ -18,6 +18,7 @@ if updates:
     last_update_id = updates[-1]['update_id']
     cookiebot.getUpdates(offset=last_update_id+1)
 
+cookiebot.sendMessage(mekhyID, 'I am online')
 
 def thread_function(msg):
     try:
@@ -29,6 +30,8 @@ def thread_function(msg):
         if chat_type == 'private' and 'reply_to_message' not in msg:
             if 'text' in msg and msg['text'] == "/stop" and msg['from']['id'] == mekhyID:
                 os._exit(0)
+            elif 'text' in msg and msg['text'] == "/restart" and msg['from']['id'] == mekhyID:
+                os.execl(sys.executable, sys.executable, *sys.argv)
             elif content_type in ['photo', 'video', 'document']:
                 ReceivePublisher(cookiebot, msg, chat_id)
             else:
@@ -166,7 +169,9 @@ def run_unnatendedthreads():
                 unnatended_threads.remove(unnatended_thread)
             except:
                 pass
-    if len(unnatended_threads) > 0:
+    if len(unnatended_threads) > 2 * num_max_threads:
+        os.execl(sys.executable, sys.executable, *sys.argv)
+    elif len(unnatended_threads) > 0:
         print("{} threads are still unnatended".format(len(unnatended_threads)))
     gc.collect()
 
