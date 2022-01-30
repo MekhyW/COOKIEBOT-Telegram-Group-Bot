@@ -95,15 +95,24 @@ def thread_function(msg):
                         cookiebot.sendMessage(chat_id, "Você não é um admin do grupo!", reply_to_message_id=msg['message_id'])
                 elif msg['text'].startswith("/novobemvindo"):
                     NovoBemvindo(cookiebot, msg, chat_id)
-                elif FurBots == False and 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida com o /regras":
-                    if str(msg['from']['username']) in listaadmins:
-                        AtualizaRegras(cookiebot, msg, chat_id)
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida com o /regras":
+                    if FurBots == False:
+                        if str(msg['from']['username']) in listaadmins:
+                            AtualizaRegras(cookiebot, msg, chat_id)
+                        else:
+                            cookiebot.sendMessage(chat_id, "Você não é um admin do grupo!", reply_to_message_id=msg['message_id'])
                     else:
-                        cookiebot.sendMessage(chat_id, "Você não é um admin do grupo!", reply_to_message_id=msg['message_id'])
-                elif FurBots == False and msg['text'].startswith("/novasregras"):
-                    NovasRegras(cookiebot, msg, chat_id)
-                elif FurBots == False and msg['text'].startswith("/regras"):
-                    Regras(cookiebot, msg, chat_id)
+                        return
+                elif msg['text'].startswith("/novasregras"):
+                    if FurBots == False:
+                        NovasRegras(cookiebot, msg, chat_id)
+                    else:
+                        return
+                elif msg['text'].startswith("/regras"):
+                    if FurBots == False:
+                        Regras(cookiebot, msg, chat_id)
+                    else:
+                        return
                 elif msg['text'].startswith("/tavivo"):
                     TaVivo(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/everyone"):
@@ -112,12 +121,21 @@ def thread_function(msg):
                     Adm(cookiebot, msg, chat_id, listaadmins)
                 elif msg['text'].startswith("/comandos"):
                     Comandos(cookiebot, msg, chat_id)
-                elif FurBots == False and (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")) and funfunctions == True:
-                    Hoje(cookiebot, msg, chat_id)
-                elif FurBots == False and (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
-                    Cheiro(cookiebot, msg, chat_id)
-                elif FurBots == False and ('eu faço' in msg['text'] or 'eu faco' in msg['text']) and '?' in msg['text'] and funfunctions == True:
-                    QqEuFaço(cookiebot, msg, chat_id)
+                elif (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")) and funfunctions == True:
+                    if FurBots == False:
+                        Hoje(cookiebot, msg, chat_id)
+                    else:
+                        return
+                elif (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
+                    if FurBots == False:
+                        Cheiro(cookiebot, msg, chat_id)
+                    else:
+                        return
+                elif ('eu faço' in msg['text'] or 'eu faco' in msg['text']) and '?' in msg['text'] and funfunctions == True:
+                    if FurBots == False:
+                        QqEuFaço(cookiebot, msg, chat_id)
+                    else:
+                        return
                 elif msg['text'].startswith("/ideiadesenho") and utilityfunctions == True:
                     IdeiaDesenho(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/contato"):
