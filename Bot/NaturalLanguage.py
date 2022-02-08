@@ -55,14 +55,14 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
             r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10)
             try:
                 Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
-                Answer1 = translator.translate(Answer1, dest='pt').text
+                #Answer1 = translator.translate(Answer1, dest='pt').text
             except:
                 try:
                     if len(str(r.text).split("{")) > 1:
                         Answer1 = str(r.text).split("{")[1]
                         Answer1 = "{" + Answer
                         Answer1 = json.loads(Answer)['messages'][0]['response'].capitalize()
-                        Answer1 = translator.translate(Answer1, dest='pt').text
+                        #Answer1 = translator.translate(Answer1, dest='pt').text
                 except:
                     pass
             if Answer1 and "Eu não resposta." not in Answer1:
