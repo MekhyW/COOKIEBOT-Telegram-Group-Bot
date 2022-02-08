@@ -96,18 +96,12 @@ def thread_function(msg):
                 elif msg['text'].startswith("/novobemvindo"):
                     NovoBemvindo(cookiebot, msg, chat_id)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida com o /regras":
-                    if FurBots == False:
-                        if str(msg['from']['username']) in listaadmins:
-                            AtualizaRegras(cookiebot, msg, chat_id)
-                        else:
-                            cookiebot.sendMessage(chat_id, "Você não é um admin do grupo!", reply_to_message_id=msg['message_id'])
+                    if str(msg['from']['username']) in listaadmins:
+                        AtualizaRegras(cookiebot, msg, chat_id)
                     else:
-                        return
+                        cookiebot.sendMessage(chat_id, "Você não é um admin do grupo!", reply_to_message_id=msg['message_id'])
                 elif msg['text'].startswith("/novasregras"):
-                    if FurBots == False:
-                        NovasRegras(cookiebot, msg, chat_id)
-                    else:
-                        return
+                    NovasRegras(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/regras"):
                     Regras(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/tavivo"):
