@@ -109,10 +109,7 @@ def thread_function(msg):
                     else:
                         return
                 elif msg['text'].startswith("/regras"):
-                    if FurBots == False:
-                        Regras(cookiebot, msg, chat_id)
-                    else:
-                        return
+                    Regras(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/tavivo"):
                     TaVivo(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/everyone"):
