@@ -5,19 +5,20 @@ import json, requests
 
 def Bemvindo(cookiebot, msg, chat_id, limbotimespan):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Welcome/Welcome_" + str(chat_id)+".txt")
+    if limbotimespan > 0:
+        try:
+            cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
+            cookiebot.sendMessage(chat_id, "ATENÇÃO! Você está limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
+        except Exception as e:
+            print(e)
     if os.path.exists("Welcome/Welcome_" + str(chat_id)+".txt"):
+        wait_open("Welcome/Welcome_" + str(chat_id)+".txt")
         with open("Welcome/Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
             regras = file.read()
-        if limbotimespan > 0:
-            cookiebot.sendMessage(chat_id, regras + "\n\nATENÇÃO! Você está limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
-        else:
             cookiebot.sendMessage(chat_id, regras)
+            file.close()
     else:
-        if limbotimespan > 0:
-            cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!\n\nATENÇÃO! Você está limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
-        else:
-            cookiebot.sendMessage(chat_id, "Seja bem-vindo(a)!")
+        cookiebot.sendMessage(chat_id, "Olá! Seja bem-vindo(a) ao grupo {}!\nUse /regras para ver as regras do grupo".format(msg['chat']['title']))
 
 def CheckCAS(cookiebot, msg, chat_id):
     r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
@@ -39,6 +40,7 @@ def CheckRaider(cookiebot, msg, chat_id):
     return False
 
 def Captcha(cookiebot, msg, chat_id, captchatimespan):
+    cookiebot.sendChatAction(chat_id, 'upload_photo')
     caracters = ['0', '2', '3', '4', '5', '6', '8', '9']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
     captcha.write(password, 'CAPTCHA.png')
@@ -108,39 +110,6 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0):
                     DeleteMessage(cookiebot, telepot.message_identifier(msg))
             else:
                 text.write(line)
-    text.close()
-
-def Limbo(msg, chat_id):
-    wait_open("Limbo.txt")
-    text = open("Limbo.txt", 'a+', encoding='utf-8')
-    text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + "\n")
-    text.close()
-
-def CheckLimbo(cookiebot, msg, chat_id, limbotimespan):
-    wait_open("Limbo.txt")
-    text = open("Limbo.txt", 'r', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    text = open("Limbo.txt", 'w+', encoding='utf-8')
-    for line in lines:
-        if len(line.split()) >= 4:
-            #CHATID userID 2021-05-13 11:45:29.027116
-            year = int(line.split()[2].split("-")[0])
-            month = int(line.split()[2].split("-")[1])
-            day = int(line.split()[2].split("-")[2])
-            hour = int(line.split()[3].split(":")[0])
-            minute = int(line.split()[3].split(":")[1])
-            second = float(line.split()[3].split(":")[2])
-            limbosettime = (hour*3600) + (minute*60) + (second)
-            if str(chat_id) != line.split()[0] or str(msg['from']['id']) != line.split()[1]:
-                text.write(line)
-            elif datetime.date.today() == datetime.date(year, month, day) and limbosettime+limbotimespan >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                text.write(line)
-            else:
-                pass
-        else:
-            pass
     text.close()
 
 def left_chat_member(msg, chat_id):

@@ -45,7 +45,6 @@ def thread_function(msg):
                 PublisherController(msg, chat_id, publisher)
             if content_type == "new_chat_member":
                 if CheckCAS(cookiebot, msg, chat_id) == False and CheckRaider(cookiebot, msg, chat_id) == False:
-                    Limbo(msg, chat_id)
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan)
                     else:
@@ -60,18 +59,15 @@ def thread_function(msg):
             elif content_type == "photo":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
-                CheckLimbo(cookiebot, msg, chat_id, limbotimespan)
             elif content_type == "video":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
-                CheckLimbo(cookiebot, msg, chat_id, limbotimespan)
             elif content_type == "document":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                     ReplySticker(cookiebot, msg, chat_id)
             elif content_type == "sticker":
-                CheckLimbo(cookiebot, msg, chat_id, limbotimespan)
                 Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit)
                 if sfw == 1:
                     AddtoStickerDatabase(msg, chat_id)
@@ -95,7 +91,7 @@ def thread_function(msg):
                         cookiebot.sendMessage(chat_id, "Você não é um admin do grupo!", reply_to_message_id=msg['message_id'])
                 elif msg['text'].startswith("/novobemvindo"):
                     NovoBemvindo(cookiebot, msg, chat_id)
-                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida com o /regras":
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém pedir as regras":
                     if str(msg['from']['username']) in listaadmins:
                         AtualizaRegras(cookiebot, msg, chat_id)
                     else:
