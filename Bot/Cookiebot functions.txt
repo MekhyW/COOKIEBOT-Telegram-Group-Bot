@@ -3,10 +3,9 @@ As Funcionalidades do Cookiebot!
 PASSIVAS:
 (EM DESENVOLVIMENTO) Autopublicador - Ajudo a divulgar artistas e comunicados/avisos, nos melhores horários para cada grupo
 IA de conversa - Responde qualquer mensagem de texto
-IA assistente - Matemática, vocabulário, física/química, weather, etc
 Stickers - Responde um sticker com outro sticker
 Captcha - Impede que bots mandem mensagens e kicka eles se não provarem que são humanos
-Limbo de imagem - Impede que novos membros mandem mídia, por um intervalo especificado
+Restrição de mídia - Impede que novos membros mandem mídia, por um intervalo especificado
 Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
 Voz para texto - Transcripta mensagens de voz
 Detector de Música - Fala o nome de uma música tocando em mensagem de voz
