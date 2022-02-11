@@ -71,7 +71,7 @@ def ReplyAleatorio(cookiebot, msg, chat_id):
     text = open("Random_Database.txt", 'r+', encoding='utf-8')
     lines = text.readlines()
     text.close()
-    while True:
+    for attempt in range(10):
         try:
             target = random.choice(lines).replace("\n", '')
             cookiebot.forwardMessage(chat_id, int(target.split()[0]), int(target.split()[1]))
