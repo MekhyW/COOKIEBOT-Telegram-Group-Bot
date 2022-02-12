@@ -5,7 +5,7 @@ translator = googletrans.Translator()
 from chatterbot import ChatBot
 from chatterbot.trainers import ListTrainer
 from chatterbot.trainers import ChatterBotCorpusTrainer
-chatbot = ChatBot('Cookiebot', storage_adapter='chatterbot.storage.SQLStorageAdapter', database_uri='sqlite:///database.sqlite3', logic_adapters=['chatterbot.logic.BestMatch'])
+chatbot = ChatBot('Cookiebot', storage_adapter='chatterbot.storage.SQLStorageAdapter', database_uri='sqlite:///database.sqlite3', logic_adapters=['chatterbot.logic.BestMatch'], filters=['chatterbot.filters.RepetitiveResponseFilter'])
 conversa = ChatterBotCorpusTrainer(chatbot)
 conversa.train('chatterbot.corpus.portuguese')
 conversa = ListTrainer(chatbot)
@@ -55,19 +55,16 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
             r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10)
             try:
                 Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
-                #Answer1 = translator.translate(Answer1, dest='pt').text
             except:
                 try:
                     if len(str(r.text).split("{")) > 1:
                         Answer1 = str(r.text).split("{")[1]
                         Answer1 = "{" + Answer
                         Answer1 = json.loads(Answer)['messages'][0]['response'].capitalize()
-                        #Answer1 = translator.translate(Answer1, dest='pt').text
                 except:
                     pass
             if Answer1 and "Eu não resposta." not in Answer1:
                 AnswerFinal = Answer1
-                conversa.train([message, AnswerFinal])
             else:
                 AnswerFinal = Answer2_text
     cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
