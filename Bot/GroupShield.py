@@ -14,11 +14,11 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan):
     if os.path.exists("Welcome/Welcome_" + str(chat_id)+".txt"):
         wait_open("Welcome/Welcome_" + str(chat_id)+".txt")
         with open("Welcome/Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
-            regras = file.read()
-            cookiebot.sendMessage(chat_id, regras)
+            welcome = file.read()
+            cookiebot.sendMessage(chat_id, welcome)
             file.close()
     else:
-        cookiebot.sendMessage(chat_id, "Olá! Seja bem-vindo(a) ao grupo {}!\nUse /regras para ver as regras do grupo".format(msg['chat']['title']))
+        cookiebot.sendMessage(chat_id, "Olá! Seja bem-vindo(a) ao grupo {}!".format(msg['chat']['title']))
 
 def CheckCAS(cookiebot, msg, chat_id):
     r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
