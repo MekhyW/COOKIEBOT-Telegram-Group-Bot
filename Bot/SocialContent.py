@@ -112,7 +112,8 @@ def CheckQR(cookiebot, msg, chat_id):
     path = cookiebot.getFile(Fileid)['file_path']
     url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
     img = PIL.Image.open(io.BytesIO(requests.get(url).content))
-    img = numpy.array(img)
-    data,bbox,rectifiedImage = qrDecoder.detectAndDecode(img)
+    npimg = numpy.array(img)
+    img.close()
+    data,bbox,rectifiedImage = qrDecoder.detectAndDecode(npimg)
     if data:
         cookiebot.sendMessage(chat_id, data, reply_to_message_id=msg['message_id'])
