@@ -9,6 +9,7 @@ Restrição de mídia - Impede que novos membros mandem mídia, por um intervalo
 Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
 Voz para texto - Transcripta mensagens de voz
 Detector de Música - Fala o nome de uma música tocando em mensagem de voz
+Detector de QR code - Identifica códigos QR em imagens
 Welcome - Mensagem customizada de boas vindas
 Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem mexer nele. Fale com o Mekhy para implementar isso no seu chat
 Backup de Participantes - Caso o grupo seja hackeado ou apagado por engano, posso ajudar a recuperar seus participantes
@@ -23,6 +24,7 @@ adm - Chama os administradores do chat
 dado - Roda um ou mais dados quaisquer
 idade - Te digo quantos anos vc tem
 genero - Sera que e menino ou menina
+shippar - Shippa um casal com caracteristica
 tavivo - Manda um ping de teste com data
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo

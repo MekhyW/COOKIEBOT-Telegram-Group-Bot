@@ -18,7 +18,10 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan):
             cookiebot.sendMessage(chat_id, welcome)
             file.close()
     else:
-        cookiebot.sendMessage(chat_id, "Olá! Seja bem-vindo(a) ao grupo {}!".format(msg['chat']['title']))
+        try:
+            cookiebot.sendMessage(chat_id, "Olá! Seja bem-vinde ao grupo {}!".format(msg['chat']['title']))
+        except:
+            cookiebot.sendMessage(chat_id, "Olá! Seja bem-vinde ao grupo!")
 
 def CheckCAS(cookiebot, msg, chat_id):
     r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
@@ -93,21 +96,18 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0):
         if len(line.split()) >= 5:
             if str(chat_id) == line.split()[0] and button == True:
                 cookiebot.sendChatAction(chat_id, 'typing')
-                Bemvindo(cookiebot, msg, chat_id, limbotimespan)
                 DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
+                Bemvindo(cookiebot, msg, chat_id, limbotimespan)
             elif str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
                 cookiebot.sendChatAction(chat_id, 'typing')
                 if "".join(msg['text'].upper().split()) == line.split()[4]:
+                    DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
+                    DeleteMessage(cookiebot, telepot.message_identifier(msg))
                     Bemvindo(cookiebot, msg, chat_id, limbotimespan)
-                    try:
-                        DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
-                        DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                    except Exception as e:
-                        print(e)
                 else:
+                    DeleteMessage(cookiebot, telepot.message_identifier(msg))
                     cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.")
                     text.write(line)
-                    DeleteMessage(cookiebot, telepot.message_identifier(msg))
             else:
                 text.write(line)
     text.close()
@@ -116,9 +116,4 @@ def left_chat_member(msg, chat_id):
     wait_open("Captcha.txt")
     text = open("Captcha.txt", 'r', encoding='utf-8')
     lines = text.readlines()
-    text.close()
-    text = open("Limbo.txt", 'w+', encoding='utf-8')
-    for line in lines:
-        if line.split()[0] != str(chat_id) or line.split()[1] != msg['left_chat_member']['id']:
-            text.write(line)
     text.close()

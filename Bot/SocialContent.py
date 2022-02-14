@@ -1,6 +1,8 @@
 from universal_funcs import *
 import google_images_search, io, PIL
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
+import cv2
+qrDecoder = cv2.QRCodeDetector()
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -104,3 +106,13 @@ def ReplySticker(cookiebot, msg, chat_id):
     lines = text.readlines()
     text.close()
     cookiebot.sendSticker(chat_id, random.choice(lines).replace("\n", ''), reply_to_message_id=msg['message_id'])
+
+def CheckQR(cookiebot, msg, chat_id):
+    Fileid = msg['photo'][-1]['file_id']
+    path = cookiebot.getFile(Fileid)['file_path']
+    url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
+    img = PIL.Image.open(io.BytesIO(requests.get(url).content))
+    img = numpy.array(img)
+    data,bbox,rectifiedImage = qrDecoder.detectAndDecode(img)
+    if data:
+        cookiebot.sendMessage(chat_id, data, reply_to_message_id=msg['message_id'])
