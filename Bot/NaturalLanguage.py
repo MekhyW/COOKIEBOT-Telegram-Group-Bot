@@ -46,25 +46,23 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
     if message == '':
         AnswerFinal = "Oi"
     else:
-        Answer2 = chatbot.get_response(message)
-        Answer2_text = Answer2.text.capitalize()
-        if Answer2.confidence > confidence_threshold:
-            AnswerFinal = Answer2_text
-        else:
-            Answer1 = ''
-            r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10)
+        Answer1 = ''
+        r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10)
+        try:
+            Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
+        except:
             try:
-                Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
+                if len(str(r.text).split("{")) > 1:
+                    Answer1 = str(r.text).split("{")[1]
+                    Answer1 = "{" + Answer
+                    Answer1 = json.loads(Answer)['messages'][0]['response'].capitalize()
             except:
-                try:
-                    if len(str(r.text).split("{")) > 1:
-                        Answer1 = str(r.text).split("{")[1]
-                        Answer1 = "{" + Answer
-                        Answer1 = json.loads(Answer)['messages'][0]['response'].capitalize()
-                except:
-                    pass
-            if Answer1 and "Eu não resposta." not in Answer1:
-                AnswerFinal = Answer1
-            else:
+                pass
+        if Answer1 and "Eu não resposta." not in Answer1:
+            AnswerFinal = Answer1
+        else:
+            Answer2 = chatbot.get_response(message)
+            Answer2_text = Answer2.text.capitalize()
+            if Answer2.confidence > confidence_threshold:
                 AnswerFinal = Answer2_text
     cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
