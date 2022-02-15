@@ -57,8 +57,6 @@ def thread_function(msg):
             elif content_type == "audio":
                 pass
             elif content_type == "photo":
-                if utilityfunctions == True:
-                    CheckQR(cookiebot, msg, chat_id)
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
             elif content_type == "video":
