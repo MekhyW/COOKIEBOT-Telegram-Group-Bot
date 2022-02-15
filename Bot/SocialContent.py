@@ -106,14 +106,3 @@ def ReplySticker(cookiebot, msg, chat_id):
     lines = text.readlines()
     text.close()
     cookiebot.sendSticker(chat_id, random.choice(lines).replace("\n", ''), reply_to_message_id=msg['message_id'])
-
-def CheckQR(cookiebot, msg, chat_id):
-    Fileid = msg['photo'][-1]['file_id']
-    path = cookiebot.getFile(Fileid)['file_path']
-    url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
-    img = PIL.Image.open(io.BytesIO(requests.get(url).content))
-    npimg = numpy.array(img)
-    img.close()
-    data,bbox,rectifiedImage = qrDecoder.detectAndDecode(npimg)
-    if data:
-        cookiebot.sendMessage(chat_id, data, reply_to_message_id=msg['message_id'])
