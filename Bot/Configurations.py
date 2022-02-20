@@ -151,7 +151,7 @@ def AtualizaRegras(cookiebot, msg, chat_id):
 
 def NovasRegras(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida com o /regras", reply_to_message_id=msg['message_id'])
+    cookiebot.sendMessage(chat_id, "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém pedir as regras", reply_to_message_id=msg['message_id'])
 
 def Regras(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
