@@ -65,13 +65,13 @@ def thread_function(msg):
             elif content_type == "document":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
-                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
+                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
                     ReplySticker(cookiebot, msg, chat_id)
             elif content_type == "sticker":
                 Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit)
                 if sfw == 1:
                     AddtoStickerDatabase(msg, chat_id)
-                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
+                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
                     ReplySticker(cookiebot, msg, chat_id)
             elif 'text' in msg:
                 if cookiebot.getMe()['username'] == "MekhysBombot" and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
