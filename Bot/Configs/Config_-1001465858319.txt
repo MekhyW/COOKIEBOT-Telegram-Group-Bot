@@ -2,7 +2,7 @@ Publicador: 1
 FurBots: 1
 Sticker_Spam_Limit: 15
 Tempo_sem_poder_mandar_imagem: 600
-Tempo_Captcha: 300
+Tempo_Captcha: 0
 Low_resolution_area: 10000
 Funções_Diversão: 1
 Funções_Utilidade: 1
