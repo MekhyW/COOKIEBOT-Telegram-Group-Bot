@@ -45,8 +45,11 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw):
             except Exception as e:
                 print(e)
     cookiebot.sendMessage(chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", reply_to_message_id=msg['message_id'])
-    my_bytes_io.close()
-    temp_img.close()
+    try:
+        my_bytes_io.close()
+        temp_img.close()
+    except UnboundLocalError as e:
+        print(e)
 
 
 def AddtoRandomDatabase(msg, chat_id):
