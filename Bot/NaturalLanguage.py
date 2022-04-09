@@ -38,7 +38,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
     global confidence_threshold
     cookiebot.sendChatAction(chat_id, 'typing')
     message = ""
-    Answer = ""
+    AnswerFinal = ""
     if "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']:
         message = msg['text'].replace("Cookiebot", '').replace("cookiebot", '').replace("@CookieMWbot", '').replace("COOKIEBOT", '').replace("CookieBot", '').replace("\n", '').capitalize()
     else:
@@ -54,8 +54,8 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
             try:
                 if len(str(r.text).split("{")) > 1:
                     Answer1 = str(r.text).split("{")[1]
-                    Answer1 = "{" + Answer
-                    Answer1 = json.loads(Answer)['messages'][0]['response'].capitalize()
+                    Answer1 = "{" + Answer1
+                    Answer1 = json.loads(Answer1)['messages'][0]['response'].capitalize()
             except:
                 pass
         if Answer1 and "Eu não resposta." not in Answer1:
@@ -65,4 +65,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
             Answer2_text = Answer2.text.capitalize()
             if Answer2.confidence > confidence_threshold:
                 AnswerFinal = Answer2_text
-    cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
+    if AnswerFinal:
+        cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
+    else:
+        print("NO AI ANSWER")
