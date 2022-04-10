@@ -47,7 +47,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
         AnswerFinal = "Oi"
     else:
         Answer1 = ''
-        r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10)
+        r = requests.get('https://api.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10, verify=False)
         try:
             Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
         except:
