@@ -53,6 +53,8 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw):
 
 
 def AddtoRandomDatabase(msg, chat_id, photo_id=None):
+    if 'forward_from' in msg:
+        return
     wait_open("Random_Database.txt")
     text = open("Random_Database.txt", 'r+', encoding='utf-8')
     lines = text.readlines()
