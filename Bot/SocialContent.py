@@ -171,11 +171,16 @@ def Meme(cookiebot, msg, chat_id, sfw):
         caption += "@{} ".format(chosen_member.split()[0])
     for red in contours_red:
         x, y, w, h = cv2.boundingRect(red)
-        chosen_photo = random.choice(random_photos)
-        random_photos.remove(chosen_photo)
-        photo_id = chosen_photo.split()[2].replace("\n", '')
-        photo_info = cookiebot.getFile(photo_id)
-        photo_url = "https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, photo_info['file_path'])
+        for attempt in range(10):
+            try:
+                chosen_photo = random.choice(random_photos)
+                random_photos.remove(chosen_photo)
+                photo_id = chosen_photo.split()[2].replace("\n", '')
+                photo_info = cookiebot.getFile(photo_id)
+                photo_url = "https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, photo_info['file_path'])
+                break
+            except:
+                continue
         resp = urllib.request.urlopen(photo_url)
         image = np.asarray(bytearray(resp.read()), dtype="uint8")
         image = cv2.imdecode(image, cv2.IMREAD_COLOR)
