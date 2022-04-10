@@ -69,8 +69,6 @@
  /time@burrsobot 
  /quote@burrsobot 
  /bolo@burrsobot 
- /addmeme@burrsobot 
- /meme@burrsobot 
  /revive@burrsobot 
  /roleta@burrsobot 
  /burr@burrsobot 

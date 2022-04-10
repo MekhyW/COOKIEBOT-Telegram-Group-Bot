@@ -16,6 +16,7 @@ Backup de Participantes - Caso o grupo seja hackeado ou apagado por engano, poss
 
 COMANDOS LIVRES:
 qualquercoisa - Manda uma foto do que vc quiser
+meme - Gera um meme
 aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
 hoje - O que está acontecendo hoje?

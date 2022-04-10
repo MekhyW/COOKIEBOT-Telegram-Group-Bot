@@ -58,7 +58,8 @@ def thread_function(msg):
                 pass
             elif content_type == "photo":
                 if sfw == 1:
-                    AddtoRandomDatabase(msg, chat_id)
+                    photo_id = msg['photo'][-1]['file_id']
+                    AddtoRandomDatabase(msg, chat_id, photo_id)
             elif content_type == "video":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
@@ -78,6 +79,8 @@ def thread_function(msg):
                     CooldownAction(cookiebot, msg, chat_id)
                 elif (msg['text'].startswith("/aleatorio") or msg['text'].startswith("/aleatório")) and funfunctions == True:
                     ReplyAleatorio(cookiebot, msg, chat_id)
+                elif msg['text'].startswith("/meme") and funfunctions == True:
+                    Meme(cookiebot, msg, chat_id, sfw)
                 elif (msg['text'].startswith("/dado") or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
                     Dado(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/idade") and funfunctions == True:
