@@ -166,7 +166,7 @@ def Meme(cookiebot, msg, chat_id, sfw):
                 if mask_green_copy[i-y, j-x] == 255:
                     template_img[i, j] = image[i-y, j-x]
         #template_img[y:y+h, x:x+w] = cv2.bitwise_and(image, image, mask=mask_green_copy)
-        caption += "@/{} ".format(chosen_member.split()[0])
+        caption += "@{} ".format(chosen_member.split()[0])
     for red in contours_red:
         x, y, w, h = cv2.boundingRect(red)
         chosen_photo = random.choice(random_photos)
