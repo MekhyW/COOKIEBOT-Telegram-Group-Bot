@@ -19,9 +19,9 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan):
             file.close()
     else:
         try:
-            cookiebot.sendMessage(chat_id, "Olá! Seja bem-vinde ao grupo {}!".format(msg['chat']['title']))
+            cookiebot.sendMessage(chat_id, "Olá! As boas-vindas ao grupo {}!".format(msg['chat']['title']))
         except:
-            cookiebot.sendMessage(chat_id, "Olá! Seja bem-vinde ao grupo!")
+            cookiebot.sendMessage(chat_id, "Olá! As boas-vindas ao grupo!")
 
 def CheckCAS(cookiebot, msg, chat_id):
     r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
