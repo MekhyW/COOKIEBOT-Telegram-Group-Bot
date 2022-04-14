@@ -87,6 +87,8 @@ def thread_function(msg):
                     Idade(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/genero") and funfunctions == True:
                     Genero(cookiebot, msg, chat_id)
+                elif msg['text'].startswith("/spam") and funfunctions == True:
+                    Spam(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/shippar") and funfunctions == True:
                     Shippar(cookiebot, msg, chat_id)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém entrar no grupo":

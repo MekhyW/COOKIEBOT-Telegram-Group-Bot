@@ -120,3 +120,11 @@ def Genero(cookiebot, msg, chat_id):
             cookiebot.sendMessage(chat_id, "É um menino! 👨\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), reply_to_message_id=msg['message_id'])
         elif Genero == 'female':
             cookiebot.sendMessage(chat_id, "É uma menina! 👩\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), reply_to_message_id=msg['message_id'])
+
+def Spam(cookiebot, msg, chat_id):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    if len(msg['text'].split()) == 1:
+        cookiebot.sendMessage(chat_id, "Digite /spam (insira texto aqui), vou spammar esse texto várias vezes\n\nEx: '/spam @ArkTheBear cade as commissions?", reply_to_message_id=msg['message_id'])
+    else:
+        for i in range(random.randint(5, 10)):
+            cookiebot.sendMessage(chat_id, msg['text'].replace("/spam", ''))
