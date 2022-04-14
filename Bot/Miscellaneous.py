@@ -126,5 +126,8 @@ def Spam(cookiebot, msg, chat_id):
     if len(msg['text'].split()) == 1:
         cookiebot.sendMessage(chat_id, "Digite /spam (insira texto aqui), vou spammar esse texto várias vezes\n\nEx: '/spam @ArkTheBear cade as commissions?", reply_to_message_id=msg['message_id'])
     else:
-        for i in range(random.randint(5, 10)):
-            cookiebot.sendMessage(chat_id, msg['text'].replace("/spam", ''))
+        for i in range(random.randint(5, 8)):
+            if 'reply_to_message' in msg:
+                cookiebot.sendMessage(chat_id, msg['text'].replace("/spam ", ""), reply_to_message_id=msg['reply_to_message']['message_id'])
+            else:
+                cookiebot.sendMessage(chat_id, msg['text'].replace("/spam", ''))
