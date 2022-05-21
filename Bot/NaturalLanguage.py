@@ -51,13 +51,13 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
         Answer1 = ''
         r = scraper.get('https://api-sv2.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10)
         try:
-            Answer1 = json.loads(r.text)['success'].capitalize()
+            Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
         except:
             try:
                 if len(str(r.text).split("{")) > 1:
                     Answer1 = str(r.text).split("{")[1]
                     Answer1 = "{" + Answer1
-                    Answer1 = json.loads(Answer1)['success'].capitalize()
+                    Answer1 = json.loads(Answer1)['messages'][0]['response'].capitalize()
             except:
                 pass
         if Answer1 and "Eu não resposta." not in Answer1:
