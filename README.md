@@ -1,5 +1,5 @@
 # COOKIEBOT-Telegram-Group-Bot
-Conversational robot for Telegram, based on OpenAI, WolframAlpha and Simsimi engines. It can also do speech-to-text, upscale images, combat raiders/spammers and provide drawing ideas.
+Conversational AI group bot for Telegram. It can also do speech-to-text, combat raiders/spammers, generate memes, scrape images, provide drawing ideas, call all members of the group and more!
 
 (To be written and organized)
 
