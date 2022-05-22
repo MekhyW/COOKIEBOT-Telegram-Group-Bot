@@ -35,7 +35,7 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw):
             alternative = result.alternatives[0]
             Paragraph = alternative.transcript.capitalize()
             for word in alternative.words:
-                if word.confidence < confidence_threshold:
+                if word.confidence < confidence_threshold and len(word.word) > minimum_words_STT:
                     Paragraph = Paragraph.replace(word.word, '(?)')
             Text += Paragraph
             if i < len(response.results) - 1:
