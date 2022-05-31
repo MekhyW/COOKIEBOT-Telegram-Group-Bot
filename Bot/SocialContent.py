@@ -1,4 +1,3 @@
-from langcodes import Language
 from universal_funcs import *
 import google_images_search, io, PIL
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)

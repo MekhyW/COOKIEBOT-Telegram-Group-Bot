@@ -1,4 +1,3 @@
-from telegram import BotCommand
 from universal_funcs import *
 
 def GetAdmins(cookiebot, msg, chat_id):
