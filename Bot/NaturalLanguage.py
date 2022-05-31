@@ -1,17 +1,7 @@
 from universal_funcs import *
 import unidecode
-import googletrans
-translator = googletrans.Translator()
 import cloudscraper
 scraper = cloudscraper.create_scraper(browser={'browser': 'chrome','platform': 'android','desktop': False})
-from chatterbot import ChatBot
-from chatterbot.trainers import ListTrainer
-from chatterbot.trainers import ChatterBotCorpusTrainer
-chatbot = ChatBot('Cookiebot', storage_adapter='chatterbot.storage.SQLStorageAdapter', database_uri='sqlite:///database.sqlite3', logic_adapters=['chatterbot.logic.BestMatch'], filters=['chatterbot.filters.RepetitiveResponseFilter'])
-conversa = ChatterBotCorpusTrainer(chatbot)
-conversa.train('chatterbot.corpus.portuguese')
-conversa = ListTrainer(chatbot)
-confidence_threshold = 0.75
 
 def OnSay(cookiebot, msg, chat_id):
     if len(msg['text'].split()) > 3:
@@ -33,11 +23,8 @@ def OnSay(cookiebot, msg, chat_id):
                     return True
     return False
 
-def ChatterbotAbsorb(msg):
-    conversa.train([msg['reply_to_message']['text'], msg['text']])
 
-def InteligenciaArtificial(cookiebot, msg, chat_id):
-    global confidence_threshold
+def InteligenciaArtificial(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     message = ""
     AnswerFinal = ""
@@ -46,27 +33,26 @@ def InteligenciaArtificial(cookiebot, msg, chat_id):
     else:
         message = msg['text'].replace("\n", '').capitalize()
     if message == '':
-        AnswerFinal = "Oi"
+        AnswerFinal = "?"
     else:
         Answer1 = ''
-        r = scraper.get('https://api-sv2.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10)
+        if language == "pt":
+            r = scraper.get('https://api-sv2.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10)
+        elif language == "es":
+            r = scraper.get('https://api-sv2.simsimi.net/v2/?text={}&lc=es&cf=true'.format(message), timeout=10)
+        else:
+            r = scraper.get('https://api-sv2.simsimi.net/v2/?text={}&lc=en&cf=true'.format(message), timeout=10)
         try:
             Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
         except:
-            try:
-                if len(str(r.text).split("{")) > 1:
-                    Answer1 = str(r.text).split("{")[1]
-                    Answer1 = "{" + Answer1
-                    Answer1 = json.loads(Answer1)['messages'][0]['response'].capitalize()
-            except:
-                pass
-        if Answer1 and "Eu não resposta." not in Answer1:
+            if len(str(r.text).split("{")) > 1:
+                Answer1 = str(r.text).split("{")[1]
+                Answer1 = "{" + Answer1
+                Answer1 = json.loads(Answer1)['messages'][0]['response'].capitalize()
+        if Answer1 and "Eu não resposta." not in Answer1 and "I don't know what you're saying." not in Answer1:
             AnswerFinal = Answer1
         else:
-            Answer2 = chatbot.get_response(message)
-            Answer2_text = Answer2.text.capitalize()
-            if Answer2.confidence > confidence_threshold:
-                AnswerFinal = Answer2_text
+            AnswerFinal = None
     if AnswerFinal:
         cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
     else:

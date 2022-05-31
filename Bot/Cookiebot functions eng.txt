@@ -1,0 +1,79 @@
+Cookiebot Features!
+
+PASSIVE:
+Member Backup - In case the group is hacked or deleted by mistake, I can help recover your participants
+Chat AI - Reply to any text message
+Stickers - Reply a sticker with another sticker
+Captcha - Stop bots from texting and kick them if they don't prove they're human
+Media Restriction - Prevents new members from sending media, for a specified interval
+Sticker antispam - Prevent raids or long chains of stickers in sequence
+Voice to Text - Transcribe voice messages
+Music Detector - Speak the name of a song playing in voice message
+Welcome - Customized welcome message
+Granular Admins - The bot can be set so that only a few people can handle it. Talk to Mekhy to implement this in your chat
+
+FREE COMMANDS:
+anything - send a picture of what you want
+meme - Generate a meme
+random - Send a media from some group
+drawingidea - No more art block
+today - What is happening today?
+everyone - Admins can call all group members
+adm - Call chat admins
+dice - Rolls one or more dice
+age - tell you how old you are
+gender - Is it a boy or a girl
+ship - Shippa a couple with character
+spam - Spam
+isalive - Send a test ping with server date
+rules - Shows the group's rules
+newrules - Updates group rules
+newwelcome - Updates the welcome message
+commands - Lists bot commands
+configure - Configure the bot
+contact - Use this command I never asked you for anything
+
+CUSTOM COMMANDS:
+allen - allen
+aly - aly
+arsen - arsen
+blackout - blackout
+bobfirrer - bobfirrer
+cloretodeodio - cloretodeodio
+deltasnep - deltasnep
+doctordirewolf - doctordirewolf
+dr4g40 - dr4g40
+fcking1212 - fcking1212
+gummypuh - gummypuh
+haura - haura
+juuj - juuj
+kuark - kuark
+kurokkuru - kurokkuru
+leeycarus - leeycarus
+loganartic - loganartic
+lukit - lukit
+matt - matt
+mekhy - mekhy
+mirai - mirai
+momo - momo
+mousse - mousse
+mrnatmax - mrnatmax
+naja - naja
+narvi - narvi
+nicolas - nicolas
+nina - nina
+nizmot - nizmot
+purplegalaxy - purplegalaxy
+ralph - ralph
+ratenhas - ratenhas
+ruby - ruby
+seive - seive
+shimano - shimano
+sopero - sopero
+tailslunar - tailslunar
+tomecow - tomecow
+tonnyrussel - tonnyrussel
+yoshiro - yoshiro
+
+
+Talk to Mekhy to add your own command or teach the bot something!

@@ -3,12 +3,12 @@ from captcha.image import ImageCaptcha
 captcha = ImageCaptcha()
 import json, requests
 
-def Bemvindo(cookiebot, msg, chat_id, limbotimespan):
+def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     if limbotimespan > 0:
         try:
             cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
-            cookiebot.sendMessage(chat_id, "ATENÇÃO! Você está limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))))
+            Send(cookiebot, chat_id, "ATENÇÃO! Você está limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))), language=language)
         except Exception as e:
             print(e)
     if os.path.exists("Welcome/Welcome_" + str(chat_id)+".txt"):
@@ -19,43 +19,49 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan):
             file.close()
     else:
         try:
-            cookiebot.sendMessage(chat_id, "Olá! As boas-vindas ao grupo {}!".format(msg['chat']['title']))
+            Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo {}!".format(msg['chat']['title']), language=language)
         except:
-            cookiebot.sendMessage(chat_id, "Olá! As boas-vindas ao grupo!")
+            Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo!", language=language)
 
-def CheckCAS(cookiebot, msg, chat_id):
+def CheckCAS(cookiebot, msg, chat_id, language):
     r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
     in_banlist = json.loads(r.text)['ok']
     if in_banlist == True:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        cookiebot.sendMessage(chat_id, "Bani o usuário recém-chegado por ser flagrado pelo sistema anti-ban CAS https://cas.chat/")
+        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado pelo sistema anti-ban CAS https://cas.chat/", language=language)
         return True
     return False
 
 
-def CheckRaider(cookiebot, msg, chat_id):
+def CheckRaider(cookiebot, msg, chat_id, language):
     r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])}, timeout=10)
     is_raider = json.loads(r.text)['raider']
     if is_raider == True:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        cookiebot.sendMessage(chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.")
+        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.", language=language)
         return True
     return False
 
-def Captcha(cookiebot, msg, chat_id, captchatimespan):
+def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     caracters = ['0', '2', '3', '4', '5', '6', '8', '9']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
     captcha.write(password, 'CAPTCHA.png')
     photo = open('CAPTCHA.png', 'rb')
-    captchaspawnID = cookiebot.sendPhoto(chat_id, photo, caption="Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60))), reply_to_message_id=msg['message_id'], reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Aprovar",callback_data='CAPTCHA')]]))['message_id']
+    if language == "pt":
+        caption = "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60)))
+    elif language == "es":
+        caption = "Ingresa el código de arriba para demostrar que no eres un robot\nTienes {} minutos, si no lo resuelves en ese tiempo te eliminaré del chat\n(NOTA: Si no aparecen 4 dígitos, abrir la imagen completa)".format(str(round(captchatimespan/60)))
+    else:
+        caption = "Type the code above to prove you're not a robot\nYou have {} minutes, if you don't solve it in that time I'll remove you from the chat\n(NOTE: If 4 digits don't appear, open the full photo)".format(str(round(captchatimespan/60)))
+    captchaspawnID = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg['message_id'], reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Approve",callback_data='CAPTCHA')]]))['message_id']
     photo.close()
     wait_open("Captcha.txt")
     text = open("Captcha.txt", 'a+', encoding='utf-8')
     text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + " " + password + " " + str(captchaspawnID) + "\n")
     text.close()
 
-def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan):
+def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
     wait_open("Captcha.txt")
     text = open("Captcha.txt", 'r', encoding='utf-8')
     lines = text.readlines()
@@ -75,7 +81,7 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan):
             user = int(line.split()[1])
             if chat == chat_id and captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                 cookiebot.kickChatMember(chat, user)
-                cookiebot.sendMessage(chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user))
+                Send(cookiebot, chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user), language=language)
                 DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
             elif chat == chat_id and user == msg['from']['id']:
                 text.write(line)
@@ -86,7 +92,7 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan):
             pass
     text.close()
 
-def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0):
+def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'):
     wait_open("Captcha.txt")
     text = open("Captcha.txt", 'r', encoding='utf-8')
     lines = text.readlines()
@@ -97,16 +103,16 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0):
             if str(chat_id) == line.split()[0] and button == True:
                 cookiebot.sendChatAction(chat_id, 'typing')
                 DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
-                Bemvindo(cookiebot, msg, chat_id, limbotimespan)
+                Bemvindo(cookiebot, msg, chat_id, limbotimespan, language)
             elif str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
                 cookiebot.sendChatAction(chat_id, 'typing')
                 if "".join(msg['text'].upper().split()) == line.split()[4]:
                     DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
                     DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                    Bemvindo(cookiebot, msg, chat_id, limbotimespan)
+                    Bemvindo(cookiebot, msg, chat_id, limbotimespan, language)
                 else:
                     DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                    cookiebot.sendMessage(chat_id, "Senha incorreta, por favor tente novamente.")
+                    Send(cookiebot, chat_id, "Senha incorreta, por favor tente novamente.", language=language)
                     text.write(line)
             else:
                 text.write(line)

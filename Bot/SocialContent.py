@@ -1,14 +1,14 @@
+from langcodes import Language
 from universal_funcs import *
 import google_images_search, io, PIL
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
 import cv2
 import numpy as np
 
-def PromptQualquerCoisa(cookiebot, msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec\n(acentos, letras maiusculas e espaços não funcionam)", reply_to_message_id=msg['message_id'])
+def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
+    Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec\n(acentos, letras maiusculas e espaços não funcionam)", msg, language)
 
-def QualquerCoisa(cookiebot, msg, chat_id, sfw):
+def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     searchterm = msg['text'].split("@")[0].replace("/", '').replace("@CookieMWbot", '')
     if sfw == 0:
@@ -44,7 +44,7 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw):
                 return 1
             except Exception as e:
                 print(e)
-    cookiebot.sendMessage(chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", reply_to_message_id=msg['message_id'])
+    Send(cookiebot, chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", msg, language)
     try:
         my_bytes_io.close()
         temp_img.close()

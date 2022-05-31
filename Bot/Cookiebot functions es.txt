@@ -1,0 +1,79 @@
+¡Las funciones de Cookiebot!
+
+PASIVO:
+Copia de seguridad de miembros - en caso de que el grupo sea pirateado o eliminado por error, puedo ayudar a recuperar a sus participantes
+Chat AI - Responde a cualquier mensaje de texto
+Stickers - responde un sticker con otra sticker
+Captcha - evita que los bots envíen mensajes de texto y expúlsalos si no prueban que son humanos
+Restricción de medios - evita que los nuevos miembros envíen medios durante un intervalo específico
+Antispam de stickers: evita redadas o largas cadenas de stickers en secuencia
+Voz a texto - transcribir mensajes de voz
+Detector de música - diga el nombre de una canción que se reproduce en un mensaje de voz
+Bienvenido - Mensaje de bienvenida personalizado
+Administradores granulares - el bot se puede configurar para que solo unas pocas personas puedan manejarlo. Habla con Mekhy para implementar esto en tu chat.
+
+COMANDOS LIBRES:
+cualquiercosa - envía una foto de lo que quieres
+meme - Generar un meme
+aleatorio - Enviar un medio de algún grupo
+ideadibujo - no más bloques de arte
+hoy - ¿Qué está pasando hoy?
+everyone - los administradores pueden llamar a todos los miembros del grupo
+adm - Llamar a los administradores del chat
+dado - tira uno o más dados.
+edad - te dice cuantos años tienes
+genero - ¿Es niño o niña?
+shippar - Shippa una pareja con carácter
+spam - Spammar
+estavivo - Envía un ping de prueba con la fecha del servidor
+reglas - Muestra las reglas del grupo
+nuevasreglas - Actualiza las reglas del grupo
+nuevabienvenida - Actualiza el mensaje de bienvenida
+comandos - enumera los comandos del bot
+configurar - Configurar el bot
+contacto - Usa este comando Nunca te pedí nada
+
+COMANDOS CUSTOMIZADOS:
+allen - allen
+aly - aly
+arsen - arsen
+blackout - blackout
+bobfirrer - bobfirrer
+cloretodeodio - cloretodeodio
+deltasnep - deltasnep
+doctordirewolf - doctordirewolf
+dr4g40 - dr4g40
+fcking1212 - fcking1212
+gummypuh - gummypuh
+haura - haura
+juuj - juuj
+kuark - kuark
+kurokkuru - kurokkuru
+leeycarus - leeycarus
+loganartic - loganartic
+lukit - lukit
+matt - matt
+mekhy - mekhy
+mirai - mirai
+momo - momo
+mousse - mousse
+mrnatmax - mrnatmax
+naja - naja
+narvi - narvi
+nicolas - nicolas
+nina - nina
+nizmot - nizmot
+purplegalaxy - purplegalaxy
+ralph - ralph
+ratenhas - ratenhas
+ruby - ruby
+seive - seive
+shimano - shimano
+sopero - sopero
+tailslunar - tailslunar
+tomecow - tomecow
+tonnyrussel - tonnyrussel
+yoshiro - yoshiro
+
+
+¡Habla con Mekhy para agregar tu propio comando o enseñarle algo al bot!

@@ -1,63 +1,70 @@
 from universal_funcs import *
-import googletrans
-translator = googletrans.Translator()
 
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
 
-def TaVivo(cookiebot, msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "Estou vivo\n\nPing enviado em:\n" + str(datetime.datetime.now()))
+def TaVivo(cookiebot, msg, chat_id, language):
+    Send(cookiebot, chat_id, "Estou vivo\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
 
-def Comandos(cookiebot, msg, chat_id):
+def Comandos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Cookiebot functions.txt")
-    text_file = open("Cookiebot functions.txt", "r+", encoding='utf8')
+    wait_open("Cookiebot functions {}.txt".format(language))
+    text_file = open("Cookiebot functions {}.txt".format(language), "r+", encoding='utf8')
     lines = text_file.readlines()
+    text_file.close()
     string = ""
     for line in lines:
         if len(line.split()) != 3:
             string += str(line)
     cookiebot.sendMessage(chat_id, string, reply_to_message_id=msg['message_id'])
 
-def Hoje(cookiebot, msg, chat_id):
+def Hoje(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     today = datetime.date.today()
     yesterday = today - datetime.timedelta(days=1)
     category = random.choice(['entertainment', 'general', 'science', 'technology'])
-    lang = random.choice(['pt', 'en'])
+    if language == 'pt':
+        lang = random.choice(['pt', 'en'])
+    else:
+        lang = 'en'
     r = requests.get('https://newsapi.org/v2/top-headlines?language={}&from={}&to={}&category={}&apiKey={}'.format(lang, str(yesterday), str(today), category, newsAPIkey), timeout=10)
     dictionary = json.loads(r.text)
     article = dictionary['articles'][random.randint(0, len(dictionary['articles'])-1)]
     title = article['title'].split(' - ')[0]
     title = translator.translate(title, dest='pt').text
     source = article['url']
-    cookiebot.sendMessage(chat_id, "Hoje {}\nFonte: {}".format(decapitalize(title), source), reply_to_message_id=msg['message_id'])
+    cookiebot.sendMessage(chat_id, "{}\nSource: {}".format(decapitalize(title), source), reply_to_message_id=msg['message_id'])
 
-def Cheiro(cookiebot, msg, chat_id):
+def Cheiro(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     wait_open("Cheiro.txt")
     text_file = open("Cheiro.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
-    cookiebot.sendMessage(chat_id, "*sniff* *sniff*\nHmmmmmm\n\nVocê está com um cheirin de "+target, reply_to_message_id=msg['message_id'])
+    Send(cookiebot, chat_id, "*sniff* *sniff*\nHmmmmmm\n\nVocê está com um cheirin de "+target, msg, language)
     text_file.close()
 
-def QqEuFaço(cookiebot, msg, chat_id):
+def QqEuFaço(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     wait_open("QqEuFaço.txt")
     text_file = open("QqEuFaço.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
-    cookiebot.sendMessage(chat_id, "Vai "+target, reply_to_message_id=msg['message_id'])
+    Send(cookiebot, chat_id, "Vai "+target, msg, language)
     text_file.close()
 
-def IdeiaDesenho(cookiebot, msg, chat_id):
+def IdeiaDesenho(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     ideiasdesenho = os.listdir('IdeiaDesenho')
     ideiaID = random.randint(0, len(ideiasdesenho)-1)
     photo = open('IdeiaDesenho'+'/'+ideiasdesenho[ideiaID], 'rb')
-    cookiebot.sendPhoto(chat_id, photo, caption="Referência com ID {}\n\nNão trace sem dar créditos! (use a busca reversa do google images)".format(ideiaID), reply_to_message_id=msg['message_id'])
+    if language == 'pt':
+        caption = "Referência com ID {}\n\nNão trace sem dar créditos! (use a busca reversa do google images)".format(ideiaID)
+    elif language == 'es':
+        caption = "Referencia con ID {}\n\n¡No rastrear sin dar créditos! (utilice la búsqueda inversa de imágenes de Google)".format(ideiaID)
+    else:
+        caption = "Reference ID {}\n\nDo not trace without credits! (use the reverse google images search)".format(ideiaID)
+    cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg['message_id'])
     photo.close()
 
 def Contato(cookiebot, msg, chat_id):
@@ -72,9 +79,11 @@ def CustomCommand(cookiebot, msg, chat_id):
     cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
     photo.close()
 
-def Dado(cookiebot, msg, chat_id):
+def Dado(cookiebot, msg, chat_id, language):
     if msg['text'].startswith("/dado"):
         cookiebot.sendMessage(chat_id, "Rodo um dado de 1 até x, n vezes\nEXEMPLO: /d20 5\n(Roda um d20 5 vezes)")
+    elif msg['text'].startswith("/dice"):
+        cookiebot.sendMessage(chat_id, "Roll a dice from 1 to x, n times\nEXAMPLE: /d20 5\n(Rotate a d20 5 times)")
     else:
         if len(msg['text'].split()) == 1:
             vezes = 1
@@ -87,27 +96,29 @@ def Dado(cookiebot, msg, chat_id):
             resposta += "🎲 -> {}".format(random.randint(1, limite))
         else:
             for vez in range(vezes):
-                resposta += "\n{}º Lançamento: 🎲 -> {}".format(vez+1, random.randint(1, limite))
+                if language == 'pt':
+                    resposta += "\n{}º Lançamento: 🎲 -> {}".format(vez+1, random.randint(1, limite))
+                else:
+                    resposta += "\n{}th Roll: 🎲 -> {}".format(vez+1, random.randint(1, limite))
         cookiebot.sendMessage(chat_id, resposta, reply_to_message_id=msg['message_id'])
 
-def Idade(cookiebot, msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
+def Idade(cookiebot, msg, chat_id, language):
     if not " " in msg['text']:
-        cookiebot.sendMessage(chat_id, "Digite um nome, vou dizer a sua idade!\n\nEx: '/idade Mekhy'\n(obs: só o primeiro nome conta)", reply_to_message_id=msg['message_id'])
+        Send(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n\nEx: '/idade Mekhy'\n(obs: só o primeiro nome conta)", msg, language)
     else:
         Nome = msg['text'].replace("/idade ", '').split()[0]
         response = json.loads(requests.get("https://api.agify.io?name={}".format(Nome), timeout=10).text)
         Idade = response['age']
         Contagem = response['count']
         if Contagem == 0:
-            cookiebot.sendMessage(chat_id, "Não conheço esse nome!", reply_to_message_id=msg['message_id'])
+            Send(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
         else:
-            cookiebot.sendMessage(chat_id, "Sua idade é {} anos! 👴\nRegistrado {} vezes".format(Idade, Contagem), reply_to_message_id=msg['message_id'])
+            Send(cookiebot, chat_id, "Sua idade é {} anos! 👴\nRegistrado {} vezes".format(Idade, Contagem), msg, language)
 
-def Genero(cookiebot, msg, chat_id):
+def Genero(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     if not " " in msg['text']:
-        cookiebot.sendMessage(chat_id, "Digite um nome, vou dizer o seu gênero!\n\nEx: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)", reply_to_message_id=msg['message_id'])
+        Send(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n\nEx: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)", msg, language)
     else:
         Nome = msg['text'].replace("/genero ", '').split()[0]
         response = json.loads(requests.get("https://api.genderize.io?name={}".format(Nome), timeout=10).text)
@@ -115,16 +126,16 @@ def Genero(cookiebot, msg, chat_id):
         Probabilidade = response['probability']
         Contagem = response['count']
         if Contagem == 0:
-            cookiebot.sendMessage(chat_id, "Não conheço esse nome!", reply_to_message_id=msg['message_id'])
+            Send(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
         elif Genero == 'male':
-            cookiebot.sendMessage(chat_id, "É um menino! 👨\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), reply_to_message_id=msg['message_id'])
+            Send(cookiebot, chat_id, "É um menino! 👨\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), msg, language)
         elif Genero == 'female':
-            cookiebot.sendMessage(chat_id, "É uma menina! 👩\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), reply_to_message_id=msg['message_id'])
+            Send(cookiebot, chat_id, "É uma menina! 👩\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), msg, language)
 
-def Spam(cookiebot, msg, chat_id):
+def Spam(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     if len(msg['text'].split()) == 1:
-        cookiebot.sendMessage(chat_id, "Digite /spam (insira texto aqui), vou spammar esse texto várias vezes\n\nEx: '/spam @ArkTheBear cade as commissions?", reply_to_message_id=msg['message_id'])
+        Send(cookiebot, chat_id, "Digite /spam (insira texto aqui), vou spammar esse texto várias vezes\n\nEx: '/spam @ArkTheBear cade as commissions?", msg, language)
     else:
         for i in range(random.randint(5, 8)):
             if 'reply_to_message' in msg:

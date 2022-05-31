@@ -46,10 +46,10 @@ def CheckLastMessageDatetime(msg, chat_id):
     text_file.close()
     return lastmessagedate, lastmessagetime
 
-def Everyone(cookiebot, msg, chat_id, listaadmins):
+def Everyone(cookiebot, msg, chat_id, listaadmins, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     if str(msg['from']['username']) not in listaadmins:
-        cookiebot.sendMessage(chat_id, "Você não tem permissão para chamar todos os membros do grupo.", reply_to_message_id=msg['message_id'])
+        Send(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo!", msg, language)
     else:
         wait_open("Registers/"+str(chat_id)+".txt")
         text_file = open("Registers/"+str(chat_id)+".txt", "r+", encoding='utf8')
@@ -68,7 +68,7 @@ def Adm(cookiebot, msg, chat_id, listaadmins):
         response += ("@" + admin + " ")
     cookiebot.sendMessage(chat_id, response, reply_to_message_id=msg['message_id'])
 
-def Quem(cookiebot, msg, chat_id):
+def Quem(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     LocucaoAdverbial = random.choice(["Com certeza o(a) ", "Sem sombra de dúvidas o(a) ", "Suponho que o(a) ", "Aposto que o(a) ", "Talvez o(a) ", "Quem sabe o(a) ", "Aparentemente o(a) "])
     wait_open("Registers/"+str(chat_id)+".txt")
@@ -79,9 +79,9 @@ def Quem(cookiebot, msg, chat_id):
     while len(lines)>1 and target in (None, ''):
         target = lines[random.randint(0, len(lines)-1)].replace("\n", '')
         target = target.split()[0]
-    cookiebot.sendMessage(chat_id, LocucaoAdverbial+"@"+target, reply_to_message_id=msg['message_id'])
+    Send(cookiebot, chat_id, LocucaoAdverbial+"@"+target, msg, language)
 
-def Shippar(cookiebot, msg, chat_id):
+def Shippar(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     if len(msg['text'].split()) >= 3:
         targetA = msg['text'].split()[1]
@@ -103,4 +103,4 @@ def Shippar(cookiebot, msg, chat_id):
     'Vocês saem juntos por prazer e nunca por obrigação, já que compartilham dos mesmos gostos e preferências', 'Vocês conseguem se comunicar e se entender com simples trocas de olhares, sem precisar verbalizar o que sentem no momento', 'Mesmo quando tentam disfarçar, sempre sabem exatamente o que o outro está pensando', 'Uma tarde chuvosa em casa se transforma em um excelente programa a dois', 'O silêncio, quando surge entre vocês, nunca é incômodo ou desafiador', 'Vocês possuem um número infinito de piadas internas', 'Vocês não se sentem constrangidos ou intimidados em contar segredos ou mesmo chorar um na frente do outro', 'Quando um dos parceiros está triste, o outro sabe exatamente o que dizer e o que fazer para afastar o sentimento ruim',
     'O casal “olho por olho, dente por dente”', 'O casal que se recusa a falar sobre dinheiro'])
     children_quantity = random.choice(['Nenhum!', 'Um', 'Dois', 'Três'])
-    cookiebot.sendMessage(chat_id, "Detectei um Casal! @{} + @{} ❤️\nCaracterística: {} 😮\nQuantos filhos: {} 🧸\nChance de divórcio: {}% 📈".format(targetA, targetB, couple_characteristic, children_quantity, divorce_prob), reply_to_message_id=msg['message_id'])
+    Send(cookiebot, chat_id, "Detectei um Casal! @{} + @{} ❤️\nCaracterística: {} 😮\nQuantos filhos: {} 🧸\nChance de divórcio: {}% 📈".format(targetA, targetB, couple_characteristic, children_quantity, divorce_prob), msg, language)

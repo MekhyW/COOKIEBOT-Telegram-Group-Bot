@@ -39,21 +39,21 @@ def thread_function(msg):
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
-                publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = GetConfig(chat_id)
+                publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language = GetConfig(chat_id)
                 CheckNewName(msg, chat_id)
                 lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
                 PublisherController(msg, chat_id, publisher)
             if content_type == "new_chat_member":
-                if CheckCAS(cookiebot, msg, chat_id) == False and CheckRaider(cookiebot, msg, chat_id) == False:
+                if CheckCAS(cookiebot, msg, chat_id, language) == False and CheckRaider(cookiebot, msg, chat_id, language) == False:
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
-                        Captcha(cookiebot, msg, chat_id, captchatimespan)
+                        Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:
-                        Bemvindo(cookiebot, msg, chat_id, limbotimespan)
+                        Bemvindo(cookiebot, msg, chat_id, limbotimespan, language)
             elif content_type == "left_chat_member":
                 left_chat_member(msg, chat_id)
             elif content_type == "voice":
                 if utilityfunctions == True:
-                    Speech_to_text(cookiebot, msg, chat_id, sfw)
+                    Speech_to_text(cookiebot, msg, chat_id, sfw, language)
             elif content_type == "audio":
                 pass
             elif content_type == "photo":
@@ -69,95 +69,88 @@ def thread_function(msg):
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
                     ReplySticker(cookiebot, msg, chat_id)
             elif content_type == "sticker":
-                Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit)
+                Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language)
                 if sfw == 1:
                     AddtoStickerDatabase(msg, chat_id)
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
                     ReplySticker(cookiebot, msg, chat_id)
             elif 'text' in msg:
                 if cookiebot.getMe()['username'] == "MekhysBombot" and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                    CooldownAction(cookiebot, msg, chat_id)
-                elif (msg['text'].startswith("/aleatorio") or msg['text'].startswith("/aleatório")) and funfunctions == True:
+                    CooldownAction(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(tuple(["/aleatorio", "/aleatório", "/random"])) and funfunctions == True:
                     ReplyAleatorio(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/meme") and funfunctions == True:
                     Meme(cookiebot, msg, chat_id, sfw)
-                elif (msg['text'].startswith("/dado") or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
-                    Dado(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/idade") and funfunctions == True:
-                    Idade(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/genero") and funfunctions == True:
-                    Genero(cookiebot, msg, chat_id)
+                elif (msg['text'].startswith(tuple(["/dado", "/dice"])) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
+                    Dado(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(tuple(["/idade", "/age", "/edad"])) and funfunctions == True:
+                    Idade(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(tuple(["/genero", "/gender"])) and funfunctions == True:
+                    Genero(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith("/spam") and funfunctions == True:
-                    Spam(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/shippar") and funfunctions == True:
-                    Shippar(cookiebot, msg, chat_id)
-                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém entrar no grupo":
+                    Spam(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(tuple(["/shippar", "/ship"])) and funfunctions == True:
+                    Shippar(cookiebot, msg, chat_id, language)
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
                     if str(msg['from']['username']) in listaadmins:
                         AtualizaBemvindo(cookiebot, msg, chat_id)
                     else:
-                        cookiebot.sendMessage(chat_id, "Você não é um admin do grupo!", reply_to_message_id=msg['message_id'])
-                elif msg['text'].startswith("/novobemvindo"):
+                        cookiebot.sendMessage(chat_id, "You are not a group admin!", reply_to_message_id=msg['message_id'])
+                elif msg['text'].startswith(tuple(["/novobemvindo", "/newwelcome", "/nuevabienvenida"])):
                     NovoBemvindo(cookiebot, msg, chat_id)
-                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "Se vc é um admin, DÊ REPLY NESTA MENSAGEM com a mensagem que será exibida quando alguém pedir as regras":
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
                     if str(msg['from']['username']) in listaadmins:
                         AtualizaRegras(cookiebot, msg, chat_id)
                     else:
-                        cookiebot.sendMessage(chat_id, "Você não é um admin do grupo!", reply_to_message_id=msg['message_id'])
-                elif msg['text'].startswith("/novasregras"):
+                        cookiebot.sendMessage(chat_id, "You are not a group admin!", reply_to_message_id=msg['message_id'])
+                elif msg['text'].startswith(tuple(["/novasregras", "/newrules", "/nuevasreglas"])):
                     NovasRegras(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/regras"):
-                    Regras(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/tavivo"):
-                    TaVivo(cookiebot, msg, chat_id)
+                elif msg['text'].startswith(tuple(["/regras", "/rules", "/reglas"])):
+                    Regras(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(tuple(["/tavivo", "/isalive", "/estavivo"])):
+                    TaVivo(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith("/everyone"):
-                    Everyone(cookiebot, msg, chat_id, listaadmins)
+                    Everyone(cookiebot, msg, chat_id, listaadmins, language)
                 elif msg['text'].startswith("/adm"):
                     Adm(cookiebot, msg, chat_id, listaadmins)
-                elif msg['text'].startswith("/comandos"):
-                    Comandos(cookiebot, msg, chat_id)
-                elif (msg['text'].startswith("/hoje") or msg['text'].startswith("/today")) and funfunctions == True:
+                elif msg['text'].startswith(tuple(["/comandos", "/commands"])):
+                    Comandos(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(tuple(["/hoje", "/today", "/hoy"])) and funfunctions == True:
                     if FurBots == False:
-                        Hoje(cookiebot, msg, chat_id)
+                        Hoje(cookiebot, msg, chat_id, language)
                     else:
                         return
                 elif (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
                     if FurBots == False:
-                        Cheiro(cookiebot, msg, chat_id)
+                        Cheiro(cookiebot, msg, chat_id, language)
                     else:
                         return
-                elif ('eu faço' in msg['text'] or 'eu faco' in msg['text']) and '?' in msg['text'] and funfunctions == True:
-                    if FurBots == False:
-                        QqEuFaço(cookiebot, msg, chat_id)
-                    else:
-                        return
-                elif msg['text'].startswith("/ideiadesenho") and utilityfunctions == True:
-                    IdeiaDesenho(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/contato"):
+                elif any(x in msg['text'].lower() for x in ['eu faço', 'eu faco', 'i do', 'debo hacer']) and '?' in msg['text'] and funfunctions == True and FurBots == False:
+                    QqEuFaço(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(tuple(["/ideiadesenho", "/drawingidea", "/ideadibujo"])) and utilityfunctions == True:
+                    IdeiaDesenho(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(tuple(["/contato", "/contact", "/contacto"])):
                     Contato(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/qualquercoisa") and utilityfunctions == True:
-                    PromptQualquerCoisa(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/configurar"):
-                    Configurar(cookiebot, msg, chat_id, listaadmins)
-                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "DÊ REPLY NESTA MENSAGEM com o novo valor da variável" in msg['reply_to_message']['text']:
+                elif msg['text'].startswith(tuple(["/qualquercoisa", "/anything", "/cualquiercosa"])) and utilityfunctions == True:
+                    PromptQualquerCoisa(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(tuple(["/configurar", "/configure"])):
+                    Configurar(cookiebot, msg, chat_id, listaadmins, language)
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                     ConfigurarSettar(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
                     CustomCommand(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/") and "//" not in msg['text'] and " " not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:
-                    QualquerCoisa(cookiebot, msg, chat_id, sfw)
-                elif (msg['text'].startswith("Cookiebot") or msg['text'].startswith("cookiebot") or 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') and ("quem" in msg['text'] or "Quem" in msg['text']) and ("?" in msg['text']):
-                    Quem(cookiebot, msg, chat_id)
-                elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and msg['reply_to_message']['caption'] == "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60))):
-                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan)
-                elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']) and funfunctions == True:
+                elif msg['text'].startswith("/") and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:
+                    QualquerCoisa(cookiebot, msg, chat_id, sfw, language)
+                elif (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot')) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and funfunctions == True:
+                    Quem(cookiebot, msg, chat_id, language)
+                elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and str(round(captchatimespan/60)) in msg['reply_to_message']['caption']:
+                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
+                elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions == True:
                     if not OnSay(cookiebot, msg, chat_id):
-                        InteligenciaArtificial(cookiebot, msg, chat_id)
-                        if 'reply_to_message' in msg and 'text' in msg['reply_to_message']:
-                            ChatterbotAbsorb(msg)
+                        InteligenciaArtificial(cookiebot, msg, chat_id, language)
                 else:
-                    if 'reply_to_message' in msg and 'text' in msg['reply_to_message']:
-                        ChatterbotAbsorb(msg)
-                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan)
-                    CheckCaptcha(cookiebot, msg, chat_id, captchatimespan)
+                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
+                    CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
                     OnSay(cookiebot, msg, chat_id)
             if chat_type != 'private':
                 CooldownUpdates(msg, chat_id, lastmessagetime)

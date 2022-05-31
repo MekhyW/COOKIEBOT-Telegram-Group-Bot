@@ -7,3 +7,4 @@ Low_resolution_area: 10000
 Funções_Diversão: 1
 Funções_Utilidade: 1
 SFW: 0
+Language: pt
