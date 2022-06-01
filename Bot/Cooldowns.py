@@ -24,7 +24,7 @@ def Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language):
             text_file.write(line)
     text_file.close()
     if counter_new == stickerspamlimit:
-        Send(cookiebot, chat_id, "Cuidado com o flood de stickers.\nMantenham o chat com textos!", language)
+        Send(cookiebot, chat_id, "Cuidado com o flood de stickers.\nMantenham o chat com textos!", msg, language)
     if counter_new > stickerspamlimit:
         DeleteMessage(cookiebot, telepot.message_identifier(msg))
 
