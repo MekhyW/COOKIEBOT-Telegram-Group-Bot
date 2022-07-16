@@ -7,6 +7,7 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     if limbotimespan > 0:
         try:
+            cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': True, 'can_send_other_messages': True, 'can_add_web_page_previews': True})
             cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
             Send(cookiebot, chat_id, "ATENÇÃO! Você está limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))), language=language)
         except Exception as e:
@@ -43,6 +44,10 @@ def CheckRaider(cookiebot, msg, chat_id, language):
     return False
 
 def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
+    try:
+        cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False})
+    except Exception as e:
+        print(e)
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     caracters = ['0', '2', '3', '4', '5', '6', '8', '9']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
