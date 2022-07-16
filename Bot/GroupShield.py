@@ -45,7 +45,7 @@ def CheckRaider(cookiebot, msg, chat_id, language):
 
 def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     try:
-        cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False})
+        cookiebot.restrictChatMember(chat_id, msg['new_chat_participant']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False})
     except Exception as e:
         print(e)
     cookiebot.sendChatAction(chat_id, 'upload_photo')
