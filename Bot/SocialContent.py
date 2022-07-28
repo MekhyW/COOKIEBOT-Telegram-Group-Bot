@@ -119,6 +119,10 @@ def Meme(cookiebot, msg, chat_id, sfw):
     wait_open("Registers/"+str(chat_id)+".txt")
     text_file = open("Registers/"+str(chat_id)+".txt", "r+", encoding='utf8')
     members = text_file.readlines()
+    members_tagged = []
+    if ('@' in msg['text']):
+        for target in msg['text'].split("@")[1:]:
+            members_tagged.append(target)
     text_file.close()
     wait_open("Random_Database.txt")
     text_file = open("Random_Database.txt", 'r+', encoding='utf-8')
@@ -147,8 +151,12 @@ def Meme(cookiebot, msg, chat_id, sfw):
     for green in contours_green:
         x, y, w, h = cv2.boundingRect(green)
         for attempt in range(10):
-            chosen_member = random.choice(members)
-            members.remove(chosen_member)
+            if not members_tagged.isempty():
+                chosen_member = random.choice(members_tagged)
+                members_tagged.remove(chosen_member)
+            else:
+                chosen_member = random.choice(members)
+                members.remove(chosen_member)
             url = "https://telegram.me/{}".format(chosen_member.split()[0])
             req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"}) 
             html = urllib.request.urlopen(req)
