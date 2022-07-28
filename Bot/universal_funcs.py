@@ -1,6 +1,7 @@
 googleAPIkey = ''
 newsAPIkey = ''
 searchEngineCX = ''
+smalltalkKey = ''
 cookiebotTOKEN = ''
 bombotTOKEN = ''
 mekhyID = 780875868

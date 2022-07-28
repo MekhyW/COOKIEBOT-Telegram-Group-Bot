@@ -1,7 +1,5 @@
 from universal_funcs import *
 import unidecode
-import cloudscraper
-scraper = cloudscraper.create_scraper(browser={'browser': 'chrome','platform': 'android','desktop': False})
 
 def OnSay(cookiebot, msg, chat_id):
     if len(msg['text'].split()) > 3:
@@ -37,18 +35,12 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language):
     else:
         Answer1 = ''
         if language == "pt":
-            r = scraper.get('https://api-sv2.simsimi.net/v2/?text={}&lc=pt&cf=true'.format(message), timeout=10)
+            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'pt'})
         elif language == "es":
-            r = scraper.get('https://api-sv2.simsimi.net/v2/?text={}&lc=es&cf=true'.format(message), timeout=10)
+            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'es'})
         else:
-            r = scraper.get('https://api-sv2.simsimi.net/v2/?text={}&lc=en&cf=true'.format(message), timeout=10)
-        try:
-            Answer1 = json.loads(r.text)['messages'][0]['response'].capitalize()
-        except:
-            if len(str(r.text).split("{")) > 1:
-                Answer1 = str(r.text).split("{")[1]
-                Answer1 = "{" + Answer1
-                Answer1 = json.loads(Answer1)['messages'][0]['response'].capitalize()
+            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'en'})
+        Answer1 = json.loads(r.text)['atext'].capitalize()
         if Answer1 and "Eu não resposta." not in Answer1 and "I don't know what you're saying." not in Answer1:
             AnswerFinal = Answer1
         else:
