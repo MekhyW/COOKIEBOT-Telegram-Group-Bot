@@ -3,7 +3,6 @@ from universal_funcs import *
 cookiebot = telepot.Bot(bombotTOKEN)
 from Configurations import *
 from GroupShield import *
-from Publisher import *
 from UserRegisters import *
 from Cooldowns import *
 from NaturalLanguage import *
@@ -26,23 +25,20 @@ def thread_function(msg):
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
-        publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = 1, 0, 1, 5, 600, 300, 1, 1
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = 0, 1, 5, 600, 300, 1, 1
         if chat_type == 'private' and 'reply_to_message' not in msg:
             if 'text' in msg and msg['text'] == "/stop" and msg['from']['id'] == mekhyID:
                 os._exit(0)
             elif 'text' in msg and msg['text'] == "/restart" and msg['from']['id'] == mekhyID:
                 os.execl(sys.executable, sys.executable, *sys.argv)
-            elif content_type in ['photo', 'video', 'document']:
-                ReceivePublisher(cookiebot, msg, chat_id)
             else:
-                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\n**Para agendar uma postagem, envie a sua mensagem por aqui (lembrando que deve conter uma foto, vídeo, gif ou documento)**\n\nSou um bot com IA de conversa, conteúdo infinito, conteúdo customizado e speech-to-text.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW")
+                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com IA de conversa, conteúdo infinito, conteúdo customizado e speech-to-text.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW")
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
-                publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language = GetConfig(chat_id)
+                FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language = GetConfig(chat_id)
                 CheckNewName(msg, chat_id)
                 lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
-                PublisherController(msg, chat_id, publisher)
             if content_type == "new_chat_member":
                 if CheckCAS(cookiebot, msg, chat_id, language) == False and CheckRaider(cookiebot, msg, chat_id, language) == False:
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
@@ -205,10 +201,6 @@ def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     if 'CONFIG' in query_data:
         ConfigVariableButton(cookiebot, msg, query_data)
-    elif 'PUBLISHER' in query_data:
-        PublisherQuery(cookiebot, msg, query_data, mekhyID)
-    elif 'PUBLISH' in query_data:
-        PublishQuery(cookiebot, msg, query_data, mekhyID)
     else:
         listaadmins_id = []
         for admin in cookiebot.getChatAdministrators(msg['message']['reply_to_message']['chat']['id']):

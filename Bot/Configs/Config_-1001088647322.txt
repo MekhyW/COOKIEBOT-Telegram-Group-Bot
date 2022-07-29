@@ -1,4 +1,3 @@
-Publicador: 1
 FurBots: 1
 Sticker_Spam_Limit: 5
 Tempo_sem_poder_mandar_imagem: 600

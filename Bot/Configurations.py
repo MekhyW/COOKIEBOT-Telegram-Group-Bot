@@ -36,20 +36,18 @@ def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language):
 
 
 def GetConfig(chat_id):
-    publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language = 1, 0, 1, 5, 600, 300, 1, 1, "pt"
+    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language = 0, 1, 5, 600, 300, 1, 1, "pt"
     if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
         open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
         text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-        text_file.write("Publicador: 1\nFurBots: 0\nSticker_Spam_Limit: 15\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1\nLanguage: pt")
+        text_file.write("FurBots: 0\nSticker_Spam_Limit: 15\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1\nLanguage: pt")
         text_file.close()
     wait_open("Configs/Config_"+str(chat_id)+".txt")
     text_file = open("Configs/Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
     lines = text_file.readlines()
     text_file.close()
     for line in lines:
-        if line.split()[0] == "Publicador:":
-            publisher = int(line.split()[1])
-        elif line.split()[0] == "FurBots:":
+        if line.split()[0] == "FurBots:":
             FurBots = int(line.split()[1])
         elif line.split()[0] == "Sticker_Spam_Limit:":
             stickerspamlimit = int(line.split()[1])
@@ -65,7 +63,7 @@ def GetConfig(chat_id):
             sfw = int(line.split()[1])
         elif line.split()[0] == "Language:":
             language = line.split()[1]
-    return publisher, FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language
+    return FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language
 
 
 def Configurar(cookiebot, msg, chat_id, listaadmins, language):
