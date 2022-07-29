@@ -46,6 +46,6 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language):
         else:
             AnswerFinal = None
     if AnswerFinal:
-        cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
+        return AnswerFinal
     else:
         print("NO AI ANSWER")

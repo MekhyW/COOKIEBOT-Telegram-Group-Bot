@@ -153,7 +153,11 @@ def thread_function(msg):
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions == True:
                     if not OnSay(cookiebot, msg, chat_id):
-                        InteligenciaArtificial(cookiebot, msg, chat_id, language)
+                        AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language)
+                        if random.randint(0, 100) >= 80:
+                            Text_to_speech(cookiebot, msg, chat_id, language, AnswerFinal)
+                        else:
+                            cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
                 else:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
