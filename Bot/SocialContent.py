@@ -198,8 +198,11 @@ def Meme(cookiebot, msg, chat_id, sfw):
                 if mask_red_copy[i-y, j-x] == 255:
                     template_img[i, j] = image[i-y, j-x]
         #template_img[y:y+h, x:x+w] = cv2.bitwise_and(image, image, mask=mask_red_copy)
-    cv2.imwrite("meme.png", template_img)
-    final_img = open("meme.png", 'rb')
-    cookiebot.sendPhoto(chat_id, photo=final_img, caption=caption, reply_to_message_id=msg['message_id'])
-    final_img.close()
-    os.remove("meme.png")
+    if len(members_tagged) > 0:
+        Meme(cookiebot, msg, chat_id, sfw)
+    else:
+        cv2.imwrite("meme.png", template_img)
+        final_img = open("meme.png", 'rb')
+        cookiebot.sendPhoto(chat_id, photo=final_img, caption=caption, reply_to_message_id=msg['message_id'])
+        final_img.close()
+        os.remove("meme.png")
