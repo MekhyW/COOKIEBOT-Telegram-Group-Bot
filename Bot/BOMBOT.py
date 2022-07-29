@@ -154,7 +154,7 @@ def thread_function(msg):
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot') or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions == True:
                     if not OnSay(cookiebot, msg, chat_id):
                         AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language)
-                        if random.randint(0, 100) >= 80:
+                        if random.randint(0, 100) >= 80 and len(AnswerFinal.split()) > minimum_words_STT:
                             Text_to_speech(cookiebot, msg, chat_id, language, AnswerFinal)
                         else:
                             cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
