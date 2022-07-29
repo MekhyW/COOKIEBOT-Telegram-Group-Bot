@@ -23,10 +23,9 @@ def Identify_music(cookiebot, msg, chat_id, content, language):
         else:
             cookiebot.sendMessage(chat_id, "SONG: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
 
-def Speech_to_text(cookiebot, msg, chat_id, sfw, language):
+def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
     global minimum_words_STT
     global confidence_threshold
-    r = requests.get("https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, cookiebot.getFile(msg['voice']['file_id'])['file_path']), allow_redirects=True, timeout=10)
     try:
         cookiebot.sendChatAction(chat_id, 'typing')
         if sfw == 1:
@@ -40,7 +39,7 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw, language):
         else:
             language_code = 'en-US'
         speechContexts = speech.SpeechContext(phrases=fandom_related_words, boost=fandom_related_words_boost)
-        audio = speech.RecognitionAudio(content=r.content)
+        audio = speech.RecognitionAudio(content=content)
         config = speech.RecognitionConfig(encoding='OGG_OPUS', sample_rate_hertz=16000, language_code=language_code, alternative_language_codes=["en-US"], speech_contexts=[speechContexts], enable_word_confidence=True, enable_automatic_punctuation=True, profanity_filter=profanityFilter, enable_spoken_emojis=True, use_enhanced=True,)
         response = client.recognize(config=config, audio=audio)
         Text = ''
@@ -58,4 +57,3 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw, language):
             cookiebot.sendMessage(chat_id, '(2.2) Text:\n"{}"'.format(Text), reply_to_message_id=msg['message_id'])
     except Exception as e:
         print(e)
-    Identify_music(cookiebot, msg, chat_id, r.content, language)
