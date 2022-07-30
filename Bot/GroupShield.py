@@ -53,7 +53,7 @@ def CheckCharacters(cookiebot, msg, chat_id, language):
         name += msg['new_chat_participant']['last_name']
     score = 0
     for caractere in name:
-        if caractere in Alphabet['Latin']:
+        if caractere in Alphabet['Latino']:
             score += 1
         else:
             for label in Alphabet:
