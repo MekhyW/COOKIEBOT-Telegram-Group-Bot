@@ -32,7 +32,7 @@ def thread_function(msg):
             elif 'text' in msg and msg['text'] == "/restart" and msg['from']['id'] == mekhyID:
                 os.execl(sys.executable, sys.executable, *sys.argv)
             else:
-                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com IA de conversa, conteúdo infinito, conteúdo customizado e speech-to-text.\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW")
+                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\n\nAtualmente estou presente em 56 Chats de Grupo!\n\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW")
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
@@ -40,7 +40,7 @@ def thread_function(msg):
                 CheckNewName(msg, chat_id)
                 lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
             if content_type == "new_chat_member":
-                if not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckCharacters(cookiebot, msg, chat_id, language):
+                if not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckCharacters(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:

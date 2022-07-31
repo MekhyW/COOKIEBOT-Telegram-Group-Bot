@@ -47,6 +47,15 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
         except:
             Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo!", language=language)
 
+def CheckHumanFactor(cookiebot, msg, chat_id, language):
+    if 'username' not in msg['new_chat_participant']:
+        userphotos = cookiebot.getUserProfilePhotos(msg['new_chat_participant']['id'])
+        if userphotos['total_count'] < 2:
+            cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+            Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser um usuário-robô", language=language)
+            return True
+    return False
+
 def CheckCharacters(cookiebot, msg, chat_id, language):
     name = msg['new_chat_participant']['first_name']
     if 'last_name' in msg['new_chat_participant']:
