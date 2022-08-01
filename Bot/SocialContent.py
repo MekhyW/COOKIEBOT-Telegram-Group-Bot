@@ -122,6 +122,8 @@ def Meme(cookiebot, msg, chat_id, sfw):
     members_tagged = []
     if ('@' in msg['text']):
         for target in msg['text'].split("@")[1:]:
+            if 'CookieMWbot' in target:
+                continue
             members_tagged.append(target)
     text_file.close()
     wait_open("Random_Database.txt")
