@@ -89,8 +89,6 @@ def thread_function(msg):
                     Idade(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/genero", "/gender"])) and funfunctions == True:
                     Genero(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith("/spam") and funfunctions == True:
-                    Spam(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/shippar", "/ship"])) and funfunctions == True:
                     Shippar(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":

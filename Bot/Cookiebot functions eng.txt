@@ -24,7 +24,6 @@ dice - Rolls one or more dice
 age - tell you how old you are
 gender - Is it a boy or a girl
 ship - Shippa a couple with character
-spam - Spam
 isalive - Send a test ping with server date
 rules - Shows the group's rules
 newrules - Updates group rules
