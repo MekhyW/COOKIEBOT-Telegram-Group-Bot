@@ -1,6 +1,5 @@
 commands - Lists bot commands
 groups - Show all groups I am present in
-isalive - Send a test ping with server date
 restart - Only my creator can use this!
 stop - Only my creator can use this!
 leave - Only my creator can use this!
