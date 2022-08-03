@@ -39,11 +39,10 @@ def thread_function(msg):
                     os.execl(sys.executable, sys.executable, *sys.argv)
                 elif msg['text'].startswith("/leave") and msg['from']['id'] == mekhyID:
                     cookiebot.leaveChat(msg['text'].split()[1])
+            if cookiebot.getMe()['username'] == "MekhysBombot":
+                cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
-                if cookiebot.getMe()['username'] == "MekhysBombot":
-                    cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
-                else:
-                    cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\nSinta-se à vontade para me adicionar no seu chat!\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\n\nUse /grupos para ver todos os chats em que estou presente\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
+                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\nSinta-se à vontade para me adicionar no seu chat!\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\n\nUse /grupos para ver todos os chats em que estou presente\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
