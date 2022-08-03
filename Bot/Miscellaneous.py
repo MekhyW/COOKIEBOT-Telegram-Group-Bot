@@ -22,7 +22,7 @@ def Grupos(cookiebot, msg, chat_id, language):
         except:
             print("Group not found: " + id)
     answer += "\n\nTotal groups found: " + str(num)
-    Send(cookiebot, chat_id, answer, language)
+    cookiebot.sendMessage(chat_id, answer)
 
 def Comandos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
