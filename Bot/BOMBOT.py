@@ -27,12 +27,23 @@ def thread_function(msg):
         print(content_type, chat_type, chat_id, msg['message_id'])
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = 0, 1, 5, 600, 300, 1, 1
         if chat_type == 'private' and 'reply_to_message' not in msg:
-            if 'text' in msg and msg['text'] == "/stop" and msg['from']['id'] == mekhyID:
-                os._exit(0)
-            elif 'text' in msg and msg['text'] == "/restart" and msg['from']['id'] == mekhyID:
-                os.execl(sys.executable, sys.executable, *sys.argv)
+            SetComandosPrivate(cookiebot, chat_id)
+            if 'text' in msg:
+                if msg['text'].startswith(tuple(["/grupos", "/groups"])):
+                    Grupos(cookiebot, msg, chat_id, 'eng')
+                elif msg['text'].startswith(tuple(["/comandos", "/commands"])):
+                    Comandos(cookiebot, msg, chat_id, 'eng')
+                elif msg['text'] == "/stop" and msg['from']['id'] == mekhyID:
+                    os._exit(0)
+                elif msg['text'] == "/restart" and msg['from']['id'] == mekhyID:
+                    os.execl(sys.executable, sys.executable, *sys.argv)
+                elif msg['text'].startswith("/leave") and msg['from']['id'] == mekhyID:
+                    cookiebot.leaveChat(msg['text'].split()[1])
             else:
-                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\n\nAtualmente estou presente em 56 Chats de Grupo!\n\nSe quiser me adicionar no seu chat ou obter a lista de comandos comentada, mande uma mensagem para o @MekhyW")
+                if cookiebot.getMe()['username'] == "MekhysBombot":
+                    cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
+                else:
+                    cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\nSinta-se à vontade para me adicionar no seu chat!\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\n\nUse /grupos para ver todos os chats em que estou presente\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
@@ -40,6 +51,8 @@ def thread_function(msg):
                 CheckNewName(msg, chat_id)
                 lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
             if content_type == "new_chat_member":
+                if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
+                    cookiebot.sendMessage(mekhyID, "Added:\n{}".format(cookiebot.getChat(chat_id)))
                 if not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckCharacters(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)

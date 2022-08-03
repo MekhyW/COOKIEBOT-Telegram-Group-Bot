@@ -6,6 +6,24 @@ def decapitalize(s, upper_rest = False):
 def TaVivo(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Estou vivo\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
 
+def Grupos(cookiebot, msg, chat_id, language):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    num = 0
+    answer = ''
+    for group in os.listdir("Registers"):
+        try:
+            id = group.replace(".txt", "")
+            chat = cookiebot.GetChat(id)
+            if 'title' in chat:
+                answer += id + " - " + chat['title'] + "\n"
+            else:
+                answer += id + " - [NO TITLE]\n"
+            num += 1
+        except:
+            print("Group not found: " + id)
+    answer += "\n\nTotal groups found: " + str(num)
+    Send(cookiebot, chat_id, answer, language)
+
 def Comandos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     wait_open("Cookiebot functions {}.txt".format(language))
