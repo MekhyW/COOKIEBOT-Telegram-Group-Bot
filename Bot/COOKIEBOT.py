@@ -52,7 +52,7 @@ def thread_function(msg):
             if content_type == "new_chat_member":
                 if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
                     cookiebot.sendMessage(mekhyID, "Added:\n{}".format(cookiebot.getChat(chat_id)))
-                if not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckCharacters(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language):
+                if not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:
