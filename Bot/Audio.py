@@ -6,7 +6,7 @@ credentials = service_account.Credentials.from_service_account_file('cookiebot_c
 client_stt = speech.SpeechClient(credentials=credentials)
 client_tts = texttospeech.TextToSpeechClient(credentials=credentials)
 minimum_words_STT = 3
-confidence_threshold = 0.5
+confidence_threshold = 0.25
 fandom_related_words = ['furry', 'furries', 'fursuiter', 'fandom', 'fursona', 'commission', 'yiff', 'collab', 'trade', 'exposed']
 fandom_related_words_boost = 50
 
