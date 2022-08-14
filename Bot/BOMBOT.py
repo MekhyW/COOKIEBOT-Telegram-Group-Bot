@@ -38,6 +38,7 @@ def thread_function(msg):
                 elif msg['text'] == "/restart" and msg['from']['id'] == mekhyID:
                     os.execl(sys.executable, sys.executable, *sys.argv)
                 elif msg['text'].startswith("/leave") and msg['from']['id'] == mekhyID:
+                    os.remove('Registers/{}.txt'.format(msg['text'].split()[1]))
                     cookiebot.leaveChat(msg['text'].split()[1])
             if cookiebot.getMe()['username'] == "MekhysBombot":
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
