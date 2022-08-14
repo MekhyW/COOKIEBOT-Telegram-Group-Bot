@@ -13,7 +13,7 @@ def Grupos(cookiebot, msg, chat_id, language):
     for group in os.listdir("Registers"):
         try:
             id = group.replace(".txt", "")
-            chat = cookiebot.GetChat(int(id))
+            chat = cookiebot.getChat(int(id))
             if 'title' in chat:
                 answer += id + " - " + chat['title'] + "\n"
             else:
