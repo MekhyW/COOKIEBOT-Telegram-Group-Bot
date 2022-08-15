@@ -23,7 +23,7 @@ cookiebot.sendMessage(mekhyID, 'I am online')
 def thread_function(msg):
     try:
         CheckPublisherQueue(cookiebot)
-        if any(key in msg for key in ['dice', 'poll', 'voice_chat_started', 'voice_chat_ended']) or 'from' not in msg:
+        if any(key in msg for key in ['dice', 'poll', 'voice_chat_started', 'voice_chat_ended']):
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
