@@ -52,7 +52,7 @@ def thread_function(msg):
                 for admin in cookiebot.getChatAdministrators(chat_id):
                     if admin['status'] == 'creator':
                         cookiebot.forwardMessage(admin['user']['id'], chat_id, msg['message_id'])
-                        cookiebot.sendMessage(admin['user']['id'], "Adicionar à fila de publicação?\n(Apenas aprove se for SFW)", reply_markup=InlineKeyboardMarkup(inline_keyboard=InlineKeyboardButton(text="Yes ✔️", callback_data='add_to_queue {}'.format(msg['message_id'])), inline_keyboard=InlineKeyboardButton(text="No ❌", callback_data='ignore_queue')))
+                        cookiebot.sendMessage(admin['user']['id'], "Adicionar à fila de publicação?\n(Apenas aprove se for SFW)", reply_markup=InlineKeyboardMarkup(inline_keyboard=[InlineKeyboardButton(text="Yes ✔️", callback_data='add_to_queue {}'.format(msg['message_id'])), InlineKeyboardButton(text="No ❌", callback_data='ignore_queue')]))
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
