@@ -9,6 +9,11 @@ def CheckNewName(msg, chat_id):
         text_file.write("\n"+msg['from']['username'])
     text_file.close()
 
+def CheckNewChannel(cookiebot, msg, chat_id):
+    if not os.path.isfile("Registers/"+str(chat_id)+".txt"):
+        open("Registers/"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
+        cookiebot.sendMessage(mekhyID, "Added:\n{}".format(cookiebot.getChat(chat_id)))
+
 def CheckLastMessageDatetime(msg, chat_id):
     lastmessagedate, lastmessagetime = "1-1-1", "0"
     wait_open("Registers/"+str(chat_id)+".txt")

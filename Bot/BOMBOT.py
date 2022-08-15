@@ -9,6 +9,7 @@ from NaturalLanguage import *
 from SocialContent import *
 from Audio import *
 from Miscellaneous import *
+from Publisher import *
 import threading, gc
 unnatended_threads = list()
 
@@ -21,6 +22,7 @@ cookiebot.sendMessage(mekhyID, 'I am online')
 
 def thread_function(msg):
     try:
+        CheckPublisherQueue(cookiebot)
         if any(key in msg for key in ['dice', 'poll', 'voice_chat_started', 'voice_chat_ended']) or 'from' not in msg:
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
@@ -44,6 +46,13 @@ def thread_function(msg):
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
                 cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\nSinta-se à vontade para me adicionar no seu chat!\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\n\nUse /grupos para ver todos os chats em que estou presente\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
+        elif chat_type == 'channel':
+            CheckNewChannel(cookiebot, msg, chat_id)
+            if 'photo' in msg or 'video' in msg:
+                for admin in cookiebot.getChatAdministrators(chat_id):
+                    if admin['status'] == 'creator':
+                        cookiebot.forwardMessage(admin['user']['id'], chat_id, msg['message_id'])
+                        cookiebot.sendMessage(admin['user']['id'], "Adicionar à fila de publicação?\n(Apenas aprove se for SFW)", reply_markup=InlineKeyboardMarkup(inline_keyboard=InlineKeyboardButton(text="Yes ✔️", callback_data='add_to_queue {}'.format(msg['message_id'])), inline_keyboard=InlineKeyboardButton(text="No ❌", callback_data='ignore_queue')))
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
@@ -219,6 +228,10 @@ def handle_query(msg):
         if query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
             SolveCaptcha(cookiebot, msg, msg['message']['reply_to_message']['chat']['id'], True)
             DeleteMessage(telepot.message_identifier(msg['message']))
+        elif 'add_to_queue' in query_data:
+            AddToPublisherQueue(query_data.split()[1])
+        elif 'ignore_queue' in query_data:
+            cookiebot.deleteMessage(msg['message']['chat']['id'], msg['message']['message_id'])
     run_unnatendedthreads()
         
 
