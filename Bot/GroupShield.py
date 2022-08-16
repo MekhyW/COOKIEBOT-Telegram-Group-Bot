@@ -105,7 +105,7 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
             chat = int(line.split()[0])
             user = int(line.split()[1])
             if chat == chat_id and captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                BanAndBlacklist(cookiebot, chat, user)
+                cookiebot.kickChatMember(chat_id, user)
                 Send(cookiebot, chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user), language=language)
                 DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
             elif chat == chat_id and user == msg['from']['id']:
