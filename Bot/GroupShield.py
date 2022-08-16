@@ -29,7 +29,7 @@ def CheckHumanFactor(cookiebot, msg, chat_id, language):
     if 'username' not in msg['new_chat_participant']:
         userphotos = cookiebot.getUserProfilePhotos(msg['new_chat_participant']['id'])
         if userphotos['total_count'] < 2:
-            cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+            BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
             Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser um usuário-robô", language=language)
             return True
     return False
@@ -38,17 +38,27 @@ def CheckCAS(cookiebot, msg, chat_id, language):
     r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
     in_banlist = json.loads(r.text)['ok']
     if in_banlist == True:
-        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+        BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
         Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado pelo sistema anti-ban CAS https://cas.chat/", language=language)
         return True
     return False
-
 
 def CheckRaider(cookiebot, msg, chat_id, language):
     r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])}, timeout=10)
     is_raider = json.loads(r.text)['raider']
     if is_raider == True:
-        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+        BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
+        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.", language=language)
+        return True
+    return False
+
+def CheckBlacklist(cookiebot, msg, chat_id, language):
+    wait_open("Blacklist.txt")
+    text = open("Blacklist.txt", 'r', encoding='utf-8')
+    lines = text.readlines()
+    text.close()
+    if str(msg['new_chat_participant']['id']) in lines:
+        BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
         Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.", language=language)
         return True
     return False
@@ -95,7 +105,7 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
             chat = int(line.split()[0])
             user = int(line.split()[1])
             if chat == chat_id and captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                cookiebot.kickChatMember(chat, user)
+                BanAndBlacklist(cookiebot, chat, user)
                 Send(cookiebot, chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user), language=language)
                 DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
             elif chat == chat_id and user == msg['from']['id']:

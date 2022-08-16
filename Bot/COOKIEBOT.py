@@ -22,7 +22,6 @@ cookiebot.sendMessage(mekhyID, 'I am online')
 
 def thread_function(msg):
     try:
-        CheckPublisherQueue(cookiebot)
         if any(key in msg for key in ['dice', 'poll', 'voice_chat_started', 'voice_chat_ended']):
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
@@ -41,7 +40,7 @@ def thread_function(msg):
                     os.execl(sys.executable, sys.executable, *sys.argv)
                 elif msg['text'].startswith("/leave") and msg['from']['id'] == mekhyID:
                     os.remove('Registers/{}.txt'.format(msg['text'].split()[1]))
-                    cookiebot.leaveChat(msg['text'].split()[1])
+                    LeaveAndBlacklist(cookiebot, msg['text'].split()[1])
             if cookiebot.getMe()['username'] == "MekhysBombot":
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
@@ -54,8 +53,16 @@ def thread_function(msg):
                 lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
             if content_type == "new_chat_member":
                 if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
-                    cookiebot.sendMessage(mekhyID, "Added:\n{}".format(cookiebot.getChat(chat_id)))
-                if not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language):
+                    wait_open("Blacklist.txt")
+                    text = open("Blacklist.txt", 'r', encoding='utf-8')
+                    lines = text.readlines()
+                    text.close()
+                    if chat_id in lines:
+                        LeaveAndBlacklist(cookiebot, chat_id)
+                        cookiebot.sendMessage(mekhyID, "Auto-left:\n{}".format(chat_id))
+                    else:
+                        cookiebot.sendMessage(mekhyID, "Added:\n{}".format(cookiebot.getChat(chat_id)))
+                if not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:
@@ -91,7 +98,7 @@ def thread_function(msg):
                     ReplySticker(cookiebot, msg, chat_id)
             elif 'text' in msg:
                 if msg['text'].startswith("/leave") and msg['from']['id'] == mekhyID:
-                    cookiebot.leaveChat(chat_id)
+                    LeaveAndBlacklist(cookiebot, chat_id)
                 elif cookiebot.getMe()['username'] == "MekhysBombot" and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                     CooldownAction(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/aleatorio", "/aleatório", "/random"])) and funfunctions == True:
