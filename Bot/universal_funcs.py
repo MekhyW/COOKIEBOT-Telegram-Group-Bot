@@ -28,18 +28,18 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt"):
         cookiebot.sendMessage(chat_id, text)
 
 def BanAndBlacklist(cookiebot, chat_id, user_id):
-    cookiebot.kickChatMember(chat_id, user_id)
     wait_open('Blacklist.txt')
     with open('Blacklist.txt', 'a') as f:
         f.write('\n' + str(user_id))
     f.close()
+    cookiebot.kickChatMember(chat_id, user_id)
 
 def LeaveAndBlacklist(cookiebot, chat_id):
-    cookiebot.leaveChat(chat_id)
     wait_open('Blacklist.txt')
     with open('Blacklist.txt', 'a') as f:
         f.write('\n' + str(chat_id))
     f.close()
+    cookiebot.leaveChat(chat_id)
 
 def wait_open(filename):
     if os.path.exists(filename):
