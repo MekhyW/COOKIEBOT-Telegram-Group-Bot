@@ -21,8 +21,6 @@ hoje - O que está acontecendo hoje?
 everyone - Admins podem chamar todos os membros do grupo
 adm - Chama os administradores do chat
 dado - Roda um ou mais dados quaisquer
-idade - Te digo quantos anos vc tem
-genero - Sera que e menino ou menina
 shippar - Shippa um casal com caracteristica
 tavivo - Manda um ping de teste com data do servidor
 regras - Mostra as regras do grupo

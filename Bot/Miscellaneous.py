@@ -119,33 +119,3 @@ def Dado(cookiebot, msg, chat_id, language):
                 else:
                     resposta += "\n{}th Roll: 🎲 -> {}".format(vez+1, random.randint(1, limite))
         cookiebot.sendMessage(chat_id, resposta, reply_to_message_id=msg['message_id'])
-
-def Idade(cookiebot, msg, chat_id, language):
-    if not " " in msg['text']:
-        Send(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n\nEx: '/idade Mekhy'\n(obs: só o primeiro nome conta)", msg, language)
-    else:
-        Nome = msg['text'].replace("/idade ", '').split()[0]
-        response = json.loads(requests.get("https://api.agify.io?name={}".format(Nome), timeout=10).text)
-        Idade = response['age']
-        Contagem = response['count']
-        if Contagem == 0:
-            Send(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
-        else:
-            Send(cookiebot, chat_id, "Sua idade é {} anos! 👴\nRegistrado {} vezes".format(Idade, Contagem), msg, language)
-
-def Genero(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if not " " in msg['text']:
-        Send(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n\nEx: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)", msg, language)
-    else:
-        Nome = msg['text'].replace("/genero ", '').split()[0]
-        response = json.loads(requests.get("https://api.genderize.io?name={}".format(Nome), timeout=10).text)
-        Genero = response['gender']
-        Probabilidade = response['probability']
-        Contagem = response['count']
-        if Contagem == 0:
-            Send(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
-        elif Genero == 'male':
-            Send(cookiebot, chat_id, "É um menino! 👨\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), msg, language)
-        elif Genero == 'female':
-            Send(cookiebot, chat_id, "É uma menina! 👩\n\nProbabilidade --> {}%\nRegistrado {} vezes".format(Probabilidade*100, Contagem), msg, language)

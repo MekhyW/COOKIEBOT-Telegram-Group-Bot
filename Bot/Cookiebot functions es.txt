@@ -21,8 +21,6 @@ hoy - ¿Qué está pasando hoy?
 everyone - los administradores pueden llamar a todos los miembros del grupo
 adm - Llamar a los administradores del chat
 dado - tira uno o más dados.
-edad - te dice cuantos años tienes
-genero - ¿Es niño o niña?
 shippar - Shippa una pareja con carácter
 estavivo - Envía un ping de prueba con la fecha del servidor
 reglas - Muestra las reglas del grupo

@@ -108,10 +108,6 @@ def thread_function(msg):
                     Meme(cookiebot, msg, chat_id, sfw)
                 elif (msg['text'].startswith(tuple(["/dado", "/dice"])) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
                     Dado(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/idade", "/age", "/edad"])) and funfunctions == True:
-                    Idade(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/genero", "/gender"])) and funfunctions == True:
-                    Genero(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/shippar", "/ship"])) and funfunctions == True:
                     Shippar(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
