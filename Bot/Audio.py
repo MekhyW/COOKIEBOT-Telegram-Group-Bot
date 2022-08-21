@@ -1,10 +1,9 @@
 from universal_funcs import *
 import ShazamAPI
-from google.cloud import speech, texttospeech
+from google.cloud import speech
 from google.oauth2 import service_account
 credentials = service_account.Credentials.from_service_account_file('cookiebot_cloudserviceaccount.json')
 client_stt = speech.SpeechClient(credentials=credentials)
-client_tts = texttospeech.TextToSpeechClient(credentials=credentials)
 minimum_words_STT = 3
 confidence_threshold = 0.25
 fandom_related_words = ['furry', 'furries', 'fursuiter', 'fandom', 'fursona', 'commission', 'yiff', 'collab', 'trade', 'exposed']
@@ -58,17 +57,3 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
             cookiebot.sendMessage(chat_id, '(2.2) Text:\n"{}"'.format(Text), reply_to_message_id=msg['message_id'])
     except Exception as e:
         print(e)
-
-def Text_to_speech(cookiebot, msg, chat_id, language, AnswerFinal):
-    cookiebot.sendChatAction(chat_id, 'record_voice')
-    input_text = texttospeech.SynthesisInput(text=AnswerFinal)
-    if language == 'pt':
-        voice = texttospeech.VoiceSelectionParams(language_code='pt-BR', name='pt-BR-Wavenet-B')
-    elif language == 'es':
-        voice = texttospeech.VoiceSelectionParams(language_code='es-ES', name='es-ES-Wavenet-B')
-    else:
-        voice = texttospeech.VoiceSelectionParams(language_code='en-US', name='en-US-Wavenet-B')
-    audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.OGG_OPUS, speaking_rate=1.3, pitch=8)
-    response = client_tts.synthesize_speech(input=input_text, voice=voice, audio_config=audio_config)
-    cookiebot.sendChatAction(chat_id, 'upload_voice')
-    cookiebot.sendVoice(chat_id, voice=response.audio_content, reply_to_message_id=msg['message_id'])
