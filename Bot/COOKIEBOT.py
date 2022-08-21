@@ -102,6 +102,11 @@ def thread_function(msg):
                     LeaveAndBlacklist(cookiebot, chat_id)
                 elif cookiebot.getMe()['username'] == "MekhysBombot" and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                     CooldownAction(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(tuple(["/análise", "/análisis", "/analysis"])):
+                    if 'reply_to_message' in msg:
+                        Analyze(cookiebot, msg, chat_id, language)
+                    else:
+                        Send(cookiebot, chat_id, "Responda uma mensagem com o comando para analisar", msg, language)
                 elif msg['text'].startswith(tuple(["/aleatorio", "/aleatório", "/random"])) and funfunctions == True:
                     ReplyAleatorio(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/meme") and funfunctions == True:

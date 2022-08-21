@@ -20,6 +20,7 @@ drawingidea - No more art block
 today - What is happening today?
 everyone - Admins can call all group members
 adm - Call chat admins
+analysis - Analyse message
 dice - Rolls one or more dice
 ship - Shippa a couple with character
 isalive - Send a test ping with server date

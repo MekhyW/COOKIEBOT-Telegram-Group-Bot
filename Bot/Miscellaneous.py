@@ -6,6 +6,12 @@ def decapitalize(s, upper_rest = False):
 def TaVivo(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Estou vivo\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
 
+def Analyze(cookiebot, msg, chat_id, language):
+    result = ''
+    for item in msg:
+        result += str(item) + '\n'
+    cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
+
 def Grupos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     num = 0

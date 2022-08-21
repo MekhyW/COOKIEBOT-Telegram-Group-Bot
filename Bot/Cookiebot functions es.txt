@@ -20,6 +20,7 @@ ideadibujo - no más bloques de arte
 hoy - ¿Qué está pasando hoy?
 everyone - los administradores pueden llamar a todos los miembros del grupo
 adm - Llamar a los administradores del chat
+análisis - Analizar mensaje
 dado - tira uno o más dados.
 shippar - Shippa una pareja con carácter
 estavivo - Envía un ping de prueba con la fecha del servidor
