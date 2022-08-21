@@ -35,11 +35,11 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language):
     else:
         Answer1 = ''
         if language == "pt":
-            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'pt'})
+            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'pt', "atext_bad_prob_max": 0.7})
         elif language == "es":
-            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'es'})
+            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'es', "atext_bad_prob_max": 0.7})
         else:
-            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'en'})
+            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'en', "atext_bad_prob_max": 0.7})
         Answer1 = json.loads(r.text)['atext'].capitalize()
         if Answer1 and "Eu não resposta." not in Answer1 and "I don't know what you're saying." not in Answer1:
             AnswerFinal = Answer1
