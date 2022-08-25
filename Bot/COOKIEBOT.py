@@ -181,7 +181,9 @@ def thread_function(msg):
                 CooldownUpdates(msg, chat_id, lastmessagetime)
             run_unnatendedthreads()
     except:
-        if 'ConnectionResetError' not in traceback.format_exc():
+        if 'ConnectionResetError' in traceback.format_exc():
+            handle(msg)
+        else:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
             cookiebot.sendMessage(mekhyID, str(msg))
 
@@ -197,7 +199,7 @@ def run_unnatendedthreads():
             num_running_threads += 1
             try:
                 unnatended_threads.remove(unnatended_thread)
-            except:
+            except ValueError:
                 pass
     if len(unnatended_threads) > 2 * num_max_threads:
         os.execl(sys.executable, sys.executable, *sys.argv)
@@ -212,9 +214,7 @@ def handle(msg):
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except:
-        if 'ConnectionResetError' not in traceback.format_exc():
-            cookiebot.sendMessage(mekhyID, traceback.format_exc())
-            cookiebot.sendMessage(mekhyID, str(msg))
+        cookiebot.sendMessage(mekhyID, traceback.format_exc())
 
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
