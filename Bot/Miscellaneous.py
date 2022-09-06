@@ -44,20 +44,12 @@ def Comandos(cookiebot, msg, chat_id, language):
 
 def Hoje(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
-    today = datetime.date.today()
-    yesterday = today - datetime.timedelta(days=1)
-    category = random.choice(['entertainment', 'general', 'science', 'technology'])
-    if language == 'pt':
-        lang = random.choice(['pt', 'en'])
-    else:
-        lang = 'en'
-    r = requests.get('https://newsapi.org/v2/top-headlines?language={}&from={}&to={}&category={}&apiKey={}'.format(lang, str(yesterday), str(today), category, newsAPIkey), timeout=10)
-    dictionary = json.loads(r.text)
-    article = dictionary['articles'][random.randint(0, len(dictionary['articles'])-1)]
-    title = article['title'].split(' - ')[0]
-    title = translator.translate(title, dest='pt').text
-    source = article['url']
-    cookiebot.sendMessage(chat_id, "{}\nSource: {}".format(decapitalize(title), source), reply_to_message_id=msg['message_id'])
+    wait_open("QqEuFaço.txt")
+    text_file = open("QqEuFaço.txt", "r+", encoding='utf8')
+    lines = text_file.readlines()
+    target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
+    Send(cookiebot, chat_id, "Hoje pra vc é dia de "+target, msg, language)
+    text_file.close()
 
 def Cheiro(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
