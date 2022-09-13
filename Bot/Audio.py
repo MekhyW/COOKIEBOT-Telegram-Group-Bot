@@ -27,7 +27,6 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
     global minimum_words_STT
     global confidence_threshold
     try:
-        cookiebot.sendChatAction(chat_id, 'typing')
         if sfw == 1:
             profanityFilter = True
         else:

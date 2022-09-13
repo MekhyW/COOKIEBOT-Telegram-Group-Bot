@@ -74,7 +74,7 @@ def thread_function(msg):
                 if utilityfunctions == True:
                     r = requests.get("https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, cookiebot.getFile(msg['voice']['file_id'])['file_path']), allow_redirects=True, timeout=10)
                     duration = int(msg['voice']['duration'])
-                    if duration >= 10 and duration <= 120:
+                    if duration >= 10 and duration <= 240:
                         Speech_to_text(cookiebot, msg, chat_id, sfw, r.content, language)
                     Identify_music(cookiebot, msg, chat_id, r.content, language)
             elif content_type == "audio":
