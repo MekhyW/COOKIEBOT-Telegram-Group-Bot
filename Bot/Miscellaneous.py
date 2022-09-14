@@ -34,12 +34,8 @@ def Comandos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     wait_open("Cookiebot functions {}.txt".format(language))
     text_file = open("Cookiebot functions {}.txt".format(language), "r+", encoding='utf8')
-    lines = text_file.readlines()
+    string = text_file.read()
     text_file.close()
-    string = ""
-    for line in lines:
-        if len(line.split()) != 3:
-            string += str(line)
     cookiebot.sendMessage(chat_id, string, reply_to_message_id=msg['message_id'])
 
 def Hoje(cookiebot, msg, chat_id, language):
