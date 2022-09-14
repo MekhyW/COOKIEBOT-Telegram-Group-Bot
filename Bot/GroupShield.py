@@ -29,8 +29,8 @@ def CheckHumanFactor(cookiebot, msg, chat_id, language):
     if 'username' not in msg['new_chat_participant']:
         userphotos = cookiebot.getUserProfilePhotos(msg['new_chat_participant']['id'])
         if userphotos['total_count'] < 2:
-            BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-            Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser um usuário-robô", language=language)
+            cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+            Send(cookiebot, chat_id, "Bani o novo usuário por suspeita de ser um robô\nSe isso foi um erro, peça para ela adicionar um username (@) e um ADM adicioná-la de volta", language=language)
             return True
     return False
 
