@@ -1,0 +1,8 @@
+FurBots: 0
+Sticker_Spam_Limit: 15
+Tempo_sem_poder_mandar_imagem: 0
+Tempo_Captcha: 0
+Funções_Diversão: 0
+Funções_Utilidade: 0
+SFW: 1
+Language: eng
