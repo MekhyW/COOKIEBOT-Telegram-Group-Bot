@@ -1,6 +1,5 @@
 KawasakiFursuit
 Neorberus
-thomas_the_blue_wolf_number_1
 Lotta_Latte
 Lican_Nightfall
 Yukino_Deericorn
@@ -11,3 +10,8 @@ SRDJMusic
 Shinu_K
 cetacus
 SalvatoreVoldarem
+RafaelMadu
+EmiMatsuOFC
+thomas_the_blue_wolf_number_1
+FenixDoDia
+GroupAnonymousBot
