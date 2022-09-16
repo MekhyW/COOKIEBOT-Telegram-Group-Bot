@@ -35,7 +35,10 @@ def CheckHumanFactor(cookiebot, msg, chat_id, language):
     return False
 
 def CheckCAS(cookiebot, msg, chat_id, language):
-    r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
+    try:
+        r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
+    except:
+        return False
     in_banlist = json.loads(r.text)['ok']
     if in_banlist == True:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
@@ -44,7 +47,10 @@ def CheckCAS(cookiebot, msg, chat_id, language):
     return False
 
 def CheckRaider(cookiebot, msg, chat_id, language):
-    r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])}, timeout=10)
+    try:
+        r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])}, timeout=10)
+    except:
+        return False
     is_raider = json.loads(r.text)['raider']
     if is_raider == True:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
