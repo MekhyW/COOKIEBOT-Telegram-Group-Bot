@@ -35,7 +35,7 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
     else:
         language_code = 'en-US'
     audio = speech.RecognitionAudio(content=content)
-    config = speech.RecognitionConfig(encoding='OGG_OPUS', sample_rate_hertz=16000, language_code=language_code, alternative_language_codes=["en-US"], enable_word_confidence=True, enable_automatic_punctuation=True, profanity_filter=profanityFilter, model="default", use_enhanced=True,)
+    config = speech.RecognitionConfig(encoding='OGG_OPUS', sample_rate_hertz=48000, language_code=language_code, alternative_language_codes=["en-US"], enable_word_confidence=True, enable_automatic_punctuation=True, profanity_filter=profanityFilter, model="default", use_enhanced=True,)
     response = client_stt.recognize(config=config, audio=audio)
     Text = ''
     print(response.results)
