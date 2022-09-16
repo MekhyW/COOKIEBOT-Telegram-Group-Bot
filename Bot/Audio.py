@@ -26,33 +26,30 @@ def Identify_music(cookiebot, msg, chat_id, content, language):
 def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
     global minimum_words_STT
     global confidence_threshold
-    try:
-        if sfw == 1:
-            profanityFilter = True
-        else:
-            profanityFilter = False
-        if language == 'pt':
-            language_code = 'pt-BR'
-        elif language == 'es':
-            language_code = 'es-AR'
-        else:
-            language_code = 'en-US'
-        speechContexts = speech.SpeechContext(phrases=fandom_related_words, boost=fandom_related_words_boost)
-        audio = speech.RecognitionAudio(content=content)
-        config = speech.RecognitionConfig(encoding='OGG_OPUS', sample_rate_hertz=16000, language_code=language_code, alternative_language_codes=["en-US"], speech_contexts=[speechContexts], enable_word_confidence=True, enable_automatic_punctuation=True, profanity_filter=profanityFilter, enable_spoken_emojis=True, model="command_and_search", use_enhanced=True,)
-        response = client_stt.recognize(config=config, audio=audio)
-        Text = ''
-        for i, result in enumerate(response.results):
-            alternative = result.alternatives[0]
-            Paragraph = alternative.transcript.capitalize()
-            for word in alternative.words:
-                if word.confidence < confidence_threshold and len(word.word) > minimum_words_STT:
-                    Paragraph = Paragraph.replace(word.word, '(?)')
-            Text += Paragraph
-            if i < len(response.results) - 1:
-                Text += '\n'
-        if len(Text.split()) >= minimum_words_STT:
-            cookiebot.sendChatAction(chat_id, 'typing')
-            cookiebot.sendMessage(chat_id, '(2.2) Text:\n"{}"'.format(Text), reply_to_message_id=msg['message_id'])
-    except Exception as e:
-        print(e)
+    if sfw == 1:
+        profanityFilter = True
+    else:
+        profanityFilter = False
+    if language == 'pt':
+        language_code = 'pt-BR'
+    elif language == 'es':
+        language_code = 'es-AR'
+    else:
+        language_code = 'en-US'
+    speechContexts = speech.SpeechContext(phrases=fandom_related_words, boost=fandom_related_words_boost)
+    audio = speech.RecognitionAudio(content=content)
+    config = speech.RecognitionConfig(encoding='OGG_OPUS', sample_rate_hertz=16000, language_code=language_code, alternative_language_codes=["en-US"], speech_contexts=[speechContexts], enable_word_confidence=True, enable_automatic_punctuation=True, profanity_filter=profanityFilter, enable_spoken_emojis=True, model="command_and_search", use_enhanced=True,)
+    response = client_stt.recognize(config=config, audio=audio)
+    Text = ''
+    for i, result in enumerate(response.results):
+        alternative = result.alternatives[0]
+        Paragraph = alternative.transcript.capitalize()
+        for word in alternative.words:
+            if word.confidence < confidence_threshold and len(word.word) > minimum_words_STT:
+                Paragraph = Paragraph.replace(word.word, '(?)')
+        Text += Paragraph
+        if i < len(response.results) - 1:
+            Text += '\n'
+    if len(Text.split()) >= minimum_words_STT:
+        cookiebot.sendChatAction(chat_id, 'typing')
+        cookiebot.sendMessage(chat_id, '(2.2) Text:\n"{}"'.format(Text), reply_to_message_id=msg['message_id'])
