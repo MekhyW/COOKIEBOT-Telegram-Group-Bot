@@ -41,13 +41,13 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
     config = speech.RecognitionConfig(encoding='OGG_OPUS', sample_rate_hertz=16000, language_code=language_code, alternative_language_codes=["en-US"], speech_contexts=[speechContexts], enable_word_confidence=True, enable_automatic_punctuation=True, profanity_filter=profanityFilter, enable_spoken_emojis=True, model="command_and_search", use_enhanced=True,)
     response = client_stt.recognize(config=config, audio=audio)
     Text = ''
+    print(response.results)
     for i, result in enumerate(response.results):
         alternative = result.alternatives[0]
         Paragraph = alternative.transcript.capitalize()
         for word in alternative.words:
             if word.confidence < confidence_threshold and len(word.word) > minimum_words_STT:
                 Paragraph = Paragraph.replace(word.word, '(?)')
-                print(word.word, word.confidence)
         Text += Paragraph
         if i < len(response.results) - 1:
             Text += '\n'
