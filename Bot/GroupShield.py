@@ -37,9 +37,9 @@ def CheckHumanFactor(cookiebot, msg, chat_id, language):
 def CheckCAS(cookiebot, msg, chat_id, language):
     try:
         r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
+        in_banlist = json.loads(r.text)['ok']
     except:
         return False
-    in_banlist = json.loads(r.text)['ok']
     if in_banlist == True:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
         Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado pelo sistema anti-ban CAS https://cas.chat/", language=language)
@@ -49,9 +49,9 @@ def CheckCAS(cookiebot, msg, chat_id, language):
 def CheckRaider(cookiebot, msg, chat_id, language):
     try:
         r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])}, timeout=10)
+        is_raider = json.loads(r.text)['raider']
     except:
         return False
-    is_raider = json.loads(r.text)['raider']
     if is_raider == True:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
         Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.", language=language)
