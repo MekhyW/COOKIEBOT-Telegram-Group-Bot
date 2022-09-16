@@ -6,8 +6,6 @@ credentials = service_account.Credentials.from_service_account_file('cookiebot_c
 client_stt = speech.SpeechClient(credentials=credentials)
 minimum_words_STT = 3
 confidence_threshold = 0.25
-fandom_related_words = ['furry', 'furries', 'fursuiter', 'fandom', 'fursona', 'commission', 'yiff', 'collab', 'trade', 'exposed']
-fandom_related_words_boost = 50
 
 def Identify_music(cookiebot, msg, chat_id, content, language):
     shazam = ShazamAPI.Shazam(content)
@@ -36,9 +34,8 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
         language_code = 'es-AR'
     else:
         language_code = 'en-US'
-    speechContexts = speech.SpeechContext(phrases=fandom_related_words, boost=fandom_related_words_boost)
     audio = speech.RecognitionAudio(content=content)
-    config = speech.RecognitionConfig(encoding='OGG_OPUS', sample_rate_hertz=16000, language_code=language_code, alternative_language_codes=["en-US"], speech_contexts=[speechContexts], enable_word_confidence=True, enable_automatic_punctuation=True, profanity_filter=profanityFilter, enable_spoken_emojis=True, model="default", use_enhanced=True,)
+    config = speech.RecognitionConfig(encoding='OGG_OPUS', sample_rate_hertz=16000, language_code=language_code, alternative_language_codes=["en-US"], enable_word_confidence=True, enable_automatic_punctuation=True, profanity_filter=profanityFilter, model="default", use_enhanced=True,)
     response = client_stt.recognize(config=config, audio=audio)
     Text = ''
     print(response.results)
