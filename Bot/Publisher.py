@@ -1,4 +1,3 @@
-from multiprocessing.connection import wait
 from universal_funcs import *
 
 def AskPublisher(cookiebot, msg, chat_id, language):
