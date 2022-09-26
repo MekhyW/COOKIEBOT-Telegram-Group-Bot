@@ -231,17 +231,8 @@ def handle_query(msg):
         ConfigVariableButton(cookiebot, msg, query_data)
     elif 'Pub' in query_data:
         if query_data.startswith('Approve'):
-            origin_chatid = query_data.split()[1].split('-')[0]
-            origin_messageid = query_data.split()[1].split('-')[1]
-            with open('PostQueue.txt', 'a', encoding='utf-8') as f:
-                f.write(origin_chatid + ' ' + origin_messageid + '\n')
-            f.close()
-            try:
-                Send(cookiebot, "Adicionei seu post à fila!", from_id)
-            except:
-                Send(cookiebot, "Seu post foi adicionado à fila, mas não consegui te mandar uma mensagem no privado.\nMe mande /start no privado", origin_chatid)
-        else:
-            cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+            SchedulePost(cookiebot, query_data, from_id)
+        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
     else:
         listaadmins_id = []
         for admin in cookiebot.getChatAdministrators(msg['message']['reply_to_message']['chat']['id']):
