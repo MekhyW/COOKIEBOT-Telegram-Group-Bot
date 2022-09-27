@@ -51,7 +51,6 @@ def thread_function(msg):
                 FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language = GetConfig(chat_id)
                 CheckNewName(msg, chat_id)
                 lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
-                RegisterActivity(msg, chat_id)
             if content_type == "new_chat_member":
                 if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
                     wait_open("Blacklist.txt")
