@@ -83,13 +83,13 @@ def thread_function(msg):
                 if sfw == 1:
                     photo_id = msg['photo'][-1]['file_id']
                     AddtoRandomDatabase(msg, chat_id, photo_id)
-                if 'sender_chat' in msg and 'text' in msg:
-                    AskPublisher(cookiebot, msg, chat_id, language)
+                #if 'sender_chat' in msg and 'text' in msg:
+                #    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "video":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
-                if 'sender_chat' in msg and 'text' in msg:
-                    AskPublisher(cookiebot, msg, chat_id, language)
+                #if 'sender_chat' in msg and 'text' in msg:
+                #    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "document":
                 if sfw == 1:
                     AddtoRandomDatabase(msg, chat_id)
