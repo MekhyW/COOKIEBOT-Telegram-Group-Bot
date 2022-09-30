@@ -61,8 +61,9 @@ def Everyone(cookiebot, msg, chat_id, listaadmins, language):
         lines = text_file.readlines()
         result = ""
         for line in lines:
-            username = line.split()[0]
-            result += ("@"+username+" ")
+            if len(line.split()):
+                username = line.split()[0]
+                result += ("@"+username+" ")
         text_file.close()
         cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
 
