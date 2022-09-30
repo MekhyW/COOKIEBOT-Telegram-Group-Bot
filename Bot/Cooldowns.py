@@ -28,21 +28,22 @@ def Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language):
     if counter_new > stickerspamlimit:
         DeleteMessage(cookiebot, telepot.message_identifier(msg))
 
-def CooldownUpdates(msg, chat_id, lastmessagetime):
+def CmdCooldownUpdates(msg, chat_id, lastmessagetime):
     if float(lastmessagetime)+60 < ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
         sentcooldownmessage = False
-    if 'text' in msg:
-        wait_open("Stickers.txt")
-        text_file = open("Stickers.txt", "r+", encoding='utf8')
-        lines = text_file.readlines()
-        text_file.close()
-        text_file = open("Stickers.txt", "w", encoding='utf8')
-        for line in lines:
-            if str(chat_id) in line:
-                text_file.write(line.split()[0] + " " + "0" + "\n")
-            else:
-                text_file.write(line)
-        text_file.close()
+
+def StickerCooldownUpdates(msg, chat_id):
+    wait_open("Stickers.txt")
+    text_file = open("Stickers.txt", "r+", encoding='utf8')
+    lines = text_file.readlines()
+    text_file.close()
+    text_file = open("Stickers.txt", "w", encoding='utf8')
+    for line in lines:
+        if str(chat_id) in line:
+            text_file.write(line.split()[0] + " " + "0" + "\n")
+        else:
+            text_file.write(line)
+    text_file.close()
 
 def CooldownAction(cookiebot, msg, chat_id, language):
     global sentcooldownmessage

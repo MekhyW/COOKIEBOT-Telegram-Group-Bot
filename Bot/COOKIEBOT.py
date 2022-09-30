@@ -190,7 +190,9 @@ def thread_function(msg):
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
                     OnSay(cookiebot, msg, chat_id)
             if chat_type != 'private' and isBombot:
-                CooldownUpdates(msg, chat_id, lastmessagetime)
+                CmdCooldownUpdates(msg, chat_id, lastmessagetime)
+            if chat_type != 'private' and 'text' in msg:
+                StickerCooldownUpdates(msg, chat_id)
             run_unnatendedthreads()
     except:
         if 'ConnectionResetError' in traceback.format_exc():
