@@ -189,7 +189,7 @@ def thread_function(msg):
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
                     OnSay(cookiebot, msg, chat_id)
-            if chat_type != 'private':
+            if chat_type != 'private' and isBombot:
                 CooldownUpdates(msg, chat_id, lastmessagetime)
             run_unnatendedthreads()
     except:
