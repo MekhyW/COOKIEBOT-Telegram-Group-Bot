@@ -1,6 +1,5 @@
 from universal_funcs import *
-#cookiebot = telepot.Bot(cookiebotTOKEN)
-cookiebot = telepot.Bot(bombotTOKEN)
+isBombot = True
 from Configurations import *
 from GroupShield import *
 from UserRegisters import *
@@ -13,6 +12,10 @@ from Publisher import *
 import threading, gc
 unnatended_threads = list()
 
+if isBombot:
+    cookiebot = telepot.Bot(bombotTOKEN)
+else:
+    cookiebot = telepot.Bot(cookiebotTOKEN)
 updates = cookiebot.getUpdates()
 if updates:
     last_update_id = updates[-1]['update_id']
@@ -41,7 +44,7 @@ def thread_function(msg):
                 elif msg['text'].startswith("/leave") and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, msg['text'].split()[1])
                     os.remove('Registers/{}.txt'.format(msg['text'].split()[1]))
-            if cookiebot.getMe()['username'] == "MekhysBombot":
+            if isBombot:
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
                 cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\nSinta-se à vontade para me adicionar no seu chat!\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\n\nUse /grupos para ver todos os chats em que estou presente\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW")
@@ -50,7 +53,8 @@ def thread_function(msg):
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
                 FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language = GetConfig(chat_id)
                 CheckNewName(msg, chat_id)
-                lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
+                if isBombot:
+                    lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
             if content_type == "new_chat_member":
                 if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
                     wait_open("Blacklist.txt")
@@ -63,7 +67,7 @@ def thread_function(msg):
                             cookiebot.sendMessage(mekhyID, "Auto-left:\n{}".format(chat_id))
                             return
                     cookiebot.sendMessage(mekhyID, "Added:\n{}".format(cookiebot.getChat(chat_id)))
-                if not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
+                if msg['new_chat_participant']['id'] != cookiebot.getMe()['id'] and not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:
@@ -100,7 +104,7 @@ def thread_function(msg):
             elif 'text' in msg:
                 if msg['text'].startswith("/leave") and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, chat_id)
-                elif cookiebot.getMe()['username'] == "MekhysBombot" and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
+                elif isBombot and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                     CooldownAction(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/análise", "/análisis", "/analysis"])):
                     if 'reply_to_message' in msg:
