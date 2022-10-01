@@ -66,7 +66,7 @@ def CheckBlacklist(cookiebot, msg, chat_id, language):
     text.close()
     for line in lines:
         if str(msg['new_chat_participant']['id']) in line:
-            BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
+            cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
             Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.", language=language)
             return True
     return False
