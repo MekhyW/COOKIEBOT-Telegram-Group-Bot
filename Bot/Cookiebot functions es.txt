@@ -10,7 +10,6 @@ Antispam de stickers: evita redadas o largas cadenas de stickers en secuencia
 Voz a texto - transcribir mensajes de voz
 Detector de música - diga el nombre de una canción que se reproduce en un mensaje de voz
 Bienvenido - Mensaje de bienvenida personalizado
-Administradores granulares - el bot se puede configurar para que solo unas pocas personas puedan manejarlo. Habla con Mekhy para implementar esto en tu chat.
 
 COMANDOS LIBRES:
 cualquiercosa - envía una foto de lo que quieres

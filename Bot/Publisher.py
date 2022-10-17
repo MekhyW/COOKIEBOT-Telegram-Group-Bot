@@ -11,7 +11,7 @@ def AskPublisher(cookiebot, msg, chat_id, language):
 def SchedulePost(cookiebot, query_data, from_id):
     origin_chatid = query_data.split()[1].split('-')[0]
     origin_messageid = query_data.split()[1].split('-')[1]
-    #use google cloud scheduler to get list of active jobs
+    #use backend to get list of active jobs
     #if there is a job with the same origin_chatid, delete all jobs with that origin_chatid
     answer = "Post marcado para os horários:\n"
     for group in os.listdir('Registers'):

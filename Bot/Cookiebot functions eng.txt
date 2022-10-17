@@ -10,7 +10,6 @@ Sticker antispam - Prevent raids or long chains of stickers in sequence
 Voice to Text - Transcribe voice messages
 Music Detector - Speak the name of a song playing in voice message
 Welcome - Customized welcome message
-Granular Admins - The bot can be set so that only a few people can handle it. Talk to Mekhy to implement this in your chat
 
 FREE COMMANDS:
 anything - send a picture of what you want

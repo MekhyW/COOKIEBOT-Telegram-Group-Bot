@@ -10,7 +10,6 @@ Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
 Voz para texto - Transcripta mensagens de voz
 Detector de Música - Fala o nome de uma música tocando em mensagem de voz
 Welcome - Mensagem customizada de boas vindas
-Admins Granulares - O bot pode ser definido para apenas algumas pessoas poderem mexer nele. Fale com o Mekhy para implementar isso no seu chat
 
 COMANDOS LIVRES:
 qualquercoisa - Manda uma foto do que vc quiser

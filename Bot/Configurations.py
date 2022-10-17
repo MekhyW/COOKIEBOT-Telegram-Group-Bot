@@ -2,20 +2,10 @@ from universal_funcs import *
 
 def GetAdmins(cookiebot, msg, chat_id):
     listaadmins, listaadmins_id = [], []
-    if not os.path.exists("GranularAdmins/GranularAdmins_" + str(chat_id) + ".txt"):
-        text = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'w').close()
-    wait_open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt")
-    text_file = open("GranularAdmins/GranularAdmins_" + str(chat_id)+".txt", 'r', encoding='utf-8')
-    lines = text_file.readlines()
-    text_file.close()
-    if lines != []:
-        for username in lines:
-            listaadmins.append(username.replace("\n", ''))
-    else:
-        for admin in cookiebot.getChatAdministrators(chat_id):
-            if 'username' in admin['user']:
-                listaadmins.append(str(admin['user']['username']))
-            listaadmins_id.append(str(admin['user']['id']))
+    for admin in cookiebot.getChatAdministrators(chat_id):
+        if 'username' in admin['user']:
+            listaadmins.append(str(admin['user']['username']))
+        listaadmins_id.append(str(admin['user']['id']))
     return listaadmins, listaadmins_id
 
 
