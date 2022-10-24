@@ -47,7 +47,11 @@ def thread_function(msg):
             if isBombot:
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
-                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *81* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW")
+                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *84* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
+                reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                    [InlineKeyboardButton(text="Adicionar ao Grupo", url="https://t.me/CookieMWbot?startgroup=new")],
+                    [InlineKeyboardButton(text="Grupo de teste/assistência", url="https://t.me/+mX6W3tGXPew2OTIx")]
+                ]))
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
@@ -84,19 +88,17 @@ def thread_function(msg):
             elif content_type == "audio":
                 pass
             elif content_type == "photo":
-                if sfw == 1:
+                if sfw == 1 and funfunctions == True:
                     photo_id = msg['photo'][-1]['file_id']
                     AddtoRandomDatabase(msg, chat_id, photo_id)
                 #if 'sender_chat' in msg and 'text' in msg and not isBombot:
                 #    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "video":
-                if sfw == 1:
+                if sfw == 1 and funfunctions == True:
                     AddtoRandomDatabase(msg, chat_id)
                 #if 'sender_chat' in msg and 'text' in msg and not isBombot:
                 #    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "document":
-                if sfw == 1:
-                    AddtoRandomDatabase(msg, chat_id)
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
                     ReplySticker(cookiebot, msg, chat_id)
             elif content_type == "sticker":
