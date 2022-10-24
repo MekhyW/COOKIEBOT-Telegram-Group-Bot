@@ -64,8 +64,6 @@ fazer seu fursona de MLP
 ver alguma ideia de desenho com o /ideiadesenho
 marcar algum evento com o /addevento
 ver o proximo evento com o /eventos
-spamar o ark com /spamark
-mandar aquela pergunta MERDA pra mim
 mandar fotos de burrs
 ver se é natal https://isitchristmas.com/
 pedir pro Mekhy colocar coisas suas no bot
@@ -404,7 +402,6 @@ ligma
 pedir pro @guaxraccoon mandar um desenho dele
 pedir para a @Tayroth um meet
 ir no banheiro 37 vezes
-se decidir se você quer um pinto com gosto de bolo ou um bolo com gosto de pinto
 engatar a ré com tudo
 molhar o biscoito no leite
 lavar as mãos
@@ -462,7 +459,6 @@ cozinhar risoto
 assitir his dark materials
 assitir Demon Slayer
 assitir Dr Stone
-parar de usar essa bosta de comando /hoje que enche o saco
 esperar até meia noite em ponto para usar /hoje de novo
 não usar /cheiro
 encher o saco dos seus pais pedindo pra ir na BFF
