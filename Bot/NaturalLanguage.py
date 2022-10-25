@@ -1,5 +1,21 @@
 from universal_funcs import *
 import unidecode
+from chatterbot import ChatBot
+
+AI_ptbr = ChatBot(
+    'Cookiebot_AI',  
+    logic_adapters=[
+        {
+            'import_path': 'chatterbot.logic.BestMatch',
+            'statement_comparison_function': 'chatterbot.comparisons.LevenshteinDistance',
+        }
+    ],
+    preprocessors=[
+        'chatterbot.preprocessors.clean_whitespace'
+    ],
+    database_uri='sqlite:///../AI/AI_ptbr.db',
+    read_only=True
+)
 
 def OnSay(cookiebot, msg, chat_id):
     if len(msg['text'].split()) > 3:
@@ -33,19 +49,6 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language):
     if message == '':
         AnswerFinal = "?"
     else:
-        Answer1 = ''
         if language == "pt":
-            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'pt', "atext_bad_prob_max": 1.0})
-        elif language == "es":
-            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'es', "atext_bad_prob_max": 1.0})
-        else:
-            r = requests.post('https://wsapi.simsimi.com/190410/talk', headers={'x-api-key': smalltalkKey}, json={'utext': message, 'lang': 'en', "atext_bad_prob_max": 1.0})
-        Answer1 = json.loads(r.text)['atext'].capitalize()
-        if Answer1 and "Eu não resposta." not in Answer1 and "I don't know what you're saying." not in Answer1:
-            AnswerFinal = Answer1
-        else:
-            AnswerFinal = None
-    if AnswerFinal:
-        return AnswerFinal
-    else:
-        print("NO AI ANSWER")
+            AnswerFinal = AI_ptbr.get_response(message).text.capitalize()
+    return AnswerFinal
