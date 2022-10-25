@@ -1,21 +1,21 @@
 from universal_funcs import *
 import unidecode
-#from chatterbot import ChatBot
+from chatterbot import ChatBot
 
-#AI_ptbr = ChatBot(
-#    'Cookiebot_AI',  
-#    logic_adapters=[
-#        {
-#            'import_path': 'chatterbot.logic.BestMatch',
-#            'statement_comparison_function': 'chatterbot.comparisons.LevenshteinDistance',
-#        }
-#    ],
-#    preprocessors=[
-#        'chatterbot.preprocessors.clean_whitespace'
-#    ],
-#    database_uri='sqlite:///../AI/AI_ptbr.db',
-#    read_only=True
-#)
+AI_ptbr = ChatBot(
+    'Cookiebot_AI',  
+    logic_adapters=[
+        {
+            'import_path': 'chatterbot.logic.BestMatch',
+            'statement_comparison_function': 'chatterbot.comparisons.LevenshteinDistance',
+        }
+    ],
+    preprocessors=[
+        'chatterbot.preprocessors.clean_whitespace'
+    ],
+    database_uri='sqlite:///../AI/AI_ptbr.db',
+    read_only=True
+)
 
 def OnSay(cookiebot, msg, chat_id):
     if len(msg['text'].split()) > 3:

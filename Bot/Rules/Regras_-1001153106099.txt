@@ -4,26 +4,37 @@ A FurFamília pode até ser uma comunidade com chats e servidores mais liberais 
 
 1 - Não é permitido incentivar, propagar ou fazer apologia à zoofilia, pedofilia, nazismo, machismo, racismo, xenofobia, gordofobia,  homofobia, gore e pornografia.
 
-2 - Evite assuntos polêmicos.
+2- NOVA REGRA: É proibido qualquer publicação NSFW independente de horário. Também é proibida temáticas NSFW em chamadas em call(mesmo ou não sendo pós meia-noite).
+Isso inclui conversas sobre temas +18, gore, pornografia, e outras formas NSFW.
+Caso venha a ser importante uma menção de algo NSFW ela deve ser censurada como no exemplo a baixo.
+Exemplo: Você quer contar uma história depois “Da primeira vez”, ao invés de falar com essas palavras, você pode dizer algo como: “Um dia, depois de ter me relacionado a fundo com uma pessoa”. O motivo é para que menores de idade não entendam o que você diga de forma alguma.
 
-3 - Proibido flood de qualquer tipo.
+Caso a regra 2 seja quebrada, ela pode ser excluída com aviso, caso faça novamente é banimento. Porém, caso seja descoberto que a pessoa que postou é menor de idade será ban(temporário ou não, a depender do quão grave for) na 1ª vez em que for postado. Para evitar maiores conflitos.
 
-4 - Não forçar intimidade com os membros do grupo.
+3 - Evite assuntos polêmicos.
 
-5 - Proibido ofender, xingar ou brigar.
+4 - Proibido flood de qualquer tipo.
 
-6 - É permitida a divulgação de um servidor, grupo ou evento que tenha conteúdo furry, mas sem fazer spam.
+5 - Não forçar intimidade com os membros do grupo.
 
-7 - Espere sua vez de falar na call e não faça barulhos que atrapalhem o andamento da conversa.
+6 - Proibido ofender, xingar ou brigar.
 
-8 - Evite ser monotemático.
+7 - É permitida a divulgação de um servidor, grupo ou evento que tenha conteúdo furry, mas sem fazer spam.
 
-9 - Respeite as opiniões alheias.
+8 - Espere sua vez de falar na call e não faça barulhos que atrapalhem o andamento da conversa.
 
-10 - Proibido falar sobre ou publicar: filmes, apps, músicas ou jogos pirateados.
+9 - Evite ser monotemático.
 
-11 - PROIBIDO SPOILER de qualquer filme, série, anime, livros, jogos e comics! (Mute 24hs)
+10 - Respeite as opiniões alheias.
+
+11 - Proibido falar sobre ou publicar: filmes, apps, músicas ou jogos pirateados.
+
+12 - PROIBIDO SPOILER de qualquer filme, série, anime, livros, jogos e comics! (Mute 24hs)
 
 Em caso de descumprimento das regras, o usuário está sujeito a mute ou ban.
+
+Viu alguém desrespeitando regras? Use o /adm do cookiebot e chame os administradores.
+
+Fora isso, bom proveito ao grupo, espero que goste e seja feliz aqui.
 
 FurFamília, orgulho de ser Furry!
