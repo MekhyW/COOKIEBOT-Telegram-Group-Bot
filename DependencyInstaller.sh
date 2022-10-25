@@ -24,3 +24,5 @@ pip3 install awscli==1.11.18
 pip3 install SQLAlchemy==1.3.6
 pip3 install Mako==1.1.2
 pip3 install levenshtein
+pip3 install spacy==2.3.5
+python3 -m spacy download en
