@@ -83,11 +83,11 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     captcha.write(password, 'CAPTCHA.png')
     photo = open('CAPTCHA.png', 'rb')
     if language == "pt":
-        caption = "Digite o código acima para provar que você não é um robô\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60)))
+        caption = "⚠️Digite o código acima para provar que você não é um robô⚠️\n\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat ⏳\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60)))
     elif language == "es":
-        caption = "Ingresa el código de arriba para demostrar que no eres un robot\nTienes {} minutos, si no lo resuelves en ese tiempo te eliminaré del chat\n(NOTA: Si no aparecen 4 dígitos, abrir la imagen completa)".format(str(round(captchatimespan/60)))
+        caption = "⚠️Ingresa el código de arriba para demostrar que no eres un robot⚠️\n\nTienes {} minutos, si no lo resuelves en ese tiempo te eliminaré del chat ⏳\n(NOTA: Si no aparecen 4 dígitos, abrir la imagen completa)".format(str(round(captchatimespan/60)))
     else:
-        caption = "Type the code above to prove you're not a robot\nYou have {} minutes, if you don't solve it in that time I'll remove you from the chat\n(NOTE: If 4 digits don't appear, open the full photo)".format(str(round(captchatimespan/60)))
+        caption = "⚠️Type the code above to prove you're not a robot⚠️\n\nYou have {} minutes, if you don't solve it in that time I'll remove you from the chat ⏳\n(NOTE: If 4 digits don't appear, open the full photo)".format(str(round(captchatimespan/60)))
     captchaspawnID = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg['message_id'], reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Approve",callback_data='CAPTCHA')]]))['message_id']
     photo.close()
     wait_open("Captcha.txt")
