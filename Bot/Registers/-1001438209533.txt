@@ -8,3 +8,6 @@ Tyxer
 CrisisHD
 Barrionovsky
 Orion_Floyd
+
+onyxpuma
+Seregore
