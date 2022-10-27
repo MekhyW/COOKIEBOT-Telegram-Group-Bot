@@ -159,7 +159,10 @@ def Meme(cookiebot, msg, chat_id, sfw):
             else:
                 chosen_member = random.choice(members)
                 members.remove(chosen_member)
-            url = "https://telegram.me/{}".format(chosen_member.split()[0])
+            try:
+                url = "https://telegram.me/{}".format(chosen_member.split()[0])
+            except IndexError:
+                continue
             req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"}) 
             html = urllib.request.urlopen(req)
             soup = BeautifulSoup(html, "html.parser")
