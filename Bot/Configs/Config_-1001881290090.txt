@@ -1,4 +1,4 @@
-FurBots: 1
+FurBots: 0
 Sticker_Spam_Limit: 15
 Tempo_sem_poder_mandar_imagem: 600
 Tempo_Captcha: 300
