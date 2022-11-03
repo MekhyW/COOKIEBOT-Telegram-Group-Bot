@@ -15,7 +15,10 @@ def SchedulePost(cookiebot, query_data, from_id):
     #if there is a job with the same origin_chatid, delete all jobs with that origin_chatid
     answer = "Post marcado para os horários:\n"
     for group in os.listdir('Registers'):
-        #schedule post on random time for the group, for the next 3 days, if the group has over 50 people
+        #if floor(number_of_people_in_group/50) < 0:
+        #    continue
+        #schedule post on random time for the group, for the next 3 days
+        #if the number of posts scheduled for the group is larger than 2*floor(number_of_people_in_group/50), unschedule oldest post for that group
         #append destination_chatid and time to answer
         pass
     try:
