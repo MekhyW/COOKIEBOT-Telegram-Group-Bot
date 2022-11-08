@@ -7,12 +7,16 @@
 #
 # -----------------------------------------------------------------------------
 sudo apt-get update
-sudo apt-get install screen, python3-pip, libfreetype6-dev
+sudo apt-get install -y git-all
+sudo apt-get install -y python3-pip
+sudo apt-get install -y libfreetype6-dev
+sudo apt-get install -y screen
 pip3 install --upgrade pip
 pip3 install beautifulsoup4
 pip3 install telepota
 pip3 install googletrans==3.1.0a0
-pip3 install Pillow, Google-Images-Search
+pip3 install Pillow
+pip3 install Google-Images-Search
 pip3 install Unidecode
 pip3 install captcha
 pip3 install google-cloud-speech
