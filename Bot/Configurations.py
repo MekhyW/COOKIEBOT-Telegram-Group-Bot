@@ -21,8 +21,8 @@ def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language):
             description = line.split(" - ")[1].replace("\n", "")
             if len(command.split()) == 1 and command.islower():
                 comandos.append({'command': command, 'description': description})
-    cookiebot.setMyCommands(commands = comandos, scope = {"type": "chat", "chat_id": chat_to_alter})
-    cookiebot.setMyCommands(commands = comandos, scope = {"type": "chat", "chat_id": chat_id})
+    #cookiebot.setMyCommands(commands = comandos, scope = {"type": "chat", "chat_id": chat_to_alter})
+    #cookiebot.setMyCommands(commands = comandos, scope = {"type": "chat", "chat_id": chat_id})
 
 def SetComandosPrivate(cookiebot, chat_id):
     SetLanguageComandos(cookiebot, chat_id, chat_id, "private")
