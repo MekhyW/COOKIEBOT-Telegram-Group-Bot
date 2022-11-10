@@ -12,14 +12,13 @@ Music Detector - Speak the name of a song playing in voice message
 Welcome - Customized welcome message
 
 FREE COMMANDS:
+everyone - Admins can call all group members
+adm - Call chat admins
 anything - send a picture of what you want
 meme - Generate a meme
 random - Send a media from some group
 drawingidea - No more art block
 today - What is happening today?
-everyone - Admins can call all group members
-adm - Call chat admins
-analysis - Analyse message
 dice - Rolls one or more dice
 ship - Shipps a couple with character
 age - tell you how old you are
@@ -28,9 +27,9 @@ isalive - Send a test ping with server date
 rules - Shows the group's rules
 newrules - Updates group rules
 newwelcome - Updates the welcome message
+analysis - Inspect elements of a message
 commands - Lists bot commands
 configure - Configure the bot
-contact - Use this command I never asked you for anything
 
 CUSTOM COMMANDS:
 allen - allen

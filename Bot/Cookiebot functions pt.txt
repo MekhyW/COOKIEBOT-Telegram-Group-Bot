@@ -12,14 +12,13 @@ Detector de Música - Fala o nome de uma música tocando em mensagem de voz
 Welcome - Mensagem customizada de boas vindas
 
 COMANDOS LIVRES:
+everyone - Admins podem chamar todos os membros do grupo
+adm - Chama os administradores do chat
 qualquercoisa - Manda uma foto do que vc quiser
 meme - Gera um meme
 aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
 hoje - O que está acontecendo hoje?
-everyone - Admins podem chamar todos os membros do grupo
-adm - Chama os administradores do chat
-análise - Analisar mensagem
 dado - Roda um ou mais dados quaisquer
 shippar - Shippa um casal com caracteristica
 idade - Te digo quantos anos vc tem
@@ -28,9 +27,9 @@ tavivo - Manda um ping de teste com data do servidor
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo
 novobemvindo - Atualiza a mensagem de boas vindas
+análise - Inspecionar elementos de uma mensagem
 comandos - Lista os comandos do bot
 configurar - Configura o bot
-contato - Usa esse comando nunca te pedi nada
 
 COMANDOS CUSTOMIZADOS:
 allen - allen
