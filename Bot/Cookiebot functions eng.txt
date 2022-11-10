@@ -21,7 +21,7 @@ everyone - Admins can call all group members
 adm - Call chat admins
 analysis - Analyse message
 dice - Rolls one or more dice
-ship - Shippa a couple with character
+ship - Shipps a couple with character
 age - tell you how old you are
 gender - Is it a boy or a girl
 isalive - Send a test ping with server date
