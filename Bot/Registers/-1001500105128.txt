@@ -13,3 +13,5 @@ BillPossum
 alfatoaster56
 DrankinSAW
 LucarioGuy15
+Channel_Bot
+GroupAnonymousBot

@@ -13,7 +13,7 @@ AI_ptbr = ChatBot(
     preprocessors=[
         'chatterbot.preprocessors.clean_whitespace'
     ],
-    database_uri='sqlite:///../AI/AI_ptbr.db',
+    database_uri='sqlite:///../AI/AI_ptbr',
     read_only=True
 )
 
