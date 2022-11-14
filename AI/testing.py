@@ -1,13 +1,10 @@
 from chatterbot import ChatBot
-from chatterbot import comparisons
-from chatterbot import response_selection
 bot = ChatBot(
     'Cookiebot_AI',  
     logic_adapters=[
         {
             'import_path': 'chatterbot.logic.BestMatch',
-            'statement_comparison_function': comparisons.LevenshteinDistance,
-            'response_selection_method': response_selection.get_most_frequent_response
+            'statement_comparison_function': 'chatterbot.comparisons.LevenshteinDistance',
         }
     ],
     preprocessors=[
