@@ -11,6 +11,8 @@ sudo apt-get install -y git-all
 sudo apt-get install -y python3-pip
 sudo apt-get install -y libfreetype6-dev
 sudo apt-get install -y screen
+sudo apt-get install git-lfs
+git-lfs install
 pip3 install --upgrade pip
 pip3 install beautifulsoup4
 pip3 install telepota
