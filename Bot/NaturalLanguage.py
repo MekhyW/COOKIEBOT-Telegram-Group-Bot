@@ -1,13 +1,16 @@
 from universal_funcs import *
 import unidecode
 from chatterbot import ChatBot
+from chatterbot import comparisons
+from chatterbot import response_selection
 
 AI_ptbr = ChatBot(
     'Cookiebot_AI',  
     logic_adapters=[
         {
             'import_path': 'chatterbot.logic.BestMatch',
-            'statement_comparison_function': 'chatterbot.comparisons.LevenshteinDistance',
+            'statement_comparison_function': comparisons.LevenshteinDistance,
+            'response_selection_method': response_selection.get_most_frequent_response
         }
     ],
     preprocessors=[
