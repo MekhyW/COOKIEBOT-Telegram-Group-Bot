@@ -49,16 +49,21 @@ def SchedulePost(cookiebot, query_data, from_id):
     origin_chatid = query_data.split()[1].split('-')[0]
     origin_messageid = query_data.split()[1].split('-')[1]
     jobs = list_jobs()
-    #if there is a job with the same origin_chatid, delete all jobs with that origin_chatid
+    for job in jobs:
+        if job.name == origin_chatid:
+            delete_job(job.name)
     answer = "Post marcado para os horários:\n"
     for group in os.listdir('Registers'):
-        number_of_people_in_group = cookiebot.getChatMembersCount(group.replace('.txt', ''))
-        if math.floor(number_of_people_in_group/50) < 0:
-            continue
-        #if the number of posts scheduled for the group is larger than 2*floor(number_of_people_in_group/50), unschedule oldest post for that group
-        #schedule post on random time for the group, for the next 3 days
-        #append destination_chatid and time to answer
-        pass
+        group_id = group.split('.')[0]
+        number_of_people_in_group = cookiebot.getChatMembersCount(group_id)
+        num_posts_for_group = 0
+        for job in jobs:
+            if job.description == group_id:
+                num_posts_for_group += 1
+        if num_posts_for_group < 2*math.floor(number_of_people_in_group/50):
+            #schedule post on random time for the group, for the next 3 days
+            #append destination_chatid and time to answer
+            pass
     try:
         Send(cookiebot, from_id, answer)
     except:
