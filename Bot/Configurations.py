@@ -87,7 +87,7 @@ def Configurar(cookiebot, msg, chat_id, listaadmins, language):
 
 def ConfigurarSettar(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    if msg['text'].isdigit() or msg['text'] in ["pt", "eng", "es"]:
+    if msg['text'].isdigit() or msg['text'].lower() in ["pt", "eng", "es"]:
         variable_to_be_altered = ""
         if "Bot language for the chat. Use pt for portuguese, eng for english or es for spanish" in msg['reply_to_message']['text']:
             variable_to_be_altered = "Language"
@@ -113,12 +113,12 @@ def ConfigurarSettar(cookiebot, msg, chat_id):
         text_file = open("Configs/Config_"+str(chat_to_alter)+".txt", 'w', encoding='utf-8')
         for line in lines:
             if variable_to_be_altered in line:
-                text_file.write(variable_to_be_altered + ": " + msg['text'] + "\n")
+                text_file.write(variable_to_be_altered + ": " + msg['text'].lower() + "\n")
                 cookiebot.sendMessage(chat_id, "Variable configured! ✔️\nYou can return to chat now")
                 DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
                 DeleteMessage(cookiebot, telepot.message_identifier(msg))
                 if variable_to_be_altered == "Language":
-                    SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'])
+                    SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'].lower())
             elif len(line.split()) > 1:
                 text_file.write(line)
         text_file.close()
