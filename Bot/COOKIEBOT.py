@@ -21,6 +21,7 @@ if updates:
     last_update_id = updates[-1]['update_id']
     cookiebot.getUpdates(offset=last_update_id+1)
 
+startPublisher(isBombot)
 cookiebot.sendMessage(mekhyID, 'I am online')
 
 def thread_function(msg):
