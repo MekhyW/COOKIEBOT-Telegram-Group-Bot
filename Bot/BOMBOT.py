@@ -121,7 +121,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(tuple(["/aleatorio", "/aleatório", "/random"])) and funfunctions == True:
                     ReplyAleatorio(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/meme") and funfunctions == True:
-                    Meme(cookiebot, msg, chat_id, sfw)
+                    Meme(cookiebot, msg, chat_id, language)
                 elif (msg['text'].startswith(tuple(["/dado", "/dice"])) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
                     Dado(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/idade", "/age", "/edad"])) and funfunctions == True:

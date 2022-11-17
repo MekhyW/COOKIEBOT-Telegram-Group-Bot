@@ -114,7 +114,7 @@ def ReplySticker(cookiebot, msg, chat_id):
     text.close()
     cookiebot.sendSticker(chat_id, random.choice(lines).replace("\n", ''), reply_to_message_id=msg['message_id'])
 
-def Meme(cookiebot, msg, chat_id, sfw):
+def Meme(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     wait_open("Registers/"+str(chat_id)+".txt")
     text_file = open("Registers/"+str(chat_id)+".txt", "r+", encoding='utf8')
@@ -131,18 +131,18 @@ def Meme(cookiebot, msg, chat_id, sfw):
     random_medias = text_file.readlines()
     random_photos = [media for media in random_medias if len(media.split()) > 2]
     text_file.close()
-    templates_sfw = os.listdir("Meme/SFW")
-    templates_nsfw = os.listdir("Meme/NSFW")
+    templates_eng = os.listdir("Meme/English")
+    templates_pt = os.listdir("Meme/Portuguese")
     caption = ""
     for attempt in range(10):
-        if sfw == 1:
-            template = "Meme/SFW/" + random.choice(templates_sfw)
+        if 'pt' not in language.lower():
+            template = "Meme/English/" + random.choice(templates_eng)
         else:
-            template_id = random.randint(0, len(templates_nsfw)+len(templates_sfw)-1)
-            if template_id > len(templates_sfw)-1:
-                template = "Meme/NSFW/" + templates_nsfw[template_id-len(templates_sfw)]
+            template_id = random.randint(0, len(templates_pt)+len(templates_eng)-1)
+            if template_id > len(templates_eng)-1:
+                template = "Meme/Portuguese/" + templates_pt[template_id-len(templates_eng)]
             else:
-                template = "Meme/SFW/" + templates_sfw[template_id]
+                template = "Meme/English/" + templates_eng[template_id]
         template_img = cv2.imread(template)
         mask_green = cv2.inRange(template_img, (0, 250, 0), (5, 255, 5))
         mask_red = cv2.inRange(template_img, (0, 0, 250), (5, 5, 255))
@@ -179,7 +179,6 @@ def Meme(cookiebot, msg, chat_id, sfw):
             for j in range(x, x+w):
                 if mask_green_copy[i-y, j-x] == 255:
                     template_img[i, j] = image[i-y, j-x]
-        #template_img[y:y+h, x:x+w] = cv2.bitwise_and(image, image, mask=mask_green_copy)
         caption += "@{} ".format(chosen_member.split()[0])
     for red in contours_red:
         x, y, w, h = cv2.boundingRect(red)
@@ -202,9 +201,8 @@ def Meme(cookiebot, msg, chat_id, sfw):
             for j in range(x, x+w):
                 if mask_red_copy[i-y, j-x] == 255:
                     template_img[i, j] = image[i-y, j-x]
-        #template_img[y:y+h, x:x+w] = cv2.bitwise_and(image, image, mask=mask_red_copy)
     if len(members_tagged) > 0:
-        Meme(cookiebot, msg, chat_id, sfw)
+        Meme(cookiebot, msg, chat_id, language)
     else:
         cv2.imwrite("meme.png", template_img)
         final_img = open("meme.png", 'rb')
