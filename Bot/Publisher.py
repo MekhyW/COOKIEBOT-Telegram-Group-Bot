@@ -6,6 +6,7 @@ subscriber = pubsub_v1.SubscriberClient.from_service_account_json("cookiebot_pub
 project_id = "cookiebot-309512"
 project_path = f"projects/{project_id}"
 parent = f"{project_path}/locations/southamerica-east1"
+topic_name = 'projects/cookiebot-309512/topics/cookiebot-publisher-topic'
 subscription_path = None
 
 def AskPublisher(cookiebot, msg, chat_id, language):
@@ -25,7 +26,7 @@ def create_job(job_name, job_description, job_data, job_schedule):
         'name': client.job_path(project_id, 'southamerica-east1', job_name),
         'description': job_description,
         'pubsub_target': {
-            'topic_name': 'projects/cookiebot-309512/topics/cookiebot-publisher-topic',
+            'topic_name': topic_name,
             'data': job_data,
         },
         'schedule': job_schedule,
@@ -53,29 +54,36 @@ def SchedulePost(cookiebot, query_data, from_id):
     for job in jobs:
         if job.name == origin_chatid:
             delete_job(job.name)
-    answer = "Post marcado para os horários:\n"
+    answer = "Post marcado para os horários (3 dias):\n"
     for group in os.listdir('Registers'):
         group_id = group.split('.')[0]
-        number_of_people_in_group = cookiebot.getChatMembersCount(group_id)
         num_posts_for_group = 0
         for job in jobs:
             if job.description == group_id:
                 num_posts_for_group += 1
-        if num_posts_for_group < 2*math.floor(number_of_people_in_group/50):
-            #schedule post on random time for the group, for the next 3 days
-            #append destination_chatid and time to answer
-            pass
+        if num_posts_for_group < 2*math.floor(cookiebot.getChatMembersCount(group_id)/50):
+            hour = random.randint(0,23)
+            minute = random.randint(0,59)
+            create_job(origin_chatid, group_id, "3 "+origin_chatid+" "+group_id+" "+origin_messageid, f"{minute} {hour} * * *")
+            answer += f"{hour}:{minute} - {cookiebot.getChat(group_id)['title']}\n"
     try:
         Send(cookiebot, from_id, answer)
     except:
         Send(cookiebot, origin_chatid, "Post adicionado à fila porém não consegui te mandar uma mensagem. Mande /start no meu privado para eu poder te mandar mensagens.")
 
-def pull_messages(number_of_messages):
-    response = subscriber.pull(subscription_path, max_messages = number_of_messages)
+def SchedulerPull(cookiebot):
+    response = subscriber.pull(subscription_path, max_messages = 1)
     received_messages = response.received_messages
     for message in received_messages:
-        print(message.message.data)
-        subscriber.acknowledge(subscription_path, [message.ack_id])
+        print(message.data)
+        remaining_times = int(message.data.split()[0]) - 1
+        origin_chatid = message.data.split()[1]
+        group_id = message.data.split()[2]
+        origin_messageid = message.data.split()[3]
+        message.ack()
+        if remaining_times <= 0:
+            delete_job(origin_chatid)
+        cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
     return received_messages
 
 def startPublisher(isBombot):
