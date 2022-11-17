@@ -6,6 +6,7 @@ subscriber = pubsub_v1.SubscriberClient.from_service_account_json("cookiebot_pub
 project_id = "cookiebot-309512"
 project_path = f"projects/{project_id}"
 parent = f"{project_path}/locations/southamerica-east1"
+subscription_path = None
 
 def AskPublisher(cookiebot, msg, chat_id, language):
     if language == "pt":
@@ -69,15 +70,17 @@ def SchedulePost(cookiebot, query_data, from_id):
     except:
         Send(cookiebot, origin_chatid, "Post adicionado à fila porém não consegui te mandar uma mensagem. Mande /start no meu privado para eu poder te mandar mensagens.")
 
-def publisher_topic_callback(post):
-    #called by scheduler
-    #posts post
-    print("Posted post: {}".format(post))
-    post.ack()
+def pull_messages(number_of_messages):
+    response = subscriber.pull(subscription_path, max_messages = number_of_messages)
+    received_messages = response.received_messages
+    for message in received_messages:
+        print(message.message.data)
+        subscriber.acknowledge(subscription_path, [message.ack_id])
+    return received_messages
 
 def startPublisher(isBombot):
+    global subscription_path
     if isBombot:
         subscription_path = subscriber.subscription_path(project_id, "bombot-subscription")
     else:
         subscription_path = subscriber.subscription_path(project_id, "cookiebot-subscription")
-    subscriber.subscribe(subscription_path, callback=publisher_topic_callback)
