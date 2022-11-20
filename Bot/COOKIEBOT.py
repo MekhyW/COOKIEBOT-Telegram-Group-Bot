@@ -237,21 +237,19 @@ def handle(msg):
 
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
+    chat_id = msg['message']['reply_to_message']['chat']['id']
+    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
     if 'CONFIG' in query_data:
         ConfigVariableButton(cookiebot, msg, query_data)
-    elif 'Pub' in query_data:
+    elif 'Pub' in query_data and str(from_id) in listaadmins_id:
         if query_data.startswith('SendToApproval'):
             AskApproval(cookiebot, query_data)
         elif query_data.startswith('Approve'):
             SchedulePost(cookiebot, query_data, from_id)
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-    else:
-        listaadmins_id = []
-        for admin in cookiebot.getChatAdministrators(msg['message']['reply_to_message']['chat']['id']):
-            listaadmins_id.append(str(admin['user']['id']))
-        if query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
-            SolveCaptcha(cookiebot, msg, msg['message']['reply_to_message']['chat']['id'], True)
-            DeleteMessage(telepot.message_identifier(msg['message']))
+    elif query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
+        SolveCaptcha(cookiebot, msg, chat_id, True)
+        DeleteMessage(telepot.message_identifier(msg['message']))
     run_unnatendedthreads()
         
 

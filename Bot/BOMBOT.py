@@ -92,13 +92,13 @@ def thread_function(msg):
                 if sfw == 1 and funfunctions == True:
                     photo_id = msg['photo'][-1]['file_id']
                     AddtoRandomDatabase(msg, chat_id, photo_id)
-                #if 'sender_chat' in msg and 'text' in msg and not isBombot:
-                #    AskPublisher(cookiebot, msg, chat_id, language)
+                if 'sender_chat' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and not isBombot:
+                    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "video":
                 if sfw == 1 and funfunctions == True:
                     AddtoRandomDatabase(msg, chat_id)
-                #if 'sender_chat' in msg and 'text' in msg and not isBombot:
-                #    AskPublisher(cookiebot, msg, chat_id, language)
+                if 'sender_chat' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and not isBombot:
+                    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "document":
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
                     ReplySticker(cookiebot, msg, chat_id)
@@ -203,8 +203,8 @@ def thread_function(msg):
         else:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
             cookiebot.sendMessage(mekhyID, str(msg))
-    #finally:
-    #    SchedulerPull(cookiebot)
+    finally:
+        SchedulerPull(cookiebot)
 
 def run_unnatendedthreads():
     global unnatended_threads
@@ -237,19 +237,19 @@ def handle(msg):
 
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
+    chat_id = msg['message']['reply_to_message']['chat']['id']
+    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
     if 'CONFIG' in query_data:
         ConfigVariableButton(cookiebot, msg, query_data)
-    elif 'Pub' in query_data:
-        if query_data.startswith('Approve'):
+    elif 'Pub' in query_data and str(from_id) in listaadmins_id:
+        if query_data.startswith('SendToApproval'):
+            AskApproval(cookiebot, query_data)
+        elif query_data.startswith('Approve'):
             SchedulePost(cookiebot, query_data, from_id)
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-    else:
-        listaadmins_id = []
-        for admin in cookiebot.getChatAdministrators(msg['message']['reply_to_message']['chat']['id']):
-            listaadmins_id.append(str(admin['user']['id']))
-        if query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
-            SolveCaptcha(cookiebot, msg, msg['message']['reply_to_message']['chat']['id'], True)
-            DeleteMessage(telepot.message_identifier(msg['message']))
+    elif query_data == 'CAPTCHA' and str(from_id) in listaadmins_id:
+        SolveCaptcha(cookiebot, msg, chat_id, True)
+        DeleteMessage(telepot.message_identifier(msg['message']))
     run_unnatendedthreads()
         
 

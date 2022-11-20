@@ -16,15 +16,15 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         answer = "Publish post?"
     cookiebot.sendMessage(chat_id, answer, reply_to_message_id=msg['message_id'], 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️",callback_data='SendToApprovalPub {}-{}-{}'.format(str(chat_id), str(msg['message_id']), str(msg['from']['id'])))],
+            [InlineKeyboardButton(text="✔️",callback_data='SendToApprovalPub {} {} {}'.format(str(chat_id), str(msg['message_id']), str(msg['from']['id'])))],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
         ]
     ))
 
 def AskApproval(cookiebot, query_data):
-    origin_chatid = query_data.split()[1].split('-')[0]
-    origin_messageid = query_data.split()[1].split('-')[1]
-    origin_userid = query_data.split()[1].split('-')[2]
+    origin_chatid = query_data.split()[1]
+    origin_messageid = query_data.split()[2]
+    origin_userid = query_data.split()[3]
     cookiebot.forwardMessage(mekhyID, origin_chatid, origin_messageid)
     cookiebot.sendMessage(mekhyID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
@@ -60,9 +60,9 @@ def delete_job(job_name):
     return response
 
 def SchedulePost(cookiebot, query_data):
-    origin_chatid = query_data.split()[1].split('-')[0]
-    origin_messageid = query_data.split()[1].split('-')[1]
-    origin_userid = query_data.split()[1].split('-')[2]
+    origin_chatid = query_data.split()[1]
+    origin_messageid = query_data.split()[2]
+    origin_userid = query_data.split()[3]
     jobs = list_jobs()
     for job in jobs:
         if job.name == origin_chatid:
