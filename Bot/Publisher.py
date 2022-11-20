@@ -88,11 +88,11 @@ def SchedulerPull(cookiebot):
     response = subscriber.pull(subscription=subscription_path, max_messages=1, return_immediately=True)
     received_messages = response.received_messages
     for message in received_messages:
-        print(message)
-        remaining_times = int(message.data.split()[0]) - 1
-        origin_chatid = message.data.split()[1]
-        group_id = message.data.split()[2]
-        origin_messageid = message.data.split()[3]
+        print(message.message.data)
+        remaining_times = int(message.message.data.split()[0]) - 1
+        origin_chatid = message.message.data.split()[1]
+        group_id = message.message.data.split()[2]
+        origin_messageid = message.message.data.split()[3]
         message.ack()
         if remaining_times <= 0:
             delete_job(origin_chatid)
