@@ -16,7 +16,19 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         answer = "Publish post?"
     cookiebot.sendMessage(chat_id, answer, reply_to_message_id=msg['message_id'], 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️",callback_data='ApprovePub {}-{}'.format(str(chat_id), str(msg['message_id'])))],
+            [InlineKeyboardButton(text="✔️",callback_data='SendToApprovalPub {}-{}-{}'.format(str(chat_id), str(msg['message_id']), str(msg['from']['id'])))],
+            [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
+        ]
+    ))
+
+def AskApproval(cookiebot, query_data):
+    origin_chatid = query_data.split()[1].split('-')[0]
+    origin_messageid = query_data.split()[1].split('-')[1]
+    origin_userid = query_data.split()[1].split('-')[2]
+    cookiebot.forwardMessage(mekhyID, origin_chatid, origin_messageid)
+    cookiebot.sendMessage(mekhyID, 'Approve post?', 
+    reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="✔️",callback_data='ApprovePub {}-{}-{}'.format(origin_chatid, origin_messageid, origin_userid))],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
         ]
     ))
@@ -47,9 +59,10 @@ def delete_job(job_name):
     print('Deleted job: {}'.format(response))
     return response
 
-def SchedulePost(cookiebot, query_data, from_id):
+def SchedulePost(cookiebot, query_data):
     origin_chatid = query_data.split()[1].split('-')[0]
     origin_messageid = query_data.split()[1].split('-')[1]
+    origin_userid = query_data.split()[1].split('-')[2]
     jobs = list_jobs()
     for job in jobs:
         if job.name == origin_chatid:
@@ -67,7 +80,7 @@ def SchedulePost(cookiebot, query_data, from_id):
             create_job(origin_chatid, group_id, "3 "+origin_chatid+" "+group_id+" "+origin_messageid, f"{minute} {hour} * * *")
             answer += f"{hour}:{minute} - {cookiebot.getChat(group_id)['title']}\n"
     try:
-        Send(cookiebot, from_id, answer)
+        Send(cookiebot, origin_userid, answer)
     except:
         Send(cookiebot, origin_chatid, "Post adicionado à fila porém não consegui te mandar uma mensagem. Mande /start no meu privado para eu poder te mandar mensagens.")
 
@@ -83,7 +96,7 @@ def SchedulerPull(cookiebot):
         message.ack()
         if remaining_times <= 0:
             delete_job(origin_chatid)
-        cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
+        #cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
     return received_messages
 
 def startPublisher(isBombot):
