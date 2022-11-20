@@ -89,14 +89,17 @@ def SchedulerPull(cookiebot):
     received_messages = response.received_messages
     for message in received_messages:
         print(message.message.data)
-        remaining_times = int(message.message.data.split()[0]) - 1
-        origin_chatid = message.message.data.split()[1]
-        group_id = message.message.data.split()[2]
-        origin_messageid = message.message.data.split()[3]
+        try:
+            remaining_times = int(message.message.data.split()[0]) - 1
+            origin_chatid = message.message.data.split()[1]
+            group_id = message.message.data.split()[2]
+            origin_messageid = message.message.data.split()[3]
+            if remaining_times <= 0:
+                delete_job(origin_chatid)
+            #cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
+        except Exception as e:
+            print(e)
         message.ack()
-        if remaining_times <= 0:
-            delete_job(origin_chatid)
-        #cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
     return received_messages
 
 def startPublisher(isBombot):
