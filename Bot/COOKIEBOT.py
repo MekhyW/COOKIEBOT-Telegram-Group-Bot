@@ -251,7 +251,7 @@ def handle_query(msg):
         if query_data.startswith('SendToApproval'):
             AskApproval(cookiebot, query_data)
         elif query_data.startswith('Approve'):
-            SchedulePost(cookiebot, query_data, from_id)
+            SchedulePost(cookiebot, query_data)
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
     elif query_data == 'CAPTCHA' and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
         SolveCaptcha(cookiebot, msg, chat_id, True)
