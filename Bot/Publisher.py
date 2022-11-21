@@ -39,7 +39,7 @@ def create_job(job_name, job_description, job_data, job_schedule):
         'description': job_description,
         'pubsub_target': {
             'topic_name': topic_name,
-            'data': job_data,
+            'data': b'{}'.format(job_data),
         },
         'schedule': job_schedule,
     }
