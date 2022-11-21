@@ -63,7 +63,7 @@ def SchedulePost(cookiebot, query_data):
     origin_chatid = query_data.split()[1]
     origin_messageid = query_data.split()[2]
     origin_userid = query_data.split()[3]
-    origin_caption = cookiebot.getMessage(origin_chatid, origin_messageid)['caption']
+    origin_chattitle = cookiebot.getChat(origin_chatid)['title']
     jobs = list_jobs()
     for job in jobs:
         if job.name == origin_chatid:
@@ -78,8 +78,9 @@ def SchedulePost(cookiebot, query_data):
         if num_posts_for_group < 2*math.floor(cookiebot.getChatMembersCount(group_id)/50):
             hour = random.randint(0,23)
             minute = random.randint(0,59)
-            create_job(origin_chatid+" --> "+group_id, origin_caption, "3 "+origin_chatid+" "+group_id+" "+origin_messageid, f"{minute} {hour} * * *")
-            answer += f"{hour}:{minute} - {cookiebot.getChat(group_id)['title']}\n"
+            target_chattitle = cookiebot.getChat(group_id)['title']
+            create_job(origin_chattitle+" --> "+target_chattitle, f"{hour}:{minute}", "3 "+origin_chatid+" "+group_id+" "+origin_messageid, f"{minute} {hour} * * *")
+            answer += f"{hour}:{minute} - {target_chattitle}\n"
     try:
         Send(cookiebot, origin_userid, answer)
     except:
