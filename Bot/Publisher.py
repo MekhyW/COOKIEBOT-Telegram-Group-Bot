@@ -79,7 +79,10 @@ def SchedulePost(cookiebot, query_data):
             hour = random.randint(0,23)
             minute = random.randint(0,59)
             target_chattitle = cookiebot.getChat(group_id)['title']
-            create_job(origin_chattitle+" --> "+target_chattitle, f"{hour}:{minute}", "3 "+origin_chatid+" "+group_id+" "+origin_messageid, f"{minute} {hour} * * *")
+            create_job(origin_chatid+group_id, 
+            f"{origin_chattitle} --> {target_chattitle}, at {hour}:{minute} ", 
+            f"3 {origin_chatid} {group_id} {origin_messageid}", 
+            f"{minute} {hour} * * *")
             answer += f"{hour}:{minute} - {target_chattitle}\n"
     try:
         Send(cookiebot, origin_userid, answer)
