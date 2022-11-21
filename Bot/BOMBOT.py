@@ -48,7 +48,7 @@ def thread_function(msg):
             if isBombot:
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
-                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *85* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
+                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *87* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                     [InlineKeyboardButton(text="Adicionar ao Grupo", url="https://t.me/CookieMWbot?startgroup=new")],
                     [InlineKeyboardButton(text="Grupo de teste/assistência", url="https://t.me/+mX6W3tGXPew2OTIx")]
@@ -238,15 +238,20 @@ def handle(msg):
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     print('Callback Query:', query_id, from_id, query_data)
-    chat_id = msg['message']['reply_to_message']['chat']['id']
-    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
+    try:
+        chat_id = msg['message']['reply_to_message']['chat']['id']
+        listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
+    except:
+        chat_id = from_id
+        listaadmins = []
+        listaadmins_id = []
     if 'CONFIG' in query_data:
         ConfigVariableButton(cookiebot, msg, query_data)
     elif 'Pub' in query_data and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
         if query_data.startswith('SendToApproval'):
             AskApproval(cookiebot, query_data)
         elif query_data.startswith('Approve'):
-            SchedulePost(cookiebot, query_data, from_id)
+            SchedulePost(cookiebot, query_data)
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
     elif query_data == 'CAPTCHA' and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
         SolveCaptcha(cookiebot, msg, chat_id, True)
