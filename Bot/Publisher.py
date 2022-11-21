@@ -78,12 +78,15 @@ def SchedulePost(cookiebot, query_data):
         if num_posts_for_group < 2*math.floor(cookiebot.getChatMembersCount(group_id)/50):
             hour = random.randint(0,23)
             minute = random.randint(0,59)
-            target_chattitle = cookiebot.getChat(group_id)['title']
-            create_job(origin_chatid+group_id, 
-            f"{origin_chattitle} --> {target_chattitle}, at {hour}:{minute} ", 
-            f"3 {origin_chatid} {group_id} {origin_messageid}", 
-            f"{minute} {hour} * * *")
-            answer += f"{hour}:{minute} - {target_chattitle}\n"
+            try:
+                target_chattitle = cookiebot.getChat(group_id)['title']
+                create_job(origin_chatid+group_id, 
+                f"{origin_chattitle} --> {target_chattitle}, at {hour}:{minute} ", 
+                f"3 {origin_chatid} {group_id} {origin_messageid}", 
+                f"{minute} {hour} * * *")
+                answer += f"{hour}:{minute} - {target_chattitle}\n"
+            except Exception as e:
+                print(e)
     try:
         Send(cookiebot, origin_userid, answer)
     except:
