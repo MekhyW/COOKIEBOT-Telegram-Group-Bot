@@ -238,8 +238,13 @@ def handle(msg):
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     print('Callback Query:', query_id, from_id, query_data)
-    chat_id = msg['message']['reply_to_message']['chat']['id']
-    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
+    try:
+        chat_id = msg['message']['reply_to_message']['chat']['id']
+        listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
+    except:
+        chat_id = from_id
+        listaadmins = []
+        listaadmins_id = []
     if 'CONFIG' in query_data:
         ConfigVariableButton(cookiebot, msg, query_data)
     elif 'Pub' in query_data and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
