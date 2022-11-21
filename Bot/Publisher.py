@@ -85,7 +85,7 @@ def SchedulePost(cookiebot, query_data):
         Send(cookiebot, origin_chatid, "Post adicionado à fila porém não consegui te mandar uma mensagem. Mande /start no meu privado para eu poder te mandar mensagens.")
 
 def SchedulerPull(cookiebot):
-    response = subscriber.pull(subscription=subscription_path, max_messages=1, return_immediately=True)
+    response = subscriber.pull(subscription=subscription_path, max_messages=100, return_immediately=True)
     received_messages = response.received_messages
     for message in received_messages:
         print(message.message.data)
