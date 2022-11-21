@@ -66,7 +66,7 @@ def SchedulePost(cookiebot, query_data):
     origin_chattitle = cookiebot.getChat(origin_chatid)['title']
     jobs = list_jobs()
     for job in jobs:
-        if job.name == origin_chatid:
+        if job.name.startswith(origin_chatid):
             delete_job(job.name)
     answer = "Post marcado para os horários (3 dias):\n"
     for group in os.listdir('Registers'):
