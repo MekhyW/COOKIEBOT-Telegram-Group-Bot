@@ -55,7 +55,7 @@ def list_jobs():
     return jobs
 
 def delete_job(job_name):
-    response = client.delete_job(job_name)
+    response = client.delete_job(name=job_name)
     print('Deleted job: {}'.format(response))
     return response
 
