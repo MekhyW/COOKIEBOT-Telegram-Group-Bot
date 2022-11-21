@@ -98,11 +98,12 @@ def SchedulerPull(cookiebot):
     received_messages = response.received_messages
     for message in received_messages:
         print(message.message.data)
+        data = message.message.data.decode('utf-8')
         try:
-            remaining_times = int(message.message.data.split()[0]) - 1
-            origin_chatid = message.message.data.split()[1]
-            group_id = message.message.data.split()[2]
-            origin_messageid = message.message.data.split()[3]
+            remaining_times = int(data.split()[0]) - 1
+            origin_chatid = data.split()[1]
+            group_id = data.split()[2]
+            origin_messageid = data.split()[3]
             if remaining_times <= 0:
                 delete_job(origin_chatid)
             #cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
