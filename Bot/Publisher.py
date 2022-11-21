@@ -99,7 +99,7 @@ def SchedulerPull(cookiebot):
             #cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
         except Exception as e:
             print(e)
-        message.ack()
+        subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
     return received_messages
 
 def startPublisher(isBombot):
