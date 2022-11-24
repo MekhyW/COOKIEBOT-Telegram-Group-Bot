@@ -110,9 +110,9 @@ def SchedulerPull(cookiebot):
             origin_messageid = data.split()[3]
             if remaining_times <= 0:
                 delete_job(origin_chatid)
-            #cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
+            cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
         except Exception as e:
-            print(e)
+            cookiebot.sendMessage(mekhyID, traceback.format_exc())
         subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
     return received_messages
 
