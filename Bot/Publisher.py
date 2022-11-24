@@ -60,6 +60,17 @@ def delete_job(job_name):
     print('Deleted job: {}'.format(response))
     return response
 
+def edit_job_data(job_name, job_data):
+    job = {
+        'name': job_name,
+        'pubsub_target': {
+            'data': bytes(job_data,'utf-8'),
+        },
+    }
+    response = client.update_job(job=job, update_mask={'paths': ['pubsub_target']})
+    print('Updated job: {}'.format(response.name))
+    return response
+
 def SchedulePost(cookiebot, query_data):
     origin_chatid = query_data.split()[1]
     origin_messageid = query_data.split()[2]
@@ -111,6 +122,8 @@ def SchedulerPull(cookiebot):
             origin_messageid = data.split()[3]
             if remaining_times <= 0:
                 delete_job(origin_chatid)
+            else:
+                edit_job_data(origin_chatid, f"{remaining_times} {origin_chatid} {group_id} {origin_messageid}")
             cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
         except Exception as e:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
