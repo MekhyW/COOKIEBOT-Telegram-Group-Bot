@@ -93,7 +93,8 @@ def SchedulePost(cookiebot, query_data):
                 print(e)
     try:
         Send(cookiebot, origin_userid, answer)
-    except:
+    except Exception as e:
+        cookiebot.sendMessage(mekhyID, e)
         Send(cookiebot, origin_chatid, "Post adicionado à fila porém não consegui te mandar uma mensagem. Mande /start no meu privado para eu poder te mandar mensagens.")
 
 def SchedulerPull(cookiebot):
