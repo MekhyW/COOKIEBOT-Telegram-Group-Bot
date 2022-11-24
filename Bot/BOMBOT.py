@@ -30,7 +30,7 @@ def thread_function(msg):
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
-        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions = 0, 1, 5, 600, 300, 1, 1
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, 'pt', 1, 1
         if chat_type == 'private' and 'reply_to_message' not in msg:
             SetComandosPrivate(cookiebot, chat_id)
             if 'text' in msg:
@@ -56,7 +56,7 @@ def thread_function(msg):
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
-                FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language = GetConfig(chat_id)
+                FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = GetConfig(chat_id)
                 CheckNewName(msg, chat_id)
                 if isBombot:
                     lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
@@ -92,12 +92,12 @@ def thread_function(msg):
                 if sfw == 1 and funfunctions == True:
                     photo_id = msg['photo'][-1]['file_id']
                     AddtoRandomDatabase(msg, chat_id, photo_id)
-                #if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg:
+                #if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherpost == True:
                 #    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "video":
                 if sfw == 1 and funfunctions == True:
                     AddtoRandomDatabase(msg, chat_id)
-                #if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg:
+                #if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherpost == True:
                 #    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "document":
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:

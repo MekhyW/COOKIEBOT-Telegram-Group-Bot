@@ -1,4 +1,5 @@
 from universal_funcs import *
+from Configurations import *
 from google.cloud import scheduler_v1
 from google.cloud import pubsub_v1
 client = scheduler_v1.CloudSchedulerClient.from_service_account_json("cookiebot_pubsub.json")
@@ -71,23 +72,25 @@ def SchedulePost(cookiebot, query_data):
     answer = "Post marcado para os horários (3 dias):\n"
     for group in os.listdir('Registers'):
         group_id = group.split('.')[0]
-        num_posts_for_group = 0
-        for job in jobs:
-            if job.description == group_id:
-                num_posts_for_group += 1
-        try:
-            memberscount = cookiebot.getChatMembersCount(group_id)
-            if num_posts_for_group < 2*math.floor(memberscount/50):
-                hour = random.randint(0,23)
-                minute = random.randint(0,59)
-                target_chattitle = cookiebot.getChat(group_id)['title']
-                create_job(origin_chatid+group_id, 
-                f"{origin_chattitle} --> {target_chattitle}, at {hour}:{minute} ", 
-                f"3 {origin_chatid} {group_id} {origin_messageid}", 
-                f"{minute} {hour} * * *")
-                answer += f"{hour}:{minute} - {target_chattitle}\n"
-        except Exception as e:
-            print(e)
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = GetConfig(group_id)
+        if publisherpost:
+            num_posts_for_group = 0
+            for job in jobs:
+                if job.description == group_id:
+                    num_posts_for_group += 1
+            try:
+                memberscount = cookiebot.getChatMembersCount(group_id)
+                if num_posts_for_group < 2*math.floor(memberscount/50):
+                    hour = random.randint(0,23)
+                    minute = random.randint(0,59)
+                    target_chattitle = cookiebot.getChat(group_id)['title']
+                    create_job(origin_chatid+group_id, 
+                    f"{origin_chattitle} --> {target_chattitle}, at {hour}:{minute} ", 
+                    f"3 {origin_chatid} {group_id} {origin_messageid}", 
+                    f"{minute} {hour} * * *")
+                    answer += f"{hour}:{minute} - {target_chattitle}\n"
+            except Exception as e:
+                print(e)
     try:
         Send(cookiebot, origin_userid, answer)
     except:

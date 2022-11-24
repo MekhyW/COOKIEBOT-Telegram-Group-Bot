@@ -28,7 +28,7 @@ def SetComandosPrivate(cookiebot, chat_id):
     SetLanguageComandos(cookiebot, chat_id, chat_id, "private")
 
 def GetConfig(chat_id):
-    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language = 0, 1, 5, 600, 300, 1, 1, "pt"
+    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, "pt", 1, 1
     if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
         open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
         text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
@@ -55,7 +55,11 @@ def GetConfig(chat_id):
             sfw = int(line.split()[1])
         elif line.split()[0] == "Language:":
             language = line.split()[1]
-    return FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language
+        elif line.split()[0] == "Publisher_Post:":
+            publisherpost = int(line.split()[1])
+        elif line.split()[0] == "Publisher_Ask:":
+            publisherask = int(line.split()[1])
+    return FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask
 
 
 def Configurar(cookiebot, msg, chat_id, listaadmins, language):
@@ -74,7 +78,9 @@ def Configurar(cookiebot, msg, chat_id, listaadmins, language):
                                     [InlineKeyboardButton(text="🕒 CAPTCHA",callback_data='d CONFIG {}'.format(str(chat_id)))],
                                     [InlineKeyboardButton(text="Fun Functions",callback_data='h CONFIG {}'.format(str(chat_id)))],
                                     [InlineKeyboardButton(text="Utility Functions",callback_data='i CONFIG {}'.format(str(chat_id)))],
-                                    [InlineKeyboardButton(text="SFW Chat",callback_data='j CONFIG {}'.format(str(chat_id)))]
+                                    [InlineKeyboardButton(text="SFW Chat",callback_data='j CONFIG {}'.format(str(chat_id)))],
+                                    [InlineKeyboardButton(text="Publisher Post",callback_data='m CONFIG {}'.format(str(chat_id)))],
+                                    [InlineKeyboardButton(text="Publisher Ask",callback_data='n CONFIG {}'.format(str(chat_id)))]
                                 ]
                             ))
             Send(cookiebot, chat_id, "Te mandei uma mensagem no chat privado para configurar", msg, language)
@@ -105,6 +111,10 @@ def ConfigurarSettar(cookiebot, msg, chat_id):
             variable_to_be_altered = "Funções_Utilidade"
         elif "Use 1 to indicate the chat is SFW, or 0 for NSFW." in msg['reply_to_message']['text']:
             variable_to_be_altered = "SFW"
+        elif "Use 1 to allow the bot to post publications from other channels (only works if group has over 50 members), or 0 to not allow" in msg['reply_to_message']['text']:
+            variable_to_be_altered = "Publisher_Post"
+        elif "Use 1 if the bot should add posts sent in the group to the publisher queue, or 0 if not" in msg['reply_to_message']['text']:
+            variable_to_be_altered = "Publisher_Ask"
         chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
         wait_open("Configs/Config_"+str(chat_to_alter)+".txt")
         text_file = open("Configs/Config_"+str(chat_to_alter)+".txt", 'r', encoding='utf-8')
@@ -144,6 +154,10 @@ def ConfigVariableButton(cookiebot, msg, query_data):
         cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 to enable commands and utility features, or 0 to disable them.\nREPLY THIS MESSAGE with the new variable value".format(query_data.split()[2]))
     elif query_data.startswith('j'):
         cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 to indicate the chat is SFW, or 0 for NSFW.\nREPLY THIS MESSAGE with the new variable value".format(query_data.split()[2]))
+    elif query_data.startswith('m'):
+        cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 to allow the bot to post publications from other channels (only works if group has over 50 members), or 0 to not allow\nREPLY THIS MESSAGE with the new variable value".format(query_data.split()[2]))
+    elif query_data.startswith('n'):
+        cookiebot.sendMessage(msg['message']['chat']['id'], "Chat = {}\nUse 1 if the bot should add posts sent in the group to the publisher queue, or 0 if not\nREPLY THIS MESSAGE with the new variable value".format(query_data.split()[2]))
 
 
 def AtualizaBemvindo(cookiebot, msg, chat_id):
