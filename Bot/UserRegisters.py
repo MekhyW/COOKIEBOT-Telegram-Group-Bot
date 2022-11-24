@@ -5,7 +5,7 @@ def CheckNewName(msg, chat_id):
         open("Registers/"+str(chat_id)+".txt", 'a', encoding='utf-8').close() 
     wait_open("Registers/"+str(chat_id)+".txt")
     text_file = open("Registers/"+str(chat_id)+".txt", "r+", encoding='utf-8')
-    if 'username' in msg['from'] and (check_if_string_in_file(text_file, msg['from']['username']) == False):
+    if 'from' in msg and 'username' in msg['from'] and (check_if_string_in_file(text_file, msg['from']['username']) == False):
         text_file.write("\n"+msg['from']['username'])
     text_file.close()
 
@@ -24,7 +24,7 @@ def CheckLastMessageDatetime(msg, chat_id):
     for line in lines:
         if line == '':
             pass
-        elif 'username' in msg['from'] and line.startswith(msg['from']['username']):
+        elif 'from' in msg and 'username' in msg['from'] and line.startswith(msg['from']['username']):
             entry = line.split()
             if 'text' in msg:
                 if msg['text'].startswith("/"):
@@ -53,7 +53,7 @@ def CheckLastMessageDatetime(msg, chat_id):
 
 def Everyone(cookiebot, msg, chat_id, listaadmins, language):
     cookiebot.sendChatAction(chat_id, 'typing')
-    if str(msg['from']['username']) not in listaadmins:
+    if 'from' in msg and str(msg['from']['username']) not in listaadmins:
         Send(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo!", msg, language)
     else:
         wait_open("Registers/"+str(chat_id)+".txt")

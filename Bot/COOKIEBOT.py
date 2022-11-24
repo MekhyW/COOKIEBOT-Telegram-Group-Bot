@@ -34,15 +34,15 @@ def thread_function(msg):
         if chat_type == 'private' and 'reply_to_message' not in msg:
             SetComandosPrivate(cookiebot, chat_id)
             if 'text' in msg:
-                if msg['text'].startswith(tuple(["/grupos", "/groups"])) and msg['from']['id'] == mekhyID:
+                if msg['text'].startswith(tuple(["/grupos", "/groups"])) and 'from' in msg and msg['from']['id'] == mekhyID:
                     Grupos(cookiebot, msg, chat_id, 'eng')
                 elif msg['text'].startswith(tuple(["/comandos", "/commands"])):
                     Comandos(cookiebot, msg, chat_id, 'eng')
-                elif msg['text'] == "/stop" and msg['from']['id'] == mekhyID:
+                elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == mekhyID:
                     os._exit(0)
-                elif msg['text'] == "/restart" and msg['from']['id'] == mekhyID:
+                elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == mekhyID:
                     os.execl(sys.executable, sys.executable, *sys.argv)
-                elif msg['text'].startswith("/leave") and msg['from']['id'] == mekhyID:
+                elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, msg['text'].split()[1])
                     os.remove('Registers/{}.txt'.format(msg['text'].split()[1]))
             if isBombot:
@@ -92,12 +92,12 @@ def thread_function(msg):
                 if sfw == 1 and funfunctions == True:
                     photo_id = msg['photo'][-1]['file_id']
                     AddtoRandomDatabase(msg, chat_id, photo_id)
-                #if 'sender_chat' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg:
+                #if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg:
                 #    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "video":
                 if sfw == 1 and funfunctions == True:
                     AddtoRandomDatabase(msg, chat_id)
-                #if 'sender_chat' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg:
+                #if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg:
                 #    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "document":
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
@@ -109,7 +109,7 @@ def thread_function(msg):
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
                     ReplySticker(cookiebot, msg, chat_id)
             elif 'text' in msg:
-                if msg['text'].startswith("/leave") and msg['from']['id'] == mekhyID:
+                if msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, chat_id)
                 elif isBombot and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("FurBots functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                     CooldownAction(cookiebot, msg, chat_id, language)
