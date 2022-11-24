@@ -39,26 +39,27 @@ def GetConfig(chat_id):
     lines = text_file.readlines()
     text_file.close()
     for line in lines:
-        if line.split()[0] == "FurBots:":
-            FurBots = int(line.split()[1])
-        elif line.split()[0] == "Sticker_Spam_Limit:":
-            stickerspamlimit = int(line.split()[1])
-        elif line.split()[0] == "Tempo_sem_poder_mandar_imagem:":
-            limbotimespan = int(line.split()[1])
-        elif line.split()[0] == "Tempo_Captcha:":
-            captchatimespan = int(line.split()[1])
-        elif line.split()[0] == "Funções_Diversão:":
-            funfunctions = int(line.split()[1])
-        elif line.split()[0] == "Funções_Utilidade:":
-            utilityfunctions = int(line.split()[1])
-        elif line.split()[0] == "SFW:":
-            sfw = int(line.split()[1])
-        elif line.split()[0] == "Language:":
-            language = line.split()[1]
-        elif line.split()[0] == "Publisher_Post:":
-            publisherpost = int(line.split()[1])
-        elif line.split()[0] == "Publisher_Ask:":
-            publisherask = int(line.split()[1])
+        if len(line.split()):
+            if line.split()[0] == "FurBots:":
+                FurBots = int(line.split()[1])
+            elif line.split()[0] == "Sticker_Spam_Limit:":
+                stickerspamlimit = int(line.split()[1])
+            elif line.split()[0] == "Tempo_sem_poder_mandar_imagem:":
+                limbotimespan = int(line.split()[1])
+            elif line.split()[0] == "Tempo_Captcha:":
+                captchatimespan = int(line.split()[1])
+            elif line.split()[0] == "Funções_Diversão:":
+                funfunctions = int(line.split()[1])
+            elif line.split()[0] == "Funções_Utilidade:":
+                utilityfunctions = int(line.split()[1])
+            elif line.split()[0] == "SFW:":
+                sfw = int(line.split()[1])
+            elif line.split()[0] == "Language:":
+                language = line.split()[1]
+            elif line.split()[0] == "Publisher_Post:":
+                publisherpost = int(line.split()[1])
+            elif line.split()[0] == "Publisher_Ask:":
+                publisherask = int(line.split()[1])
     return FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask
 
 
