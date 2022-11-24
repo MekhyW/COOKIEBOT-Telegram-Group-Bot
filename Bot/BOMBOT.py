@@ -92,13 +92,13 @@ def thread_function(msg):
                 if sfw == 1 and funfunctions == True:
                     photo_id = msg['photo'][-1]['file_id']
                     AddtoRandomDatabase(msg, chat_id, photo_id)
-                #if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherpost == True:
-                #    AskPublisher(cookiebot, msg, chat_id, language)
+                if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherpost == True:
+                    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "video":
                 if sfw == 1 and funfunctions == True:
                     AddtoRandomDatabase(msg, chat_id)
-                #if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherpost == True:
-                #    AskPublisher(cookiebot, msg, chat_id, language)
+                if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherpost == True:
+                    AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "document":
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
                     ReplySticker(cookiebot, msg, chat_id)
@@ -249,7 +249,7 @@ def handle_query(msg):
         ConfigVariableButton(cookiebot, msg, query_data)
     elif 'Pub' in query_data and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
         if query_data.startswith('SendToApproval'):
-            AskApproval(cookiebot, query_data)
+            AskApproval(cookiebot, query_data, from_id)
         elif query_data.startswith('Approve'):
             SchedulePost(cookiebot, query_data)
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))

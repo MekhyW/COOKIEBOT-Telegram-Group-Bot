@@ -249,7 +249,7 @@ def handle_query(msg):
         ConfigVariableButton(cookiebot, msg, query_data)
     elif 'Pub' in query_data and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
         if query_data.startswith('SendToApproval'):
-            AskApproval(cookiebot, query_data)
+            AskApproval(cookiebot, query_data, from_id)
         elif query_data.startswith('Approve'):
             SchedulePost(cookiebot, query_data)
         cookiebot.deleteMessage(telepot.message_identifier(msg['message']))

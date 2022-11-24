@@ -17,15 +17,15 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         answer = "Publish post?"
     cookiebot.sendMessage(chat_id, answer, reply_to_message_id=msg['message_id'], 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️",callback_data='SendToApprovalPub {} {} {}'.format(str(chat_id), str(msg['message_id']), str(msg['from']['id'])))],
+            [InlineKeyboardButton(text="✔️",callback_data='SendToApprovalPub {} {}'.format(str(chat_id), str(msg['message_id'])))],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
         ]
     ))
 
-def AskApproval(cookiebot, query_data):
+def AskApproval(cookiebot, query_data, from_id):
     origin_chatid = query_data.split()[1]
     origin_messageid = query_data.split()[2]
-    origin_userid = query_data.split()[3]
+    origin_userid = from_id
     cookiebot.forwardMessage(mekhyID, origin_chatid, origin_messageid)
     cookiebot.sendMessage(mekhyID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
