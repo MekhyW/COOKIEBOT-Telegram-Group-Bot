@@ -208,4 +208,7 @@ def Meme(cookiebot, msg, chat_id, language):
         final_img = open("meme.png", 'rb')
         cookiebot.sendPhoto(chat_id, photo=final_img, caption=caption, reply_to_message_id=msg['message_id'])
         final_img.close()
-        os.remove("meme.png")
+        try:
+            os.remove("meme.png")
+        except FileNotFoundError:
+            pass
