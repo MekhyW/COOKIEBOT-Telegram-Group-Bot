@@ -5,5 +5,5 @@ Tempo_Captcha: 180
 Low_resolution_area: 10001
 Funções_Diversão: 1
 Funções_Utilidade: 1
-SFW: 0
+SFW: 1
 Language: pt

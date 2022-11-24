@@ -12,19 +12,21 @@ Palavrões poderão ser eventualmente usados como interjeição ou frase de efei
 - violência verbal;
 - racismo;
 - preconceito (de todos os tipos);
-- divulgação de fake news (inclusive relacionadas a Covid-19);
+- divulgação de fake news;
 - apologia a crimes/condutas criminosas;
 - envio de links, hacks, arquivos e conteúdo que infrinja regras de direitos autorais (pirataria em geral);
 - discussões políticas/eleitorais;
 - assuntos envolvendo atentados à vida.
 
-🔨 Em caso descumprimento das regras, descumprimento de pedidos do staff, as punições seguirão a seguinte ordem:
-- Mutado por 1 dia
-- Mutado por 7 dias
-- Banido permanentemente
+🔨 Em caso descumprimento das regras, descumprimento de pedidos do staff, as punições podem ser:
+- Mute por 1 dia
+- Mute por 7 dias
+- Ban permanente
 - O banimento poderá ser a primeira punição dependendo da gravidade e do julgamento dos moderadores do chat.
 
 ❌ O staff se reserva ao direito de não discutir sobre regras e punições no chat aberto.
+
+📺 Anúncios podem ser postados uma vez por dia e devem ser em português, além de mostrarem os valores em R$/BRL
 
 😎 Siga as regras de bom senso e as comunicações dos admins.
 Descumprir os pedidos dos moderadores ou ironizar os pedidos gerará punições imediatas.
