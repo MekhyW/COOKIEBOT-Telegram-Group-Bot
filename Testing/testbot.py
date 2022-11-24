@@ -1,10 +1,24 @@
 import telepot
+from telepot.loop import MessageLoop
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
 token = ''
 mekhyID = 780875868
+testgroupID = -1001618375433
 
 bot = telepot.Bot(token)
+
+#bot.sendMessage(testgroupID, 'test query', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+#                   [InlineKeyboardButton(text='test', callback_data='test')]]))
 
 def changecmds(bot):
     bot.setMyCommands(commands=[{'command': 'idk', 'description': 'description'}], scope={"type": "chat", 'chat_id': mekhyID})
 
-changecmds(bot)
+def handle(msg):
+    content_type, chat_type, chat_id = telepot.glance(msg)
+    print(content_type, chat_type, chat_id)
+
+def handle_query(msg):
+    query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
+    print('Callback Query:', query_id, from_id, query_data)
+
+MessageLoop(bot, {'chat': handle, 'callback_query': handle_query}).run_forever()
