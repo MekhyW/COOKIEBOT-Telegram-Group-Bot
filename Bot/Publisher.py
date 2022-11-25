@@ -64,6 +64,7 @@ def edit_job_data(job_name, job_data):
     job = {
         'name': client.job_path(project_id, 'southamerica-east1', job_name),
         'pubsub_target': {
+            'topic_name': topic_name,
             'data': bytes(job_data,'utf-8'),
         },
     }
