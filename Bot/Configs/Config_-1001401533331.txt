@@ -8,4 +8,8 @@ Funções_Utilidade: 1
 SFW: 1
 Language: pt
 Publisher_Post: 0
+<<<<<<< Updated upstream
 Publisher_Ask: 0
+=======
+Publisher_Ask: 1
+>>>>>>> Stashed changes

@@ -7,5 +7,5 @@ Funções_Utilidade: 0
 SFW: 1
 Language: eng
 
-Publisher_Post: 1
+Publisher_Post: 0
 Publisher_Ask: 1

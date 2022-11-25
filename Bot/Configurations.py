@@ -32,7 +32,7 @@ def GetConfig(chat_id):
     if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
         open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
         text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-        text_file.write("FurBots: 0\nSticker_Spam_Limit: 15\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1\nLanguage: pt")
+        text_file.write("FurBots: 0\nSticker_Spam_Limit: 15\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1\nLanguage: pt\nPublisher_Post: 0\nPublisher_Ask: 1")
         text_file.close()
     wait_open("Configs/Config_"+str(chat_id)+".txt")
     text_file = open("Configs/Config_"+str(chat_id)+".txt", "r", encoding='utf-8')

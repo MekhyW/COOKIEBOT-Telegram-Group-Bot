@@ -30,7 +30,7 @@ def thread_function(msg):
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
-        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, 'pt', 1, 1
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, 'pt', 0, 1
         if chat_type == 'private' and 'reply_to_message' not in msg:
             SetComandosPrivate(cookiebot, chat_id)
             if 'text' in msg:
