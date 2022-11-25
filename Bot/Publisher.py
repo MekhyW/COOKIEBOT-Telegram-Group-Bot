@@ -88,11 +88,11 @@ def SchedulePost(cookiebot, query_data):
         if publisherpost:
             num_posts_for_group = 0
             for job in jobs:
-                if job.description == group_id:
+                if f"--> {group_id}" in job.description:
                     num_posts_for_group += 1
             try:
                 memberscount = cookiebot.getChatMembersCount(group_id)
-                if num_posts_for_group < 2*math.floor(memberscount/50):
+                if num_posts_for_group < math.floor(memberscount/50):
                     hour = random.randint(0,23)
                     minute = random.randint(0,59)
                     target_chattitle = cookiebot.getChat(group_id)['title']
