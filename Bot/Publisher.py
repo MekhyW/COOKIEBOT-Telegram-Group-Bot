@@ -62,7 +62,7 @@ def delete_job(job_name):
 
 def edit_job_data(job_name, job_data):
     job = {
-        'name': job_name,
+        'name': client.job_path(project_id, 'southamerica-east1', job_name),
         'pubsub_target': {
             'data': bytes(job_data,'utf-8'),
         },
