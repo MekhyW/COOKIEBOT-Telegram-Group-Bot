@@ -13,7 +13,7 @@ bot = ChatBot(
 conversa = ListTrainer(bot)
 df = pd.read_csv('result-master-ptbr.csv')
 for index in range(len(df)):
-    if index < 435000:
+    if index < 470000:
         continue
     print(str(index) + ' / ' + str(len(df)))
     try:
