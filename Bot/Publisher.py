@@ -121,9 +121,9 @@ def SchedulerPull(cookiebot):
             group_id = data.split()[2]
             origin_messageid = data.split()[3]
             if remaining_times <= 0:
-                delete_job(origin_chatid)
+                delete_job(origin_chatid+group_id)
             else:
-                edit_job_data(origin_chatid, f"{remaining_times} {origin_chatid} {group_id} {origin_messageid}")
+                edit_job_data(origin_chatid+group_id, f"{remaining_times} {origin_chatid} {group_id} {origin_messageid}")
             cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
         except Exception as e:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
