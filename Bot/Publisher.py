@@ -81,11 +81,12 @@ def SchedulePost(cookiebot, query_data):
     for job in jobs:
         if job.name.startswith(f"{parent}/jobs/{origin_chatid}"):
             delete_job(job.name)
-    answer = "Post marcado para os horários (3 dias):\n"
+    answer = "Post set for the following times (3 days):\n"
+    language_origin = GetConfig(origin_chatid)[7]
     for group in os.listdir('Registers'):
         group_id = group.split('.')[0]
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = GetConfig(group_id)
-        if publisherpost:
+        if publisherpost and language_origin == language:
             num_posts_for_group = 0
             for job in jobs:
                 if f"--> {group_id}" in job.description:
