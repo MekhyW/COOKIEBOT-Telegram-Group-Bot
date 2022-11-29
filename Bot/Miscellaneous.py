@@ -32,16 +32,16 @@ def Grupos(cookiebot, msg, chat_id, language):
 
 def Comandos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Cookiebot functions {}.txt".format(language))
-    text_file = open("Cookiebot functions {}.txt".format(language), "r+", encoding='utf8')
+    wait_open("Static/Cookiebot_functions_{}.txt".format(language))
+    text_file = open("Static/Cookiebot_functions_{}.txt".format(language), "r+", encoding='utf8')
     string = text_file.read()
     text_file.close()
     cookiebot.sendMessage(chat_id, string, reply_to_message_id=msg['message_id'])
 
 def Hoje(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("QqEuFaço.txt")
-    text_file = open("QqEuFaço.txt", "r+", encoding='utf8')
+    wait_open("Static/QqEuFaço.txt")
+    text_file = open("Static/QqEuFaço.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
     Send(cookiebot, chat_id, "Hoje pra vc é dia de "+target, msg, language)
@@ -49,8 +49,8 @@ def Hoje(cookiebot, msg, chat_id, language):
 
 def Cheiro(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Cheiro.txt")
-    text_file = open("Cheiro.txt", "r+", encoding='utf8')
+    wait_open("Static/Cheiro.txt")
+    text_file = open("Static/Cheiro.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
     Send(cookiebot, chat_id, "*sniff* *sniff*\nHmmmmmm\n\nVocê está com um cheirin de "+target, msg, language)
@@ -58,8 +58,8 @@ def Cheiro(cookiebot, msg, chat_id, language):
 
 def QqEuFaço(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("QqEuFaço.txt")
-    text_file = open("QqEuFaço.txt", "r+", encoding='utf8')
+    wait_open("Static/QqEuFaço.txt")
+    text_file = open("Static/QqEuFaço.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
     Send(cookiebot, chat_id, "Vai "+target, msg, language)

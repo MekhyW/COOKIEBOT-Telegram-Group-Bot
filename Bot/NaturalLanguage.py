@@ -26,8 +26,8 @@ def OnSay(cookiebot, msg, chat_id):
         for word in msg['text'].split():
             keyword_texts.append(unidecode.unidecode(''.join(filter(str.isalnum, word.lower()))))
         print(keyword_texts)
-        wait_open("Onsay_Dictionary.txt")
-        text_file = open("Onsay_Dictionary.txt", 'r', encoding='utf8')
+        wait_open("Static/Onsay_Dictionary.txt")
+        text_file = open("Static/Onsay_Dictionary.txt", 'r', encoding='utf8')
         lines = text_file.readlines()
         text_file.close()
         for line in lines:
