@@ -10,8 +10,8 @@ def GetAdmins(cookiebot, msg, chat_id):
 
 
 def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language):
-    wait_open("Cookiebot functions {}.txt".format(language))
-    text_file = open("Cookiebot functions {}.txt".format(language), "r", encoding='utf8')
+    wait_open("Static/Cookiebot_functions_{}.txt".format(language))
+    text_file = open("Static/Cookiebot_functions_{}.txt".format(language), "r", encoding='utf8')
     lines = text_file.readlines()
     text_file.close()
     comandos = []
