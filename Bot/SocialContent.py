@@ -51,68 +51,28 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
         print(e)
 
 
-def AddtoRandomDatabase(msg, chat_id, photo_id=None):
-    if 'forward_from' in msg:
-        return
-    wait_open("Random_Database.txt")
-    text = open("Random_Database.txt", 'r+', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    text = open("Random_Database.txt", 'w', encoding='utf-8')
-    if len(lines) > 1000:
-        i = len(lines) - 1000
-    else:
-        i = 0
-    while i < len(lines):
-        if not lines[i] == "\n":
-            text.write(lines[i])
-        i += 1
-    i = 0
-    if photo_id:
-        text.write(str(chat_id) + " " + str(msg['message_id']) + " " + str(photo_id) + "\n")
-    else:
-        text.write(str(chat_id) + " " + str(msg['message_id']) + "\n")
-    text.close()
+def AddtoRandomDatabase(msg, chat_id, photo_id=''):
+    if not 'forward_from' in msg:
+        PostRequestBackend('randomdatabase', {'chat_id': chat_id, 'message_id': str(msg['message_id']), 'photo_id': photo_id})
 
 def ReplyAleatorio(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
-    wait_open("Random_Database.txt")
-    text = open("Random_Database.txt", 'r+', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
     for attempt in range(10):
         try:
-            target = random.choice(lines).replace("\n", '')
-            cookiebot.forwardMessage(chat_id, int(target.split()[0]), int(target.split()[1]))
+            target = GetRequestBackend("randomdatabase")
+            cookiebot.forwardMessage(chat_id, target['id'], target['idMessage'])
             break
         except Exception as e:
             print(e)
         
 
 def AddtoStickerDatabase(msg, chat_id):
-    wait_open("Sticker_Database.txt")
-    text = open("Sticker_Database.txt", 'r+', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    text = open("Sticker_Database.txt", 'w', encoding='utf-8')
-    if len(lines) > 1000:
-        i = len(lines) - 1000
-    else:
-        i = 0
-    while i < len(lines):
-        if not lines[i] == "\n":
-            text.write(lines[i])
-        i += 1
-    i = 0
-    text.write(msg['sticker']['file_id'] + "\n")
-    text.close()
+    stickerId = msg['sticker']['file_id']
+    PostRequestBackend('stickerdatabase', {'id': stickerId})
 
 def ReplySticker(cookiebot, msg, chat_id):
-    wait_open("Sticker_Database.txt")
-    text = open("Sticker_Database.txt", 'r+', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    cookiebot.sendSticker(chat_id, random.choice(lines).replace("\n", ''), reply_to_message_id=msg['message_id'])
+    sticker = GetRequestBackend("stickerdatabase")
+    cookiebot.sendSticker(chat_id, sticker['id'], reply_to_message_id=msg['message_id'])
 
 def Meme(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
