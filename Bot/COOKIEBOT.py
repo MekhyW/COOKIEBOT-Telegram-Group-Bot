@@ -43,8 +43,9 @@ def thread_function(msg):
                 elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == mekhyID:
                     os.execl(sys.executable, sys.executable, *sys.argv)
                 elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
-                    LeaveAndBlacklist(cookiebot, msg['text'].split()[1])
-                    os.remove('Registers/{}.txt'.format(msg['text'].split()[1]))
+                    targetId = msg['text'].split()[1]
+                    LeaveAndBlacklist(cookiebot, targetId)
+                    DeleteRequestBackend(f'registers/{targetId}')
             if isBombot:
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
@@ -60,15 +61,11 @@ def thread_function(msg):
                 CheckNewName(msg, chat_id)
             if content_type == "new_chat_member":
                 if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
-                    wait_open("Blacklist.txt")
-                    text = open("Blacklist.txt", 'r', encoding='utf-8')
-                    lines = text.readlines()
-                    text.close()
-                    for line in lines:
-                        if str(chat_id) in line:
-                            LeaveAndBlacklist(cookiebot, chat_id)
-                            cookiebot.sendMessage(mekhyID, "Auto-left:\n{}".format(chat_id))
-                            return
+                    isBlacklisted = GetRequestBackend(f"blacklist/{chat_id}")
+                    if not 'error' in isBlacklisted:
+                        LeaveAndBlacklist(cookiebot, chat_id)
+                        cookiebot.sendMessage(mekhyID, "Auto-left:\n{}".format(chat_id))
+                        return
                     cookiebot.sendMessage(mekhyID, "Added:\n{}".format(cookiebot.getChat(chat_id)))
                 if msg['new_chat_participant']['id'] != cookiebot.getMe()['id'] and not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
