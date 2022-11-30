@@ -1,12 +1,11 @@
 googleAPIkey = ''
-newsAPIkey = ''
 searchEngineCX = ''
-smalltalkKey = ''
 cookiebotTOKEN = ''
 bombotTOKEN = ''
 mekhyID = 780875868
 import os, math, numpy, random, time, datetime, re, sys, traceback
 import urllib, json, requests
+from requests.auth import HTTPBasicAuth
 from bs4 import BeautifulSoup
 import telepot
 from telepot.loop import MessageLoop
@@ -14,6 +13,23 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Messa
 from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
 import googletrans
 translator = googletrans.Translator()
+login_backend, password_backend, serverIP = json.loads(open('cookiebot_backendauth.json', 'r').read())
+
+def GetRequestBackend(route, params=None):
+    response = requests.get(f'{serverIP}/{route}', params=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False)
+    return json.loads(response.text)
+
+def PostRequestBackend(route, params=None):
+    response = requests.post(f'{serverIP}/{route}', params=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False)
+    return json.loads(response.text)
+
+def PutRequestBackend(route, params=None):
+    response = requests.put(f'{serverIP}/{route}', params=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False)
+    return json.loads(response.text)
+
+def DeleteRequestBackend(route, params=None):
+    response = requests.delete(f'{serverIP}/{route}', params=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False)
+    return json.loads(response.text)
 
 def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt"):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -28,17 +44,11 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt"):
         cookiebot.sendMessage(chat_id, text)
 
 def BanAndBlacklist(cookiebot, chat_id, user_id):
-    wait_open('Blacklist.txt')
-    with open('Blacklist.txt', 'a') as f:
-        f.write('\n' + str(user_id))
-    f.close()
+    PostRequestBackend(f'blacklist/{user_id}')
     cookiebot.kickChatMember(chat_id, user_id)
 
 def LeaveAndBlacklist(cookiebot, chat_id):
-    wait_open('Blacklist.txt')
-    with open('Blacklist.txt', 'a') as f:
-        f.write('\n' + str(chat_id))
-    f.close()
+    PostRequestBackend(f'blacklist/{chat_id}')
     cookiebot.leaveChat(chat_id)
 
 def wait_open(filename):
