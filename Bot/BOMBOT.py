@@ -58,8 +58,6 @@ def thread_function(msg):
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
                 FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = GetConfig(chat_id)
                 CheckNewName(msg, chat_id)
-                if isBombot:
-                    lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
             if content_type == "new_chat_member":
                 if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
                     wait_open("Blacklist.txt")
@@ -111,8 +109,6 @@ def thread_function(msg):
             elif 'text' in msg:
                 if msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, chat_id)
-                elif isBombot and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("Static/FurBots_functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                    CooldownAction(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/análise", "/análisis", "/analysis"])):
                     if 'reply_to_message' in msg:
                         Analyze(cookiebot, msg, chat_id, language)
@@ -192,8 +188,6 @@ def thread_function(msg):
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
                     OnSay(cookiebot, msg, chat_id)
-            if chat_type != 'private' and isBombot:
-                CmdCooldownUpdates(msg, chat_id, lastmessagetime)
             if chat_type != 'private' and 'text' in msg:
                 StickerCooldownUpdates(msg, chat_id)
             run_unnatendedthreads()
