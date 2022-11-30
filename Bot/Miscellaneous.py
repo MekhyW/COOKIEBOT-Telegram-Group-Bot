@@ -14,11 +14,12 @@ def Analyze(cookiebot, msg, chat_id, language):
 
 def Grupos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
+    groups = GetRequestBackend('registers')
     num = 0
     answer = ''
-    for group in os.listdir("Registers"):
+    for group in groups:
         try:
-            id = group.replace(".txt", "")
+            id = group['id']
             chat = cookiebot.getChat(int(id))
             if 'title' in chat:
                 answer += id + " - " + chat['title'] + "\n"
