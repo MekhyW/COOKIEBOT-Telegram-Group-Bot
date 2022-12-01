@@ -13,7 +13,8 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Messa
 from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
 import googletrans
 translator = googletrans.Translator()
-login_backend, password_backend, serverIP = json.loads(open('cookiebot_backendauth.json', 'r').read())
+backendauth = json.loads(open('cookiebot_backendauth.json', 'r').read())
+login_backend, password_backend, serverIP = backendauth['login'], backendauth['password'], backendauth['serverIP']
 
 def GetRequestBackend(route, params=None):
     response = requests.get(f'{serverIP}/{route}', params=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False)

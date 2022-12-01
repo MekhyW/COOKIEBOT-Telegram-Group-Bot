@@ -2,13 +2,23 @@ from universal_funcs import *
 
 def GetMembersChat(chat_id):
     members = GetRequestBackend(f"registers/{chat_id}", {"id": chat_id})
-    members = json.loads(members['users'])
-    return members
+    members = members['users']
+    members_dicts = []
+    for part in range(len(members)):
+        if 'user' in members[part]:
+            user = members[part].replace('[', '').replace(']', '').replace("'", '"')
+            date = members[part+1].replace('[', '').replace(']', '').replace("'", '"')
+            try:
+                members_dicts.append(json.loads(user+', '+date))
+            except Exception as e:
+                print(e)
+    print(members_dicts)
+    return members_dicts
 
 def CheckNewName(msg, chat_id):
     username = msg['from']['username']
     members = GetMembersChat(chat_id)
-    if username not in members.keys():
+    if username not in str(members):
         members.append({'user': username, 'date': ''})
         PutRequestBackend(f"registers/{chat_id}", {"id": chat_id, "users": json.dumps(members)})
 
