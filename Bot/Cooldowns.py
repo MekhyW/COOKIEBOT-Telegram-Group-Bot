@@ -3,7 +3,7 @@ from universal_funcs import *
 def Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language):
     sticker_seq = GetRequestBackend(f"stickers/{chat_id}")
     if 'error' in sticker_seq and sticker_seq['error'] == "Not Found":
-        PostRequestBackend(f"stickers/{chat_id}", {"id": chat_id, "lastUsed": 0})
+        PostRequestBackend(f"stickers/{chat_id}", {"lastUsed": 0})
     else:
         lastUsed = int(sticker_seq['lastUsed'])
         if lastUsed == stickerspamlimit:

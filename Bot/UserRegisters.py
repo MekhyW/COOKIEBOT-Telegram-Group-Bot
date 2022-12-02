@@ -19,7 +19,7 @@ def CheckNewName(msg, chat_id):
     members = GetMembersChat(chat_id)
     if username not in str(members):
         members.append({'user': username, 'date': ''})
-        PutRequestBackend(f"registers/{chat_id}", {"id": chat_id, "users": json.dumps(members)})
+        PutRequestBackend(f"registers/{chat_id}", {"users": json.dumps(members)})
 
 def Everyone(cookiebot, msg, chat_id, listaadmins, language):
     cookiebot.sendChatAction(chat_id, 'typing')

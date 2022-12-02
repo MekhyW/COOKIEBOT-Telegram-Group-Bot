@@ -31,7 +31,7 @@ def GetConfig(chat_id):
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, "pt", 1, 1
     configs = GetRequestBackend(f"configs/{chat_id}")
     if 'error' in configs and configs['error'] == "Not Found":
-        PostRequestBackend(f"configs/{chat_id}", {"id":str(chat_id), 'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask})
+        PostRequestBackend(f"configs/{chat_id}", {'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask})
     else:
         FurBots = configs['furbots']
         sfw = configs['sfw']
@@ -100,7 +100,7 @@ def ConfigurarSettar(cookiebot, msg, chat_id):
             current_configs[8] = bool(int(new_val))
         elif "Use 1 if the bot should add posts sent in the group to the publisher queue, or 0 if not" in msg['reply_to_message']['text']:
             current_configs[9] = bool(int(new_val))
-        PutRequestBackend(f"configs/{chat_id}", {"id":str(chat_id), "furbots": current_configs[0], "sfw": current_configs[1], "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], "publisherPost": current_configs[8], "publisherAsk": current_configs[9]})
+        PutRequestBackend(f"configs/{chat_id}", {"furbots": current_configs[0], "sfw": current_configs[1], "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], "publisherPost": current_configs[8], "publisherAsk": current_configs[9]})
         if variable_to_be_altered == "Language":
             SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'].lower())
         cookiebot.sendMessage(chat_id, "Successfully changed the variable!", reply_to_message_id=msg['message_id'])
@@ -134,7 +134,7 @@ def ConfigVariableButton(cookiebot, msg, query_data):
 
 def AtualizaBemvindo(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    PutRequestBackend(f"welcomes/{chat_id}", {"id":str(chat_id), "message": msg['text']})
+    PutRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
     cookiebot.sendMessage(chat_id, "Welcome message updated! ✅", reply_to_message_id=msg['message_id'])
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 
@@ -145,7 +145,7 @@ def NovoBemvindo(cookiebot, msg, chat_id):
 
 def AtualizaRegras(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    PutRequestBackend(f"rules/{chat_id}", {"id":str(chat_id), "rules": msg['text']})
+    PutRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
     cookiebot.sendMessage(chat_id, "Updated rules message! ✅", reply_to_message_id=msg['message_id'])
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 
