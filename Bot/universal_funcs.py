@@ -18,18 +18,22 @@ login_backend, password_backend, serverIP = backendauth['login'], backendauth['p
 
 def GetRequestBackend(route, params=None):
     response = requests.get(f'{serverIP}/{route}', params=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False)
+    print("GET: ", response.text)
     return json.loads(response.text)
 
 def PostRequestBackend(route, params=None):
     response = requests.post(f'{serverIP}/{route}', params=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False)
+    print("POST: ", response.text)
     return json.loads(response.text)
 
 def PutRequestBackend(route, params=None):
     response = requests.put(f'{serverIP}/{route}', params=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False)
+    print("PUT: ", response.text)
     return json.loads(response.text)
 
 def DeleteRequestBackend(route, params=None):
     response = requests.delete(f'{serverIP}/{route}', params=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False)
+    print("DELETE: ", response.text)
     return json.loads(response.text)
 
 def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt"):

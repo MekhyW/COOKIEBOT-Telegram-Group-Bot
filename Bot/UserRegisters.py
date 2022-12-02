@@ -12,7 +12,6 @@ def GetMembersChat(chat_id):
                 members_dicts.append(json.loads(user+', '+date))
             except Exception as e:
                 print(e)
-    print(members_dicts)
     return members_dicts
 
 def CheckNewName(msg, chat_id):

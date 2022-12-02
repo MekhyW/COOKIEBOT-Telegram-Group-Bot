@@ -29,9 +29,9 @@ def SetComandosPrivate(cookiebot, chat_id):
 
 def GetConfig(chat_id):
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, "pt", 1, 1
-    configs = GetRequestBackend(f"Configs/{chat_id}")
+    configs = GetRequestBackend(f"configs/{chat_id}")
     if 'error' in configs and configs['error'] == "Not Found":
-        PostRequestBackend(f"Configs/{chat_id}", {"id":str(chat_id), 'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask})
+        PostRequestBackend(f"configs/{chat_id}", {"id":str(chat_id), 'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask})
     else:
         FurBots = configs['furbots']
         sfw = configs['sfw']
@@ -43,16 +43,14 @@ def GetConfig(chat_id):
         language = configs['language']
         publisherpost = configs['publisherPost']
         publisherask = configs['publisherAsk']
-    return FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask
+    return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask]
 
 
 def Configurar(cookiebot, msg, chat_id, listaadmins, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     if str(msg['from']['username']) in listaadmins or str(msg['from']['username']) == "MekhyW":
-        wait_open("Configs/Config_"+str(chat_id)+".txt")
-        text = open("Configs/Config_"+str(chat_id)+".txt", 'r', encoding='utf-8')
-        variables = text.read()
-        text.close()
+        configs = GetConfig(chat_id)
+        variables = f"FurBots: {configs[0]}\n sfw: {configs[1]}\n Sticker Spam Limit: {configs[2]}\n Time Without Sending Images: {configs[3]}\n Time Captcha: {configs[4]}\n Fun Functions: {configs[5]}\n Utility Functions: {configs[6]}\n Language: {configs[7]}\n Publisher Post: {configs[8]}\n Publisher Ask: {configs[9]}"
         try:
             cookiebot.sendMessage(msg['from']['id'],"Current settings:\n\n" + variables + '\n\nChoose the variable you would like to change', reply_markup = InlineKeyboardMarkup(inline_keyboard=[
                                     [InlineKeyboardButton(text="Language",callback_data='k CONFIG {}'.format(str(chat_id)))],
@@ -77,6 +75,7 @@ def Configurar(cookiebot, msg, chat_id, listaadmins, language):
 
 def ConfigurarSettar(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
+    chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
     current_configs = GetConfig(chat_to_alter)
     new_val = msg['text'].lower()
     if new_val or new_val in ["pt", "eng", "es"]:
@@ -101,10 +100,10 @@ def ConfigurarSettar(cookiebot, msg, chat_id):
             current_configs[8] = bool(int(new_val))
         elif "Use 1 if the bot should add posts sent in the group to the publisher queue, or 0 if not" in msg['reply_to_message']['text']:
             current_configs[9] = bool(int(new_val))
-        chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
-        PutRequestBackend(f"configs/{chat_id}", {"id":str(chat_id), "furbots": current_configs[0], "sfw": current_configs[1], "stickerspamlimit": current_configs[2], "limbotimespan": current_configs[3], "captchatimespan": current_configs[4], "funfunctions": current_configs[5], "utilityfunctions": current_configs[6], "language": current_configs[7], "publisherpost": current_configs[8], "publisherask": current_configs[9]})
+        PutRequestBackend(f"configs/{chat_id}", {"id":str(chat_id), "furbots": current_configs[0], "sfw": current_configs[1], "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], "publisherPost": current_configs[8], "publisherAsk": current_configs[9]})
         if variable_to_be_altered == "Language":
-                SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'].lower())
+            SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'].lower())
+        cookiebot.sendMessage(chat_id, "Successfully changed the variable!", reply_to_message_id=msg['message_id'])
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])
 
