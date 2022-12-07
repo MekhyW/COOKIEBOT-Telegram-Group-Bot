@@ -100,7 +100,7 @@ def ConfigurarSettar(cookiebot, msg, chat_id):
             current_configs[8] = bool(int(new_val))
         elif "Use 1 if the bot should add posts sent in the group to the publisher queue, or 0 if not" in msg['reply_to_message']['text']:
             current_configs[9] = bool(int(new_val))
-        PutRequestBackend(f"configs/{chat_id}", {"furbots": current_configs[0], "sfw": current_configs[1], "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], "publisherPost": current_configs[8], "publisherAsk": current_configs[9]})
+        PutRequestBackend(f"configs/{chat_to_alter}", {"furbots": current_configs[0], "sfw": current_configs[1], "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], "publisherPost": current_configs[8], "publisherAsk": current_configs[9]})
         if variable_to_be_altered == "Language":
             SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'].lower())
         cookiebot.sendMessage(chat_id, "Successfully changed the variable!", reply_to_message_id=msg['message_id'])
