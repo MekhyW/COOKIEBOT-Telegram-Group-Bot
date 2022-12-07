@@ -29,7 +29,8 @@ def AskApproval(cookiebot, query_data, from_id):
     cookiebot.forwardMessage(mekhyID, origin_chatid, origin_messageid)
     cookiebot.sendMessage(mekhyID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️",callback_data='ApprovePub {} {} {}'.format(origin_chatid, origin_messageid, origin_userid))],
+            [InlineKeyboardButton(text="✔️ 3 days",callback_data='ApprovePub {} {} {} 3'.format(origin_chatid, origin_messageid, origin_userid))],
+            [InlineKeyboardButton(text="✔️ 1 day",callback_data='ApprovePub {} {} {} 1'.format(origin_chatid, origin_messageid, origin_userid))]
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
         ]
     ))
@@ -76,12 +77,13 @@ def SchedulePost(cookiebot, query_data):
     origin_chatid = query_data.split()[1]
     origin_messageid = query_data.split()[2]
     origin_userid = query_data.split()[3]
+    days = query_data.split()[4]
     origin_chattitle = cookiebot.getChat(origin_chatid)['title']
     jobs = list_jobs()
     for job in jobs:
         if job.name.startswith(f"{parent}/jobs/{origin_chatid}"):
             delete_job(job.name)
-    answer = "Post set for the following times (3 days):\n"
+    answer = f"Post set for the following times ({days} days):\n"
     language_origin = GetConfig(origin_chatid)[7]
     for group in os.listdir('Registers'):
         group_id = group.split('.')[0]
@@ -99,7 +101,7 @@ def SchedulePost(cookiebot, query_data):
                     target_chattitle = cookiebot.getChat(group_id)['title']
                     create_job(origin_chatid+group_id, 
                     f"{origin_chattitle} --> {target_chattitle}, at {hour}:{minute} ", 
-                    f"3 {origin_chatid} {group_id} {origin_messageid}", 
+                    f"{days} {origin_chatid} {group_id} {origin_messageid}", 
                     f"{minute} {hour} * * *")
                     answer += f"{hour}:{minute} - {target_chattitle}\n"
             except Exception as e:
