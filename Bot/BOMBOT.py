@@ -49,10 +49,11 @@ def thread_function(msg):
             if isBombot:
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
-                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *104* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
+                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *105* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                    [InlineKeyboardButton(text="Adicionar ao Grupo", url="https://t.me/CookieMWbot?startgroup=new")],
-                    [InlineKeyboardButton(text="Grupo de teste/assistência", url="https://t.me/+mX6W3tGXPew2OTIx")]
+                    [InlineKeyboardButton(text="Acesse o Site 🌐", url="https://cookiebot-website.vercel.app/")],
+                    [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url="https://t.me/CookieMWbot?startgroup=new")],
+                    [InlineKeyboardButton(text="Grupo de teste/assistência 🧪", url="https://t.me/+mX6W3tGXPew2OTIx")]
                 ]))
         else:
             if chat_type != 'private':
