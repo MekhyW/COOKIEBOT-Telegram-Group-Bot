@@ -1,5 +1,4 @@
 from universal_funcs import *
-import unidecode
 from chatterbot import ChatBot
 from chatterbot import comparisons
 from chatterbot import response_selection

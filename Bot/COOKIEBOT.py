@@ -162,8 +162,6 @@ def thread_function(msg):
                     QqEuFaço(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/ideiadesenho", "/drawingidea", "/ideadibujo"])) and utilityfunctions == True:
                     IdeiaDesenho(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/contato", "/contact", "/contacto"])):
-                    Contato(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(tuple(["/qualquercoisa", "/anything", "/cualquiercosa"])) and utilityfunctions == True:
                     PromptQualquerCoisa(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/configurar", "/configure"])):

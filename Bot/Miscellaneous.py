@@ -80,10 +80,6 @@ def IdeiaDesenho(cookiebot, msg, chat_id, language):
     cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg['message_id'])
     photo.close()
 
-def Contato(cookiebot, msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, '💌 Email: felipe_catapano@yahoo.com.br\n🔵 Telegram: @MekhyW\n🟦 LinkedIn: https://www.linkedin.com/in/felipe-catapano/\n⚛️ GitHub: https://github.com/MekhyW')
-
 def CustomCommand(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     images = os.listdir("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", ''))
