@@ -134,7 +134,9 @@ def ConfigVariableButton(cookiebot, msg, query_data):
 
 def AtualizaBemvindo(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    PutRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
+    req = PutRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
+    if 'error' in req and req['error'] == "Not Found":
+        PostRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
     cookiebot.sendMessage(chat_id, "Welcome message updated! ✅", reply_to_message_id=msg['message_id'])
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 
@@ -145,7 +147,9 @@ def NovoBemvindo(cookiebot, msg, chat_id):
 
 def AtualizaRegras(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    PutRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
+    req = PutRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
+    if 'error' in req and req['error'] == "Not Found":
+        PostRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
     cookiebot.sendMessage(chat_id, "Updated rules message! ✅", reply_to_message_id=msg['message_id'])
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 

@@ -2,6 +2,9 @@ from universal_funcs import *
 
 def GetMembersChat(chat_id):
     members = GetRequestBackend(f"registers/{chat_id}", {"id": chat_id})
+    if 'error' in members and members['error'] == "Not Found":
+        PostRequestBackend(f"registers/{chat_id}", {"id": chat_id, "users": []})
+        return []
     members = members['users']
     members_dicts = []
     for part in range(len(members)):
@@ -18,8 +21,7 @@ def CheckNewName(msg, chat_id):
     username = msg['from']['username']
     members = GetMembersChat(chat_id)
     if username not in str(members):
-        members.append({'user': username, 'date': ''})
-        PutRequestBackend(f"registers/{chat_id}/users", {"users": json.dumps(members)})
+        PostRequestBackend(f"registers/{chat_id}/users", {"user": username, "date": str(datetime.now())})
 
 def Everyone(cookiebot, msg, chat_id, listaadmins, language):
     cookiebot.sendChatAction(chat_id, 'typing')
