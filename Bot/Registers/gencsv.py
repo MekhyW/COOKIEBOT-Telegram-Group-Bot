@@ -3,7 +3,7 @@ import warnings
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 
-df = pd.DataFrame(columns=['id', 'user', 'date'])
+df = pd.DataFrame(columns=['id', 'users'])
 
 os.chdir('Registers')
 for file in os.listdir():
@@ -12,6 +12,7 @@ for file in os.listdir():
         lines = opened.readlines()
         opened.close()
         id = file.replace('.txt', '')
+        users = []
         for line in lines:
             if len(line.split()):
                 user = line.split()[0]
@@ -19,7 +20,8 @@ for file in os.listdir():
                     date = line.replace(user, '').replace('\n', '')[1:]
                 else:
                     date = ''
-                df = df.append({'id': id, 'user': user, 'date': date}, ignore_index=True)
+                users.append({'user': user, 'date': date})
+        df = df.append({'id': id, 'users': users}, ignore_index=True)
 
 print(df.head(100))
-df.to_csv('Registers.csv', index=False)
+df.to_json('Registers.json', orient='records', force_ascii=False)
