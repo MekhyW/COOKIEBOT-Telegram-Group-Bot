@@ -10,6 +10,5 @@ Language: pt
 Publisher_Post: 0
 <<<<<<< Updated upstream
 Publisher_Ask: 0
-=======
-Publisher_Ask: 1
+Publisher_Ask: 0
 >>>>>>> Stashed changes
