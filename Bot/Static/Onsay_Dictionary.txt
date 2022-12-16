@@ -1,6 +1,0 @@
-["nao", "fursuit", "evento"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
-["nao", "fursuit", "eventos"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
-["nn", "fursuit", "evento"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
-["nn", "fursuit", "eventos"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
-["sem", "fursuit", "evento"] > Não precisa de fursuit pra se divertir em eventos da furry fandom
-["sem", "fursuit", "eventos"] > Não precisa de fursuit pra se divertir em eventos da furry fandom

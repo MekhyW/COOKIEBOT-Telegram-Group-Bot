@@ -43,34 +43,30 @@ def thread_function(msg):
                 elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == mekhyID:
                     os.execl(sys.executable, sys.executable, *sys.argv)
                 elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
-                    LeaveAndBlacklist(cookiebot, msg['text'].split()[1])
-                    os.remove('Registers/{}.txt'.format(msg['text'].split()[1]))
+                    targetId = msg['text'].split()[1]
+                    LeaveAndBlacklist(cookiebot, targetId)
+                    DeleteRequestBackend(f'registers/{targetId}')
             if isBombot:
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
-                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *104* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
+                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *105* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                    [InlineKeyboardButton(text="Adicionar ao Grupo", url="https://t.me/CookieMWbot?startgroup=new")],
-                    [InlineKeyboardButton(text="Grupo de teste/assistência", url="https://t.me/+mX6W3tGXPew2OTIx")]
+                    [InlineKeyboardButton(text="Acesse o Site 🌐", url="https://cookiebot-website.vercel.app/")],
+                    [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url="https://t.me/CookieMWbot?startgroup=new")],
+                    [InlineKeyboardButton(text="Grupo de teste/assistência 🧪", url="https://t.me/+mX6W3tGXPew2OTIx")]
                 ]))
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
                 FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = GetConfig(chat_id)
                 CheckNewName(msg, chat_id)
-                if isBombot:
-                    lastmessagedate, lastmessagetime = CheckLastMessageDatetime(msg, chat_id)
             if content_type == "new_chat_member":
                 if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
-                    wait_open("Blacklist.txt")
-                    text = open("Blacklist.txt", 'r', encoding='utf-8')
-                    lines = text.readlines()
-                    text.close()
-                    for line in lines:
-                        if str(chat_id) in line:
-                            LeaveAndBlacklist(cookiebot, chat_id)
-                            cookiebot.sendMessage(mekhyID, "Auto-left:\n{}".format(chat_id))
-                            return
+                    isBlacklisted = GetRequestBackend(f"blacklist/{chat_id}")
+                    if not 'error' in isBlacklisted:
+                        LeaveAndBlacklist(cookiebot, chat_id)
+                        cookiebot.sendMessage(mekhyID, "Auto-left:\n{}".format(chat_id))
+                        return
                     cookiebot.sendMessage(mekhyID, "Added:\n{}".format(cookiebot.getChat(chat_id)))
                 if msg['new_chat_participant']['id'] != cookiebot.getMe()['id'] and not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
@@ -111,8 +107,6 @@ def thread_function(msg):
             elif 'text' in msg:
                 if msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, chat_id)
-                elif isBombot and msg['text'].startswith("/") and " " not in msg['text'] and (FurBots==False or msg['text'] not in open("Static/FurBots_functions.txt", "r+", encoding='utf-8').read()) and str(datetime.date.today()) == lastmessagedate and float(lastmessagetime)+60 >= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
-                    CooldownAction(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/análise", "/análisis", "/analysis"])):
                     if 'reply_to_message' in msg:
                         Analyze(cookiebot, msg, chat_id, language)
@@ -168,8 +162,6 @@ def thread_function(msg):
                     QqEuFaço(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/ideiadesenho", "/drawingidea", "/ideadibujo"])) and utilityfunctions == True:
                     IdeiaDesenho(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/contato", "/contact", "/contacto"])):
-                    Contato(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(tuple(["/qualquercoisa", "/anything", "/cualquiercosa"])) and utilityfunctions == True:
                     PromptQualquerCoisa(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(tuple(["/configurar", "/configure"])):
@@ -185,15 +177,11 @@ def thread_function(msg):
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and str(round(captchatimespan/60)) in msg['reply_to_message']['caption']:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions == True:
-                    if not OnSay(cookiebot, msg, chat_id):
-                        AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language)
-                        cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
+                    AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language)
+                    cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
                 else:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
-                    OnSay(cookiebot, msg, chat_id)
-            if chat_type != 'private' and isBombot:
-                CmdCooldownUpdates(msg, chat_id, lastmessagetime)
             if chat_type != 'private' and 'text' in msg:
                 StickerCooldownUpdates(msg, chat_id)
             run_unnatendedthreads()
@@ -237,27 +225,34 @@ def handle(msg):
         cookiebot.sendMessage(mekhyID, traceback.format_exc())
 
 def handle_query(msg):
-    query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
-    print('Callback Query:', query_id, from_id, query_data)
     try:
-        chat_id = msg['message']['reply_to_message']['chat']['id']
-        listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
+        query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
+        print('Callback Query:', query_id, from_id, query_data)
+        try:
+            chat_id = msg['message']['reply_to_message']['chat']['id']
+            listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
+        except:
+            chat_id = from_id
+            listaadmins = []
+            listaadmins_id = []
+        if 'CONFIG' in query_data:
+            ConfigVariableButton(cookiebot, msg, query_data)
+        elif 'Pub' in query_data and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
+            if query_data.startswith('SendToApproval'):
+                AskApproval(cookiebot, query_data, from_id)
+            elif query_data.startswith('Approve'):
+                SchedulePost(cookiebot, query_data)
+            cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+        elif query_data == 'CAPTCHA' and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
+            SolveCaptcha(cookiebot, msg, chat_id, True)
+            DeleteMessage(telepot.message_identifier(msg['message']))
+        run_unnatendedthreads()
     except:
-        chat_id = from_id
-        listaadmins = []
-        listaadmins_id = []
-    if 'CONFIG' in query_data:
-        ConfigVariableButton(cookiebot, msg, query_data)
-    elif 'Pub' in query_data and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
-        if query_data.startswith('SendToApproval'):
-            AskApproval(cookiebot, query_data, from_id)
-        elif query_data.startswith('Approve'):
-            SchedulePost(cookiebot, query_data)
-        cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
-    elif query_data == 'CAPTCHA' and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
-        SolveCaptcha(cookiebot, msg, chat_id, True)
-        DeleteMessage(telepot.message_identifier(msg['message']))
-    run_unnatendedthreads()
+        if 'ConnectionResetError' in traceback.format_exc():
+            handle_query(msg)
+        else:
+            cookiebot.sendMessage(mekhyID, traceback.format_exc())
+            cookiebot.sendMessage(mekhyID, str(msg))
         
 
 MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()

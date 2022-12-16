@@ -13,17 +13,15 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
             Send(cookiebot, chat_id, "ATENÇÃO! Você está limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))), language=language)
         except Exception as e:
             print(e)
-    if os.path.exists("Welcome/Welcome_" + str(chat_id)+".txt"):
-        wait_open("Welcome/Welcome_" + str(chat_id)+".txt")
-        with open("Welcome/Welcome_" + str(chat_id)+".txt", encoding='utf-8') as file:
-            welcome = file.read()
-            cookiebot.sendMessage(chat_id, welcome)
-            file.close()
-    else:
+    welcome = GetRequestBackend(f'welcomes/{chat_id}')
+    if 'error' in welcome and welcome['error'] == "Not Found":
         try:
             Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo {}!".format(msg['chat']['title']), language=language)
         except:
             Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo!", language=language)
+    else:
+        cookiebot.sendMessage(chat_id, welcome['message'])
+        
 
 def CheckHumanFactor(cookiebot, msg, chat_id, language):
     if 'username' not in msg['new_chat_participant']:
@@ -61,16 +59,13 @@ def CheckRaider(cookiebot, msg, chat_id, language):
     return False
 
 def CheckBlacklist(cookiebot, msg, chat_id, language):
-    wait_open("Blacklist.txt")
-    text = open("Blacklist.txt", 'r', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
-    for line in lines:
-        if str(msg['new_chat_participant']['id']) in line:
-            cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-            Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.", language=language)
-            return True
-    return False
+    isBlacklisted = GetRequestBackend(f"blacklist/{msg['new_chat_participant']['id']}")
+    if 'error' in isBlacklisted:
+        return False
+    else:
+        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.", language=language)
+        return True
 
 def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     try:

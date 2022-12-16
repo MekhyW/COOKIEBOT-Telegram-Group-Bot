@@ -29,47 +29,28 @@ def SetComandosPrivate(cookiebot, chat_id):
 
 def GetConfig(chat_id):
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, "pt", 1, 1
-    if not os.path.isfile("Configs/Config_"+str(chat_id)+".txt"):
-        open("Configs/Config_"+str(chat_id)+".txt", 'a', encoding='utf-8').close()
-        text_file = open("Configs/Config_"+str(chat_id)+".txt", "w", encoding='utf-8')
-        text_file.write("FurBots: 0\nSticker_Spam_Limit: 15\nTempo_sem_poder_mandar_imagem: 600\nTempo_Captcha: 300\nFunções_Diversão: 1\nFunções_Utilidade: 1\nSFW: 1\nLanguage: pt\nPublisher_Post: 0\nPublisher_Ask: 1")
-        text_file.close()
-    wait_open("Configs/Config_"+str(chat_id)+".txt")
-    text_file = open("Configs/Config_"+str(chat_id)+".txt", "r", encoding='utf-8')
-    lines = text_file.readlines()
-    text_file.close()
-    for line in lines:
-        if len(line.split()):
-            if line.split()[0] == "FurBots:":
-                FurBots = int(line.split()[1])
-            elif line.split()[0] == "Sticker_Spam_Limit:":
-                stickerspamlimit = int(line.split()[1])
-            elif line.split()[0] == "Tempo_sem_poder_mandar_imagem:":
-                limbotimespan = int(line.split()[1])
-            elif line.split()[0] == "Tempo_Captcha:":
-                captchatimespan = int(line.split()[1])
-            elif line.split()[0] == "Funções_Diversão:":
-                funfunctions = int(line.split()[1])
-            elif line.split()[0] == "Funções_Utilidade:":
-                utilityfunctions = int(line.split()[1])
-            elif line.split()[0] == "SFW:":
-                sfw = int(line.split()[1])
-            elif line.split()[0] == "Language:":
-                language = line.split()[1]
-            elif line.split()[0] == "Publisher_Post:":
-                publisherpost = int(line.split()[1])
-            elif line.split()[0] == "Publisher_Ask:":
-                publisherask = int(line.split()[1])
-    return FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask
+    configs = GetRequestBackend(f"configs/{chat_id}")
+    if 'error' in configs and configs['error'] == "Not Found":
+        PostRequestBackend(f"configs/{chat_id}", {'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask})
+    else:
+        FurBots = configs['furbots']
+        sfw = configs['sfw']
+        stickerspamlimit = configs['stickerSpamLimit']
+        limbotimespan = configs['timeWithoutSendingImages']
+        captchatimespan = configs['timeCaptcha']
+        funfunctions = configs['functionsFun']
+        utilityfunctions = configs['functionsUtility']
+        language = configs['language']
+        publisherpost = configs['publisherPost']
+        publisherask = configs['publisherAsk']
+    return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask]
 
 
 def Configurar(cookiebot, msg, chat_id, listaadmins, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     if str(msg['from']['username']) in listaadmins or str(msg['from']['username']) == "MekhyW":
-        wait_open("Configs/Config_"+str(chat_id)+".txt")
-        text = open("Configs/Config_"+str(chat_id)+".txt", 'r', encoding='utf-8')
-        variables = text.read()
-        text.close()
+        configs = GetConfig(chat_id)
+        variables = f"FurBots: {configs[0]}\n sfw: {configs[1]}\n Sticker Spam Limit: {configs[2]}\n Time Without Sending Images: {configs[3]}\n Time Captcha: {configs[4]}\n Fun Functions: {configs[5]}\n Utility Functions: {configs[6]}\n Language: {configs[7]}\n Publisher Post: {configs[8]}\n Publisher Ask: {configs[9]}"
         try:
             cookiebot.sendMessage(msg['from']['id'],"Current settings:\n\n" + variables + '\n\nChoose the variable you would like to change', reply_markup = InlineKeyboardMarkup(inline_keyboard=[
                                     [InlineKeyboardButton(text="Language",callback_data='k CONFIG {}'.format(str(chat_id)))],
@@ -94,45 +75,35 @@ def Configurar(cookiebot, msg, chat_id, listaadmins, language):
 
 def ConfigurarSettar(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    if msg['text'].isdigit() or msg['text'].lower() in ["pt", "eng", "es"]:
+    chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
+    current_configs = GetConfig(chat_to_alter)
+    new_val = msg['text'].lower()
+    if new_val or new_val in ["pt", "eng", "es"]:
         variable_to_be_altered = ""
         if "Bot language for the chat. Use pt for portuguese, eng for english or es for spanish" in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Language"
+            current_configs[7] = new_val
         elif "Use 1 to not interfere with other furbots if they're in the group, or 0 if I'm the only one." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "FurBots"
+            current_configs[0] = bool(int(new_val))
         elif "This is the maximum number of stickers allowed in a sequence by the bot. The next ones beyond that will be deleted to avoid spam. It's valid for everyone." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Sticker_Spam_Limit"
+            current_configs[2] = int(new_val)
         elif "This is the time for which new users in the group will not be able to send images (the bot automatically deletes)." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Tempo_sem_poder_mandar_imagem"
+            current_configs[3] = int(new_val)
         elif "This is the time new users have to solve Captcha. USE 0 TO TURN CAPTCHA OFF!" in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Tempo_Captcha"
+            current_configs[4] = int(new_val)
         elif "Use 1 to enable commands and fun functionality, or 0 for control/management functions only." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Funções_Diversão"
+            current_configs[5] = bool(int(new_val))
         elif "Use 1 to enable commands and utility features, or 0 to disable them." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Funções_Utilidade"
+            current_configs[6] = bool(int(new_val))
         elif "Use 1 to indicate the chat is SFW, or 0 for NSFW." in msg['reply_to_message']['text']:
-            variable_to_be_altered = "SFW"
+            current_configs[1] = bool(int(new_val))
         elif "Use 1 to allow the bot to post publications from other channels (only works if group has over 50 members), or 0 to not allow" in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Publisher_Post"
+            current_configs[8] = bool(int(new_val))
         elif "Use 1 if the bot should add posts sent in the group to the publisher queue, or 0 if not" in msg['reply_to_message']['text']:
-            variable_to_be_altered = "Publisher_Ask"
-        chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
-        wait_open("Configs/Config_"+str(chat_to_alter)+".txt")
-        text_file = open("Configs/Config_"+str(chat_to_alter)+".txt", 'r', encoding='utf-8')
-        lines = text_file.readlines()
-        text_file.close()
-        text_file = open("Configs/Config_"+str(chat_to_alter)+".txt", 'w', encoding='utf-8')
-        for line in lines:
-            if variable_to_be_altered in line:
-                text_file.write(variable_to_be_altered + ": " + msg['text'].lower() + "\n")
-                cookiebot.sendMessage(chat_id, "Variable configured! ✔️\nYou can return to chat now")
-                DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
-                DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                if variable_to_be_altered == "Language":
-                    SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'].lower())
-            elif len(line.split()) > 1:
-                text_file.write(line)
-        text_file.close()
+            current_configs[9] = bool(int(new_val))
+        PutRequestBackend(f"configs/{chat_to_alter}", {"furbots": current_configs[0], "sfw": current_configs[1], "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], "publisherPost": current_configs[8], "publisherAsk": current_configs[9]})
+        if variable_to_be_altered == "Language":
+            SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'].lower())
+        cookiebot.sendMessage(chat_id, "Successfully changed the variable!", reply_to_message_id=msg['message_id'])
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])
 
@@ -163,11 +134,10 @@ def ConfigVariableButton(cookiebot, msg, query_data):
 
 def AtualizaBemvindo(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Welcome/Welcome_" + str(chat_id)+".txt")
-    text_file = open("Welcome/Welcome_" + str(chat_id)+".txt", 'w', encoding='utf-8')
-    text_file.write(msg['text'])
+    req = PutRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
+    if 'error' in req and req['error'] == "Not Found":
+        PostRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
     cookiebot.sendMessage(chat_id, "Welcome message updated! ✅", reply_to_message_id=msg['message_id'])
-    text_file.close()
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 
 def NovoBemvindo(cookiebot, msg, chat_id):
@@ -177,11 +147,10 @@ def NovoBemvindo(cookiebot, msg, chat_id):
 
 def AtualizaRegras(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Rules/Regras_" + str(chat_id)+".txt")
-    text_file = open("Rules/Regras_" + str(chat_id)+".txt", 'w', encoding='utf-8')
-    text_file.write(msg['text'])
+    req = PutRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
+    if 'error' in req and req['error'] == "Not Found":
+        PostRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
     cookiebot.sendMessage(chat_id, "Updated rules message! ✅", reply_to_message_id=msg['message_id'])
-    text_file.close()
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 
 def NovasRegras(cookiebot, msg, chat_id):
@@ -190,10 +159,11 @@ def NovasRegras(cookiebot, msg, chat_id):
 
 def Regras(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
-    wait_open("Rules/Regras_" + str(chat_id)+".txt")
-    if os.path.exists("Rules/Regras_" + str(chat_id)+".txt"):
-        with open("Rules/Regras_" + str(chat_id)+".txt", encoding='utf-8') as file:
-            regras = file.read()
+    rules = GetRequestBackend(f"rules/{chat_id}")
+    if 'error' in rules and rules['error'] == "Not Found":    
+        Send(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", msg, language)
+    else:
+        regras = rules['rules']
         if regras.endswith("@MekhyW"):
             cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
         else:
@@ -203,5 +173,3 @@ def Regras(cookiebot, msg, chat_id, language):
                 cookiebot.sendMessage(chat_id, regras+"\n\n¿Preguntas sobre el bot? Envíalo a @MekhyW", reply_to_message_id=msg['message_id'])
             else:
                 cookiebot.sendMessage(chat_id, regras+"\n\nQuestions about the bot? Send to @MekhyW", reply_to_message_id=msg['message_id'])
-    else:    
-        Send(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", msg, language)

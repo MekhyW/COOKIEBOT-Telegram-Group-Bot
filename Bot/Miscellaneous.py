@@ -14,11 +14,12 @@ def Analyze(cookiebot, msg, chat_id, language):
 
 def Grupos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
+    groups = GetRequestBackend('registers')
     num = 0
     answer = ''
-    for group in os.listdir("Registers"):
+    for group in groups:
         try:
-            id = group.replace(".txt", "")
+            id = group['id']
             chat = cookiebot.getChat(int(id))
             if 'title' in chat:
                 answer += id + " - " + chat['title'] + "\n"
@@ -78,10 +79,6 @@ def IdeiaDesenho(cookiebot, msg, chat_id, language):
         caption = "Reference ID {}\n\nDo not trace without credits! (use the reverse google images search)".format(ideiaID)
     cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg['message_id'])
     photo.close()
-
-def Contato(cookiebot, msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, '💌 Email: felipe_catapano@yahoo.com.br\n🔵 Telegram: @MekhyW\n🟦 LinkedIn: https://www.linkedin.com/in/felipe-catapano/\n⚛️ GitHub: https://github.com/MekhyW')
 
 def CustomCommand(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
