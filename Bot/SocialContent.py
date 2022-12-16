@@ -53,7 +53,7 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
 
 def AddtoRandomDatabase(msg, chat_id, photo_id=''):
     if not 'forward_from' in msg:
-        PostRequestBackend('randomdatabase', {'chat_id': chat_id, 'message_id': str(msg['message_id']), 'photo_id': photo_id})
+        PostRequestBackend('randomdatabase', {'id': chat_id, 'idMessage': str(msg['message_id']), 'idMedia': photo_id})
 
 def ReplyAleatorio(cookiebot, msg, chat_id):
     cookiebot.sendChatAction(chat_id, 'upload_photo')

@@ -6,16 +6,7 @@ def GetMembersChat(chat_id):
         PostRequestBackend(f"registers/{chat_id}", {"id": chat_id, "users": []})
         return []
     members = members['users']
-    members_dicts = []
-    for part in range(len(members)):
-        if 'user' in members[part]:
-            user = members[part].replace('[', '').replace(']', '').replace("'", '"')
-            date = members[part+1].replace('[', '').replace(']', '').replace("'", '"')
-            try:
-                members_dicts.append(json.loads(user+', '+date))
-            except Exception as e:
-                print(e)
-    return members_dicts
+    return members
 
 def CheckNewName(msg, chat_id):
     username = msg['from']['username']
