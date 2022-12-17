@@ -17,7 +17,7 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         answer = "Publish post?"
     cookiebot.sendMessage(chat_id, answer, reply_to_message_id=msg['message_id'], 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️",callback_data='SendToApprovalPub {} {}'.format(str(chat_id), str(msg['message_id'])))],
+            [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {chat_id} {msg['message_id']}")],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
         ]
     ))
@@ -29,8 +29,8 @@ def AskApproval(cookiebot, query_data, from_id):
     cookiebot.forwardMessage(mekhyID, origin_chatid, origin_messageid)
     cookiebot.sendMessage(mekhyID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️ 3 days",callback_data='ApprovePub {} {} {} 3'.format(origin_chatid, origin_messageid, origin_userid))],
-            [InlineKeyboardButton(text="✔️ 1 day",callback_data='ApprovePub {} {} {} 1'.format(origin_chatid, origin_messageid, origin_userid))],
+            [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 3')],
+            [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 1')],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
         ]
     ))
@@ -46,7 +46,7 @@ def create_job(job_name, job_description, job_data, job_schedule):
         'schedule': job_schedule,
     }
     response = client.create_job(parent=parent, job=job)
-    print('Created job: {}'.format(response.name))
+    print(f'Created job: {response.name}')
     return response
 
 def list_jobs():
@@ -58,7 +58,7 @@ def list_jobs():
 
 def delete_job(job_name):
     response = client.delete_job(name=client.job_path(project_id, 'southamerica-east1', job_name))
-    print('Deleted job: {}'.format(response))
+    print(f'Deleted job: {response}')
     return response
 
 def edit_job_data(job_name, job_data):
@@ -70,7 +70,7 @@ def edit_job_data(job_name, job_data):
         },
     }
     response = client.update_job(job=job, update_mask={'paths': ['pubsub_target']})
-    print('Updated job: {}'.format(response.name))
+    print(f'Updated job: {response.name}')
     return response
 
 def SchedulePost(cookiebot, query_data):

@@ -65,9 +65,9 @@ def thread_function(msg):
                     isBlacklisted = GetRequestBackend(f"blacklist/{chat_id}")
                     if not 'error' in isBlacklisted:
                         LeaveAndBlacklist(cookiebot, chat_id)
-                        cookiebot.sendMessage(mekhyID, "Auto-left:\n{}".format(chat_id))
+                        cookiebot.sendMessage(mekhyID, f"Auto-left:\n{chat_id}")
                         return
-                    cookiebot.sendMessage(mekhyID, "Added:\n{}".format(cookiebot.getChat(chat_id)))
+                    cookiebot.sendMessage(mekhyID, f"Added:\n{cookiebot.getChat(chat_id)}")
                 if msg['new_chat_participant']['id'] != cookiebot.getMe()['id'] and not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
@@ -77,7 +77,7 @@ def thread_function(msg):
                 left_chat_member(msg, chat_id)
             elif content_type == "voice":
                 if utilityfunctions == True:
-                    r = requests.get("https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, cookiebot.getFile(msg['voice']['file_id'])['file_path']), allow_redirects=True, timeout=10)
+                    r = requests.get(f"https://api.telegram.org/file/bot{cookiebotTOKEN}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=10)
                     duration = int(msg['voice']['duration'])
                     if duration >= 10 and duration <= 240:
                         Speech_to_text(cookiebot, msg, chat_id, sfw, r.content, language)
@@ -212,7 +212,7 @@ def run_unnatendedthreads():
     if len(unnatended_threads) > 2 * num_max_threads:
         os.execl(sys.executable, sys.executable, *sys.argv)
     elif len(unnatended_threads) > 0:
-        print("{} threads are still unnatended".format(len(unnatended_threads)))
+        print(f"{len(unnatended_threads)} threads are still unnatended")
     gc.collect()
 
 def handle(msg):

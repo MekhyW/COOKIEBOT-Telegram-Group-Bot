@@ -10,13 +10,13 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
         try:
             cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': True, 'can_send_other_messages': True, 'can_add_web_page_previews': True})
             cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
-            Send(cookiebot, chat_id, "ATENÇÃO! Você está limitado por {} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo".format(str(round(limbotimespan/60))), language=language)
+            Send(cookiebot, chat_id, f"ATENÇÃO! Você está limitado por {round(limbotimespan/60)} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo", language=language)
         except Exception as e:
             print(e)
     welcome = GetRequestBackend(f'welcomes/{chat_id}')
     if 'error' in welcome and welcome['error'] == "Not Found":
         try:
-            Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo {}!".format(msg['chat']['title']), language=language)
+            Send(cookiebot, chat_id, f"Olá! As boas-vindas ao grupo {msg['chat']['title']}!", language=language)
         except Exception as e:
             print(e)
             Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo!", language=language)
@@ -38,7 +38,7 @@ def CheckHumanFactor(cookiebot, msg, chat_id, language):
 
 def CheckCAS(cookiebot, msg, chat_id, language):
     try:
-        r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
+        r = requests.get(f"https://api.cas.chat/check?user_id={msg['new_chat_participant']['id']}", timeout=10)
         in_banlist = json.loads(r.text)['ok']
     except Exception as e:
         print(e)
@@ -51,7 +51,7 @@ def CheckCAS(cookiebot, msg, chat_id, language):
 
 def CheckRaider(cookiebot, msg, chat_id, language):
     try:
-        r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])}, timeout=10)
+        r = requests.post('https://burrbot.xyz/noraid.php', data={'id': str(msg['new_chat_participant']['id'])}, timeout=10)
         is_raider = json.loads(r.text)['raider']
     except Exception as e:
         print(e)
@@ -82,11 +82,11 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     captcha.write(password, 'CAPTCHA.png')
     photo = open('CAPTCHA.png', 'rb')
     if language == "pt":
-        caption = "⚠️Digite o código acima para provar que você não é um robô⚠️\n\nVocê tem {} minutos, se não resolver nesse tempo te removerei do chat ⏳\n(OBS: Se não aparecem 4 digitos, abra a foto completa)".format(str(round(captchatimespan/60)))
+        caption = f"⚠️Digite o código acima para provar que você não é um robô⚠️\n\nVocê tem {round(captchatimespan/60)} minutos, se não resolver nesse tempo te removerei do chat ⏳\n(OBS: Se não aparecem 4 digitos, abra a foto completa)"
     elif language == "es":
-        caption = "⚠️Ingresa el código de arriba para demostrar que no eres un robot⚠️\n\nTienes {} minutos, si no lo resuelves en ese tiempo te eliminaré del chat ⏳\n(NOTA: Si no aparecen 4 dígitos, abrir la imagen completa)".format(str(round(captchatimespan/60)))
+        caption = f"⚠️Ingresa el código de arriba para demostrar que no eres un robot⚠️\n\nTienes {round(captchatimespan/60)} minutos, si no lo resuelves en ese tiempo te eliminaré del chat ⏳\n(NOTA: Si no aparecen 4 dígitos, abrir la imagen completa)"
     else:
-        caption = "⚠️Type the code above to prove you're not a robot⚠️\n\nYou have {} minutes, if you don't solve it in that time I'll remove you from the chat ⏳\n(NOTE: If 4 digits don't appear, open the full photo)".format(str(round(captchatimespan/60)))
+        caption = f"⚠️Type the code above to prove you're not a robot⚠️\n\nYou have {round(captchatimespan/60)} minutes, if you don't solve it in that time I'll remove you from the chat ⏳\n(NOTE: If 4 digits don't appear, open the full photo)"
     captchaspawnID = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg['message_id'], reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Approve",callback_data='CAPTCHA')]]))['message_id']
     photo.close()
     wait_open("Captcha.txt")
@@ -115,7 +115,7 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
             if chat == chat_id and captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
                 cookiebot.kickChatMember(chat_id, user)
                 cookiebot.unbanChatMember(chat_id, user)
-                Send(cookiebot, chat, "Bani o usuário com id {} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta".format(user), language=language)
+                Send(cookiebot, chat, f"Bani o usuário com id {user} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta", language=language)
                 DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
             elif chat == chat_id and user == msg['from']['id']:
                 text.write(line)

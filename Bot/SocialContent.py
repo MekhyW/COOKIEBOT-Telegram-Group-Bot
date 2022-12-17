@@ -116,7 +116,7 @@ def Meme(cookiebot, msg, chat_id, language):
                     members.remove(chosen_member)
                     chosen_member = chosen_member['user']
                 try:
-                    url = "https://telegram.me/{}".format(chosen_member)
+                    url = f"https://telegram.me/{chosen_member}"
                 except IndexError:
                     continue
                 req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"}) 
@@ -135,7 +135,7 @@ def Meme(cookiebot, msg, chat_id, language):
                 for j in range(x, x+w):
                     if mask_green_copy[i-y, j-x] == 255:
                         template_img[i, j] = image[i-y, j-x]
-            caption += "@{} ".format(chosen_member)
+            caption += f"@{chosen_member} "
         for red in contours_red:
             x, y, w, h = cv2.boundingRect(red)
             for attempt in range(10):
@@ -143,7 +143,7 @@ def Meme(cookiebot, msg, chat_id, language):
                     chosen_photo = GetRequestBackend("randomdatabase")
                     photo_id = chosen_photo['idMedia']
                     photo_info = cookiebot.getFile(photo_id)
-                    photo_url = "https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, photo_info['file_path'])
+                    photo_url = f"https://api.telegram.org/file/bot{cookiebotTOKEN}/{photo_info['file_path']}"
                     break
                 except Exception as e:
                     print(e)
