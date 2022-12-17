@@ -25,14 +25,17 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
         
 
 def CheckHumanFactor(cookiebot, msg, chat_id, language):
-    if 'username' not in msg['new_chat_participant']:
-        if 'is_premium' not in msg['new_chat_participant'] or not msg['new_chat_participant']['is_premium']:
-            userphotos = cookiebot.getUserProfilePhotos(msg['new_chat_participant']['id'])
-            if userphotos['total_count'] == 0:
-                cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-                cookiebot.unbanChatMember(chat_id, msg['new_chat_participant']['id'])
-                Send(cookiebot, chat_id, "Bani o novo usuário por suspeita de ser um robô\nSe isso foi um erro, peça para ela adicionar um username (@) e um ADM adicioná-la de volta", language=language)
-                return True
+    if (
+        'username' not in msg['new_chat_participant']
+        and 'is_premium' not in msg['new_chat_participant']
+        or not msg['new_chat_participant']['is_premium']
+    ):
+        userphotos = cookiebot.getUserProfilePhotos(msg['new_chat_participant']['id'])
+        if userphotos['total_count'] == 0:
+            cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+            cookiebot.unbanChatMember(chat_id, msg['new_chat_participant']['id'])
+            Send(cookiebot, chat_id, "Bani o novo usuário por suspeita de ser um robô\nSe isso foi um erro, peça para ela adicionar um username (@) e um ADM adicioná-la de volta", language=language)
+            return True
     return False
 
 def CheckCAS(cookiebot, msg, chat_id, language):
