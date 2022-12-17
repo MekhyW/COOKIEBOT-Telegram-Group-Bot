@@ -34,9 +34,9 @@ def thread_function(msg):
         if chat_type == 'private' and 'reply_to_message' not in msg:
             SetComandosPrivate(cookiebot, chat_id)
             if 'text' in msg:
-                if msg['text'].startswith(tuple(["/grupos", "/groups"])) and 'from' in msg and msg['from']['id'] == mekhyID:
+                if msg['text'].startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == mekhyID:
                     Grupos(cookiebot, msg, chat_id, 'eng')
-                elif msg['text'].startswith(tuple(["/comandos", "/commands"])):
+                elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, 'eng')
                 elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == mekhyID:
                     os._exit(0)
@@ -107,48 +107,48 @@ def thread_function(msg):
             elif 'text' in msg:
                 if msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, chat_id)
-                elif msg['text'].startswith(tuple(["/análise", "/análisis", "/analysis"])):
+                elif msg['text'].startswith(("/análise", "/análisis", "/analysis")):
                     if 'reply_to_message' in msg:
                         Analyze(cookiebot, msg, chat_id, language)
                     else:
                         Send(cookiebot, chat_id, "Responda uma mensagem com o comando para analisar", msg, language)
-                elif msg['text'].startswith(tuple(["/aleatorio", "/aleatório", "/random"])) and funfunctions == True:
+                elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")) and funfunctions == True:
                     ReplyAleatorio(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/meme") and funfunctions == True:
                     Meme(cookiebot, msg, chat_id, language)
-                elif (msg['text'].startswith(tuple(["/dado", "/dice"])) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
+                elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
                     Dado(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/idade", "/age", "/edad"])) and funfunctions == True:
+                elif msg['text'].startswith(("/idade", "/age", "/edad")) and funfunctions == True:
                     Idade(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/genero", "/gender"])) and funfunctions == True:
+                elif msg['text'].startswith(("/genero", "/gender")) and funfunctions == True:
                     Genero(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/shippar", "/ship"])) and funfunctions == True:
+                elif msg['text'].startswith(("/shippar", "/ship")) and funfunctions == True:
                     Shippar(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
                     if str(msg['from']['username']) in listaadmins:
                         AtualizaBemvindo(cookiebot, msg, chat_id)
                     else:
                         cookiebot.sendMessage(chat_id, "You are not a group admin!", reply_to_message_id=msg['message_id'])
-                elif msg['text'].startswith(tuple(["/novobemvindo", "/newwelcome", "/nuevabienvenida"])):
+                elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                     NovoBemvindo(cookiebot, msg, chat_id)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
                     if str(msg['from']['username']) in listaadmins:
                         AtualizaRegras(cookiebot, msg, chat_id)
                     else:
                         cookiebot.sendMessage(chat_id, "You are not a group admin!", reply_to_message_id=msg['message_id'])
-                elif msg['text'].startswith(tuple(["/novasregras", "/newrules", "/nuevasreglas"])):
+                elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
                     NovasRegras(cookiebot, msg, chat_id)
-                elif msg['text'].startswith(tuple(["/regras", "/rules", "/reglas"])):
+                elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
                     Regras(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/tavivo", "/isalive", "/estavivo"])):
+                elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
                     TaVivo(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith("/everyone"):
                     Everyone(cookiebot, msg, chat_id, listaadmins, language)
                 elif msg['text'].startswith("/adm"):
                     Adm(cookiebot, msg, chat_id, listaadmins)
-                elif msg['text'].startswith(tuple(["/comandos", "/commands"])):
+                elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/hoje", "/today", "/hoy"])) and funfunctions == True:
+                elif msg['text'].startswith(("/hoje", "/today", "/hoy")) and funfunctions == True:
                     if FurBots == False:
                         Hoje(cookiebot, msg, chat_id, language)
                     else:
@@ -160,11 +160,11 @@ def thread_function(msg):
                         return
                 elif any(x in msg['text'].lower() for x in ['eu faço', 'eu faco', 'i do', 'debo hacer']) and '?' in msg['text'] and funfunctions == True and FurBots == False:
                     QqEuFaço(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/ideiadesenho", "/drawingidea", "/ideadibujo"])) and utilityfunctions == True:
+                elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions == True:
                     IdeiaDesenho(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/qualquercoisa", "/anything", "/cualquiercosa"])) and utilityfunctions == True:
+                elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions == True:
                     PromptQualquerCoisa(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(tuple(["/configurar", "/configure"])):
+                elif msg['text'].startswith(("/configurar", "/configure")):
                     Configurar(cookiebot, msg, chat_id, listaadmins, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                     ConfigurarSettar(cookiebot, msg, chat_id)
