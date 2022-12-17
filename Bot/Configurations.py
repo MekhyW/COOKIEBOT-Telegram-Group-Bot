@@ -163,7 +163,7 @@ def Regras(cookiebot, msg, chat_id, language):
     if 'error' in rules and rules['error'] == "Not Found":    
         Send(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", msg, language)
     else:
-        regras = rules['rules']
+        regras = rules['rules'].replace('\\n', '\n')
         if regras.endswith("@MekhyW"):
             cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
         else:
