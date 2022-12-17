@@ -107,7 +107,7 @@ def Meme(cookiebot, msg, chat_id, language):
         for green in contours_green:
             x, y, w, h = cv2.boundingRect(green)
             for attempt in range(10):
-                if not len(members_tagged) == 0:
+                if len(members_tagged) != 0:
                     chosen_member = random.choice(members_tagged)
                     members_tagged.remove(chosen_member)
                 else:
