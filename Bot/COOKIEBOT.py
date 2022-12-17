@@ -196,7 +196,6 @@ def thread_function(msg):
             SchedulerPull(cookiebot)
 
 def run_unnatendedthreads():
-    global unnatended_threads
     num_running_threads = threading.active_count()
     num_max_threads = 10
     for unnatended_thread in unnatended_threads:
@@ -217,7 +216,6 @@ def run_unnatendedthreads():
 
 def handle(msg):
     try:
-        global unnatended_threads
         new_thread = threading.Thread(target=thread_function, args=(msg,))
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
