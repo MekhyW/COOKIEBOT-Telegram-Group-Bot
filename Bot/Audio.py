@@ -10,16 +10,19 @@ confidence_threshold = 0.25
 def Identify_music(cookiebot, msg, chat_id, content, language):
     shazam = ShazamAPI.Shazam(content)
     recognize_generator = shazam.recognizeSong()
-    response = next(recognize_generator)
-    if('track' in response[1]):
-        title = response[1]['track']['title']
-        subtitle = response[1]['track']['subtitle']
-        if language == 'pt':
-            cookiebot.sendMessage(chat_id, "MÚSICA: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
-        elif language == 'es':
-            cookiebot.sendMessage(chat_id, "CANCIÓN: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
-        else:
-            cookiebot.sendMessage(chat_id, "SONG: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
+    try:
+        response = next(recognize_generator)
+        if('track' in response[1]):
+            title = response[1]['track']['title']
+            subtitle = response[1]['track']['subtitle']
+            if language == 'pt':
+                cookiebot.sendMessage(chat_id, "MÚSICA: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
+            elif language == 'es':
+                cookiebot.sendMessage(chat_id, "CANCIÓN: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
+            else:
+                cookiebot.sendMessage(chat_id, "SONG: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
+    except StopIteration:
+        pass
 
 def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
     global minimum_words_STT
