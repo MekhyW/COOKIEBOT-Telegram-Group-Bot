@@ -231,7 +231,8 @@ def handle_query(msg):
         try:
             chat_id = msg['message']['reply_to_message']['chat']['id']
             listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
-        except:
+        except Exception as e:
+            print(e)
             chat_id = from_id
             listaadmins_id = []
         if 'CONFIG' in query_data:

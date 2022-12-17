@@ -17,7 +17,8 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
     if 'error' in welcome and welcome['error'] == "Not Found":
         try:
             Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo {}!".format(msg['chat']['title']), language=language)
-        except:
+        except Exception as e:
+            print(e)
             Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo!", language=language)
     else:
         welcome = welcome['message'].replace('\\n', '\n')
@@ -39,7 +40,8 @@ def CheckCAS(cookiebot, msg, chat_id, language):
     try:
         r = requests.get("https://api.cas.chat/check?user_id={}".format(msg['new_chat_participant']['id']), timeout=10)
         in_banlist = json.loads(r.text)['ok']
-    except:
+    except Exception as e:
+        print(e)
         return False
     if in_banlist == True:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
@@ -51,7 +53,8 @@ def CheckRaider(cookiebot, msg, chat_id, language):
     try:
         r = requests.post('https://burrbot.xyz/noraid.php', data={'id': '{}'.format(msg['new_chat_participant']['id'])}, timeout=10)
         is_raider = json.loads(r.text)['raider']
-    except:
+    except Exception as e:
+        print(e)
         return False
     if is_raider == True:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])

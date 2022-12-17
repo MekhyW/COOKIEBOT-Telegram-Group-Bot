@@ -27,7 +27,8 @@ def Grupos(cookiebot, msg, chat_id, language):
             else:
                 answer += id + " - [NO TITLE]\n"
             num += 1
-        except:
+        except Exception as e:
+            print(e)
             print("Group not found: " + id)
     answer += "\n\nTotal groups found: " + str(num)
     cookiebot.sendMessage(chat_id, answer)

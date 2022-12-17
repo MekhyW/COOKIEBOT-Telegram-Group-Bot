@@ -31,7 +31,8 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
             my_bytes_io.close()
             temp_img.close()
             return 1
-        except:
+        except Exception as e:
+            print(e)
             try:
                 my_bytes_io.seek(0)
                 my_bytes_io.truncate(0)
@@ -144,7 +145,8 @@ def Meme(cookiebot, msg, chat_id, language):
                     photo_info = cookiebot.getFile(photo_id)
                     photo_url = "https://api.telegram.org/file/bot{}/{}".format(cookiebotTOKEN, photo_info['file_path'])
                     break
-                except:
+                except Exception as e:
+                    print(e)
                     continue
             resp = urllib.request.urlopen(photo_url)
             image = np.asarray(bytearray(resp.read()), dtype="uint8")
