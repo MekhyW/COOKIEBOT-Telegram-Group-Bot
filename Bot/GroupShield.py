@@ -26,11 +26,7 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
         
 
 def CheckHumanFactor(cookiebot, msg, chat_id, language):
-    if (
-        'username' not in msg['new_chat_participant']
-        and 'is_premium' not in msg['new_chat_participant']
-        or not msg['new_chat_participant']['is_premium']
-    ):
+    if 'username' not in msg['new_chat_participant']:
         userphotos = cookiebot.getUserProfilePhotos(msg['new_chat_participant']['id'])
         if userphotos['total_count'] == 0:
             cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
