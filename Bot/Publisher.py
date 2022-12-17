@@ -85,8 +85,8 @@ def SchedulePost(cookiebot, query_data):
             delete_job(job.name)
     answer = f"Post set for the following times ({days} days):\n"
     language_origin = GetConfig(origin_chatid)[7]
-    for group in os.listdir('Registers'):
-        group_id = group.split('.')[0]
+    for group in GetRequestBackend('registers'):
+        group_id = group['id']
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = GetConfig(group_id)
         if publisherpost and language_origin == language:
             num_posts_for_group = 0
