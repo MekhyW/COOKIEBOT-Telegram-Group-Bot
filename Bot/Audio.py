@@ -24,10 +24,7 @@ def Identify_music(cookiebot, msg, chat_id, content, language):
 def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
     global minimum_words_STT
     global confidence_threshold
-    if sfw == 1:
-        profanityFilter = True
-    else:
-        profanityFilter = False
+    profanityFilter = sfw == 1
     if language == 'pt':
         language_code = 'pt-BR'
     elif language == 'es':
