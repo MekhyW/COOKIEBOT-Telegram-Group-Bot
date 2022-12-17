@@ -27,7 +27,7 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
             temp_img = PIL.Image.open(my_bytes_io)
             temp_img.save(my_bytes_io, format="png")
             my_bytes_io.seek(0)
-            cookiebot.sendPhoto(chat_id, ('x.png', my_bytes_io), reply_to_message_id=msg['message_id'])
+            cookiebot.sendPhoto(chat_id, ('x.png', my_bytes_io), reply_to_message_id=msg['message_id'], caption=image.referrer_url)
             my_bytes_io.close()
             temp_img.close()
             return 1
@@ -39,7 +39,7 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
                 temp_img = PIL.Image.open(my_bytes_io)
                 temp_img.save(my_bytes_io, format="jpg")
                 my_bytes_io.seek(0)
-                cookiebot.sendPhoto(chat_id, ('x.jpg', my_bytes_io), reply_to_message_id=msg['message_id'])
+                cookiebot.sendPhoto(chat_id, ('x.jpg', my_bytes_io), reply_to_message_id=msg['message_id'], caption=image.referrer_url)
                 my_bytes_io.close()
                 temp_img.close()
                 return 1
