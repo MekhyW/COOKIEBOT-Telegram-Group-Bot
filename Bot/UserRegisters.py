@@ -47,7 +47,7 @@ def Shippar(cookiebot, msg, chat_id, language):
         targetA = msg['text'].split()[1]
         targetB = msg['text'].split()[2]
     else:
-        members.shuffle()
+        random.shuffle(members)
         targetA = members[0]['user']
         targetB = members[1]['user']
     divorce_prob = str(random.randint(0, 100))
