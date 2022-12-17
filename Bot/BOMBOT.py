@@ -233,7 +233,6 @@ def handle_query(msg):
             listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
         except:
             chat_id = from_id
-            listaadmins = []
             listaadmins_id = []
         if 'CONFIG' in query_data:
             ConfigVariableButton(cookiebot, msg, query_data)
@@ -242,10 +241,10 @@ def handle_query(msg):
                 AskApproval(cookiebot, query_data, from_id)
             elif query_data.startswith('Approve'):
                 SchedulePost(cookiebot, query_data)
-            cookiebot.deleteMessage(telepot.message_identifier(msg['message']))
+            DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data == 'CAPTCHA' and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
             SolveCaptcha(cookiebot, msg, chat_id, True)
-            DeleteMessage(telepot.message_identifier(msg['message']))
+            DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         run_unnatendedthreads()
     except:
         if 'ConnectionResetError' in traceback.format_exc():
