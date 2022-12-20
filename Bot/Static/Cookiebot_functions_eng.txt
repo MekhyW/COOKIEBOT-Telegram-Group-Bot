@@ -1,16 +1,15 @@
 Cookiebot Features!
 
 PASSIVE:
+Member Backup - In case the group is hacked or deleted by mistake, I can help recover your participants
 Chat AI - Reply to any text message
 Stickers - Reply a sticker with another sticker
 Captcha - Stop bots from texting and kick them if they don't prove they're human
 Media Restriction - Prevents new members from sending media, for a specified interval
 Sticker antispam - Prevent raids or long chains of stickers in sequence
-Reverse image search - Searches for sources of images sent in the group
-Voice to Text - Transcribes voice messages
-Music Detector - Speaks the name of a song playing in voice message
+Voice to Text - Transcribe voice messages
+Music Detector - Speak the name of a song playing in voice message
 Welcome - Customized welcome message
-Member Backup - In case the group is hacked or deleted by mistake, I can help recover your participants
 
 FREE COMMANDS:
 everyone - Admins can call all group members
