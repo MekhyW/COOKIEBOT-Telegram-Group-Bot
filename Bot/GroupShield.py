@@ -20,7 +20,7 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
         except Exception as e:
             print(e)
             Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo!", language=language)
-    else:
+    elif len(welcome['message']) > 0:
         welcome = welcome['message'].replace('\\n', '\n')
         cookiebot.sendMessage(chat_id, welcome)
         
