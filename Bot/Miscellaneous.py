@@ -5,20 +5,19 @@ def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
 
 def ReverseImageSearch(cookiebot, msg, chat_id):
-    return
-    #path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
-    #image_url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
-    #url = 'https://yandex.com/images/search?url=' + image_url + "&rpt=imageview"
-    #req = requests.get(url)
-    #text = req.text
-    #if 'Other image sizes' in text and 'No matching images found' not in text:
-    #    links = re.findall(link_regex, text)
-    #    for link in links:
-    #        required_substrings = ['twitter', 'pinterest', 'furaffinity', 'deviantart', 'tumblr', 'instagram', 'facebook', 'flickr', 'imgur', 'reddit', '4chan', 'pixiv', 'artstation', 'patreon', 'e621', 'weasyl', 'etsy', 'ko-fi']
-    #        prohibited_substrings = ['yandex', 'yastatic', 'w3.org', 'google', 'bing', 'ggpht', 'twimg', 'quot', '.png', '.jpg', '.jpeg', '.webp']
-    #        if any(substring in link[0] for substring in required_substrings) and not any(substring in link[0] for substring in prohibited_substrings):
-    #            cookiebot.sendMessage(chat_id, link[0], reply_to_message_id=msg['message_id'])
-    #            return
+    path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
+    image_url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
+    url = 'https://yandex.com/images/search?url=' + image_url + "&rpt=imageview"
+    req = requests.get(url)
+    text = req.text
+    if 'Other image sizes' in text and 'No matching images found' not in text:
+        links = re.findall(link_regex, text)
+        for link in links:
+            required_substrings = ['twitter', 'pinterest', 'furaffinity', 'deviantart', 'tumblr', 'instagram', 'facebook', 'flickr', 'imgur', 'reddit', '4chan', 'pixiv', 'artstation', 'patreon', 'e621', 'weasyl', 'etsy', 'ko-fi']
+            prohibited_substrings = ['yandex', 'yastatic', 'w3.org', 'google', 'bing', 'ggpht', 'twimg', 'quot', '.png', '.jpg', '.jpeg', '.webp']
+            if any(substring in link[0] for substring in required_substrings) and not any(substring in link[0] for substring in prohibited_substrings):
+                cookiebot.sendMessage(chat_id, link[0], reply_to_message_id=msg['message_id'])
+                return
 
 def TaVivo(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Estou vivo\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
