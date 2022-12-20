@@ -1,15 +1,16 @@
 ¡Las funciones de Cookiebot!
 
 PASIVO:
-Copia de seguridad de miembros - en caso de que el grupo sea pirateado o eliminado por error, puedo ayudar a recuperar a sus participantes
 Chat AI - Responde a cualquier mensaje de texto
-Stickers - responde un sticker con otra sticker
-Captcha - evita que los bots envíen mensajes de texto y expúlsalos si no prueban que son humanos
-Restricción de medios - evita que los nuevos miembros envíen medios durante un intervalo específico
-Antispam de stickers: evita redadas o largas cadenas de stickers en secuencia
-Voz a texto - transcribir mensajes de voz
-Detector de música - diga el nombre de una canción que se reproduce en un mensaje de voz
+Stickers - Responde un sticker con otra sticker
+Captcha - Evita que los bots envíen mensajes de texto y expúlsalos si no prueban que son humanos
+Restricción de medios - Evita que los nuevos miembros envíen medios durante un intervalo específico
+Antispam de stickers: Evita redadas o largas cadenas de stickers en secuencia
+Voz a texto - Transcribir mensajes de voz
+Detector de música - Dizer el nombre de una canción que se reproduce en un mensaje de voz
+Búsqueda inversa de imágenes - Busca la fuente de una obra de arte
 Bienvenido - Mensaje de bienvenida personalizado
+Copia de seguridad de miembros - En caso de que el grupo sea pirateado o eliminado por error, puedo ayudar a recuperar a sus participantes
 
 COMANDOS LIBRES:
 everyone - los administradores pueden llamar a todos los miembros del grupo

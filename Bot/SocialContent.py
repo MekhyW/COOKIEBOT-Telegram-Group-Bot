@@ -2,8 +2,28 @@ from universal_funcs import *
 from UserRegisters import *
 import google_images_search, io, PIL
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
+from google.cloud import vision
+reverseimagesearcher = vision.ImageAnnotatorClient.from_service_account_json('cookiebot_cloudserviceaccount.json')
 import cv2
 import numpy as np
+
+def ReverseImageSearch(cookiebot, msg, chat_id):
+    path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
+    image_url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
+    urllib.request.urlretrieve(image_url, 'temp.jpg')
+    with io.open('temp.jpg', 'rb') as image_file:
+        content = image_file.read()
+    image = vision.Image(content=content)
+    response = reverseimagesearcher.web_detection(image=image)
+    annotations = response.web_detection
+    tags = ['art', 'drawing', 'comics', 'cartoon', 'furry', 'fursona', 'yiff']
+    if not any(entity.description.lower() in tags for entity in annotations.web_entities):
+        return
+    for page in annotations.pages_with_matching_images:
+        if page.full_matching_images:
+            cookiebot.sendChatAction(chat_id, 'typing')
+            cookiebot.sendMessage(chat_id, f"SOURCE: 🔗{page.url}", reply_to_message_id=msg['message_id'])
+            return
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec\n(acentos, letras maiusculas e espaços não funcionam)", msg, language)

@@ -16,6 +16,10 @@ def changecmds(bot):
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
     print(content_type, chat_type, chat_id)
+    if content_type == 'photo':
+        path = bot.getFile(msg['photo'][-1]['file_id'])['file_path']
+        image_url = 'https://api.telegram.org/file/bot{}/{}'.format(token, path)
+        bot.sendMessage(chat_id, image_url)
 
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
