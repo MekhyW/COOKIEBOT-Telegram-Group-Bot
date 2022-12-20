@@ -13,9 +13,7 @@ def ReverseImageSearch(cookiebot, msg, chat_id):
     if 'Other image sizes' in text and 'No matching images found' not in text:
         links = re.findall(link_regex, text)
         for link in links:
-            required_substrings = ['twitter', 'pinterest', 'furaffinity', 'deviantart', 'tumblr', 'instagram', 'facebook', 'flickr', 'imgur', 'reddit', '4chan', 'pixiv', 'artstation', 'patreon', 'e621', 'weasyl', 'etsy', 'ko-fi']
-            prohibited_substrings = ['yandex', 'yastatic', 'w3.org', 'google', 'bing', 'ggpht', 'twimg', 'quot', '.png', '.jpg', '.jpeg', '.webp']
-            if any(substring in link[0] for substring in required_substrings) and not any(substring in link[0] for substring in prohibited_substrings):
+            if not any(substring in link[0] for substring in ['yandex', 'yastatic', 'w3.org', 'google', 'bing', 'ggpht', 'twimg', 'quot', '.png', '.jpg', '.jpeg', '.webp']):
                 cookiebot.sendMessage(chat_id, link[0], reply_to_message_id=msg['message_id'])
                 return
 
