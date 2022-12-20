@@ -90,6 +90,8 @@ def thread_function(msg):
                     AddtoRandomDatabase(msg, chat_id, photo_id)
                 if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherask == True:
                     AskPublisher(cookiebot, msg, chat_id, language)
+                elif utilityfunctions == True:
+                    ReverseImageSearch(cookiebot, msg, chat_id)
             elif content_type == "video":
                 if sfw == 1 and funfunctions == True:
                     AddtoRandomDatabase(msg, chat_id)

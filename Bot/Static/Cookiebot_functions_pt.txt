@@ -1,15 +1,16 @@
 As Funcionalidades do Cookiebot!
 
 PASSIVAS:
-Backup de Participantes - Caso o grupo seja hackeado ou apagado por engano, posso ajudar a recuperar seus participantes
 IA de conversa - Responde qualquer mensagem de texto
 Stickers - Responde um sticker com outro sticker
 Captcha - Impede que bots mandem mensagens e kicka eles se não provarem que são humanos
 Restrição de mídia - Impede que novos membros mandem mídia, por um intervalo especificado
 Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
+Pesquisa reversa de imagens - Procura as fontes das imagens enviadas no grupo
 Voz para texto - Transcripta mensagens de voz
 Detector de Música - Fala o nome de uma música tocando em mensagem de voz
 Welcome - Mensagem customizada de boas vindas
+Backup de Participantes - Caso o grupo seja hackeado ou apagado por engano, posso ajudar a recuperar seus participantes
 
 COMANDOS LIVRES:
 everyone - Admins podem chamar todos os membros do grupo
