@@ -8,7 +8,6 @@ Media Restriction - Prevents new members from sending media, for a specified int
 Sticker antispam - Prevent raids or long chains of stickers in sequence
 Voice to Text - Transcribe voice messages
 Music Detector - Speak the name of a song playing in voice message
-Reverse image search - Searches for the source of an artwork
 Welcome - Customized welcome message
 Member Backup - In case the group is hacked or deleted by mistake, I can help recover your participants
 
@@ -16,6 +15,7 @@ FREE COMMANDS:
 everyone - Admins can call all group members
 adm - Call chat admins
 anything - send a picture of what you want
+searchimage - Searches for the source of an artwork
 meme - Generate a meme
 random - Send a media from some group
 drawingidea - No more art block

@@ -8,7 +8,6 @@ Restrição de mídia - Impede que novos membros mandem mídia, por um intervalo
 Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
 Voz para texto - Transcripta mensagens de voz
 Detector de Música - Fala o nome de uma música tocando em mensagem de voz
-Pesquisa reversa de imagens - Pesquisa a fonte de uma obra de arte
 Welcome - Mensagem customizada de boas vindas
 Backup de Participantes - Caso o grupo seja hackeado ou apagado por engano, posso ajudar a recuperar seus participantes
 
@@ -16,6 +15,7 @@ COMANDOS LIVRES:
 everyone - Admins podem chamar todos os membros do grupo
 adm - Chama os administradores do chat
 qualquercoisa - Manda uma foto do que vc quiser
+pesquisaimagem - Pesquisa a fonte de uma obra de arte
 meme - Gera um meme
 aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block

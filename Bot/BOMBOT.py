@@ -90,8 +90,6 @@ def thread_function(msg):
                     AddtoRandomDatabase(msg, chat_id, photo_id)
                 if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherask == True:
                     AskPublisher(cookiebot, msg, chat_id, language)
-                elif utilityfunctions == True:
-                    ReverseImageSearch(cookiebot, msg, chat_id)
             elif content_type == "video":
                 if sfw == 1 and funfunctions == True:
                     AddtoRandomDatabase(msg, chat_id)
@@ -114,6 +112,11 @@ def thread_function(msg):
                         Analyze(cookiebot, msg, chat_id, language)
                     else:
                         Send(cookiebot, chat_id, "Responda uma mensagem com o comando para analisar", msg, language)
+                elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")):
+                    if 'reply_to_message' in msg:
+                        ReverseImageSearch(cookiebot, msg['reply_to_message'], chat_id)
+                    else:
+                        Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte", msg, language)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")) and funfunctions == True:
                     ReplyAleatorio(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/meme") and funfunctions == True:
