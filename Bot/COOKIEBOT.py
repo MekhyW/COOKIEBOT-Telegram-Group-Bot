@@ -114,7 +114,7 @@ def thread_function(msg):
                         Send(cookiebot, chat_id, "Responda uma mensagem com o comando para analisar", msg, language)
                 elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")):
                     if 'reply_to_message' in msg:
-                        ReverseImageSearch(cookiebot, msg['reply_to_message'], chat_id)
+                        ReverseImageSearch(cookiebot, msg['reply_to_message'], chat_id, language)
                     else:
                         Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte", msg, language)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")) and funfunctions == True:

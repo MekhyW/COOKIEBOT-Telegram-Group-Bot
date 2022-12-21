@@ -7,7 +7,7 @@ reverseimagesearcher = vision.ImageAnnotatorClient.from_service_account_json('co
 import cv2
 import numpy as np
 
-def ReverseImageSearch(cookiebot, msg, chat_id):
+def ReverseImageSearch(cookiebot, msg, chat_id, language):
     path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
     image_url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
     urllib.request.urlretrieve(image_url, 'temp.jpg')
@@ -16,14 +16,12 @@ def ReverseImageSearch(cookiebot, msg, chat_id):
     image = vision.Image(content=content)
     response = reverseimagesearcher.web_detection(image=image)
     annotations = response.web_detection
-    tags = ['art', 'drawing', 'comics', 'cartoon', 'furry', 'fursona', 'yiff']
-    if not any(entity.description.lower() in tags for entity in annotations.web_entities):
-        return
     for page in annotations.pages_with_matching_images:
         if page.full_matching_images:
             cookiebot.sendChatAction(chat_id, 'typing')
             cookiebot.sendMessage(chat_id, f"SOURCE: 🔗{page.url}", reply_to_message_id=msg['message_id'])
             return
+    Send(cookiebot, chat_id, "Não consegui achar uma correspondência exata", msg, language)
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec\n(acentos, letras maiusculas e espaços não funcionam)", msg, language)
