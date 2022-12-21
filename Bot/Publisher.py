@@ -29,6 +29,7 @@ def AskApproval(cookiebot, query_data, from_id):
     cookiebot.forwardMessage(mekhyID, origin_chatid, origin_messageid)
     cookiebot.sendMessage(mekhyID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="✔️ 10 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 10')],
             [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 3')],
             [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 1')],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
