@@ -140,7 +140,7 @@ def thread_function(msg):
                         cookiebot.sendMessage(chat_id, "You are not a group admin!", reply_to_message_id=msg['message_id'])
                 elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
                     NovasRegras(cookiebot, msg, chat_id)
-                elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
+                elif msg['text'].startswith(("/regras", "/rules", "/reglas")) and FurBots == False:
                     Regras(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
                     TaVivo(cookiebot, msg, chat_id, language)
@@ -150,16 +150,10 @@ def thread_function(msg):
                     Adm(cookiebot, msg, chat_id, listaadmins)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/hoje", "/today", "/hoy")) and funfunctions == True:
-                    if FurBots == False:
-                        Hoje(cookiebot, msg, chat_id, language)
-                    else:
-                        return
-                elif (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
-                    if FurBots == False:
-                        Cheiro(cookiebot, msg, chat_id, language)
-                    else:
-                        return
+                elif msg['text'].startswith(("/hoje", "/today", "/hoy")) and funfunctions == True and FurBots == False:
+                    Hoje(cookiebot, msg, chat_id, language)
+                elif (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True and FurBots == False:
+                    Cheiro(cookiebot, msg, chat_id, language)
                 elif any(x in msg['text'].lower() for x in ['eu faço', 'eu faco', 'i do', 'debo hacer']) and '?' in msg['text'] and funfunctions == True and FurBots == False:
                     QqEuFaço(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions == True:
