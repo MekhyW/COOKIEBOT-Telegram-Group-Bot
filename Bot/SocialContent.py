@@ -8,9 +8,18 @@ import cv2
 import numpy as np
 
 def ReverseImageSearch(cookiebot, msg, chat_id, language):
-    path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
-    image_url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
-    urllib.request.urlretrieve(image_url, 'temp.jpg')
+    try:
+        path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
+        image_url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
+        urllib.request.urlretrieve(image_url, 'temp.jpg')
+    except KeyError:
+        path = cookiebot.getFile(msg['document']['file_id'])['file_path']
+        video_url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
+        urllib.request.urlretrieve(video_url, 'temp.mp4')
+        vidcap = cv2.VideoCapture('temp.mp4')
+        success, image = vidcap.read()
+        cv2.imwrite('temp.jpg', image)
+        os.remove('temp.mp4')
     with io.open('temp.jpg', 'rb') as image_file:
         content = image_file.read()
     image = vision.Image(content=content)
