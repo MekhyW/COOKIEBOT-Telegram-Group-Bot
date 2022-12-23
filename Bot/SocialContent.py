@@ -30,7 +30,12 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
             cookiebot.sendChatAction(chat_id, 'typing')
             cookiebot.sendMessage(chat_id, f"SOURCE: 🔗{page.url}", reply_to_message_id=msg['message_id'])
             return
-    Send(cookiebot, chat_id, "Não consegui achar uma correspondência exata", msg, language)
+    for page in annotations.pages_with_matching_images:
+        if page.partial_matching_images:
+            cookiebot.sendChatAction(chat_id, 'typing')
+            cookiebot.sendMessage(chat_id, f"SOURCE: 🔗{page.url} (partial matching)", reply_to_message_id=msg['message_id'])
+            return
+    Send(cookiebot, chat_id, "Não consegui achar uma correspondência", msg, language)
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec\n(acentos, letras maiusculas e espaços não funcionam)", msg, language)
