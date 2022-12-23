@@ -120,19 +120,19 @@ def SchedulerPull(cookiebot):
     for message in received_messages:
         print(message.message.data)
         data = message.message.data.decode('utf-8')
+        remaining_times = int(data.split()[0]) - 1
+        origin_chatid = data.split()[1]
+        group_id = data.split()[2]
+        origin_messageid = data.split()[3]
+        if remaining_times <= 0:
+            delete_job(origin_chatid+group_id)
+        else:
+            edit_job_data(origin_chatid+group_id, f"{remaining_times} {origin_chatid} {group_id} {origin_messageid}")
         try:
-            remaining_times = int(data.split()[0]) - 1
-            origin_chatid = data.split()[1]
-            group_id = data.split()[2]
-            origin_messageid = data.split()[3]
-            if remaining_times <= 0:
-                delete_job(origin_chatid+group_id)
-            else:
-                edit_job_data(origin_chatid+group_id, f"{remaining_times} {origin_chatid} {group_id} {origin_messageid}")
             cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
-        except Exception as e:
-            cookiebot.sendMessage(mekhyID, traceback.format_exc())
-        subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
+            subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
+        except telepot.exception.TelegramError as e:
+            delete_job(origin_chatid+group_id)
     return received_messages
 
 def startPublisher(isBombot):
