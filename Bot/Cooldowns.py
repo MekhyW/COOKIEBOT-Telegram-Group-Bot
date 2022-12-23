@@ -10,6 +10,7 @@ def Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language):
             Send(cookiebot, chat_id, "Cuidado com o flood de stickers.\nMantenham o chat com textos!", msg, language)
         if int(lastUsed) > int(stickerspamlimit):
             DeleteMessage(cookiebot, telepot.message_identifier(msg))
+        PutRequestBackend(f"stickers/{chat_id}", {"lastUsed": lastUsed + 1})
 
 def StickerCooldownUpdates(msg, chat_id):
     PutRequestBackend(f"stickers/{chat_id}", {"lastUsed": 0})
