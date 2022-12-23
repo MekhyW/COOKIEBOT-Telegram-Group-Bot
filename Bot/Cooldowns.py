@@ -5,12 +5,12 @@ def Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language):
     if 'error' in sticker_seq and sticker_seq['error'] == "Not Found":
         PostRequestBackend(f"stickers/{chat_id}", {"lastUsed": 0})
     else:
-        lastUsed = int(sticker_seq['lastUsed'])
+        lastUsed = int(sticker_seq['lastUsed']) + 1
         if lastUsed == int(stickerspamlimit):
             Send(cookiebot, chat_id, "Cuidado com o flood de stickers.\nMantenham o chat com textos!", msg, language)
         if int(lastUsed) > int(stickerspamlimit):
             DeleteMessage(cookiebot, telepot.message_identifier(msg))
-        PutRequestBackend(f"stickers/{chat_id}", {"lastUsed": lastUsed + 1})
+        PutRequestBackend(f"stickers/{chat_id}", {"lastUsed": lastUsed})
 
 def StickerCooldownUpdates(msg, chat_id):
     PutRequestBackend(f"stickers/{chat_id}", {"lastUsed": 0})
