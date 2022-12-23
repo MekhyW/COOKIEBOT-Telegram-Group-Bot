@@ -2,6 +2,7 @@ from universal_funcs import *
 import ShazamAPI
 from google.cloud import speech
 from google.oauth2 import service_account
+from google.api_core.exceptions import InvalidArgument
 credentials = service_account.Credentials.from_service_account_file('cookiebot_cloudserviceaccount.json')
 client_stt = speech.SpeechClient(credentials=credentials)
 minimum_words_STT = 3
@@ -12,17 +13,17 @@ def Identify_music(cookiebot, msg, chat_id, content, language):
     recognize_generator = shazam.recognizeSong()
     try:
         response = next(recognize_generator)
-        if('track' in response[1]):
-            title = response[1]['track']['title']
-            subtitle = response[1]['track']['subtitle']
-            if language == 'pt':
-                cookiebot.sendMessage(chat_id, "MÚSICA: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
-            elif language == 'es':
-                cookiebot.sendMessage(chat_id, "CANCIÓN: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
-            else:
-                cookiebot.sendMessage(chat_id, "SONG: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
     except StopIteration:
-        pass
+        return
+    if('track' in response[1]):
+        title = response[1]['track']['title']
+        subtitle = response[1]['track']['subtitle']
+        if language == 'pt':
+            cookiebot.sendMessage(chat_id, "MÚSICA: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
+        elif language == 'es':
+            cookiebot.sendMessage(chat_id, "CANCIÓN: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
+        else:
+            cookiebot.sendMessage(chat_id, "SONG: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
 
 def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
     global minimum_words_STT
@@ -36,7 +37,10 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
         language_code = 'en-US'
     audio = speech.RecognitionAudio(content=content)
     config = speech.RecognitionConfig(encoding='OGG_OPUS', sample_rate_hertz=48000, language_code=language_code, alternative_language_codes=["en-US"], enable_word_confidence=True, enable_automatic_punctuation=True, profanity_filter=profanityFilter, model="default", use_enhanced=True,)
-    response = client_stt.recognize(config=config, audio=audio)
+    try:
+        response = client_stt.recognize(config=config, audio=audio)
+    except InvalidArgument as e:
+        return
     Text = ''
     print(response.results)
     for i, result in enumerate(response.results):
