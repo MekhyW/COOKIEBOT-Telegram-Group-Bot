@@ -131,7 +131,7 @@ def SchedulerPull(cookiebot):
         try:
             cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
             subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
-        except telepot.exception.TelegramError as e:
+        except TelegramError as e:
             delete_job(origin_chatid+group_id)
     return received_messages
 
