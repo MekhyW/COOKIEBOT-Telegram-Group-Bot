@@ -33,6 +33,16 @@ def Grupos(cookiebot, msg, chat_id, language):
     answer += "\n\nTotal groups found: " + str(num)
     cookiebot.sendMessage(chat_id, answer)
 
+def Broadcast(cookiebot, msg):
+    groups = GetRequestBackend('registers')
+    for group in groups:
+        try:
+            id = group['id']
+            cookiebot.sendMessage(int(id), msg['text'].replace('/broadcast', ''))
+            time.sleep(0.5)
+        except:
+            pass
+
 def Comandos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     wait_open(f"Static/Cookiebot_functions_{language}.txt")

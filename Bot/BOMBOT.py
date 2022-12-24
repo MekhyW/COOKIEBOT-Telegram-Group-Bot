@@ -46,6 +46,8 @@ def thread_function(msg):
                     targetId = msg['text'].split()[1]
                     LeaveAndBlacklist(cookiebot, targetId)
                     DeleteRequestBackend(f'registers/{targetId}')
+                elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == mekhyID:
+                    Broadcast(cookiebot, msg)
             if isBombot:
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
