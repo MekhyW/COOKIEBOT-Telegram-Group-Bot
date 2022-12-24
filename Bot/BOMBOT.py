@@ -177,7 +177,10 @@ def thread_function(msg):
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions == True:
                     AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language)
-                    cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
+                    try:
+                        cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
+                    except TelegramError:
+                        pass
                 else:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
