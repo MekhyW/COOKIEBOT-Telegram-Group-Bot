@@ -38,7 +38,7 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Não consegui achar uma correspondência", msg, language)
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
-    Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec\n(acentos, letras maiusculas e espaços não funcionam)", msg, language)
+    Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec", msg, language)
 
 def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
