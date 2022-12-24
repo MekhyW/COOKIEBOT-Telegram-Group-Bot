@@ -21,7 +21,7 @@ def Grupos(cookiebot, msg, chat_id, language):
         try:
             id = group['id']
             chat = cookiebot.getChat(int(id))
-            time.sleep(1)
+            time.sleep(0.5)
             if 'title' in chat:
                 answer += id + " - " + chat['title'] + "\n"
             else:
