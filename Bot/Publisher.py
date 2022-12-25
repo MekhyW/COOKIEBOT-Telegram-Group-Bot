@@ -9,6 +9,7 @@ project_path = f"projects/{project_id}"
 parent = f"{project_path}/locations/southamerica-east1"
 topic_name = 'projects/cookiebot-309512/topics/cookiebot-publisher-topic'
 subscription_path = None
+BFFptID = -1001041938696
 
 def AskPublisher(cookiebot, msg, chat_id, language):
     if language == "pt":
@@ -107,6 +108,14 @@ def SchedulePost(cookiebot, query_data):
                     answer += f"{hour}:{minute} - {target_chattitle}\n"
             except Exception as e:
                 print(e)
+    if language_origin == 'pt':
+        hour = random.randint(0,23)
+        minute = random.randint(0,59)
+        create_job(origin_chatid+BFFptID, 
+        f"{origin_chattitle} --> Brasil FurFest, at {hour}:{minute} ", 
+        f"{days} {origin_chatid} {BFFptID} {origin_messageid}", 
+        f"{minute} {hour} * * *")
+        answer += f"{hour}:{minute} - Brasil FurFest\n"
     try:
         Send(cookiebot, origin_userid, answer)
         Send(cookiebot, origin_chatid, "Post adicionado à fila!")
@@ -114,7 +123,13 @@ def SchedulePost(cookiebot, query_data):
         cookiebot.sendMessage(mekhyID, traceback.format_exc())
         Send(cookiebot, origin_chatid, "Post adicionado à fila porém não consegui te mandar os horários. Mande /start no meu privado para eu poder te mandar mensagens.")
 
-def SchedulerPull(cookiebot):
+def UpdateJobDays(remaining_times, name, data):
+    if remaining_times <= 0:
+        delete_job(name)
+    else:
+        edit_job_data(name, data)
+
+def SchedulerPull(cookiebot, isBombot):
     response = subscriber.pull(subscription=subscription_path, max_messages=100, return_immediately=True)
     received_messages = response.received_messages
     for message in received_messages:
@@ -124,13 +139,13 @@ def SchedulerPull(cookiebot):
         origin_chatid = data.split()[1]
         group_id = data.split()[2]
         origin_messageid = data.split()[3]
-        if remaining_times <= 0:
-            delete_job(origin_chatid+group_id)
-        else:
-            edit_job_data(origin_chatid+group_id, f"{remaining_times} {origin_chatid} {group_id} {origin_messageid}")
+        if not isBombot:
+            UpdateJobDays(remaining_times, origin_chatid+group_id, f"{remaining_times} {origin_chatid} {group_id} {origin_messageid}")
         try:
             cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
             subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
+            if isBombot:
+                UpdateJobDays(remaining_times, origin_chatid+group_id, f"{remaining_times} {origin_chatid} {group_id} {origin_messageid}")
         except TelegramError as e:
             delete_job(origin_chatid+group_id)
     return received_messages

@@ -201,8 +201,7 @@ def thread_function(msg):
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
             cookiebot.sendMessage(mekhyID, str(msg))
     finally:
-        if not isBombot:
-            SchedulerPull(cookiebot)
+        SchedulerPull(cookiebot, isBombot)
 
 def run_unnatendedthreads():
     global unnatended_threads
