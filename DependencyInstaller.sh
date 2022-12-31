@@ -26,7 +26,10 @@ pip3 install google-cloud-pubsub
 pip3 install google-cloud-scheduler
 pip3 install google-cloud-vision
 pip3 install ShazamAPI
+pip3 install numpy
 pip3 install opencv-python
+pip3 install forex-python
+pip3 install price-parser
 pip3 install ChatterBot-corpus
 pip3 install awscli==1.11.18
 pip3 install SQLAlchemy==1.3.6

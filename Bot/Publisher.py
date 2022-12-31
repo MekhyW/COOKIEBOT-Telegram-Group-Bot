@@ -2,6 +2,11 @@ from universal_funcs import *
 from Configurations import *
 from google.cloud import scheduler_v1
 from google.cloud import pubsub_v1
+from forex_python.converter import CurrencyRates
+from forex_python.converter import CurrencyCodes
+from price_parser import Price
+currencyRates = CurrencyRates()
+currencyCodes = CurrencyCodes()
 client = scheduler_v1.CloudSchedulerClient.from_service_account_json("cookiebot_pubsub.json")
 subscriber = pubsub_v1.SubscriberClient.from_service_account_json("cookiebot_pubsub.json")
 project_id = "cookiebot-309512"
@@ -9,6 +14,24 @@ project_path = f"projects/{project_id}"
 parent = f"{project_path}/locations/southamerica-east1"
 topic_name = 'projects/cookiebot-309512/topics/cookiebot-publisher-topic'
 subscription_path = None
+
+def ConvertCurrency(snippet, to_currency):
+    parsed = Price.fromstring(snippet)
+    if parsed.amount is None or parsed.currency is None:
+        return None
+    if parsed.currency == '$':
+        from_currency = 'USD'
+    elif parsed.currency == '€':
+        from_currency = 'EUR'
+    elif parsed.currency == '£':
+        from_currency = 'GBP'
+    elif parsed.currency == 'R$':
+        from_currency = 'BRL'
+    else:
+        from_currency = currencyCodes.get_currency_code(parsed.currency)
+    rate = currencyRates.get_rate(from_currency, to_currency)    
+    converted = round(parsed.amount_float * rate, 2)
+    return f"{to_currency} {converted}"
 
 def AskPublisher(cookiebot, msg, chat_id, language):
     if language == "pt":
