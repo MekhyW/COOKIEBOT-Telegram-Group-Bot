@@ -84,9 +84,9 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
     current_configs = GetConfig(chat_to_alter)
     new_val = msg['text'].lower()
     if new_val or new_val in ["pt", "eng", "es"]:
-        variable_to_be_altered = ""
         if "Bot language for the chat. Use pt for portuguese, eng for english or es for spanish" in msg['reply_to_message']['text']:
             current_configs[7] = new_val
+            SetLanguageComandos(cookiebot, chat_id, chat_to_alter, new_val, isBombot=isBombot)
         elif "Use 1 to not interfere with other furbots if they're in the group, or 0 if I'm the only one." in msg['reply_to_message']['text']:
             current_configs[0] = bool(int(new_val))
         elif "This is the maximum number of stickers allowed in a sequence by the bot. The next ones beyond that will be deleted to avoid spam. It's valid for everyone." in msg['reply_to_message']['text']:
@@ -106,8 +106,6 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
         elif "Use 1 if the bot should add posts sent in the group to the publisher queue, or 0 if not" in msg['reply_to_message']['text']:
             current_configs[9] = bool(int(new_val))
         PutRequestBackend(f"configs/{chat_to_alter}", {"furbots": current_configs[0], "sfw": current_configs[1], "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], "publisherPost": current_configs[8], "publisherAsk": current_configs[9]})
-        if variable_to_be_altered == "Language":
-            SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'].lower(), isBombot=isBombot)
         cookiebot.sendMessage(chat_id, "Successfully changed the variable!", reply_to_message_id=msg['message_id'])
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])
