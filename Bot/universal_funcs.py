@@ -20,7 +20,6 @@ login_backend, password_backend, serverIP = backendauth['login'], backendauth['p
 def GetRequestBackend(route, params=None):
     response = requests.get(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False)
     try:
-        print("GET: ", response.text)
         return json.loads(response.text)
     except Exception as e:
         print(e)
