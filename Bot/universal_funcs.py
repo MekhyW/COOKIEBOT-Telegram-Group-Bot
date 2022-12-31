@@ -73,7 +73,7 @@ def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="
     data = {'commands': commands,
             'scope': {'type': 'chat', 'chat_id': scope_chat_id},
             'language_code': language[0:2].lower()}
-    requests.get(url, json=data)
+    print(requests.get(url, json=data))
 
 def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBombot=False):
     cookiebot.sendChatAction(chat_id, 'typing')
@@ -83,7 +83,7 @@ def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBomb
         token = cookiebotTOKEN
     if thread_id:
         url_req = f"https://api.telegram.org/bot{token}/forwardMessage?chat_id={chat_id}&from_chat_id={from_chat_id}&message_id={message_id}&message_thread_id={thread_id}"
-        requests.get(url_req)
+        print(requests.get(url_req))
     else:
         cookiebot.forwardMessage(chat_id, from_chat_id, message_id)
 
