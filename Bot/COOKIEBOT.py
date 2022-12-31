@@ -69,7 +69,8 @@ def thread_function(msg):
                         LeaveAndBlacklist(cookiebot, chat_id)
                         cookiebot.sendMessage(mekhyID, f"Auto-left:\n{chat_id}")
                         return
-                    cookiebot.sendMessage(mekhyID, f"Added:\n{cookiebot.getChat(chat_id)}")
+                    Send(cookiebot, mekhyID, f"Added:\n{cookiebot.getChat(chat_id)}")
+                    Send(cookiebot, chat_id, "Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW")
                 if msg['new_chat_participant']['id'] != cookiebot.getMe()['id'] and not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
