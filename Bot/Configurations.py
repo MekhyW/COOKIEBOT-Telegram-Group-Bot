@@ -28,7 +28,7 @@ def SetComandosPrivate(cookiebot, chat_id):
     SetLanguageComandos(cookiebot, chat_id, chat_id, "private")
 
 def GetConfig(chat_id):
-    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, "pt", 1, 1
+    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1
     configs = GetRequestBackend(f"configs/{chat_id}")
     if 'error' in configs and configs['error'] == "Not Found":
         PostRequestBackend(f"configs/{chat_id}", {'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask})
