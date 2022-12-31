@@ -1,5 +1,4 @@
 from universal_funcs import *
-from Configurations import *
 
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -13,7 +12,7 @@ def Analyze(cookiebot, msg, chat_id, language):
         result += str(item) + ': ' + str(msg['reply_to_message'][item]) + '\n'
     cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
 
-def Grupos(cookiebot, msg, chat_id, language, isBombot=False):
+def Grupos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     groups = GetRequestBackend('registers')
     num = 0
@@ -22,7 +21,6 @@ def Grupos(cookiebot, msg, chat_id, language, isBombot=False):
         try:
             id = group['id']
             chat = cookiebot.getChat(int(id))
-            SetLanguageComandos(cookiebot, chat_id, id, group['language'], isBombot=isBombot)
             time.sleep(0.5)
             if 'title' in chat:
                 answer += id + " - " + chat['title'] + "\n"
