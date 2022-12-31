@@ -35,7 +35,7 @@ def thread_function(msg):
             SetComandosPrivate(cookiebot, chat_id, isBombot=isBombot)
             if 'text' in msg:
                 if msg['text'].startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == mekhyID:
-                    Grupos(cookiebot, msg, chat_id, 'eng')
+                    Grupos(cookiebot, msg, chat_id, 'eng', isBombot=isBombot)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, 'eng')
                 elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == mekhyID:
