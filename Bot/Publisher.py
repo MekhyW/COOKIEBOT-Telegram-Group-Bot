@@ -22,11 +22,11 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         ]
     ))
 
-def AskApproval(cookiebot, query_data, from_id):
+def AskApproval(cookiebot, query_data, from_id, isBombot=False):
     origin_chatid = query_data.split()[1]
     origin_messageid = query_data.split()[2]
     origin_userid = from_id
-    cookiebot.forwardMessage(mekhyID, origin_chatid, origin_messageid)
+    Forward(cookiebot, mekhyID, origin_chatid, origin_messageid, isBombot=isBombot)
     cookiebot.sendMessage(mekhyID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️ 10 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 10')],
@@ -114,7 +114,7 @@ def SchedulePost(cookiebot, query_data):
         cookiebot.sendMessage(mekhyID, traceback.format_exc())
         Send(cookiebot, origin_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários. Mande /start no meu PV para eu poder te mandar mensagens.")
 
-def SchedulerPull(cookiebot):
+def SchedulerPull(cookiebot, isBombot=False):
     response = subscriber.pull(subscription=subscription_path, max_messages=100, return_immediately=True)
     received_messages = response.received_messages
     for message in received_messages:
@@ -129,7 +129,11 @@ def SchedulerPull(cookiebot):
         else:
             edit_job_data(origin_chatid+group_id, f"{remaining_times} {origin_chatid} {group_id} {origin_messageid}")
         try:
-            cookiebot.forwardMessage(group_id, origin_chatid, origin_messageid)
+            target_chat = cookiebot.getChat(group_id)
+            if 'is_forum' in target_chat and target_chat['is_forum']:
+                Forward(cookiebot, group_id, origin_chatid, origin_messageid, thread_id=472148, isBombot=isBombot)
+            else:
+                Forward(cookiebot, group_id, origin_chatid, origin_messageid, isBombot=isBombot)
             subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
         except TelegramError as e:
             delete_job(origin_chatid+group_id)

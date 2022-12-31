@@ -120,7 +120,7 @@ def thread_function(msg):
                     else:
                         Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte", msg, language)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")) and funfunctions == True:
-                    ReplyAleatorio(cookiebot, msg, chat_id)
+                    ReplyAleatorio(cookiebot, msg, chat_id, isBombot=isBombot)
                 elif msg['text'].startswith("/meme") and funfunctions == True:
                     Meme(cookiebot, msg, chat_id, language)
                 elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
@@ -202,7 +202,7 @@ def thread_function(msg):
             cookiebot.sendMessage(mekhyID, str(msg))
     finally:
         if not isBombot:
-            SchedulerPull(cookiebot)
+            SchedulerPull(cookiebot, isBombot=isBombot)
 
 def run_unnatendedthreads():
     global unnatended_threads
@@ -249,7 +249,7 @@ def handle_query(msg):
         elif 'Pub' in query_data:
             if str(from_id) in listaadmins_id or str(from_id) == str(mekhyID):
                 if query_data.startswith('SendToApproval'):
-                    AskApproval(cookiebot, query_data, from_id)
+                    AskApproval(cookiebot, query_data, from_id, isBombot=isBombot)
                 elif query_data.startswith('Approve'):
                     SchedulePost(cookiebot, query_data)
                 DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))

@@ -65,6 +65,18 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt"):
     else:
         cookiebot.sendMessage(chat_id, text)
 
+def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBombot=False):
+    cookiebot.sendChatAction(chat_id, 'typing')
+    if isBombot:
+        token = bombotTOKEN
+    else:
+        token = cookiebotTOKEN
+    if thread_id:
+        url_req = f"https://api.telegram.org/bot{token}/forwardMessage?chat_id={chat_id}&from_chat_id={from_chat_id}&message_id={message_id}&message_thread_id={thread_id}"
+        requests.get(url_req)
+    else:
+        cookiebot.forwardMessage(chat_id, from_chat_id, message_id)
+
 def BanAndBlacklist(cookiebot, chat_id, user_id):
     PostRequestBackend(f'blacklist/{user_id}')
     cookiebot.kickChatMember(chat_id, user_id)
