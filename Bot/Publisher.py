@@ -58,7 +58,10 @@ def list_jobs():
     return jobs
 
 def delete_job(job_name):
-    response = client.delete_job(name=client.job_path(project_id, 'southamerica-east1', job_name))
+    try:
+        response = client.delete_job(name=client.job_path(project_id, 'southamerica-east1', job_name))
+    except:
+        response = client.delete_job(name=job_name)
     print(f'Deleted job: {response}')
     return response
 
