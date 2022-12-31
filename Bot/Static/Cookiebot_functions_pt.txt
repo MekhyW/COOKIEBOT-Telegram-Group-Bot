@@ -24,6 +24,7 @@ dado - Roda um ou mais dados quaisquer
 shippar - Shippa um casal com caracteristica
 idade - Te digo quantos anos vc tem
 genero - Sera que e menino ou menina
+rojao - Pra pra pra pra poooow
 tavivo - Manda um ping de teste com data do servidor
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo
