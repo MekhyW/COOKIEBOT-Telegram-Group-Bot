@@ -9,7 +9,7 @@ def GetAdmins(cookiebot, msg, chat_id):
     return listaadmins, listaadmins_id
 
 
-def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language):
+def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=False):
     wait_open(f"Static/Cookiebot_functions_{language}.txt")
     text_file = open(f"Static/Cookiebot_functions_{language}.txt", "r", encoding='utf8')
     lines = text_file.readlines()
@@ -21,11 +21,16 @@ def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language):
             description = line.split(" - ")[1].replace("\n", "")
             if len(command.split()) == 1 and command.islower():
                 comandos.append({'command': command, 'description': description})
-    #cookiebot.setMyCommands(commands = comandos, scope = {"type": "chat", "chat_id": chat_to_alter})
-    #cookiebot.setMyCommands(commands = comandos, scope = {"type": "chat", "chat_id": chat_id})
+    if language == "private":
+        SetMyCommands(cookiebot, comandos, chat_to_alter, isBombot=isBombot)
+        SetMyCommands(cookiebot, comandos, chat_id, isBombot=isBombot)
+    else:
+        SetMyCommands(cookiebot, comandos, chat_to_alter, isBombot=isBombot, language=language)
+        SetMyCommands(cookiebot, comandos, chat_id, isBombot=isBombot, language=language)
+        Send(cookiebot, chat_id, f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}", language=language)
 
-def SetComandosPrivate(cookiebot, chat_id):
-    SetLanguageComandos(cookiebot, chat_id, chat_id, "private")
+def SetComandosPrivate(cookiebot, chat_id, isBombot=False):
+    SetLanguageComandos(cookiebot, chat_id, chat_id, "private", isBombot)
 
 def GetConfig(chat_id):
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1
@@ -73,7 +78,7 @@ def Configurar(cookiebot, msg, chat_id, listaadmins, language):
         Send(cookiebot, chat_id, "Você não tem permissão para configurar o bot!", msg, language)
 
 
-def ConfigurarSettar(cookiebot, msg, chat_id):
+def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
     cookiebot.sendChatAction(chat_id, 'typing')
     chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
     current_configs = GetConfig(chat_to_alter)
@@ -102,7 +107,7 @@ def ConfigurarSettar(cookiebot, msg, chat_id):
             current_configs[9] = bool(int(new_val))
         PutRequestBackend(f"configs/{chat_to_alter}", {"furbots": current_configs[0], "sfw": current_configs[1], "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], "publisherPost": current_configs[8], "publisherAsk": current_configs[9]})
         if variable_to_be_altered == "Language":
-            SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'].lower())
+            SetLanguageComandos(cookiebot, chat_id, chat_to_alter, msg['text'].lower(), isBombot=isBombot)
         cookiebot.sendMessage(chat_id, "Successfully changed the variable!", reply_to_message_id=msg['message_id'])
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])

@@ -19,7 +19,7 @@ pesquisaimagem - Pesquisa a fonte de uma obra de arte
 meme - Gera um meme
 aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
-hoje - O que está acontecendo hoje?
+hoje - O que esta acontecendo hoje?
 dado - Roda um ou mais dados quaisquer
 shippar - Shippa um casal com caracteristica
 idade - Te digo quantos anos vc tem
@@ -28,7 +28,7 @@ tavivo - Manda um ping de teste com data do servidor
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo
 novobemvindo - Atualiza a mensagem de boas vindas
-análise - Inspecionar elementos de uma mensagem
+analise - Inspecionar elementos de uma mensagem
 comandos - Lista os comandos do bot
 configurar - Configura o bot
 

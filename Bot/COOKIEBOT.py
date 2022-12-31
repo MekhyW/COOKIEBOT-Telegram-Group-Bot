@@ -32,7 +32,7 @@ def thread_function(msg):
         print(content_type, chat_type, chat_id, msg['message_id'])
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, 'pt', 0, 1
         if chat_type == 'private' and 'reply_to_message' not in msg:
-            SetComandosPrivate(cookiebot, chat_id)
+            SetComandosPrivate(cookiebot, chat_id, isBombot=isBombot)
             if 'text' in msg:
                 if msg['text'].startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == mekhyID:
                     Grupos(cookiebot, msg, chat_id, 'eng')
@@ -110,7 +110,7 @@ def thread_function(msg):
             elif 'text' in msg:
                 if msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, chat_id)
-                elif msg['text'].startswith(("/análise", "/análisis", "/analysis")):
+                elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                     if 'reply_to_message' in msg:
                         Analyze(cookiebot, msg, chat_id, language)
                     else:
@@ -169,7 +169,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/configurar", "/configure")):
                     Configurar(cookiebot, msg, chat_id, listaadmins, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
-                    ConfigurarSettar(cookiebot, msg, chat_id)
+                    ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
                 elif msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
                     CustomCommand(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/") and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and (FurBots==False or msg['text'] not in open("Static/FurBots_functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:

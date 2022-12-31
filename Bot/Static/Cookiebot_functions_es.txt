@@ -18,17 +18,17 @@ cualquiercosa - envía una foto de lo que quieres
 buscarimagen - Busca la fuente de una obra de arte
 meme - Generar un meme
 aleatorio - Enviar un medio de algún grupo
-ideadibujo - no más bloques de arte
-hoy - ¿Qué está pasando hoy?
-dado - tira uno o más dados.
-shippar - Shippa una pareja con carácter
+ideadibujo - no mas bloques de arte
+hoy - ¿Qué esta pasando hoy?
+dado - tira uno o mas dados.
+shippar - Shippa una pareja con caracter
 edad - te dice cuantos años tienes
 genero - ¿Es niño o niña?
 estavivo - Envía un ping de prueba con la fecha del servidor
 reglas - Muestra las reglas del grupo
 nuevasreglas - Actualiza las reglas del grupo
 nuevabienvenida - Actualiza el mensaje de bienvenida
-análisis - Analizar mensaje
+analisis - Analizar mensaje
 comandos - enumera los comandos del bot
 configurar - Configurar el bot
 

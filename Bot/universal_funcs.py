@@ -65,6 +65,17 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt"):
     else:
         cookiebot.sendMessage(chat_id, text)
 
+def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
+    if isBombot:
+        token = bombotTOKEN
+    else:
+        token = cookiebotTOKEN
+    url = 'https://api.telegram.org/bot{}/setMyCommands'.format(token)
+    data = {'commands': commands,
+            'scope': {'type': 'chat', 'chat_id': scope_chat_id},
+            'language_code': language[0:2].lower()}
+    requests.get(url, json=data)
+
 def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBombot=False):
     cookiebot.sendChatAction(chat_id, 'typing')
     if isBombot:

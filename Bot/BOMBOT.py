@@ -32,7 +32,7 @@ def thread_function(msg):
         print(content_type, chat_type, chat_id, msg['message_id'])
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, 'pt', 0, 1
         if chat_type == 'private' and 'reply_to_message' not in msg:
-            SetComandosPrivate(cookiebot, chat_id)
+            SetComandosPrivate(cookiebot, chat_id, isBombot=isBombot)
             if 'text' in msg:
                 if msg['text'].startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == mekhyID:
                     Grupos(cookiebot, msg, chat_id, 'eng')
@@ -69,7 +69,8 @@ def thread_function(msg):
                         LeaveAndBlacklist(cookiebot, chat_id)
                         cookiebot.sendMessage(mekhyID, f"Auto-left:\n{chat_id}")
                         return
-                    cookiebot.sendMessage(mekhyID, f"Added:\n{cookiebot.getChat(chat_id)}")
+                    Send(cookiebot, mekhyID, f"Added:\n{cookiebot.getChat(chat_id)}")
+                    Send(cookiebot, chat_id, "Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW")
                 if msg['new_chat_participant']['id'] != cookiebot.getMe()['id'] and not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
@@ -109,7 +110,7 @@ def thread_function(msg):
             elif 'text' in msg:
                 if msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, chat_id)
-                elif msg['text'].startswith(("/análise", "/análisis", "/analysis")):
+                elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                     if 'reply_to_message' in msg:
                         Analyze(cookiebot, msg, chat_id, language)
                     else:
@@ -168,7 +169,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/configurar", "/configure")):
                     Configurar(cookiebot, msg, chat_id, listaadmins, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
-                    ConfigurarSettar(cookiebot, msg, chat_id)
+                    ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
                 elif msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
                     CustomCommand(cookiebot, msg, chat_id)
                 elif msg['text'].startswith("/") and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and (FurBots==False or msg['text'] not in open("Static/FurBots_functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:
