@@ -164,5 +164,4 @@ def Rojao(cookiebot, msg, chat_id):
             n = 1
         cookiebot.sendMessage(chat_id, "pra "*n)
         amount -= n
-        time.sleep(0.1*n)
     cookiebot.sendMessage(chat_id, "💥POOOOOOOWW💥")
