@@ -13,10 +13,10 @@ bot = ChatBot(
 conversa = ListTrainer(bot)
 df = pd.read_csv('result-master-ptbr.csv')
 for index in range(len(df)):
-    if index < 531000:
+    if index < 848229:
         continue
     print(str(index) + ' / ' + str(len(df)))
     try:
-        conversa.train([df.loc[index, 'Question'], df.loc[index, 'Answer']])
+        conversa.train([df.loc[index, 'sentence'], df.loc[index, 'response']])
     except Exception as e:
         print(e)
