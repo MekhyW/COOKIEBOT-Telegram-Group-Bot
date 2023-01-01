@@ -195,7 +195,7 @@ def thread_function(msg):
             run_unnatendedthreads()
     except TooManyRequestsError:
         return
-    except (UnauthorizedError, BotWasKickedError, BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError) as e:
+    except (KeyError, UnauthorizedError, BotWasKickedError, BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError) as e:
         print(e)
     except:
         if 'ConnectionResetError' in traceback.format_exc():

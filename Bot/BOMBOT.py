@@ -131,6 +131,8 @@ def thread_function(msg):
                     Idade(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/genero", "/gender")) and funfunctions == True:
                     Genero(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith("/rojao") and funfunctions == True:
+                    Rojao(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(("/shippar", "/ship")) and funfunctions == True:
                     Shippar(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
@@ -193,7 +195,7 @@ def thread_function(msg):
             run_unnatendedthreads()
     except TooManyRequestsError:
         return
-    except (UnauthorizedError, BotWasKickedError, BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError) as e:
+    except (KeyError, UnauthorizedError, BotWasKickedError, BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError) as e:
         print(e)
     except:
         if 'ConnectionResetError' in traceback.format_exc():
