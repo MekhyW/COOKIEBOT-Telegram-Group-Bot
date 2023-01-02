@@ -201,7 +201,6 @@ def thread_function(msg):
         if 'ConnectionResetError' in traceback.format_exc():
             handle(msg)
         else:
-            Send(cookiebot, chat_id, "❗ERRO❗--Por favor, tente novamente.")
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
             cookiebot.sendMessage(mekhyID, str(msg))
     finally:
