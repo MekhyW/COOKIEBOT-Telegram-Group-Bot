@@ -144,6 +144,7 @@ def SchedulerPull(cookiebot, isBombot=False):
     response = subscriber.pull(subscription=subscription_path, max_messages=100, return_immediately=True)
     received_messages = response.received_messages
     for message in received_messages:
+        subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
         print(message.message.data)
         data = message.message.data.decode('utf-8')
         remaining_times = int(data.split()[0]) - 1
@@ -160,7 +161,6 @@ def SchedulerPull(cookiebot, isBombot=False):
                 Forward(cookiebot, group_id, origin_chatid, origin_messageid, thread_id=472148, isBombot=isBombot)
             else:
                 Forward(cookiebot, group_id, origin_chatid, origin_messageid, isBombot=isBombot)
-            subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
         except TelegramError as e:
             delete_job(origin_chatid+group_id)
     return received_messages
