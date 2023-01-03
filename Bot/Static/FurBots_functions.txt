@@ -1,3 +1,6 @@
+/warn
+/ban
+/mute
 /hoje@CookieMWbot
 /cheiro@CookieMWbot
 /today@burrsobot
