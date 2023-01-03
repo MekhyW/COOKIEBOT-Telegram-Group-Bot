@@ -52,7 +52,7 @@ def DeleteRequestBackend(route, params=None):
         print(e)
         return ''
 
-def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt"):
+def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False):
     cookiebot.sendChatAction(chat_id, 'typing')
     if language == 'eng':
         text = translator.translate(text, dest='en').text
@@ -61,6 +61,13 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt"):
     if msg_to_reply:
         reply_id = msg_to_reply['message_id']
         cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id)
+    elif thread_id is not None:
+        if isBombot:
+            token = bombotTOKEN
+        else:
+            token = cookiebotTOKEN
+        url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}"
+        requests.get(url)
     else:
         cookiebot.sendMessage(chat_id, text)
 
@@ -69,7 +76,7 @@ def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="
         token = bombotTOKEN
     else:
         token = cookiebotTOKEN
-    url = 'https://api.telegram.org/bot{}/setMyCommands'.format(token)
+    url = f'https://api.telegram.org/bot{token}/setMyCommands'
     data = {'commands': commands,
             'scope': {'type': 'chat', 'chat_id': scope_chat_id},
             'language_code': language[0:2].lower()}
