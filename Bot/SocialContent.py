@@ -89,12 +89,12 @@ def AddtoRandomDatabase(msg, chat_id, photo_id=''):
     if not 'forward_from' in msg:
         PostRequestBackend('randomdatabase', {'id': chat_id, 'idMessage': str(msg['message_id']), 'idMedia': photo_id})
 
-def ReplyAleatorio(cookiebot, msg, chat_id, isBombot=False):
+def ReplyAleatorio(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
-    for attempt in range(10):
+    for attempt in range(50):
         try:
             target = GetRequestBackend("randomdatabase")
-            Forward(cookiebot, chat_id, target['id'], target['idMessage'], isBombot=isBombot)
+            Forward(cookiebot, chat_id, target['id'], target['idMessage'], thread_id=thread_id, isBombot=isBombot)
             break
         except Exception as e:
             print(e)

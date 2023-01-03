@@ -153,7 +153,7 @@ def Genero(cookiebot, msg, chat_id, language):
         elif Genero == 'female':
             Send(cookiebot, chat_id, f"É uma menina! 👩\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes", msg, language)
 
-def Rojao(cookiebot, msg, chat_id):
+def Rojao(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
     cookiebot.sendMessage(chat_id, "fiiiiiiii.... ", reply_to_message_id=msg['message_id'])
     time.sleep(0.1)
     amount = random.randint(5, 20)
@@ -162,6 +162,6 @@ def Rojao(cookiebot, msg, chat_id):
             n = random.randint(1, amount)
         else:
             n = 1
-        cookiebot.sendMessage(chat_id, "pra "*n)
+        Send(chat_id, "pra "*n, thread_id=thread_id, isBombot=isBombot)
         amount -= n
-    cookiebot.sendMessage(chat_id, "💥POOOOOOOWW💥")
+    Send(chat_id, "💥POOOOOOOWW💥", thread_id=thread_id, isBombot=isBombot)

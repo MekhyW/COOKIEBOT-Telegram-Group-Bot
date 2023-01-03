@@ -28,6 +28,10 @@ def thread_function(msg):
     try:
         if any(key in msg for key in ['dice', 'poll', 'voice_chat_started', 'voice_chat_ended']):
             return
+        if 'message_thread_id' in msg:
+            thread_id = msg['message_thread_id']
+        else:
+            thread_id = None
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = 0, 1, 5, 600, 300, 1, 1, 'pt', 0, 1
@@ -122,7 +126,7 @@ def thread_function(msg):
                     else:
                         Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte", msg, language)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")) and funfunctions == True:
-                    ReplyAleatorio(cookiebot, msg, chat_id, isBombot=isBombot)
+                    ReplyAleatorio(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
                 elif msg['text'].startswith("/meme") and funfunctions == True:
                     Meme(cookiebot, msg, chat_id, language)
                 elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
@@ -132,7 +136,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/genero", "/gender")) and funfunctions == True:
                     Genero(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith("/rojao") and funfunctions == True:
-                    Rojao(cookiebot, msg, chat_id)
+                    Rojao(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
                 elif msg['text'].startswith(("/shippar", "/ship")) and funfunctions == True:
                     Shippar(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
