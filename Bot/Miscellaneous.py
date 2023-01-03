@@ -162,6 +162,6 @@ def Rojao(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
             n = random.randint(1, amount)
         else:
             n = 1
-        Send(chat_id, "pra "*n, thread_id=thread_id, isBombot=isBombot)
+        Send(cookiebot, chat_id, "pra "*n, thread_id=thread_id, isBombot=isBombot)
         amount -= n
-    Send(chat_id, "💥POOOOOOOWW💥", thread_id=thread_id, isBombot=isBombot)
+    Send(cookiebot, chat_id, "💥POOOOOOOWW💥", thread_id=thread_id, isBombot=isBombot)
