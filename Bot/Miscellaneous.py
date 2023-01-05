@@ -16,22 +16,20 @@ def Grupos(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     groups = GetRequestBackend('registers')
     num = 0
-    answer = ''
     for group in groups:
         try:
             id = group['id']
             chat = cookiebot.getChat(int(id))
             time.sleep(0.5)
             if 'title' in chat:
-                answer += id + " - " + chat['title'] + "\n"
+                cookiebot.sendMessage(chat_id, f"{id} - {chat['title']}")
             else:
-                answer += id + " - [NO TITLE]\n"
+                cookiebot.sendMessage(chat_id, f"{id} - [NO TITLE]")
             num += 1
         except Exception as e:
             print(e)
             print("Group not found: " + id)
-    answer += "\n\nTotal groups found: " + str(num)
-    cookiebot.sendMessage(chat_id, answer)
+    cookiebot.sendMessage(chat_id, f"Total groups found: {num}")
 
 def Broadcast(cookiebot, msg):
     groups = GetRequestBackend('registers')
