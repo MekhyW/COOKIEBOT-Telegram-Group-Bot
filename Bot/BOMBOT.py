@@ -139,7 +139,7 @@ def thread_function(msg):
                     Idade(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/genero", "/gender")) and funfunctions == True:
                     Genero(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith("/rojao") and funfunctions == True:
+                elif msg['text'].startswith(("/rojao", "/rojão")) and funfunctions == True:
                     Rojao(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
                 elif msg['text'].startswith(("/shippar", "/ship")) and funfunctions == True:
                     Shippar(cookiebot, msg, chat_id, language)
