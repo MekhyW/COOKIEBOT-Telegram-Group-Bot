@@ -20,10 +20,10 @@ def Everyone(cookiebot, msg, chat_id, listaadmins, language):
     if 'from' in msg and str(msg['from']['username']) not in listaadmins:
         Send(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo!", msg, language)
     else:
-        result = ""
         members = GetMembersChat(chat_id)
+        result = f"Number of known users: {len(members)}\n"
         for member in members:
-            result += ("@"+member['user']+" ")
+            result += f"@{member['user']} "
         cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
 
 def Adm(cookiebot, msg, chat_id, listaadmins):
