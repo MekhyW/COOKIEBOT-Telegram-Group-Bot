@@ -158,7 +158,11 @@ def SchedulerPull(cookiebot, isBombot=False):
         try:
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
-                Forward(cookiebot, group_id, origin_chatid, origin_messageid, thread_id=472148, isBombot=isBombot)
+                for thread_id in [472148, 566548]:
+                    try:
+                        Forward(cookiebot, group_id, origin_chatid, origin_messageid, thread_id=thread_id, isBombot=isBombot)
+                    except Exception as e:
+                        print(e)
             else:
                 Forward(cookiebot, group_id, origin_chatid, origin_messageid, isBombot=isBombot)
         except TelegramError as e:
