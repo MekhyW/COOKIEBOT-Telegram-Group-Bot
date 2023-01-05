@@ -15,6 +15,9 @@ def CheckNewName(msg, chat_id):
         if username not in str(members):
             PostRequestBackend(f"registers/{chat_id}/users", {"user": username, "date": ''})
 
+def left_chat_member(msg, chat_id):
+    DeleteRequestBackend(f"registers/{chat_id}/users", {"user": msg['left_chat_member']['username']})
+
 def Everyone(cookiebot, msg, chat_id, listaadmins, language):
     cookiebot.sendChatAction(chat_id, 'typing')
     if 'from' in msg and str(msg['from']['username']) not in listaadmins:

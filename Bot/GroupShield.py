@@ -150,9 +150,3 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
             else:
                 text.write(line)
     text.close()
-
-def left_chat_member(msg, chat_id):
-    wait_open("Captcha.txt")
-    text = open("Captcha.txt", 'r', encoding='utf-8')
-    lines = text.readlines()
-    text.close()
