@@ -1,6 +1,7 @@
 ¡Las funciones de Cookiebot!
 
 PASIVO:
+Autopublicador - puede usar el bot para publicar comisiones/eventos/avisos en varios grupos durante varios días
 Chat AI - Responde a cualquier mensaje de texto
 Stickers - Responde un sticker con otra sticker
 Captcha - Evita que los bots envíen mensajes de texto y expúlsalos si no prueban que son humanos

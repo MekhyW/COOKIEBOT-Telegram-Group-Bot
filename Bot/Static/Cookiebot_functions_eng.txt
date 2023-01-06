@@ -1,6 +1,7 @@
 Cookiebot Features!
 
 PASSIVE:
+Publisher - Can use bot to publish commissions/events/notices in multiple groups for multiple days
 Chat AI - Reply to any text message
 Stickers - Reply a sticker with another sticker
 Captcha - Stop bots from texting and kick them if they don't prove they're human

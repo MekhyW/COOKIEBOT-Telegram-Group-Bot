@@ -1,6 +1,7 @@
 As Funcionalidades do Cookiebot!
 
 PASSIVAS:
+Autopublicador - Pode usar o bot para publicar comissões/eventos/avisos em vários grupos por vários dias
 IA de conversa - Responde qualquer mensagem de texto
 Stickers - Responde um sticker com outro sticker
 Captcha - Impede que bots mandem mensagens e kicka eles se não provarem que são humanos
