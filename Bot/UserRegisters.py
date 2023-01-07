@@ -1,11 +1,16 @@
 from universal_funcs import *
+cache_members = {}
 
 def GetMembersChat(chat_id):
+    members = cache_members.get(chat_id)
+    if members is not None:
+        return members
     members = GetRequestBackend(f"registers/{chat_id}", {"id": chat_id})
     if 'error' in members and members['error'] == "Not Found":
         PostRequestBackend(f"registers/{chat_id}", {"id": chat_id, "users": []})
         return []
     members = members['users']
+    cache_members[chat_id] = members
     return members
 
 def CheckNewName(msg, chat_id):
@@ -14,9 +19,11 @@ def CheckNewName(msg, chat_id):
         members = GetMembersChat(chat_id)
         if username not in str(members):
             PostRequestBackend(f"registers/{chat_id}/users", {"user": username, "date": ''})
+            cache_members[chat_id].append(username)
 
 def left_chat_member(msg, chat_id):
     DeleteRequestBackend(f"registers/{chat_id}/users", {"user": msg['left_chat_member']['username']})
+    cache_members[chat_id].remove(msg['left_chat_member']['username'])
 
 def Everyone(cookiebot, msg, chat_id, listaadmins, language):
     cookiebot.sendChatAction(chat_id, 'typing')
