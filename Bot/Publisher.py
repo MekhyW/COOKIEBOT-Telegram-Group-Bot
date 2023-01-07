@@ -114,15 +114,14 @@ def SchedulePost(cookiebot, query_data):
     language_origin = GetConfig(origin_chatid)[7]
     for group in GetRequestBackend('registers'):
         group_id = group['id']
-        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask = GetConfig(group_id)
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = GetConfig(group_id)
         if publisherpost and language_origin == language:
             num_posts_for_group = 0
             for job in jobs:
                 if f"--> {group_id}" in job.description:
                     num_posts_for_group += 1
             try:
-                memberscount = cookiebot.getChatMembersCount(group_id)
-                if num_posts_for_group < math.floor(memberscount/50):
+                if num_posts_for_group < maxPosts:
                     hour = random.randint(0,23)
                     minute = random.randint(0,59)
                     target_chattitle = cookiebot.getChat(group_id)['title']
@@ -158,11 +157,9 @@ def SchedulerPull(cookiebot, isBombot=False):
         try:
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
-                for thread_id in [472148, 566548, 603]:
-                    try:
-                        Forward(cookiebot, group_id, origin_chatid, origin_messageid, thread_id=thread_id, isBombot=isBombot)
-                    except Exception as e:
-                        print(e)
+                #for thread_id in [472148, 566548, 603]:
+                config = GetConfig(group_id)
+                Forward(cookiebot, group_id, origin_chatid, origin_messageid, thread_id=int(config[10]), isBombot=isBombot)
             else:
                 Forward(cookiebot, group_id, origin_chatid, origin_messageid, isBombot=isBombot)
         except TelegramError as e:
