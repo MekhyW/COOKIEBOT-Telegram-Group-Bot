@@ -121,7 +121,7 @@ def SchedulePost(cookiebot, query_data):
                 if f"--> {group_id}" in job.description:
                     num_posts_for_group += 1
             try:
-                if num_posts_for_group < maxPosts:
+                if maxPosts is None or num_posts_for_group < maxPosts:
                     hour = random.randint(0,23)
                     minute = random.randint(0,59)
                     target_chattitle = cookiebot.getChat(group_id)['title']

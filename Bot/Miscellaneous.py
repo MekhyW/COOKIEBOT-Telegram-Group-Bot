@@ -20,7 +20,7 @@ def Grupos(cookiebot, msg, chat_id, language):
         try:
             id = group['id']
             chat = cookiebot.getChat(int(id))
-            time.sleep(0.5)
+            time.sleep(0.2)
             if 'title' in chat:
                 cookiebot.sendMessage(chat_id, f"{id} - {chat['title']}")
             else:
