@@ -126,7 +126,7 @@ def Idade(cookiebot, msg, chat_id, language):
         Send(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n\nEx: '/idade Mekhy'\n(obs: só o primeiro nome conta)", msg, language)
     else:
         Nome = msg['text'].replace("/idade ", '').split()[0]
-        response = json.loads(requests.get(f"https://api.agify.io?name={Nome}", timeout=10).text)
+        response = json.loads(requests.get(f"https://api.agify.io?name={Nome}", timeout=2).text)
         Idade = response['age']
         Contagem = response['count']
         if Contagem == 0:
@@ -140,7 +140,7 @@ def Genero(cookiebot, msg, chat_id, language):
         Send(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n\nEx: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)", msg, language)
     else:
         Nome = msg['text'].replace("/genero ", '').split()[0]
-        response = json.loads(requests.get(f"https://api.genderize.io?name={Nome}", timeout=10).text)
+        response = json.loads(requests.get(f"https://api.genderize.io?name={Nome}", timeout=2).text)
         Genero = response['gender']
         Probabilidade = response['probability']
         Contagem = response['count']

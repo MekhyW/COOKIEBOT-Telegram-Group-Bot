@@ -37,7 +37,7 @@ def CheckHumanFactor(cookiebot, msg, chat_id, language):
 
 def CheckCAS(cookiebot, msg, chat_id, language):
     try:
-        r = requests.get(f"https://api.cas.chat/check?user_id={msg['new_chat_participant']['id']}", timeout=10)
+        r = requests.get(f"https://api.cas.chat/check?user_id={msg['new_chat_participant']['id']}", timeout=2)
         in_banlist = json.loads(r.text)['ok']
     except Exception as e:
         print(e)
@@ -50,7 +50,7 @@ def CheckCAS(cookiebot, msg, chat_id, language):
 
 def CheckRaider(cookiebot, msg, chat_id, language):
     try:
-        r = requests.post('https://burrbot.xyz/noraid.php', data={'id': str(msg['new_chat_participant']['id'])}, timeout=10)
+        r = requests.post('https://burrbot.xyz/noraid.php', data={'id': str(msg['new_chat_participant']['id'])}, timeout=2)
         is_raider = json.loads(r.text)['raider']
     except Exception as e:
         print(e)

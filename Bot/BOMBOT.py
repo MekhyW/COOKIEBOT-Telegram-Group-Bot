@@ -86,7 +86,7 @@ def thread_function(msg):
                 left_chat_member(msg, chat_id)
             elif content_type == "voice":
                 if utilityfunctions == True:
-                    r = requests.get(f"https://api.telegram.org/file/bot{cookiebotTOKEN}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=10)
+                    r = requests.get(f"https://api.telegram.org/file/bot{cookiebotTOKEN}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=2)
                     duration = int(msg['voice']['duration'])
                     if duration >= 10 and duration <= 240:
                         Speech_to_text(cookiebot, msg, chat_id, sfw, r.content, language)
