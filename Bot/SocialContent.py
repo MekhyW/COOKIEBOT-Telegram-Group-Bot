@@ -51,14 +51,13 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
     random.shuffle(images)
     for image in images:
         try:
-            cookiebot.sendAnimation(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url)
+            if 'gif' in image.url:
+                cookiebot.sendAnimation(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url)
+            else:
+                cookiebot.sendPhoto(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url)
             return 1
         except Exception as e:
-            try:
-                cookiebot.sendPhoto(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url)
-                return 1
-            except Exception as e:
-                print(e)
+            print(e)
     Send(cookiebot, chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", msg, language)
 
 def AddtoRandomDatabase(msg, chat_id, photo_id=''):
