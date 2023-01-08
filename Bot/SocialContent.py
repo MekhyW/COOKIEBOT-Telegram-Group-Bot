@@ -44,46 +44,22 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
     searchterm = msg['text'].split("@")[0].replace("/", '').replace("@CookieMWbot", '')
     if sfw == 0:
-        googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'off', 'filetype':'jpg|png'})
+        googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'off', 'filetype':'jpg|gif|png'})
     else:
-        googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'medium', 'filetype':'jpg|png'})
+        googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'medium', 'filetype':'jpg|gif|png'})
     images = googleimagesearcher.results()
     random.shuffle(images)
-    my_bytes_io = io.BytesIO()
     for image in images:
-        my_bytes_io.seek(0)
-        my_bytes_io.truncate(0)
-        image.copy_to(my_bytes_io)
-        my_bytes_io.seek(0)
         try:
-            temp_img = PIL.Image.open(my_bytes_io)
-            temp_img.save(my_bytes_io, format="png")
-            my_bytes_io.seek(0)
-            cookiebot.sendPhoto(chat_id, ('x.png', my_bytes_io), reply_to_message_id=msg['message_id'], caption=image.referrer_url)
-            my_bytes_io.close()
-            temp_img.close()
+            cookiebot.sendAnimation(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url)
             return 1
         except Exception as e:
-            print(e)
             try:
-                my_bytes_io.seek(0)
-                my_bytes_io.truncate(0)
-                temp_img = PIL.Image.open(my_bytes_io)
-                temp_img.save(my_bytes_io, format="jpg")
-                my_bytes_io.seek(0)
-                cookiebot.sendPhoto(chat_id, ('x.jpg', my_bytes_io), reply_to_message_id=msg['message_id'], caption=image.referrer_url)
-                my_bytes_io.close()
-                temp_img.close()
+                cookiebot.sendPhoto(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url)
                 return 1
             except Exception as e:
                 print(e)
     Send(cookiebot, chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", msg, language)
-    try:
-        my_bytes_io.close()
-        temp_img.close()
-    except UnboundLocalError as e:
-        print(e)
-
 
 def AddtoRandomDatabase(msg, chat_id, photo_id=''):
     if not 'forward_from' in msg:
