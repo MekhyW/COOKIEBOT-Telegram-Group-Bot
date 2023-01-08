@@ -130,7 +130,6 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
 
 
 def ConfigVariableButton(cookiebot, msg, query_data):
-    DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
     chat = query_data.split()[2]
     if query_data.startswith('k'):
         cookiebot.sendMessage(msg['message']['chat']['id'], f'Chat = {chat}\nBot language for the chat. Use pt for portuguese, eng for english or es for spanish\n\nREPLY THIS MESSAGE with the new variable value')
