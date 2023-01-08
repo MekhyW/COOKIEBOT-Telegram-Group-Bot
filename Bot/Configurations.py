@@ -3,8 +3,8 @@ cache_configurations = {}
 cache_admins = {}
 
 def GetAdmins(cookiebot, msg, chat_id):
-    admins = cache_admins.get(chat_id)
-    if admins is not None:
+    if chat_id in cache_admins:
+        admins = cache_admins[chat_id]
         return admins[0], admins[1]
     listaadmins, listaadmins_id = [], []
     for admin in cookiebot.getChatAdministrators(chat_id):
@@ -39,9 +39,8 @@ def SetComandosPrivate(cookiebot, chat_id, isBombot=False):
     SetLanguageComandos(cookiebot, chat_id, chat_id, "private", isBombot)
 
 def GetConfig(chat_id):
-    configs = cache_configurations.get(chat_id)
-    if configs is not None:
-        return configs
+    if chat_id in cache_configurations:
+        return cache_configurations[chat_id]
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 3
     configs = GetRequestBackend(f"configs/{chat_id}")
     if 'error' in configs and configs['error'] == "Not Found":

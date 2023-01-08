@@ -2,9 +2,8 @@ from universal_funcs import *
 cache_members = {}
 
 def GetMembersChat(chat_id):
-    members = cache_members.get(chat_id)
-    if members is not None:
-        return members
+    if chat_id in cache_members:
+        return cache_members[chat_id]
     members = GetRequestBackend(f"registers/{chat_id}", {"id": chat_id})
     if 'error' in members and members['error'] == "Not Found":
         PostRequestBackend(f"registers/{chat_id}", {"id": chat_id, "users": []})
