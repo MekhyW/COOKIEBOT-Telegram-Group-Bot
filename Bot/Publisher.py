@@ -35,9 +35,9 @@ def ConvertCurrency(snippet, to_currency):
 
 def AskPublisher(cookiebot, msg, chat_id, language):
     if language == "pt":
-        answer = "Publicar postagem?"
+        answer = "Divulgar postagem?"
     else:
-        answer = "Publish post?"
+        answer = "Share post?"
     cookiebot.sendMessage(chat_id, answer, reply_to_message_id=msg['message_id'], 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {chat_id} {msg['message_id']}")],
