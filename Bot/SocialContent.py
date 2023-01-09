@@ -1,6 +1,6 @@
 from universal_funcs import *
 from UserRegisters import *
-import google_images_search, io, PIL
+import google_images_search, io
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
 from google.cloud import vision
 reverseimagesearcher = vision.ImageAnnotatorClient.from_service_account_json('cookiebot_cloudserviceaccount.json')
@@ -49,12 +49,16 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
         googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'medium', 'filetype':'jpg|gif|png'})
     images = googleimagesearcher.results()
     random.shuffle(images)
+    if language == 'pt':
+        button = InlineKeyboardButton(text="De novo", callback_data=f"REPEAT qualquercoisa {searchterm} {sfw} {language} {msg['message_id']}")
+    else:
+        button = InlineKeyboardButton(text="Again", callback_data=f"REPEAT qualquercoisa {searchterm} {sfw} {language} {msg['message_id']}")
     for image in images:
         try:
             if 'gif' in image.url:
-                cookiebot.sendAnimation(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url)
+                cookiebot.sendAnimation(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url, reply_markup=InlineKeyboardMarkup(inline_keyboard=[[button]]))
             else:
-                cookiebot.sendPhoto(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url)
+                cookiebot.sendPhoto(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url, reply_markup=InlineKeyboardMarkup(inline_keyboard=[[button]]))
             return 1
         except Exception as e:
             print(e)

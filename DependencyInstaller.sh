@@ -23,7 +23,6 @@ git-lfs install
 pip3 install --upgrade pip
 pip3 install beautifulsoup4
 pip3 install telepota
-pip3 install Pillow
 pip3 install captcha
 pip3 install googletrans==3.1.0a0
 pip3 install Google-Images-Search

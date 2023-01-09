@@ -258,6 +258,10 @@ def handle_query(msg):
             listaadmins_id = []
         if 'CONFIG' in query_data:
             ConfigVariableButton(cookiebot, msg, query_data)
+        elif 'REPEAT' in query_data:
+            splitted = query_data.split()
+            if splitted[1] == 'qualquercoisa':
+                QualquerCoisa(cookiebot, {'text': splitted[2], 'message_id': splitted[5]}, chat_id, splitted[3], splitted[4])
         elif 'Pub' in query_data:
             if str(from_id) in listaadmins_id or str(from_id) == str(mekhyID):
                 if query_data.startswith('SendToApproval'):
