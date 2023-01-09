@@ -51,6 +51,10 @@ def Quem(cookiebot, msg, chat_id, language):
 
 def Shippar(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
+    if language == 'pt':
+        button = InlineKeyboardButton(text="De novo", callback_data=f"REPEAT shippar {language} {msg['text']} {msg['message_id']}")
+    else:
+        button = InlineKeyboardButton(text="Again", callback_data=f"REPEAT shippar {language} {msg['text']} {msg['message_id']}")
     members = GetMembersChat(chat_id)
     if len(msg['text'].split()) >= 3:
         targetA = msg['text'].split()[1]
@@ -64,4 +68,4 @@ def Shippar(cookiebot, msg, chat_id, language):
     'Vocês saem juntos por prazer e nunca por obrigação, já que compartilham dos mesmos gostos e preferências', 'Vocês conseguem se comunicar e se entender com simples trocas de olhares, sem precisar verbalizar o que sentem no momento', 'Mesmo quando tentam disfarçar, sempre sabem exatamente o que o outro está pensando', 'Uma tarde chuvosa em casa se transforma em um excelente programa a dois', 'O silêncio, quando surge entre vocês, nunca é incômodo ou desafiador', 'Vocês possuem um número infinito de piadas internas', 'Vocês não se sentem constrangidos ou intimidados em contar segredos ou mesmo chorar um na frente do outro', 'Quando um dos parceiros está triste, o outro sabe exatamente o que dizer e o que fazer para afastar o sentimento ruim',
     'O casal “olho por olho, dente por dente”', 'O casal que se recusa a falar sobre dinheiro'])
     children_quantity = random.choice(['Nenhum!', 'Um', 'Dois', 'Três'])
-    Send(cookiebot, chat_id, f"Detectei um Casal! @{targetA} + @{targetB} ❤️\nCaracterística: {couple_characteristic} 😮\nQuantos filhos: {children_quantity} 🧸\nChance de divórcio: {divorce_prob}% 📈", msg, language)
+    Send(cookiebot, chat_id, f"Detectei um Casal! @{targetA} + @{targetB} ❤️\nCaracterística: {couple_characteristic} 😮\nQuantos filhos: {children_quantity} 🧸\nChance de divórcio: {divorce_prob}% 📈", msg, language, reply_markup=InlineKeyboardMarkup([[button]]))
