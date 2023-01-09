@@ -56,7 +56,7 @@ def thread_function(msg):
             if isBombot:
                 cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
-                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *119* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
+                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *121* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                     #[InlineKeyboardButton(text="Acesse o Site 🌐", url="https://cookiebot-website.vercel.app/")],
                     [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url="https://t.me/CookieMWbot?startgroup=new")],
@@ -258,28 +258,6 @@ def handle_query(msg):
             listaadmins_id = []
         if 'CONFIG' in query_data:
             ConfigVariableButton(cookiebot, msg, query_data)
-        elif 'REPEAT' in query_data:
-            if 'username' in msg['from'] and msg['from']['username'] != None:
-                Send(cookiebot, chat_id, f"Repetição pedida por @{msg['from']['username']}")
-            else:
-                Send(cookiebot, chat_id, f"Repetição pedida por {msg['from']['first_name']}")
-            splitted = query_data.split()
-            if splitted[1] == 'qualquercoisa':
-                QualquerCoisa(cookiebot, {'text': splitted[2], 'message_id': splitted[5]}, chat_id, splitted[3], splitted[4])
-            elif splitted[1] == 'meme':
-                Meme(cookiebot, {'text': splitted[3], 'message_id': splitted[4]}, chat_id, splitted[2])
-            elif splitted[1] == 'hoje':
-                Hoje(cookiebot, {'message_id': splitted[3]}, chat_id, splitted[2])
-            elif splitted[1] == 'cheiro':
-                Cheiro(cookiebot, {'message_id': splitted[3]}, chat_id, splitted[2])
-            elif splitted[1] == 'ideiadesenho':
-                IdeiaDesenho(cookiebot, {'message_id': splitted[3]}, chat_id, splitted[2])
-            elif splitted[1] == 'custom':
-                CustomCommand(cookiebot, {'text': splitted[2],'message_id': splitted[3]}, chat_id)
-            elif splitted[1] == 'dado':
-                Dado(cookiebot, {'text': splitted[3], 'message_id': splitted[4]}, chat_id, splitted[2])
-            elif splitted[1] == 'shippar':
-                Shippar(cookiebot, {'text': splitted[3], 'message_id': splitted[4]}, chat_id, splitted[2])
         elif 'Pub' in query_data:
             if str(from_id) in listaadmins_id or str(from_id) == str(mekhyID):
                 if query_data.startswith('SendToApproval'):

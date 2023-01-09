@@ -51,28 +51,20 @@ def Comandos(cookiebot, msg, chat_id, language):
 
 def Hoje(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
-    if language == 'pt':
-        button = InlineKeyboardButton(text="De novo", callback_data=f"REPEAT hoje {language} {msg['message_id']}")
-    else:
-        button = InlineKeyboardButton(text="Again", callback_data=f"REPEAT hoje {language} {msg['message_id']}")
     wait_open("Static/QqEuFaço.txt")
     text_file = open("Static/QqEuFaço.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
-    Send(cookiebot, chat_id, "Hoje pra vc é dia de "+target, msg, language, reply_markup=InlineKeyboardMarkup([[button]]))
+    Send(cookiebot, chat_id, "Hoje pra vc é dia de "+target, msg, language)
     text_file.close()
 
 def Cheiro(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'typing')
-    if language == 'pt':
-        button = InlineKeyboardButton(text="De novo", callback_data=f"REPEAT cheiro {language} {msg['message_id']}")
-    else:
-        button = InlineKeyboardButton(text="Again", callback_data=f"REPEAT cheiro {language} {msg['message_id']}")
     wait_open("Static/Cheiro.txt")
     text_file = open("Static/Cheiro.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
     target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
-    Send(cookiebot, chat_id, "*sniff* *sniff*\nHmmmmmm\n\nVocê está com um cheirin de "+target, msg, language, reply_markup=InlineKeyboardMarkup([[button]]))
+    Send(cookiebot, chat_id, "*sniff* *sniff*\nHmmmmmm\n\nVocê está com um cheirin de "+target, msg, language)
     text_file.close()
 
 def QqEuFaço(cookiebot, msg, chat_id, language):
@@ -91,14 +83,11 @@ def IdeiaDesenho(cookiebot, msg, chat_id, language):
     photo = open('IdeiaDesenho'+'/'+ideiasdesenho[ideiaID], 'rb')
     if language == 'pt':
         caption = f"Referência com ID {ideiaID}\n\nNão trace sem dar créditos! (use a busca reversa do google images)"
-        button = InlineKeyboardButton(text="De novo", callback_data=f"REPEAT ideiadesenho {language} {msg['message_id']}")
     elif language == 'es':
         caption = f"Referencia con ID {ideiaID}\n\n¡No rastrear sin dar créditos! (utilice la búsqueda inversa de imágenes de Google)"
-        button = InlineKeyboardButton(text="De nuevo", callback_data=f"REPEAT ideiadesenho {language} {msg['message_id']}")
     else:
         caption = f"Reference ID {ideiaID}\n\nDo not trace without credits! (use the reverse google images search)"
-        button = InlineKeyboardButton(text="Again", callback_data=f"REPEAT ideiadesenho {language} {msg['message_id']}")
-    cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg['message_id'], reply_markup=InlineKeyboardMarkup(inline_keyboard=[[button]]))
+    cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg['message_id'])
     photo.close()
 
 def CustomCommand(cookiebot, msg, chat_id):
@@ -107,7 +96,7 @@ def CustomCommand(cookiebot, msg, chat_id):
     images = os.listdir("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", ''))
     imageID = random.randint(0, len(images)-1)
     photo = open("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')+'/'+images[imageID], 'rb')
-    cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'], reply_markup=InlineKeyboardMarkup(inline_keyboard=[[button]]))
+    cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
     photo.close()
 
 def Dado(cookiebot, msg, chat_id, language):
@@ -131,11 +120,7 @@ def Dado(cookiebot, msg, chat_id, language):
                     resposta += f"\n{vez+1}º Lançamento: 🎲 -> {random.randint(1, limite)}"
                 else:
                     resposta += f"\n{vez+1}th Roll: 🎲 -> {random.randint(1, limite)}"
-        if language == 'pt':
-            button = InlineKeyboardButton(text="De novo", callback_data=f"REPEAT dado {language} {msg['text']} {msg['message_id']}")
-        else:
-            button = InlineKeyboardButton(text="Again", callback_data=f"REPEAT dado {language} {msg['text']} {msg['message_id']}")
-        cookiebot.sendMessage(chat_id, resposta, reply_to_message_id=msg['message_id'], reply_markup=InlineKeyboardMarkup([[button]]))
+        cookiebot.sendMessage(chat_id, resposta, reply_to_message_id=msg['message_id'])
 
 def Idade(cookiebot, msg, chat_id, language):
     if not " " in msg['text']:

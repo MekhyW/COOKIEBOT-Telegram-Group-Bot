@@ -89,10 +89,6 @@ def ReplySticker(cookiebot, msg, chat_id):
 
 def Meme(cookiebot, msg, chat_id, language):
     cookiebot.sendChatAction(chat_id, 'upload_photo')
-    if language == 'pt':
-        button = InlineKeyboardButton(text="De novo", callback_data=f"REPEAT meme {language} {msg['text']} {msg['message_id']}")
-    else:
-        button = InlineKeyboardButton(text="Again", callback_data=f"REPEAT meme {language} {msg['text']} {msg['message_id']}")
     members_tagged = []
     if ('@' in msg['text']):
         for target in msg['text'].split("@")[1:]:
@@ -174,7 +170,7 @@ def Meme(cookiebot, msg, chat_id, language):
                         template_img[i, j] = image[i-y, j-x]
         cv2.imwrite("meme.png", template_img)
         final_img = open("meme.png", 'rb')
-        cookiebot.sendPhoto(chat_id, photo=final_img, caption=caption, reply_to_message_id=msg['message_id'], reply_markup=InlineKeyboardMarkup(inline_keyboard=[[button]]))
+        cookiebot.sendPhoto(chat_id, photo=final_img, caption=caption, reply_to_message_id=msg['message_id'])
         final_img.close()
         try:
             os.remove("meme.png")
