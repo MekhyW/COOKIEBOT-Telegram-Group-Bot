@@ -121,7 +121,10 @@ def Meme(cookiebot, msg, chat_id, language):
                 else:
                     chosen_member = random.choice(members)
                     members.remove(chosen_member)
-                    chosen_member = chosen_member['user']
+                    if 'user' in chosen_member:
+                        chosen_member = chosen_member['user']
+                    else:
+                        continue
                 try:
                     url = f"https://telegram.me/{chosen_member}"
                 except IndexError:
