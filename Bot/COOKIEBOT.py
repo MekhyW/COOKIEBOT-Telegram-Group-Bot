@@ -86,11 +86,11 @@ def thread_function(msg):
                 left_chat_member(msg, chat_id)
             elif content_type == "voice":
                 if utilityfunctions == True:
-                    r = requests.get(f"https://api.telegram.org/file/bot{cookiebotTOKEN}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=2)
+                    audio = GetVoiceMessage(cookiebot, msg, isBombot=isBombot)
                     duration = int(msg['voice']['duration'])
                     if duration >= 10 and duration <= 240:
-                        Speech_to_text(cookiebot, msg, chat_id, sfw, r.content, language)
-                    Identify_music(cookiebot, msg, chat_id, r.content, language)
+                        Speech_to_text(cookiebot, msg, chat_id, sfw, audio, language)
+                    Identify_music(cookiebot, msg, chat_id, audio, language)
             elif content_type == "audio":
                 pass
             elif content_type == "photo":

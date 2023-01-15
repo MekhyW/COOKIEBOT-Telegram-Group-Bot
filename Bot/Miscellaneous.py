@@ -13,7 +13,7 @@ def Analyze(cookiebot, msg, chat_id, language):
     cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
 
 def Grupos(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     groups = GetRequestBackend('registers')
     num = 0
     for group in groups:
@@ -42,7 +42,7 @@ def Broadcast(cookiebot, msg):
             pass
 
 def Comandos(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     wait_open(f"Static/Cookiebot_functions_{language}.txt")
     text_file = open(f"Static/Cookiebot_functions_{language}.txt", "r+", encoding='utf8')
     string = text_file.read()
@@ -50,7 +50,7 @@ def Comandos(cookiebot, msg, chat_id, language):
     cookiebot.sendMessage(chat_id, string, reply_to_message_id=msg['message_id'])
 
 def Hoje(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     wait_open("Static/QqEuFaço.txt")
     text_file = open("Static/QqEuFaço.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
@@ -59,7 +59,7 @@ def Hoje(cookiebot, msg, chat_id, language):
     text_file.close()
 
 def Cheiro(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     wait_open("Static/Cheiro.txt")
     text_file = open("Static/Cheiro.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
@@ -68,7 +68,7 @@ def Cheiro(cookiebot, msg, chat_id, language):
     text_file.close()
 
 def QqEuFaço(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     wait_open("Static/QqEuFaço.txt")
     text_file = open("Static/QqEuFaço.txt", "r+", encoding='utf8')
     lines = text_file.readlines()
@@ -77,7 +77,7 @@ def QqEuFaço(cookiebot, msg, chat_id, language):
     text_file.close()
 
 def IdeiaDesenho(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'upload_photo')
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
     ideiasdesenho = os.listdir('IdeiaDesenho')
     ideiaID = random.randint(0, len(ideiasdesenho)-1)
     photo = open('IdeiaDesenho'+'/'+ideiasdesenho[ideiaID], 'rb')
@@ -91,7 +91,7 @@ def IdeiaDesenho(cookiebot, msg, chat_id, language):
     photo.close()
 
 def CustomCommand(cookiebot, msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'upload_photo')
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
     button = InlineKeyboardButton(text="Again", callback_data=f"REPEAT custom {msg['text']} {msg['message_id']}")
     images = os.listdir("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", ''))
     imageID = random.randint(0, len(images)-1)
@@ -136,7 +136,7 @@ def Idade(cookiebot, msg, chat_id, language):
             Send(cookiebot, chat_id, f"Sua idade é {Idade} anos! 👴\nRegistrado {Contagem} vezes", msg, language)
 
 def Genero(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     if not " " in msg['text']:
         Send(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n\nEx: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)", msg, language)
     else:

@@ -25,7 +25,7 @@ def left_chat_member(msg, chat_id):
     cache_members[chat_id].remove(msg['left_chat_member']['username'])
 
 def Everyone(cookiebot, msg, chat_id, listaadmins, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     if 'from' in msg and str(msg['from']['username']) not in listaadmins:
         Send(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo!", msg, language)
     else:
@@ -36,21 +36,21 @@ def Everyone(cookiebot, msg, chat_id, listaadmins, language):
         cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
 
 def Adm(cookiebot, msg, chat_id, listaadmins):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     response = ""
     for admin in listaadmins:
         response += ("@" + admin + " ")
     cookiebot.sendMessage(chat_id, response, reply_to_message_id=msg['message_id'])
 
 def Quem(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     members = GetMembersChat(chat_id)
     chosen = random.choice(members)['user']
     LocucaoAdverbial = random.choice(["Com certeza o(a) ", "Sem sombra de dúvidas o(a) ", "Suponho que o(a) ", "Aposto que o(a) ", "Talvez o(a) ", "Quem sabe o(a) ", "Aparentemente o(a) "])
     Send(cookiebot, chat_id, LocucaoAdverbial+"@"+chosen, msg, language)
 
 def Shippar(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     members = GetMembersChat(chat_id)
     if len(msg['text'].split()) >= 3:
         targetA = msg['text'].split()[1]

@@ -63,7 +63,7 @@ def GetConfig(chat_id):
 
 
 def Configurar(cookiebot, msg, chat_id, listaadmins, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['username']) in listaadmins or str(msg['from']['username']) == "MekhyW":
         configs = GetConfig(chat_id)
         variables = f"FurBots: {configs[0]}\n sfw: {configs[1]}\n Sticker Spam Limit: {configs[2]}\n Time Without Sending Images: {configs[3]}\n Time Captcha: {configs[4]}\n Fun Functions: {configs[5]}\n Utility Functions: {configs[6]}\n Language: {configs[7]}\n Publisher Post: {configs[8]}\n Publisher Ask: {configs[9]}\n Thread Posts: {configs[10]}\n Max Posts: {configs[11]}"
@@ -92,7 +92,7 @@ def Configurar(cookiebot, msg, chat_id, listaadmins, language):
 
 
 def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
     current_configs = GetConfig(chat_to_alter)
     new_val = msg['text'].lower()
@@ -158,7 +158,7 @@ def ConfigVariableButton(cookiebot, msg, query_data):
 
 
 def AtualizaBemvindo(cookiebot, msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     req = PutRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
     if 'error' in req and req['error'] == "Not Found":
         PostRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
@@ -166,12 +166,12 @@ def AtualizaBemvindo(cookiebot, msg, chat_id):
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 
 def NovoBemvindo(cookiebot, msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group", reply_to_message_id=msg['message_id'])
 
 
 def AtualizaRegras(cookiebot, msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     req = PutRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
     if 'error' in req and req['error'] == "Not Found":
         PostRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
@@ -179,11 +179,11 @@ def AtualizaRegras(cookiebot, msg, chat_id):
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 
 def NovasRegras(cookiebot, msg, chat_id):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules", reply_to_message_id=msg['message_id'])
 
 def Regras(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     rules = GetRequestBackend(f"rules/{chat_id}")
     if 'error' in rules and rules['error'] == "Not Found":    
         Send(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", msg, language)

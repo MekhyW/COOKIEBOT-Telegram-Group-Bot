@@ -27,12 +27,12 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
     annotations = response.web_detection
     for page in annotations.pages_with_matching_images:
         if page.full_matching_images:
-            cookiebot.sendChatAction(chat_id, 'typing')
+            SendChatAction(cookiebot, chat_id, 'typing')
             cookiebot.sendMessage(chat_id, f"SOURCE: 🔗{page.url}", reply_to_message_id=msg['message_id'])
             return
     for page in annotations.pages_with_matching_images:
         if page.partial_matching_images:
-            cookiebot.sendChatAction(chat_id, 'typing')
+            SendChatAction(cookiebot, chat_id, 'typing')
             cookiebot.sendMessage(chat_id, f"SOURCE: 🔗{page.url} (partial matching)", reply_to_message_id=msg['message_id'])
             return
     Send(cookiebot, chat_id, "Não consegui achar uma correspondência", msg, language)
@@ -41,7 +41,7 @@ def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec", msg, language)
 
 def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
-    cookiebot.sendChatAction(chat_id, 'upload_photo')
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
     searchterm = msg['text'].split("@")[0].replace("/", '').replace("@CookieMWbot", '')
     if sfw == 0:
         googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'off', 'filetype':'jpg|gif|png'})
@@ -65,7 +65,7 @@ def AddtoRandomDatabase(msg, chat_id, photo_id=''):
         PostRequestBackend('randomdatabase', {'id': chat_id, 'idMessage': str(msg['message_id']), 'idMedia': photo_id})
 
 def ReplyAleatorio(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
-    cookiebot.sendChatAction(chat_id, 'upload_photo')
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
     for attempt in range(50):
         try:
             target = GetRequestBackend("randomdatabase")
@@ -84,7 +84,7 @@ def ReplySticker(cookiebot, msg, chat_id):
     cookiebot.sendSticker(chat_id, sticker['id'], reply_to_message_id=msg['message_id'])
 
 def Meme(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'upload_photo')
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
     members_tagged = []
     if ('@' in msg['text']):
         for target in msg['text'].split("@")[1:]:

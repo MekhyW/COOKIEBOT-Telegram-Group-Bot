@@ -5,7 +5,7 @@ captcha = ImageCaptcha()
 import json, requests
 
 def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     if limbotimespan > 0:
         try:
             cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': True, 'can_send_other_messages': True, 'can_add_web_page_previews': True})
@@ -75,7 +75,7 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
         cookiebot.restrictChatMember(chat_id, msg['new_chat_participant']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + captchatimespan))
     except Exception as e:
         print(e)
-    cookiebot.sendChatAction(chat_id, 'upload_photo')
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
     caracters = ['0', '2', '3', '4', '5', '6', '8', '9']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
     captcha.write(password, 'CAPTCHA.png')
@@ -134,11 +134,11 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
     for line in lines:
         if len(line.split()) >= 5:
             if str(chat_id) == line.split()[0] and button == True:
-                cookiebot.sendChatAction(chat_id, 'typing')
+                SendChatAction(cookiebot, chat_id, 'typing')
                 DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
                 Bemvindo(cookiebot, msg, chat_id, limbotimespan, language)
             elif str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
-                cookiebot.sendChatAction(chat_id, 'typing')
+                SendChatAction(cookiebot, chat_id, 'typing')
                 if "".join(msg['text'].upper().split()) == line.split()[4]:
                     DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
                     DeleteMessage(cookiebot, telepot.message_identifier(msg))

@@ -4,7 +4,7 @@ cookiebotTOKEN = ''
 bombotTOKEN = ''
 mekhyID = 780875868
 import os, math, numpy, random, time, datetime, re, sys, traceback
-import urllib, json, requests
+import urllib, urllib3, json, requests
 from requests.auth import HTTPBasicAuth
 from bs4 import BeautifulSoup
 import telepot
@@ -52,24 +52,44 @@ def DeleteRequestBackend(route, params=None):
         print(e)
         return ''
 
-def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
-    cookiebot.sendChatAction(chat_id, 'typing')
-    if language == 'eng':
-        text = translator.translate(text, dest='en').text
-    elif language == 'es':
-        text = translator.translate(text, dest='es').text
-    if msg_to_reply:
-        reply_id = msg_to_reply['message_id']
-        cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
-    elif thread_id is not None:
-        if isBombot:
-            token = bombotTOKEN
-        else:
-            token = cookiebotTOKEN
-        url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}"
-        requests.get(url)
+def SendChatAction(cookiebot, chat_id, action):
+    try:
+        cookiebot.sendChatAction(chat_id, action)
+    except urllib3.exceptions.ProtocolError:
+        cookiebot.sendChatAction(chat_id, action)
+
+def GetVoiceMessage(cookiebot, msg, isBombot=False):
+    if isBombot:
+        token = bombotTOKEN
     else:
-        cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
+        token = cookiebotTOKEN
+    try:
+        r = requests.get(f"https://api.telegram.org/file/bot{token}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=2)
+    except urllib3.exceptions.ProtocolError:
+        r = requests.get(f"https://api.telegram.org/file/bot{token}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=2)
+    return r.content
+
+def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
+    try:
+        SendChatAction(cookiebot, chat_id, 'typing')
+        if language == 'eng':
+            text = translator.translate(text, dest='en').text
+        elif language == 'es':
+            text = translator.translate(text, dest='es').text
+        if msg_to_reply:
+            reply_id = msg_to_reply['message_id']
+            cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
+        elif thread_id is not None:
+            if isBombot:
+                token = bombotTOKEN
+            else:
+                token = cookiebotTOKEN
+            url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}"
+            requests.get(url)
+        else:
+            cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
+    except urllib3.exceptions.ProtocolError:
+        Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup)
 
 def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
     if isBombot:
@@ -83,7 +103,7 @@ def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="
     print(requests.get(url, json=data))
 
 def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBombot=False):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     if isBombot:
         token = bombotTOKEN
     else:

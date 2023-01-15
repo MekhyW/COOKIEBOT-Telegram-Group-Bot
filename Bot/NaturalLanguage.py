@@ -21,7 +21,7 @@ AI_ptbr = ChatBot(
 
 
 def InteligenciaArtificial(cookiebot, msg, chat_id, language):
-    cookiebot.sendChatAction(chat_id, 'typing')
+    SendChatAction(cookiebot, chat_id, 'typing')
     message = ""
     AnswerFinal = ""
     if "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']:

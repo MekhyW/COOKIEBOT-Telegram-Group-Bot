@@ -53,5 +53,5 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
         if i < len(response.results) - 1:
             Text += '\n'
     if len(Text.split()) >= minimum_words_STT:
-        cookiebot.sendChatAction(chat_id, 'typing')
+        SendChatAction(cookiebot, chat_id, 'typing')
         cookiebot.sendMessage(chat_id, f'(2.2) Text:\n"{Text}"', reply_to_message_id=msg['message_id'])
