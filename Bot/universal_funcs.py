@@ -90,6 +90,8 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
             cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
         Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup)
+    except TelegramError:
+        pass
 
 def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
     if isBombot:
