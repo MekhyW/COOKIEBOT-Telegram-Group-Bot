@@ -259,7 +259,7 @@ def handle_query(msg):
         if 'CONFIG' in query_data:
             ConfigVariableButton(cookiebot, msg, query_data)
         elif 'Pub' in query_data:
-            if str(from_id) in listaadmins_id or str(from_id) == str(mekhyID):
+            if str(from_id) in listaadmins_id or str(from_id) == str(mekhyID) or msg['from']['is_bot'] == True:
                 if query_data.startswith('SendToApproval'):
                     AskApproval(cookiebot, query_data, from_id, isBombot=isBombot)
                 elif query_data.startswith('Approve'):
