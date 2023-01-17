@@ -10,7 +10,7 @@ def Analyze(cookiebot, msg, chat_id, language):
     result = ''
     for item in msg['reply_to_message']:
         result += str(item) + ': ' + str(msg['reply_to_message'][item]) + '\n'
-    cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
+    Send(cookiebot, chat_id, result, msg_to_reply=msg)
 
 def Grupos(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
@@ -36,7 +36,7 @@ def Broadcast(cookiebot, msg):
     for group in groups:
         try:
             id = group['id']
-            cookiebot.sendMessage(int(id), msg['text'].replace('/broadcast', ''))
+            Send(cookiebot, int(id), msg['text'].replace('/broadcast', ''))
             time.sleep(0.5)
         except:
             pass
@@ -47,7 +47,7 @@ def Comandos(cookiebot, msg, chat_id, language):
     text_file = open(f"Static/Cookiebot_functions_{language}.txt", "r+", encoding='utf8')
     string = text_file.read()
     text_file.close()
-    cookiebot.sendMessage(chat_id, string, reply_to_message_id=msg['message_id'])
+    Send(cookiebot, chat_id, string, msg_to_reply=msg)
 
 def Hoje(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
@@ -101,9 +101,9 @@ def CustomCommand(cookiebot, msg, chat_id):
 
 def Dado(cookiebot, msg, chat_id, language):
     if msg['text'].startswith("/dado"):
-        cookiebot.sendMessage(chat_id, "Rodo um dado de 1 até x, n vezes\nEXEMPLO: /d20 5\n(Roda um d20 5 vezes)")
+        Send(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\nEXEMPLO: /d20 5\n(Roda um d20 5 vezes)")
     elif msg['text'].startswith("/dice"):
-        cookiebot.sendMessage(chat_id, "Roll a dice from 1 to x, n times\nEXAMPLE: /d20 5\n(Rotate a d20 5 times)")
+        Send(cookiebot, chat_id, "Roll a dice from 1 to x, n times\nEXAMPLE: /d20 5\n(Rotate a d20 5 times)")
     else:
         if len(msg['text'].split()) == 1:
             vezes = 1
@@ -120,7 +120,7 @@ def Dado(cookiebot, msg, chat_id, language):
                     resposta += f"\n{vez+1}º Lançamento: 🎲 -> {random.randint(1, limite)}"
                 else:
                     resposta += f"\n{vez+1}th Roll: 🎲 -> {random.randint(1, limite)}"
-        cookiebot.sendMessage(chat_id, resposta, reply_to_message_id=msg['message_id'])
+        Send(cookiebot, chat_id, resposta, msg_to_reply=msg)
 
 def Idade(cookiebot, msg, chat_id, language):
     if not " " in msg['text']:
@@ -153,7 +153,7 @@ def Genero(cookiebot, msg, chat_id, language):
             Send(cookiebot, chat_id, f"É uma menina! 👩\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes", msg, language)
 
 def Rojao(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
-    cookiebot.sendMessage(chat_id, "fiiiiiiii.... ", reply_to_message_id=msg['message_id'])
+    Send(cookiebot, chat_id, "fiiiiiiii.... ", msg_to_reply=msg)
     time.sleep(0.1)
     amount = random.randint(5, 20)
     while amount > 0:

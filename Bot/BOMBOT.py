@@ -22,7 +22,7 @@ if updates:
     cookiebot.getUpdates(offset=last_update_id+1)
 
 startPublisher(isBombot)
-cookiebot.sendMessage(mekhyID, 'I am online')
+Send(cookiebot, mekhyID, 'I am online')
 
 def thread_function(msg):
     try:
@@ -54,9 +54,9 @@ def thread_function(msg):
                 elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == mekhyID:
                     Broadcast(cookiebot, msg)
             if isBombot:
-                cookiebot.sendMessage(chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
+                Send(cookiebot, chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
-                cookiebot.sendMessage(chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *121* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
+                Send(cookiebot, chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *121* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                     #[InlineKeyboardButton(text="Acesse o Site 🌐", url="https://cookiebot-website.vercel.app/")],
                     [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url="https://t.me/CookieMWbot?startgroup=new")],
@@ -72,7 +72,7 @@ def thread_function(msg):
                     isBlacklisted = GetRequestBackend(f"blacklist/{chat_id}")
                     if not 'error' in isBlacklisted:
                         LeaveAndBlacklist(cookiebot, chat_id)
-                        cookiebot.sendMessage(mekhyID, f"Auto-left:\n{chat_id}")
+                        Send(cookiebot, mekhyID, f"Auto-left:\n{chat_id}")
                         return
                     Send(cookiebot, mekhyID, f"Added:\n{cookiebot.getChat(chat_id)}")
                     cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
@@ -148,14 +148,14 @@ def thread_function(msg):
                     if str(msg['from']['username']) in listaadmins:
                         AtualizaBemvindo(cookiebot, msg, chat_id)
                     else:
-                        cookiebot.sendMessage(chat_id, "You are not a group admin!", reply_to_message_id=msg['message_id'])
+                        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
                 elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                     NovoBemvindo(cookiebot, msg, chat_id)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
                     if str(msg['from']['username']) in listaadmins:
                         AtualizaRegras(cookiebot, msg, chat_id)
                     else:
-                        cookiebot.sendMessage(chat_id, "You are not a group admin!", reply_to_message_id=msg['message_id'])
+                        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
                 elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
                     NovasRegras(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(("/regras", "/rules", "/reglas")) and FurBots == False:
@@ -193,7 +193,7 @@ def thread_function(msg):
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions == True:
                     AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language)
                     try:
-                        cookiebot.sendMessage(chat_id, AnswerFinal, reply_to_message_id=msg['message_id'])
+                        Send(cookiebot, chat_id, AnswerFinal, msg_to_reply=msg)
                     except TelegramError:
                         pass
                 else:
@@ -210,8 +210,8 @@ def thread_function(msg):
         if 'ConnectionResetError' in traceback.format_exc():
             handle(msg)
         else:
-            cookiebot.sendMessage(mekhyID, traceback.format_exc())
-            cookiebot.sendMessage(mekhyID, str(msg))
+            Send(cookiebot, mekhyID, traceback.format_exc())
+            Send(cookiebot, mekhyID, str(msg))
     finally:
         if not isBombot:
             SchedulerPull(cookiebot, isBombot=isBombot)
@@ -243,7 +243,7 @@ def handle(msg):
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except:
-        cookiebot.sendMessage(mekhyID, traceback.format_exc())
+        Send(cookiebot, mekhyID, traceback.format_exc())
 
 def handle_query(msg):
     try:
@@ -275,8 +275,8 @@ def handle_query(msg):
         if 'ConnectionResetError' in traceback.format_exc():
             handle_query(msg)
         else:
-            cookiebot.sendMessage(mekhyID, traceback.format_exc())
-            cookiebot.sendMessage(mekhyID, str(msg))
+            Send(cookiebot, mekhyID, traceback.format_exc())
+            Send(cookiebot, mekhyID, str(msg))
         
 
 MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()

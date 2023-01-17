@@ -22,7 +22,7 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
             Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo!", language=language)
     elif len(welcome['message']) > 0:
         welcome = welcome['message'].replace('\\n', '\n')
-        cookiebot.sendMessage(chat_id, welcome)
+        Send(cookiebot, chat_id, welcome, language=language)
         
 
 def CheckHumanFactor(cookiebot, msg, chat_id, language):

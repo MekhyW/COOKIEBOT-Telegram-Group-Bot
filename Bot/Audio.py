@@ -18,12 +18,10 @@ def Identify_music(cookiebot, msg, chat_id, content, language):
     if('track' in response[1]):
         title = response[1]['track']['title']
         subtitle = response[1]['track']['subtitle']
-        if language == 'pt':
-            cookiebot.sendMessage(chat_id, "MÚSICA: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
-        elif language == 'es':
-            cookiebot.sendMessage(chat_id, "CANCIÓN: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
+        if language in ['pt', 'es']:
+            Send(cookiebot, chat_id, f"MÚSICA: 🎵 {title} - {subtitle} 🎵", msg, language)
         else:
-            cookiebot.sendMessage(chat_id, "SONG: 🎵 " + title + " - " + subtitle + " 🎵", reply_to_message_id=msg['message_id'])
+            Send(cookiebot, chat_id, f"SONG: 🎵 {title} - {subtitle} 🎵", msg, language)
 
 def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
     global minimum_words_STT
@@ -54,4 +52,4 @@ def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
             Text += '\n'
     if len(Text.split()) >= minimum_words_STT:
         SendChatAction(cookiebot, chat_id, 'typing')
-        cookiebot.sendMessage(chat_id, f'(2.2) Text:\n"{Text}"', reply_to_message_id=msg['message_id'])
+        Send(cookiebot, chat_id, f'(2.2) Text:\n"{Text}"', msg_to_reply=msg, language=language)

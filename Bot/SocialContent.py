@@ -28,12 +28,12 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
     for page in annotations.pages_with_matching_images:
         if page.full_matching_images:
             SendChatAction(cookiebot, chat_id, 'typing')
-            cookiebot.sendMessage(chat_id, f"SOURCE: 🔗{page.url}", reply_to_message_id=msg['message_id'])
+            Send(cookiebot, chat_id, f"SOURCE: 🔗{page.url}", msg_to_reply=msg)
             return
     for page in annotations.pages_with_matching_images:
         if page.partial_matching_images:
             SendChatAction(cookiebot, chat_id, 'typing')
-            cookiebot.sendMessage(chat_id, f"SOURCE: 🔗{page.url} (partial matching)", reply_to_message_id=msg['message_id'])
+            Send(cookiebot, chat_id, f"SOURCE: 🔗{page.url} (partial matching)", msg_to_reply=msg)
             return
     Send(cookiebot, chat_id, "Não consegui achar uma correspondência", msg, language)
 

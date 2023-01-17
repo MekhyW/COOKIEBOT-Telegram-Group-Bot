@@ -38,7 +38,7 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         answer = "Divulgar postagem?"
     else:
         answer = "Share post?"
-    cookiebot.sendMessage(chat_id, answer, reply_to_message_id=msg['message_id'], 
+    Send(cookiebot, chat_id, answer, msg_to_reply=msg, 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {chat_id} {msg['message_id']}")],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
@@ -50,7 +50,7 @@ def AskApproval(cookiebot, query_data, from_id, isBombot=False):
     origin_messageid = query_data.split()[2]
     origin_userid = from_id
     Forward(cookiebot, mekhyID, origin_chatid, origin_messageid, isBombot=isBombot)
-    cookiebot.sendMessage(mekhyID, 'Approve post?', 
+    Send(cookiebot, mekhyID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️ 10 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 10')],
             [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 3')],
@@ -136,7 +136,7 @@ def SchedulePost(cookiebot, query_data):
         Send(cookiebot, origin_userid, answer)
         Send(cookiebot, origin_chatid, "Post adicionado à fila de publicação!")
     except Exception as e:
-        cookiebot.sendMessage(mekhyID, traceback.format_exc())
+        Send(cookiebot, mekhyID, traceback.format_exc())
         Send(cookiebot, origin_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários. Mande /start no meu PV para eu poder te mandar mensagens.")
 
 def SchedulerPull(cookiebot, isBombot=False):

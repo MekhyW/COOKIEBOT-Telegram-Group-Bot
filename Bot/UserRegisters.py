@@ -33,14 +33,14 @@ def Everyone(cookiebot, msg, chat_id, listaadmins, language):
         result = f"Number of known users: {len(members)}\n"
         for member in members:
             result += f"@{member['user']} "
-        cookiebot.sendMessage(chat_id, result, reply_to_message_id=msg['message_id'])
+        Send(cookiebot, chat_id, result, msg_to_reply=msg)
 
 def Adm(cookiebot, msg, chat_id, listaadmins):
     SendChatAction(cookiebot, chat_id, 'typing')
     response = ""
     for admin in listaadmins:
         response += ("@" + admin + " ")
-    cookiebot.sendMessage(chat_id, response, reply_to_message_id=msg['message_id'])
+    Send(cookiebot, chat_id, response, msg_to_reply=msg)
 
 def Quem(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
