@@ -93,6 +93,24 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
     except TelegramError:
         pass
 
+def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
+    try:
+        SendChatAction(cookiebot, chat_id, 'upload_photo')
+        if language == 'eng' and caption is not None:
+            caption = translator.translate(caption, dest='en').text
+        elif language == 'es':
+            caption = translator.translate(caption, dest='es').text
+        if msg_to_reply:
+            reply_id = msg_to_reply['message_id']
+            sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_id, reply_markup=reply_markup)
+        else:
+            sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup)
+    except urllib3.exceptions.ProtocolError:
+        SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
+    except TelegramError:
+        pass
+    return sentphoto['message_id']
+
 def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
     if isBombot:
         token = bombotTOKEN

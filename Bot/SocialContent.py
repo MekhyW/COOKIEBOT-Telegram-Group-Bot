@@ -169,7 +169,7 @@ def Meme(cookiebot, msg, chat_id, language):
                         template_img[i, j] = image[i-y, j-x]
         cv2.imwrite("meme.png", template_img)
         final_img = open("meme.png", 'rb')
-        cookiebot.sendPhoto(chat_id, photo=final_img, caption=caption, reply_to_message_id=msg['message_id'])
+        SendPhoto(cookiebot, chat_id, photo=final_img, caption=caption, msg_to_reply=msg)
         final_img.close()
         try:
             os.remove("meme.png")

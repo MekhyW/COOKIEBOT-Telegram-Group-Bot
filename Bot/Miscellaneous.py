@@ -87,7 +87,7 @@ def IdeiaDesenho(cookiebot, msg, chat_id, language):
         caption = f"Referencia con ID {ideiaID}\n\n¡No rastrear sin dar créditos! (utilice la búsqueda inversa de imágenes de Google)"
     else:
         caption = f"Reference ID {ideiaID}\n\nDo not trace without credits! (use the reverse google images search)"
-    cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg['message_id'])
+    SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
     photo.close()
 
 def CustomCommand(cookiebot, msg, chat_id):
@@ -96,7 +96,7 @@ def CustomCommand(cookiebot, msg, chat_id):
     images = os.listdir("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", ''))
     imageID = random.randint(0, len(images)-1)
     photo = open("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')+'/'+images[imageID], 'rb')
-    cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
+    SendPhoto(cookiebot, chat_id, photo, msg_to_reply=msg)
     photo.close()
 
 def Dado(cookiebot, msg, chat_id, language):
