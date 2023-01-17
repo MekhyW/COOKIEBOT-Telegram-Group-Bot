@@ -32,7 +32,8 @@ def Everyone(cookiebot, msg, chat_id, listaadmins, language):
         members = GetMembersChat(chat_id)
         result = f"Number of known users: {len(members)}\n"
         for member in members:
-            result += f"@{member['user']} "
+            if 'user' in member:
+                result += f"@{member['user']} "
         Send(cookiebot, chat_id, result, msg_to_reply=msg)
 
 def Adm(cookiebot, msg, chat_id, listaadmins):
