@@ -31,6 +31,14 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language):
     if message == '':
         AnswerFinal = "?"
     else:
-        if language == "pt":
+        if language == "eng":
+            r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': 'en'})
+        else:    
+            r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': language})
+        if 'message' in r.json() and len(r.json()['message']) > 0:
+            AnswerFinal = r.json()['message'].capitalize()
+        elif language == "pt":
             AnswerFinal = AI_ptbr.get_response(message).text.capitalize()
+        else:
+            AnswerFinal = "Sorry, I don't understand."
     return AnswerFinal
