@@ -80,17 +80,12 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
     captcha.write(password, 'CAPTCHA.png')
     photo = open('CAPTCHA.png', 'rb')
-    if language == "pt":
-        caption = f"⚠️Digite o código acima para provar que você não é um robô⚠️\n\nVocê tem {round(captchatimespan/60)} minutos, se não resolver nesse tempo te removerei do chat ⏳\n(OBS: Se não aparecem 4 digitos, abra a foto completa)"
-    elif language == "es":
-        caption = f"⚠️Ingresa el código de arriba para demostrar que no eres un robot⚠️\n\nTienes {round(captchatimespan/60)} minutos, si no lo resuelves en ese tiempo te eliminaré del chat ⏳\n(NOTA: Si no aparecen 4 dígitos, abrir la imagen completa)"
-    else:
-        caption = f"⚠️Type the code above to prove you're not a robot⚠️\n\nYou have {round(captchatimespan/60)} minutes, if you don't solve it in that time I'll remove you from the chat ⏳\n(NOTE: If 4 digits don't appear, open the full photo)"
-    captchaspawnID = SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Approve",callback_data='CAPTCHA')]]))
+    caption = f"⚠️Digite o código acima para provar que você não é um robô⚠️\n\nVocê tem {round(captchatimespan/60)} minutos, se não resolver nesse tempo te removerei do chat ⏳\n(OBS: Se não aparecem 4 digitos, abra a foto completa)"
+    captchaspawnID = SendPhoto(cookiebot, chat_id, photo, caption=caption, language=language, msg_to_reply=msg, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Approve",callback_data='CAPTCHA')]]))
     photo.close()
     wait_open("Captcha.txt")
     text = open("Captcha.txt", 'a+', encoding='utf-8')
-    text.write(str(chat_id) + " " + str(msg['new_chat_participant']['id']) + " " + str(datetime.datetime.now()) + " " + password + " " + str(captchaspawnID) + "\n")
+    text.write(f"{chat_id} {msg['new_chat_participant']['id']} {datetime.datetime.now()} {password} {captchaspawnID}\n")
     text.close()
 
 def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
