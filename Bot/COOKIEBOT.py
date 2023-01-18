@@ -207,7 +207,8 @@ def thread_function(msg):
     except (BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError) as e:
         print(e)
     except Exception as e:
-        if 'ConnectionResetError' in traceback.format_exc() or 'RemoteDisconnected' in traceback.format_exc():
+        errormsg = f"{traceback.format_exc()} {e}"
+        if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle(msg)
         else:
             Send(cookiebot, mekhyID, traceback.format_exc())
@@ -273,7 +274,8 @@ def handle_query(msg):
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         run_unnatendedthreads()
     except Exception as e:
-        if 'ConnectionResetError' in traceback.format_exc() or 'RemoteDisconnected' in traceback.format_exc():
+        errormsg = f"{traceback.format_exc()} {e}"
+        if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle_query(msg)
         else:
             Send(cookiebot, mekhyID, traceback.format_exc())
