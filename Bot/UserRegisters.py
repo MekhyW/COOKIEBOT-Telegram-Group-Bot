@@ -21,9 +21,10 @@ def CheckNewName(msg, chat_id):
             cache_members[chat_id].append(username)
 
 def left_chat_member(msg, chat_id):
-    DeleteRequestBackend(f"registers/{chat_id}/users", {"user": msg['left_chat_member']['username']})
-    if msg['left_chat_member']['username'] in cache_members[chat_id]:
-        cache_members[chat_id].remove(msg['left_chat_member']['username'])
+    if 'username' in msg['left_chat_member']:
+        DeleteRequestBackend(f"registers/{chat_id}/users", {"user": msg['left_chat_member']['username']})
+        if msg['left_chat_member']['username'] in cache_members[chat_id]:
+            cache_members[chat_id].remove(msg['left_chat_member']['username'])
 
 def Everyone(cookiebot, msg, chat_id, listaadmins, language):
     SendChatAction(cookiebot, chat_id, 'typing')
