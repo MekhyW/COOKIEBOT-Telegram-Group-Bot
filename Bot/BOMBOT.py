@@ -204,14 +204,15 @@ def thread_function(msg):
             run_unnatendedthreads()
     except TooManyRequestsError:
         return
-    except (KeyError, UnauthorizedError, BotWasKickedError, BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError) as e:
+    except (BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError) as e:
         print(e)
-    except:
+    except Exception as e:
         if 'ConnectionResetError' in traceback.format_exc():
             handle(msg)
         else:
             Send(cookiebot, mekhyID, traceback.format_exc())
             Send(cookiebot, mekhyID, str(msg))
+            Send(cookiebot, mekhyID, str(e))
     finally:
         if not isBombot:
             SchedulerPull(cookiebot, isBombot=isBombot)
@@ -271,12 +272,13 @@ def handle_query(msg):
             SolveCaptcha(cookiebot, msg, chat_id, True)
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         run_unnatendedthreads()
-    except:
+    except Exception as e:
         if 'ConnectionResetError' in traceback.format_exc():
             handle_query(msg)
         else:
             Send(cookiebot, mekhyID, traceback.format_exc())
             Send(cookiebot, mekhyID, str(msg))
+            Send(cookiebot, mekhyID, str(e))
         
 
 MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
