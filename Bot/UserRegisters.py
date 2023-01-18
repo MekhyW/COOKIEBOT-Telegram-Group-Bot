@@ -48,7 +48,10 @@ def Adm(cookiebot, msg, chat_id, listaadmins):
 def Quem(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     members = GetMembersChat(chat_id)
-    chosen = random.choice(members)['user']
+    try:
+        chosen = random.choice(members)['user']
+    except TypeError:
+        chosen = random.choice(members)['user']
     LocucaoAdverbial = random.choice(["Com certeza o(a) ", "Sem sombra de dúvidas o(a) ", "Suponho que o(a) ", "Aposto que o(a) ", "Talvez o(a) ", "Quem sabe o(a) ", "Aparentemente o(a) "])
     Send(cookiebot, chat_id, LocucaoAdverbial+"@"+chosen, msg, language)
 
