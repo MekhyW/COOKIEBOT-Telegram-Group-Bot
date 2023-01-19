@@ -20,7 +20,7 @@ AI_ptbr = ChatBot(
 )
 
 
-def InteligenciaArtificial(cookiebot, msg, chat_id, language):
+def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
     SendChatAction(cookiebot, chat_id, 'typing')
     message = ""
     AnswerFinal = ""
@@ -28,17 +28,21 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language):
         message = msg['text'].replace("Cookiebot", '').replace("cookiebot", '').replace("@CookieMWbot", '').replace("COOKIEBOT", '').replace("CookieBot", '').replace("\n", '').capitalize()
     else:
         message = msg['text'].replace("\n", '').capitalize()
-    if message == '':
+    if len(message) == 0:
         AnswerFinal = "?"
     else:
-        if language == "eng":
-            r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': 'en'})
-        else:    
-            r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': language})
-        if 'message' in r.json() and len(r.json()['message']) > 0:
-            AnswerFinal = r.json()['message'].capitalize()
-        elif language == "pt":
-            AnswerFinal = AI_ptbr.get_response(message).text.capitalize()
+        if sfw == "True":
+            if language == "pt":
+                AnswerFinal = AI_ptbr.get_response(message).text.capitalize()
+            else:
+                AnswerFinal = "Sorry, my SFW AI is currently only available in Portuguese."
         else:
-            AnswerFinal = "Sorry, I don't understand."
+            if language == "eng":
+                r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': 'en'})
+            else:    
+                r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': language})
+            if 'message' in r.json() and len(r.json()['message']) > 0:
+                AnswerFinal = r.json()['message'].capitalize()
+            else:
+                AnswerFinal = "Sorry, I don't understand."
     return AnswerFinal
