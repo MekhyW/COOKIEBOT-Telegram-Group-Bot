@@ -31,7 +31,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
     if len(message) == 0:
         AnswerFinal = "?"
     else:
-        if sfw == "True":
+        if sfw == True:
             if language == "pt":
                 AnswerFinal = AI_ptbr.get_response(message).text.capitalize()
             else:
