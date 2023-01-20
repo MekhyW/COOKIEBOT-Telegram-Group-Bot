@@ -17,24 +17,6 @@ subscription_path = None
 cache_posts = {}
 postmail_chat_id = -1001869523792
 
-def ConvertCurrency(snippet, to_currency):
-    parsed = Price.fromstring(snippet)
-    if parsed.amount is None or parsed.currency is None:
-        return None
-    if parsed.currency == '$':
-        from_currency = 'USD'
-    elif parsed.currency == '€':
-        from_currency = 'EUR'
-    elif parsed.currency == '£':
-        from_currency = 'GBP'
-    elif parsed.currency == 'R$':
-        from_currency = 'BRL'
-    else:
-        from_currency = currencyCodes.get_currency_code(parsed.currency)
-    rate = currencyRates.get_rate(from_currency, to_currency)    
-    converted = round(parsed.amount_float * rate, 2)
-    return f"{to_currency} {converted}"
-
 def AskPublisher(cookiebot, msg, chat_id, language):
     global cache_posts
     if language == "pt":
@@ -110,18 +92,45 @@ def edit_job_data(job_name, job_data):
     print(f'Updated job: {response.name}')
     return response
 
+def ConvertPricesinText(text, code_target):
+    final_text = ''
+    for paragraph in text.split('\n'):
+        parsed = Price.fromstring(paragraph)
+        if parsed.amount is None or parsed.currency is None:
+            final_text += f"{paragraph}\n"
+        else:
+            if parsed.currency == '$':
+                code_from = 'USD'
+            elif parsed.currency == '€':
+                code_from = 'EUR'
+            elif parsed.currency == '£':
+                code_from = 'GBP'
+            elif parsed.currency == 'R$':
+                code_from = 'BRL'
+            else:
+                code_from = currencyCodes.get_currency_code(parsed.currency)
+            if code_from != code_target:
+                rate = currencyRates.get_rate(code_from, code_target)    
+                converted = round(parsed.amount_float * rate, 2)
+                final_text += f"{paragraph} ({code_target} {converted})\n"
+            else:
+                final_text += f"{paragraph}\n"
+    return final_text
+
 def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     cached_post = cache_posts[origin_messageid]
     inline_keyboard = []
     inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
+    caption_pt = ConvertPricesinText(translator.translate(cached_post['caption'], dest='pt').text, 'BRL')
+    caption_en = ConvertPricesinText(translator.translate(cached_post['caption'], dest='en').text, 'USD')
     if origin_user is not None:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
     if 'photo' in cached_post:
-        sent_pt = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=translator.translate(cached_post['caption'], dest='pt').text, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
-        sent_en = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=translator.translate(cached_post['caption'], dest='en').text, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
+        sent_pt = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
+        sent_en = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
     elif 'video' in cached_post:
-        sent_pt = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=translator.translate(cached_post['caption'], dest='pt').text, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
-        sent_en = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=translator.translate(cached_post['caption'], dest='en').text, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+        sent_pt = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+        sent_en = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
     cache_posts.pop(origin_messageid)
     return sent_pt, sent_en
 
