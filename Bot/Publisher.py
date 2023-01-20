@@ -36,6 +36,7 @@ def ConvertCurrency(snippet, to_currency):
     return f"{to_currency} {converted}"
 
 def AskPublisher(cookiebot, msg, chat_id, language):
+    global cache_posts
     if language == "pt":
         answer = "Divulgar postagem?"
     else:
