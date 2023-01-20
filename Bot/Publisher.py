@@ -14,6 +14,8 @@ project_path = f"projects/{project_id}"
 parent = f"{project_path}/locations/southamerica-east1"
 topic_name = 'projects/cookiebot-309512/topics/cookiebot-publisher-topic'
 subscription_path = None
+cache_posts = {}
+postmail_chat_id = -1001869523792
 
 def ConvertCurrency(snippet, to_currency):
     parsed = Price.fromstring(snippet)
@@ -40,10 +42,14 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         answer = "Share post?"
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {chat_id} {msg['message_id']}")],
+            [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {msg['forward_from_chat']['id']} {msg['message_id']}")],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
         ]
     ))
+    if 'photo' in msg:
+        cache_posts[msg['message_id']] = {'photo': msg['photo'][-1]['file_id'], 'caption': msg['caption']}
+    elif 'video' in msg:
+        cache_posts[msg['message_id']] = {'video': msg['video']['file_id'], 'caption': msg['caption']}
 
 def AskApproval(cookiebot, query_data, from_id, isBombot=False):
     origin_chatid = query_data.split()[1]
@@ -55,7 +61,7 @@ def AskApproval(cookiebot, query_data, from_id, isBombot=False):
             [InlineKeyboardButton(text="✔️ 10 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 10')],
             [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 3')],
             [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 1')],
-            [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
+            [InlineKeyboardButton(text="❌",callback_data=f'DenyPub {origin_messageid}')]
         ]
     ))
 
@@ -100,22 +106,45 @@ def edit_job_data(job_name, job_data):
     print(f'Updated job: {response.name}')
     return response
 
+def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
+    cached_post = cache_posts[origin_messageid]
+    inline_keyboard = []
+    inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
+    if origin_user is not None:
+        inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
+    if 'photo' in cached_post:
+        sent_pt = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=translator.translate(cached_post['caption'], dest='pt').text, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
+        sent_en = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=translator.translate(cached_post['caption'], dest='en').text, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
+    elif 'video' in cached_post:
+        sent_pt = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=translator.translate(cached_post['caption'], dest='pt').text, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+        sent_en = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=translator.translate(cached_post['caption'], dest='en').text, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+    cache_posts.pop(origin_messageid)
+    return sent_pt, sent_en
+
+def DenyPost(cookiebot, query_data):
+    origin_messageid = query_data.split()[1]
+    cache_posts.pop(origin_messageid)
+
 def SchedulePost(cookiebot, query_data):
     origin_chatid = query_data.split()[1]
     origin_messageid = query_data.split()[2]
     origin_userid = query_data.split()[3]
     days = query_data.split()[4]
-    origin_chattitle = cookiebot.getChat(origin_chatid)['title']
+    origin_chat = cookiebot.getChat(origin_chatid)
+    try:
+        origin_user = cookiebot.getChatMember(origin_chatid, origin_userid)['user']
+    except:
+        origin_user = None
+    sent_pt, sent_en = PreparePost(cookiebot, origin_messageid, origin_chat, origin_user)
     jobs = list_jobs()
     for job in jobs:
         if job.name.startswith(f"{parent}/jobs/{origin_chatid}"):
             delete_job(job.name)
     answer = f"Post set for the following times ({days} days):\n"
-    language_origin = GetConfig(origin_chatid)[7]
     for group in GetRequestBackend('registers'):
         group_id = group['id']
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = GetConfig(group_id)
-        if publisherpost and language_origin == language:
+        if publisherpost:
             num_posts_for_group = 0
             for job in jobs:
                 if f"--> {group_id}" in job.description:
@@ -125,10 +154,16 @@ def SchedulePost(cookiebot, query_data):
                     hour = random.randint(0,23)
                     minute = random.randint(0,59)
                     target_chattitle = cookiebot.getChat(group_id)['title']
-                    create_job(origin_chatid+group_id, 
-                    f"{origin_chattitle} --> {target_chattitle}, at {hour}:{minute} ", 
-                    f"{days} {origin_chatid} {group_id} {origin_messageid}", 
-                    f"{minute} {hour} * * *")
+                    if language == 'pt':
+                        create_job(origin_chatid+group_id, 
+                        f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
+                        f"{days} {postmail_chat_id} {group_id} {sent_pt}", 
+                        f"{minute} {hour} * * *")
+                    else:
+                        create_job(origin_chatid+group_id, 
+                        f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
+                        f"{days} {postmail_chat_id} {group_id} {sent_en}", 
+                        f"{minute} {hour} * * *")
                     answer += f"{hour}:{minute} - {target_chattitle}\n"
             except Exception as e:
                 print(e)

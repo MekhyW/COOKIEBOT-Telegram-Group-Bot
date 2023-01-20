@@ -266,6 +266,8 @@ def handle_query(msg):
                     AskApproval(cookiebot, query_data, from_id, isBombot=isBombot)
                 elif query_data.startswith('Approve'):
                     SchedulePost(cookiebot, query_data)
+                elif query_data.startswith('Deny'):
+                    DenyPost(cookiebot, query_data)
                 DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
             else:
                 cookiebot.answerCallbackQuery(query_id, text="Only admins can use this.\n(Chats don't work, are you in anonymous mode?)")
