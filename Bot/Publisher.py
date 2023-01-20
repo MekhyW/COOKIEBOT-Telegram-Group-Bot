@@ -62,9 +62,9 @@ def AskApproval(cookiebot, query_data, from_id, isBombot=False):
     Forward(cookiebot, mekhyID, second_chatid, second_messageid, isBombot=isBombot)
     Send(cookiebot, mekhyID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️ 10 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 10')],
-            [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 3')],
-            [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 1')],
+            [InlineKeyboardButton(text="✔️ 10 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 10')],
+            [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 3')],
+            [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 1')],
             [InlineKeyboardButton(text="❌",callback_data=f'DenyPub {origin_messageid}')]
         ]
     ))
@@ -131,9 +131,10 @@ def DenyPost(cookiebot, query_data):
 
 def SchedulePost(cookiebot, query_data):
     origin_chatid = query_data.split()[1]
-    origin_messageid = query_data.split()[2]
-    origin_userid = query_data.split()[3]
-    days = query_data.split()[4]
+    second_chatid = query_data.split()[2]
+    origin_messageid = query_data.split()[3]
+    origin_userid = query_data.split()[4]
+    days = query_data.split()[5]
     origin_chat = cookiebot.getChat(origin_chatid)
     try:
         origin_user = cookiebot.getChatMember(origin_chatid, origin_userid)['user']
@@ -173,10 +174,10 @@ def SchedulePost(cookiebot, query_data):
                 print(e)
     try:
         Send(cookiebot, origin_userid, answer)
-        Send(cookiebot, origin_chatid, "Post adicionado à fila de publicação!")
+        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação!")
     except Exception as e:
         Send(cookiebot, mekhyID, traceback.format_exc())
-        Send(cookiebot, origin_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários. Mande /start no meu PV para eu poder te mandar mensagens.")
+        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários. Mande /start no meu PV para eu poder te mandar mensagens.")
 
 def SchedulerPull(cookiebot, isBombot=False):
     response = subscriber.pull(subscription=subscription_path, max_messages=100, return_immediately=True)
@@ -196,7 +197,6 @@ def SchedulerPull(cookiebot, isBombot=False):
         try:
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
-                #for thread_id in [472148, 566548, 603]:
                 config = GetConfig(group_id)
                 Forward(cookiebot, group_id, origin_chatid, origin_messageid, thread_id=int(config[10]), isBombot=isBombot)
             else:
