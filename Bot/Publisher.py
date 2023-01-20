@@ -126,6 +126,8 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     return sent_pt, sent_en
 
 def DenyPost(cookiebot, query_data):
+    if len(query_data.split()) < 2:
+        return
     origin_messageid = query_data.split()[1]
     cache_posts.pop(origin_messageid)
 
