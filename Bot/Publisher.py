@@ -171,15 +171,13 @@ def SchedulePost(cookiebot, query_data):
                     minute = random.randint(0,59)
                     target_chattitle = cookiebot.getChat(group_id)['title']
                     if language == 'pt':
-                        create_job(origin_chatid+group_id, 
-                        f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
-                        f"{days} {postmail_chat_id} {group_id} {sent_pt}", 
-                        f"{minute} {hour} * * *")
+                        sent = sent_pt
                     else:
-                        create_job(origin_chatid+group_id, 
-                        f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
-                        f"{days} {postmail_chat_id} {group_id} {sent_en}", 
-                        f"{minute} {hour} * * *")
+                        sent = sent_en
+                    create_job(origin_chatid+group_id, 
+                    f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
+                    f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid}",
+                    f"{minute} {hour} * * *")
                     answer += f"{hour}:{minute} - {target_chattitle}\n"
             except Exception as e:
                 print(e)
@@ -198,20 +196,21 @@ def SchedulerPull(cookiebot, isBombot=False):
         print(message.message.data)
         data = message.message.data.decode('utf-8')
         remaining_times = int(data.split()[0]) - 1
-        origin_chatid = data.split()[1]
+        postmail_chat_id = data.split()[1]
         group_id = data.split()[2]
         origin_messageid = data.split()[3]
+        origin_chatid = data.split()[4]
         if remaining_times <= 0:
             delete_job(origin_chatid+group_id)
         else:
-            edit_job_data(origin_chatid+group_id, f"{remaining_times} {origin_chatid} {group_id} {origin_messageid}")
+            edit_job_data(origin_chatid+group_id, f"{remaining_times} {postmail_chat_id} {group_id} {origin_messageid} {origin_chatid}")
         try:
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
                 config = GetConfig(group_id)
-                Forward(cookiebot, group_id, origin_chatid, origin_messageid, thread_id=int(config[10]), isBombot=isBombot)
+                Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, thread_id=int(config[10]), isBombot=isBombot)
             else:
-                Forward(cookiebot, group_id, origin_chatid, origin_messageid, isBombot=isBombot)
+                Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, isBombot=isBombot)
         except TelegramError as e:
             delete_job(origin_chatid+group_id)
     return received_messages
