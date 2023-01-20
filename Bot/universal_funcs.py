@@ -91,7 +91,7 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
     except urllib3.exceptions.ProtocolError:
         Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup)
     except TelegramError:
-        pass
+        cookiebot.sendMessage(mekhyID, traceback.format_exc())
 
 def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
     try:
@@ -108,7 +108,7 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
     except urllib3.exceptions.ProtocolError:
         SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
     except TelegramError:
-        pass
+        cookiebot.sendMessage(mekhyID, traceback.format_exc())
     return sentphoto['message_id']
 
 def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
