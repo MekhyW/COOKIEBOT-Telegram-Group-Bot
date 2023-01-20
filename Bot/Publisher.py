@@ -212,6 +212,7 @@ def SchedulerPull(cookiebot, isBombot=False):
             else:
                 Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, isBombot=isBombot)
         except TelegramError as e:
+            Send(cookiebot, mekhyID, traceback.format_exc())
             delete_job(origin_chatid+group_id)
     return received_messages
 
