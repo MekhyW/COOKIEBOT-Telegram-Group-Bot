@@ -42,7 +42,7 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         answer = "Share post?"
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {msg['forward_from_chat']['id']} {msg['message_id']}")],
+            [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {msg['forward_from_chat']['id']} {chat_id} {msg['message_id']}")],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
         ]
     ))
@@ -53,9 +53,10 @@ def AskPublisher(cookiebot, msg, chat_id, language):
 
 def AskApproval(cookiebot, query_data, from_id, isBombot=False):
     origin_chatid = query_data.split()[1]
-    origin_messageid = query_data.split()[2]
+    second_chatid = query_data.split()[2]
+    origin_messageid = query_data.split()[3]
     origin_userid = from_id
-    Forward(cookiebot, mekhyID, origin_chatid, origin_messageid, isBombot=isBombot)
+    Forward(cookiebot, mekhyID, second_chatid, origin_messageid, isBombot=isBombot)
     Send(cookiebot, mekhyID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️ 10 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 10')],
