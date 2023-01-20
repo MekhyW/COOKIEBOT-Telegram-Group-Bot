@@ -38,13 +38,9 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         answer = "Divulgar postagem?"
     else:
         answer = "Share post?"
-    if 'photo' in msg:
-        origin_mediaid = msg['photo'][-1]['file_id']
-    elif 'video' in msg:
-        origin_mediaid = msg['video']['file_id']
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {chat_id} {msg['message_id']} {origin_mediaid} {msg['caption']}")],
+            [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {chat_id} {msg['message_id']}")],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
         ]
     ))
@@ -52,15 +48,13 @@ def AskPublisher(cookiebot, msg, chat_id, language):
 def AskApproval(cookiebot, query_data, from_id, isBombot=False):
     origin_chatid = query_data.split()[1]
     origin_messageid = query_data.split()[2]
-    origin_mediaid = query_data.split()[3]
-    origin_caption = query_data.replace(f"SendToApprovalPub {origin_chatid} {origin_messageid} {origin_mediaid} ", "")
     origin_userid = from_id
     Forward(cookiebot, mekhyID, origin_chatid, origin_messageid, isBombot=isBombot)
     Send(cookiebot, mekhyID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️ 10 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_mediaid} {origin_userid} 10 {origin_caption}')],
-            [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_mediaid} {origin_userid} 3 {origin_caption}')],
-            [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_mediaid} {origin_userid} 1 {origin_caption}')],
+            [InlineKeyboardButton(text="✔️ 10 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 10')],
+            [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 3')],
+            [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {origin_messageid} {origin_userid} 1')],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
         ]
     ))
@@ -109,10 +103,9 @@ def edit_job_data(job_name, job_data):
 def SchedulePost(cookiebot, query_data):
     origin_chatid = query_data.split()[1]
     origin_messageid = query_data.split()[2]
-    origin_mediaid = query_data.split()[3]
-    origin_userid = query_data.split()[4]
-    days = query_data.split()[5]
-    origin_caption = query_data.replace(f"ApprovePub {origin_chatid} {origin_messageid} {origin_mediaid} {origin_userid} {days} ", "")
+    origin_userid = query_data.split()[3]
+    days = query_data.split()[4]
+    origin_chattitle = cookiebot.getChat(origin_chatid)['title']
     jobs = list_jobs()
     for job in jobs:
         if job.name.startswith(f"{parent}/jobs/{origin_chatid}"):
@@ -133,8 +126,8 @@ def SchedulePost(cookiebot, query_data):
                     minute = random.randint(0,59)
                     target_chattitle = cookiebot.getChat(group_id)['title']
                     create_job(origin_chatid+group_id, 
-                    origin_caption, 
-                    f"{days} {origin_chatid} {group_id} {origin_messageid} {origin_mediaid}", 
+                    f"{origin_chattitle} --> {target_chattitle}, at {hour}:{minute} ", 
+                    f"{days} {origin_chatid} {group_id} {origin_messageid}", 
                     f"{minute} {hour} * * *")
                     answer += f"{hour}:{minute} - {target_chattitle}\n"
             except Exception as e:
@@ -153,16 +146,10 @@ def SchedulerPull(cookiebot, isBombot=False):
         subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
         print(message.message.data)
         data = message.message.data.decode('utf-8')
-        data_splitted = data.split()
-        remaining_times = int(data_splitted[0]) - 1
-        origin_chatid = data_splitted[1]
-        group_id = data_splitted[2]
-        origin_messageid = data_splitted[3]
-        origin_caption = data.replace(f"{data_splitted[0]} {origin_chatid} {group_id} {origin_messageid} ", "")
-        if len(data_splitted) > 4:
-            origin_mediaid = data_splitted[4]
-        else:
-            origin_mediaid = None
+        remaining_times = int(data.split()[0]) - 1
+        origin_chatid = data.split()[1]
+        group_id = data.split()[2]
+        origin_messageid = data.split()[3]
         if remaining_times <= 0:
             delete_job(origin_chatid+group_id)
         else:
@@ -170,17 +157,11 @@ def SchedulerPull(cookiebot, isBombot=False):
         try:
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
+                #for thread_id in [472148, 566548, 603]:
                 config = GetConfig(group_id)
-                thread_id = int(config[10])
+                Forward(cookiebot, group_id, origin_chatid, origin_messageid, thread_id=int(config[10]), isBombot=isBombot)
             else:
-                thread_id = None
-            if origin_mediaid is not None:
-                try:
-                    SendPhoto(cookiebot, group_id, origin_mediaid, caption=origin_caption.replace('  ', '\n'), thread_id=thread_id, isBombot=isBombot)
-                except:
-                    SendVideo(cookiebot, group_id, origin_mediaid, caption=origin_caption.replace('  ', '\n'), thread_id=thread_id, isBombot=isBombot)
-            else:
-                Forward(cookiebot, group_id, origin_chatid, origin_messageid, thread_id=thread_id, isBombot=isBombot)
+                Forward(cookiebot, group_id, origin_chatid, origin_messageid, isBombot=isBombot)
         except TelegramError as e:
             delete_job(origin_chatid+group_id)
     return received_messages
