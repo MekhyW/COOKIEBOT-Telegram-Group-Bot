@@ -48,9 +48,9 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         ]
     ))
     if 'photo' in msg:
-        cache_posts[msg['forward_from_message_id']] = {'photo': msg['photo'][-1]['file_id'], 'caption': msg['caption']}
+        cache_posts[str(msg['forward_from_message_id'])] = {'photo': msg['photo'][-1]['file_id'], 'caption': msg['caption']}
     elif 'video' in msg:
-        cache_posts[msg['forward_from_message_id']] = {'video': msg['video']['file_id'], 'caption': msg['caption']}
+        cache_posts[str(msg['forward_from_message_id'])] = {'video': msg['video']['file_id'], 'caption': msg['caption']}
     print(cache_posts)
 
 def AskApproval(cookiebot, query_data, from_id, isBombot=False):
