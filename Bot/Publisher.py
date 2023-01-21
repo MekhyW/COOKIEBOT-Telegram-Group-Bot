@@ -112,7 +112,7 @@ def ConvertPricesinText(text, code_target):
             if code_from != code_target:
                 rate = currencyRates.get_rate(code_from, code_target)    
                 converted = round(parsed.amount_float * rate, 2)
-                final_text += f"{paragraph} ({code_target} {converted})\n"
+                final_text += f"{paragraph} ({code_target} ≈{converted})\n"
             else:
                 final_text += f"{paragraph}\n"
     return final_text
