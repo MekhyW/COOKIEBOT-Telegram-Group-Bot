@@ -121,10 +121,11 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     cached_post = cache_posts[origin_messageid]
     inline_keyboard = []
     inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
-    caption_pt = ConvertPricesinText(translator.translate(cached_post['caption'], dest='pt').text, 'BRL')
-    caption_en = ConvertPricesinText(translator.translate(cached_post['caption'], dest='en').text, 'USD')
     if origin_user is not None:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
+    inline_keyboard.append([InlineKeyboardButton(text="Postmail 📬", url=f"https://t.me/CookiebotPostmail")])
+    caption_pt = ConvertPricesinText(translator.translate(cached_post['caption'], dest='pt').text, 'BRL')
+    caption_en = ConvertPricesinText(translator.translate(cached_post['caption'], dest='en').text, 'USD')
     if 'photo' in cached_post:
         sent_pt = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
         sent_en = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
