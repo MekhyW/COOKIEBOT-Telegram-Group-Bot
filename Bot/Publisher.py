@@ -158,6 +158,7 @@ def SchedulePost(cookiebot, query_data):
         if job.name.startswith(f"{parent}/jobs/{origin_chatid}"):
             delete_job(job.name)
     answer = f"Post set for the following times ({days} days):\n"
+    answer += "NOW - Cookiebot Postmail 📬\n"
     for group in GetRequestBackend('registers'):
         group_id = group['id']
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = GetConfig(group_id)
