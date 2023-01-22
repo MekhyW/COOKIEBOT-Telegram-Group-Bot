@@ -108,7 +108,8 @@ def ConvertPricesinText(text, code_target):
             elif parsed.currency == 'R$':
                 code_from = 'BRL'
             else:
-                code_from = currencyCodes.get_currency_code(parsed.currency)
+                final_text += f"{paragraph}\n"
+                continue
             if code_from != code_target:
                 rate = currencyRates.get_rate(code_from, code_target)    
                 converted = round(parsed.amount_float * rate, 2)
