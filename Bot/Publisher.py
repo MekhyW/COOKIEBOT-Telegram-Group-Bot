@@ -124,7 +124,7 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
     if origin_user is not None:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
-    inline_keyboard.append([InlineKeyboardButton(text="Postmail 📬", url=f"https://t.me/CookiebotPostmail")])
+    inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=f"https://t.me/CookiebotPostmail")])
     caption_pt = ConvertPricesinText(translator.translate(cached_post['caption'], dest='pt').text, 'BRL')
     caption_en = ConvertPricesinText(translator.translate(cached_post['caption'], dest='en').text, 'USD')
     if 'photo' in cached_post:
@@ -159,7 +159,7 @@ def SchedulePost(cookiebot, query_data):
         if job.name.startswith(f"{parent}/jobs/{origin_chatid}"):
             delete_job(job.name)
     answer = f"Post set for the following times ({days} days):\n"
-    answer += "NOW - Cookiebot Postmail 📬\n"
+    answer += "NOW - Cookiebot Mural 📬\n"
     for group in GetRequestBackend('registers'):
         group_id = group['id']
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = GetConfig(group_id)
