@@ -13,11 +13,13 @@ def GetMembersChat(chat_id):
     return members
 
 def CheckNewName(msg, chat_id):
-    if 'username' in msg['from'] and msg['from']['username'] != None:
+    if 'from' in msg and 'username' in msg['from'] and msg['from']['username'] != None:
         username = msg['from']['username']
         members = GetMembersChat(chat_id)
         if username not in str(members):
             PostRequestBackend(f"registers/{chat_id}/users", {"user": username, "date": ''})
+            if chat_id not in cache_members:
+                cache_members[chat_id] = []
             cache_members[chat_id].append(username)
 
 def left_chat_member(msg, chat_id):
