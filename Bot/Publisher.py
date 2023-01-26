@@ -95,6 +95,7 @@ def edit_job_data(job_name, job_data):
 
 def ConvertPricesinText(text, code_target):
     final_text = ''
+    text = text.replace('Reais', 'R$').replace('reais', 'R$')
     for paragraph in text.split('\n'):
         parsed = Price.fromstring(paragraph)
         if parsed.amount is None or parsed.currency is None:
