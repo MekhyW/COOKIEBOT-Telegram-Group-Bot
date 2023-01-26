@@ -21,9 +21,9 @@ url_regex = r"\b((?:https?://)?(?:(?:www\.)?(?:[\da-z\.-]+)\.(?:[a-z]{2,6})|(?:(
 def AskPublisher(cookiebot, msg, chat_id, language):
     global cache_posts
     if language == "pt":
-        answer = "Divulgar postagem?"
+        answer = "Divulgar postagem?\n(Aperte como usuário, não como canal)"
     else:
-        answer = "Share post?"
+        answer = "Share post?\n(Press as user, not as channel)"
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {msg['forward_from_chat']['id']} {chat_id} {msg['forward_from_message_id']} {msg['message_id']}")],
