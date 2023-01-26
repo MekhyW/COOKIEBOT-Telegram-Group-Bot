@@ -124,6 +124,8 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     inline_keyboard = []
     inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
     for url in re.findall(url_regex, cached_post['caption']):
+        if url.endswith('/'):
+            url = url[:-1]
         text = url.split('/')[-1].replace('www.', '')
         inline_keyboard.append([InlineKeyboardButton(text=text, url=url)])
     if origin_user is not None:
