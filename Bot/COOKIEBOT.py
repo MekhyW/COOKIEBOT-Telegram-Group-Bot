@@ -120,6 +120,10 @@ def thread_function(msg):
                     reply_to_message_id=msg['message_id'])
                 elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, chat_id)
+                elif msg['text'].startswith(("/reload", "/recarregar")):
+                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = GetConfig(chat_id, ignorecache=True)
+                    Send(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
                 elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                     if 'reply_to_message' in msg:
                         Analyze(cookiebot, msg, chat_id, language)

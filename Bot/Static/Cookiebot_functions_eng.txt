@@ -32,6 +32,7 @@ newwelcome - Updates the welcome message
 analysis - Inspect elements of a message
 commands - Lists bot commands
 configure - Configure the bot
+reload - Reload settings cache
 
 CUSTOM COMMANDS:
 allen - allen

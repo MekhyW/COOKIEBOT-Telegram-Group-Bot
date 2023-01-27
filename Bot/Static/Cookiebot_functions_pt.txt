@@ -33,6 +33,7 @@ novobemvindo - Atualiza a mensagem de boas vindas
 analise - Inspecionar elementos de uma mensagem
 comandos - Lista os comandos do bot
 configurar - Configura o bot
+reload - Recarregar cache de configuracoes
 
 COMANDOS CUSTOMIZADOS:
 allen - allen

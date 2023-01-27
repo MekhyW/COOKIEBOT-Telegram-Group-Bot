@@ -32,6 +32,7 @@ nuevabienvenida - Actualiza el mensaje de bienvenida
 analisis - Analizar mensaje
 comandos - enumera los comandos del bot
 configurar - Configurar el bot
+reload - Recarregar cache de configuracion
 
 COMANDOS CUSTOMIZADOS:
 allen - allen

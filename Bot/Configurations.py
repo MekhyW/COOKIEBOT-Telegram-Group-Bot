@@ -2,8 +2,8 @@ from universal_funcs import *
 cache_configurations = {}
 cache_admins = {}
 
-def GetAdmins(cookiebot, msg, chat_id):
-    if chat_id in cache_admins:
+def GetAdmins(cookiebot, msg, chat_id, ignorecache=False):
+    if chat_id in cache_admins and not ignorecache:
         admins = cache_admins[chat_id]
         return admins[0], admins[1]
     listaadmins, listaadmins_id = [], []
@@ -13,7 +13,6 @@ def GetAdmins(cookiebot, msg, chat_id):
         listaadmins_id.append(str(admin['user']['id']))
     cache_admins[chat_id] = [listaadmins, listaadmins_id]
     return listaadmins, listaadmins_id
-
 
 def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=False):
     wait_open(f"Static/Cookiebot_functions_{language}.txt")
@@ -38,8 +37,8 @@ def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=Fa
 def SetComandosPrivate(cookiebot, chat_id, isBombot=False):
     SetLanguageComandos(cookiebot, chat_id, chat_id, "private", isBombot)
 
-def GetConfig(chat_id):
-    if chat_id in cache_configurations:
+def GetConfig(chat_id, ignorecache=False):
+    if chat_id in cache_configurations and not ignorecache:
         return cache_configurations[chat_id]
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 3
     configs = GetRequestBackend(f"configs/{chat_id}")
