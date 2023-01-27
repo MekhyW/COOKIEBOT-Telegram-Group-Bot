@@ -132,7 +132,7 @@ def Meme(cookiebot, msg, chat_id, language):
                 req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"}) 
                 html = urllib.request.urlopen(req)
                 soup = BeautifulSoup(html, "html.parser")
-                images = [img for img in soup.findAll('img')]
+                images = list(soup.findAll('img'))
                 if len(images) == 0:
                     continue
                 break
