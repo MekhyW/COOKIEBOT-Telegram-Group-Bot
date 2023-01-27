@@ -50,6 +50,7 @@ focads - focads
 gummypuh - gummypuh
 haura - haura
 juuj - juuj
+klefus - klefus
 kuark - kuark
 kurokkuru - kurokkuru
 leeycarus - leeycarus
