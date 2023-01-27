@@ -30,9 +30,16 @@ def AskPublisher(cookiebot, msg, chat_id, language):
         ]
     ))
     if 'photo' in msg:
-        cache_posts[str(msg['forward_from_message_id'])] = {'photo': msg['photo'][-1]['file_id'], 'caption': msg['caption']}
+        media_type = 'photo'
+        media_id = msg['photo'][-1]['file_id']
     elif 'video' in msg:
-        cache_posts[str(msg['forward_from_message_id'])] = {'video': msg['video']['file_id'], 'caption': msg['caption']}
+        media_type = 'video'
+        media_id = msg['video']['file_id']
+    caption_entities = []
+    if 'caption_entities' in msg:
+        for entity in msg['caption_entities']:
+            caption_entities.append(entity)
+    cache_posts[str(msg['forward_from_message_id'])] = {media_type: media_id, 'caption': msg['caption'], 'caption_entities': caption_entities}
     print(cache_posts)
 
 def AskApproval(cookiebot, query_data, from_id, isBombot=False):
@@ -128,6 +135,9 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
             url = url[:-1]
         text = url.split('/')[-1].replace('www.', '')
         inline_keyboard.append([InlineKeyboardButton(text=text, url=url)])
+    for entity in cached_post['caption_entities']:
+        if 'url' in entity:
+            inline_keyboard.append([InlineKeyboardButton(text=entity['url'], url=entity['url'])])
     if origin_user is not None:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=f"https://t.me/CookiebotPostmail")])
