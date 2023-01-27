@@ -10,11 +10,11 @@ import numpy as np
 def ReverseImageSearch(cookiebot, msg, chat_id, language):
     try:
         path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
-        image_url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
+        image_url = f'https://api.telegram.org/file/bot{cookiebotTOKEN}/{path}'
         urllib.request.urlretrieve(image_url, 'temp.jpg')
     except KeyError:
         path = cookiebot.getFile(msg['document']['file_id'])['file_path']
-        video_url = 'https://api.telegram.org/file/bot{}/{}'.format(cookiebotTOKEN, path)
+        video_url = f'https://api.telegram.org/file/bot{cookiebotTOKEN}/{path}'
         urllib.request.urlretrieve(video_url, 'temp.mp4')
         vidcap = cv2.VideoCapture('temp.mp4')
         success, image = vidcap.read()
