@@ -24,8 +24,6 @@ def Identify_music(cookiebot, msg, chat_id, content, language):
             Send(cookiebot, chat_id, f"SONG: 🎵 {title} - {subtitle} 🎵", msg, language)
 
 def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
-    global minimum_words_STT
-    global confidence_threshold
     profanityFilter = sfw == 1
     if language == 'pt':
         language_code = 'pt-BR'
