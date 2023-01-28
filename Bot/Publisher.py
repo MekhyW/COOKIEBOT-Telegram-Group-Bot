@@ -136,7 +136,7 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
             name = name[:-1]
         name = name.split('/')[-1].replace('www.', '')
         if len(name) and len(url):
-            inline_keyboard.append([InlineKeyboardButton(text=name, url=url)])
+            inline_keyboard.append([InlineKeyboardButton(text=name, url=url[0])])
     for entity in cached_post['caption_entities']:
         if 'url' in entity and len(entity['url']):
             inline_keyboard.append([InlineKeyboardButton(text=str(entity['url']), url=str(entity['url']))])
