@@ -135,10 +135,11 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
         if name.endswith('/'):
             name = name[:-1]
         name = name.split('/')[-1].replace('www.', '')
-        inline_keyboard.append([InlineKeyboardButton(text=name, url=url)])
+        if len(name) and len(url):
+            inline_keyboard.append([InlineKeyboardButton(text=name, url=url)])
     for entity in cached_post['caption_entities']:
-        if 'url' in entity:
-            inline_keyboard.append([InlineKeyboardButton(text=entity['url'], url=entity['url'])])
+        if 'url' in entity and len(entity['url']):
+            inline_keyboard.append([InlineKeyboardButton(text=str(entity['url']), url=str(entity['url']))])
     if origin_user is not None:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=f"https://t.me/CookiebotPostmail")])
