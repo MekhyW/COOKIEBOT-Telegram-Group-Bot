@@ -3,8 +3,84 @@ from universal_funcs import *
 from captcha.image import ImageCaptcha
 captcha = ImageCaptcha()
 import json, requests
+import cv2
+import numpy as np
+from PIL import ImageFont, ImageDraw, Image
 
-def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
+emoji_pattern = re.compile("["
+        u"\U0001F600-\U0001F64F"  # emoticons
+        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
+        u"\U0001F680-\U0001F6FF"  # transport & map symbols
+        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
+                           "]+", flags=re.UNICODE)
+
+def openTelegramImage(cookiebot, token, photo_id):
+    photo_info = cookiebot.getFile(photo_id)
+    photo_url = f"https://api.telegram.org/file/bot{token}/{photo_info['file_path']}"
+    resp = urllib.request.urlopen(photo_url)
+    image = np.asarray(bytearray(resp.read()), dtype="uint8")
+    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+    return image
+
+def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
+    # Get base images
+    if isBombot:
+        token = bombotTOKEN
+    else:
+        token = cookiebotTOKEN
+    try:
+        photo_id = cookiebot.getUserProfilePhotos(msg['from']['id'])['photos'][0][-1]['file_id']
+        user_img = openTelegramImage(cookiebot, token, photo_id)
+    except (KeyError, IndexError):
+        user_img = cv2.imread('Static/No_Image_Available.jpg', cv2.IMREAD_COLOR)
+    try:
+        url = 'https://api.telegram.org/bot{}/getChat?chat_id={}'.format(token, chat_id)
+        data = requests.get(url).json()
+        photo_id = data['result']['photo']['big_file_id']
+        chat_img = openTelegramImage(cookiebot, token, photo_id)
+    except (KeyError, IndexError):
+        chat_img = cv2.imread('Static/No_Image_Available.jpg', cv2.IMREAD_COLOR)
+    # Insert card background
+    size = (1067, 483)
+    scale = size[0]/chat_img.shape[1]
+    rescaled_chat_img = cv2.resize(chat_img, (int(chat_img.shape[1] * scale), int(chat_img.shape[0] * scale)))
+    cx, cy, offx, offy = int(rescaled_chat_img.shape[1]/2), int(rescaled_chat_img.shape[0]/2), int(size[1]/2), int(size[0]/2)
+    cropped_chat_img = rescaled_chat_img[(cx - offx):(cx + offx), (cy - offy):(cy + offy)]
+    blurred_chat_img = cv2.blur(cropped_chat_img, (17, 17))
+    circle_center = (cx, int(cy/3))
+    circle_radius = int(size[1]*0.28)
+    cv2.circle(blurred_chat_img, circle_center, int(circle_radius*1.1), (255, 255, 255), -1)
+    # Insert user profile picture
+    user_img = cv2.resize(user_img, (circle_radius*2, circle_radius*2))
+    for i in range(0, user_img.shape[0]):
+        for j in range(0, user_img.shape[1]):
+            if math.sqrt((i - circle_radius)**2 + (j - circle_radius)**2) < circle_radius:
+                blurred_chat_img[circle_center[1] - circle_radius + i, circle_center[0] - circle_radius + j] = user_img[i, j]
+    # Insert text
+    cv2.rectangle(blurred_chat_img, (0, int(size[0]*0.36)), (size[1]*10, int(size[0]*0.40)), (0, 0, 0), -1)
+    if language == 'pt':
+        welcome = 'Bem-vinde ao'
+    elif language == 'es':
+        welcome = 'Bienvenido a'
+    else:
+        welcome = 'Welcome to'
+    font = ImageFont.truetype('Roadgeek2005Engschrift-lgJw.ttf', 32)
+    img_pil = Image.fromarray(blurred_chat_img)
+    draw = ImageDraw.Draw(img_pil)    
+    chat_title = emoji_pattern.sub(r'', msg['chat']['title'].strip())
+    user_firstname = emoji_pattern.sub(r'', msg['from']['first_name'].strip())             
+    text = f'{welcome} {chat_title}, {user_firstname}!'
+    textW, textH = draw.textsize(text, font=font)
+    textX = int(((size[1]*2.2) - textW) / 2)
+    textY = int(((size[0]*0.69) + textH) / 2)
+    draw.text((textX, textY), text, font = font, fill = (255, 255, 255, 0))
+    final_img = np.array(img_pil)
+    # Save image and return
+    cv2.imwrite("welcome_card.png", final_img)
+    final_img = open("welcome_card.png", 'rb')
+    return final_img
+
+def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
     if limbotimespan > 0:
         try:
@@ -16,12 +92,17 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language):
     welcome = GetRequestBackend(f'welcomes/{chat_id}')
     if 'error' in welcome and welcome['error'] == "Not Found":
         try:
-            Send(cookiebot, chat_id, f"Olá! As boas-vindas ao grupo {msg['chat']['title']}!", language=language)
+            welcome = f"Olá! As boas-vindas ao grupo {msg['chat']['title']}!"
         except Exception as e:
             print(e)
-            Send(cookiebot, chat_id, "Olá! As boas-vindas ao grupo!", language=language)
+            welcome = f"Olá! As boas-vindas ao grupo!"
     elif len(welcome['message']) > 0:
         welcome = welcome['message'].replace('\\n', '\n')
+    try:
+        welcome_card = WelcomeCard(cookiebot, msg, chat_id, language, isBombot)
+        SendPhoto(cookiebot, chat_id, welcome_card, caption=welcome, msg_to_reply=msg, language=language)
+    except Exception as e:
+        print(e)
         Send(cookiebot, chat_id, welcome, language=language)
         
 
@@ -120,7 +201,7 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
             pass
     text.close()
 
-def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'):
+def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt', isBombot=False):
     wait_open("Captcha.txt")
     text = open("Captcha.txt", 'r', encoding='utf-8')
     lines = text.readlines()
@@ -131,13 +212,13 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
             if str(chat_id) == line.split()[0] and button == True:
                 SendChatAction(cookiebot, chat_id, 'typing')
                 DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
-                Bemvindo(cookiebot, msg, chat_id, limbotimespan, language)
+                Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
             elif str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
                 SendChatAction(cookiebot, chat_id, 'typing')
                 if "".join(msg['text'].upper().split()) == line.split()[4]:
                     DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
                     DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                    Bemvindo(cookiebot, msg, chat_id, limbotimespan, language)
+                    Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
                 else:
                     DeleteMessage(cookiebot, telepot.message_identifier(msg))
                     Send(cookiebot, chat_id, "Senha incorreta, por favor tente novamente.", language=language)

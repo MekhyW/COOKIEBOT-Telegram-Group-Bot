@@ -10,6 +10,7 @@ Antispam de stickers - Evita redadas o largas cadenas de stickers en secuencia
 Voz a texto - Transcribir mensajes de voz
 Detector de música - Dizer el nombre de una canción que se reproduce en un mensaje de voz
 Bienvenido - Mensaje de bienvenida personalizado
+Tarjetas de bienvenida - Imagen de bienvenida personalizada con foto de chat y foto de usuario
 Copia de seguridad de miembros - En caso de que el grupo sea pirateado o eliminado por error, puedo ayudar a recuperar a sus participantes
 
 COMANDOS LIBRES:

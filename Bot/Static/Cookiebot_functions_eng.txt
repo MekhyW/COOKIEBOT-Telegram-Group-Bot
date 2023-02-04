@@ -10,6 +10,7 @@ Sticker antispam - Prevent raids or long chains of stickers in sequence
 Voice to Text - Transcribe voice messages
 Music Detector - Speak the name of a song playing in voice message
 Welcome - Customized welcome message
+Welcome Cards - Customized welcome image with chat photo and user photo
 Member Backup - In case the group is hacked or deleted by mistake, I can help recover your participants
 
 FREE COMMANDS:

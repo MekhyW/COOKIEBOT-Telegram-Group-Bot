@@ -10,6 +10,7 @@ Sticker antispam - Impede raids ou longas cadeias de stickers em sequencia
 Voz para texto - Transcripta mensagens de voz
 Detector de Música - Fala o nome de uma música tocando em mensagem de voz
 Welcome - Mensagem customizada de boas vindas
+Cartoes de boas-vindas - Imagem de boas-vindas personalizada com foto do chat e foto do usuário
 Backup de Participantes - Caso o grupo seja hackeado ou apagado por engano, posso ajudar a recuperar seus participantes
 
 COMANDOS LIVRES:

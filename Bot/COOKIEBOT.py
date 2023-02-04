@@ -81,7 +81,7 @@ def thread_function(msg):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:
-                        Bemvindo(cookiebot, msg, chat_id, limbotimespan, language)
+                        Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=isBombot)
             elif content_type == "left_chat_member":
                 left_chat_member(msg, chat_id)
             elif content_type == "voice":
@@ -193,7 +193,7 @@ def thread_function(msg):
                 elif (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot')) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and funfunctions == True:
                     Quem(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and str(round(captchatimespan/60)) in msg['reply_to_message']['caption']:
-                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
+                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions == True:
                     AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw)
                     try:
@@ -201,7 +201,7 @@ def thread_function(msg):
                     except TelegramError:
                         pass
                 else:
-                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language)
+                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
             if chat_type != 'private' and 'text' in msg:
                 StickerCooldownUpdates(msg, chat_id)
@@ -274,7 +274,7 @@ def handle_query(msg):
             else:
                 cookiebot.answerCallbackQuery(query_id, text="Only admins can use this.\n(Chats don't work, are you in anonymous mode?)")
         elif query_data == 'CAPTCHA' and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
-            SolveCaptcha(cookiebot, msg, chat_id, True)
+            SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot)
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         run_unnatendedthreads()
     except Exception as e:
