@@ -100,7 +100,7 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
         welcome = welcome['message'].replace('\\n', '\n')
     try:
         welcome_card = WelcomeCard(cookiebot, msg, chat_id, language, isBombot)
-        SendPhoto(cookiebot, chat_id, welcome_card, caption=welcome, msg_to_reply=msg, language=language)
+        SendPhoto(cookiebot, chat_id, welcome_card, caption=welcome, language=language)
     except Exception as e:
         print(e)
         Send(cookiebot, chat_id, welcome, language=language)
