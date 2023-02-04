@@ -23,13 +23,17 @@ def openTelegramImage(cookiebot, token, photo_id):
     return image
 
 def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
+    if 'new_chat_member' in msg:
+        user = msg['new_chat_member']
+    else:
+        user = msg['from']
     # Get base images
     if isBombot:
         token = bombotTOKEN
     else:
         token = cookiebotTOKEN
     try:
-        photo_id = cookiebot.getUserProfilePhotos(msg['from']['id'])['photos'][0][-1]['file_id']
+        photo_id = cookiebot.getUserProfilePhotos(user['id'])['photos'][0][-1]['file_id']
         user_img = openTelegramImage(cookiebot, token, photo_id)
     except (KeyError, IndexError):
         user_img = cv2.imread('Static/No_Image_Available.jpg', cv2.IMREAD_COLOR)
@@ -68,7 +72,7 @@ def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
     img_pil = Image.fromarray(blurred_chat_img)
     draw = ImageDraw.Draw(img_pil)    
     chat_title = emoji_pattern.sub(r'', cookiebot.getChat(chat_id)['title'].strip())
-    user_firstname = emoji_pattern.sub(r'', msg['from']['first_name'].strip())             
+    user_firstname = emoji_pattern.sub(r'', user['first_name'].strip())             
     text = f'{welcome} {chat_title}, {user_firstname}!'
     textW, textH = draw.textsize(text, font=font)
     textX = int(((size[1]*2.2) - textW) / 2)
