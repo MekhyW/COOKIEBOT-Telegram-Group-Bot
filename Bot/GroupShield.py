@@ -64,7 +64,7 @@ def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
         welcome = 'Bienvenido a'
     else:
         welcome = 'Welcome to'
-    font = ImageFont.truetype('Roadgeek2005Engschrift-lgJw.ttf', 32)
+    font = ImageFont.truetype('Static/Roadgeek2005Engschrift-lgJw.ttf', 32)
     img_pil = Image.fromarray(blurred_chat_img)
     draw = ImageDraw.Draw(img_pil)    
     chat_title = emoji_pattern.sub(r'', msg['chat']['title'].strip())
