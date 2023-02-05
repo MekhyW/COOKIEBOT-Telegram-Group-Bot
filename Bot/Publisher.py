@@ -4,6 +4,7 @@ from google.cloud import scheduler_v1
 from google.cloud import pubsub_v1
 from forex_python.converter import CurrencyRates
 from forex_python.converter import CurrencyCodes
+from forex_python.converter import RatesNotAvailableError
 from price_parser import Price
 currencyRates = CurrencyRates()
 currencyCodes = CurrencyCodes()
@@ -119,9 +120,12 @@ def ConvertPricesinText(text, code_target):
                 final_text += f"{paragraph}\n"
                 continue
             if code_from != code_target:
-                rate = currencyRates.get_rate(code_from, code_target)    
-                converted = round(parsed.amount_float * rate, 2)
-                final_text += f"{paragraph} ({code_target} ≈{converted})\n"
+                try:
+                    rate = currencyRates.get_rate(code_from, code_target)    
+                    converted = round(parsed.amount_float * rate, 2)
+                    final_text += f"{paragraph} ({code_target} ≈{converted})\n"
+                except RatesNotAvailableError:
+                    final_text += f"{paragraph}\n"
             else:
                 final_text += f"{paragraph}\n"
     return final_text
@@ -140,7 +144,7 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     for entity in cached_post['caption_entities']:
         if 'url' in entity and len(entity['url']):
             inline_keyboard.append([InlineKeyboardButton(text=str(entity['url']), url=str(entity['url']))])
-    if origin_user is not None:
+    if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=f"https://t.me/CookiebotPostmail")])
     caption_pt = ConvertPricesinText(translator.translate(cached_post['caption'], dest='pt').text, 'BRL')
