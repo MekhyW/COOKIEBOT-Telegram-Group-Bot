@@ -3,11 +3,8 @@ from Configurations import *
 from UserRegisters import *
 from google.cloud import scheduler_v1
 from google.cloud import pubsub_v1
-from forex_python.converter import CurrencyRates
 from forex_python.converter import CurrencyCodes
-from forex_python.converter import RatesNotAvailableError
 from price_parser import Price
-currencyRates = CurrencyRates()
 currencyCodes = CurrencyCodes()
 client = scheduler_v1.CloudSchedulerClient.from_service_account_json("cookiebot_pubsub.json")
 subscriber = pubsub_v1.SubscriberClient.from_service_account_json("cookiebot_pubsub.json")
@@ -122,10 +119,11 @@ def ConvertPricesinText(text, code_target):
                 continue
             if code_from != code_target:
                 try:
-                    rate = currencyRates.get_rate(code_from, code_target)    
+                    rate = json.loads(requests.get(f"https://v6.exchangerate-api.com/v6/{exchangerate_key}/latest/{code_from}").text)['conversion_rates'][code_target]
                     converted = round(parsed.amount_float * rate, 2)
                     final_text += f"{paragraph} ({code_target} ≈{converted})\n"
-                except RatesNotAvailableError:
+                except Exception as e:
+                    print(e)
                     final_text += f"{paragraph}\n"
             else:
                 final_text += f"{paragraph}\n"

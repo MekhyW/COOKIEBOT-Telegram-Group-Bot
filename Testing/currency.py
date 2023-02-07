@@ -1,7 +1,7 @@
-from forex_python.converter import CurrencyRates
 from forex_python.converter import CurrencyCodes
 from price_parser import Price
-currencyRates = CurrencyRates()
+import requests, json
+exchangerate_key = ''
 currencyCodes = CurrencyCodes()
 import googletrans
 translator = googletrans.Translator()
@@ -29,9 +29,9 @@ for paragraph in translated_text.split('\n'):
             code_from = currencyCodes.get_currency_code(parsed.currency)
         if code_from != code_target:
             print(f"Amount: {parsed.amount_float}\nOriginal currency: {parsed.currency}\nCode: {code_from}")
-            rate = currencyRates.get_rate(code_from, code_target)    
+            rate = json.loads(requests.get(f"https://v6.exchangerate-api.com/v6/{exchangerate_key}/latest/{code_from}").text)['conversion_rates'][code_target]
             converted = round(parsed.amount_float * rate, 2)
-            final_text += f"{paragraph} ({code_target} {converted})\n"
+            final_text += f"{paragraph} ({code_target} ≈{converted})\n"
         else:
             final_text += f"{paragraph}\n"
 
