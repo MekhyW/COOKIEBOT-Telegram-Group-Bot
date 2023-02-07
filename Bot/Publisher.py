@@ -190,7 +190,7 @@ def SchedulePost(cookiebot, query_data):
         #Temporary fix for Art Divulge chat
         if str(group_id) == '-1001657931221':
             members = GetMembersChat(group_id)
-            if origin_user['username'] not in str(members):
+            if origin_user is None or origin_user['username'] not in str(members):
                 answer += f"ERROR! Cannot post in 🎄🍁Art Divulge🍁🎄 (because you are not a member)\n"
                 continue
         #Continuing
