@@ -1,5 +1,6 @@
 from universal_funcs import *
 from Configurations import *
+from UserRegisters import *
 from google.cloud import scheduler_v1
 from google.cloud import pubsub_v1
 from forex_python.converter import CurrencyRates
@@ -185,6 +186,13 @@ def SchedulePost(cookiebot, query_data):
     for group in GetRequestBackend('registers'):
         group_id = group['id']
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = GetConfig(group_id)
+        #Temporary fix for Art Divulge chat
+        if str(group_id) == '-1001657931221':
+            members = GetMembersChat(group_id)
+            if origin_user['username'] not in str(members):
+                answer += f"ERROR! Cannot post in 🎄🍁Art Divulge🍁🎄 (because you are not a member)\n"
+                continue
+        #Continuing
         if publisherpost:
             num_posts_for_group = 0
             for job in jobs:
