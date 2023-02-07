@@ -123,7 +123,7 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
             current_configs[11] = int(new_val)
         PutRequestBackend(f"configs/{chat_to_alter}", {"furbots": current_configs[0], "sfw": current_configs[1], "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], "publisherPost": current_configs[8], "publisherAsk": current_configs[9], "threadPosts": current_configs[10], "maxPosts": current_configs[11]})
         cache_configurations[chat_id] = [current_configs[0], current_configs[1], current_configs[2], current_configs[3], current_configs[4], current_configs[5], current_configs[6], current_configs[7], current_configs[8], current_configs[9], current_configs[10], current_configs[11]]
-        cookiebot.sendMessage(chat_id, "Successfully changed the variable!", reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, "Successfully changed the variable!\nSend /reload in the chat if the old config persists", reply_to_message_id=msg['message_id'])
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])
 
