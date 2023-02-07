@@ -121,10 +121,12 @@ def ConvertPricesinText(text, code_target):
                 try:
                     if code_from != 'USD':
                         rate = json.loads(requests.get(f"https://v6.exchangerate-api.com/v6/{exchangerate_key}/latest/{code_from}").text)['conversion_rates']['USD']
+                        converted = round(parsed.amount_float * rate, 2)
+                        final_text += f"{paragraph} (USD ≈{converted})\n"
                     else:
                         rate = json.loads(requests.get(f"https://v6.exchangerate-api.com/v6/{exchangerate_key}/latest/{code_from}").text)['conversion_rates'][code_target]
-                    converted = round(parsed.amount_float * rate, 2)
-                    final_text += f"{paragraph} ({code_target} ≈{converted})\n"
+                        converted = round(parsed.amount_float * rate, 2)
+                        final_text += f"{paragraph} ({code_target} ≈{converted})\n"
                 except Exception as e:
                     print(e)
                     final_text += f"{paragraph}\n"
