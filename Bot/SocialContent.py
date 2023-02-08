@@ -109,7 +109,7 @@ def Meme(cookiebot, msg, chat_id, language):
         contours_green, tree = cv2.findContours(mask_green, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours_red, tree = cv2.findContours(mask_red, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     if len(members_tagged) > len(contours_green):
-        Meme(cookiebot, msg, chat_id, language)
+        return Meme(cookiebot, msg, chat_id, language)
     else:
         members = GetMembersChat(chat_id)
         for green in contours_green:
@@ -119,7 +119,10 @@ def Meme(cookiebot, msg, chat_id, language):
                     chosen_member = random.choice(members_tagged)
                     members_tagged.remove(chosen_member)
                 else:
-                    chosen_member = random.choice(members)
+                    try:
+                        chosen_member = random.choice(members)
+                    except IndexError:
+                        return Meme(cookiebot, msg, chat_id, language)
                     members.remove(chosen_member)
                     if 'user' in chosen_member:
                         chosen_member = chosen_member['user']
