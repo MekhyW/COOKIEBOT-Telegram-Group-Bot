@@ -218,7 +218,7 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
                 DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
                 msg['new_chat_member'] = cookiebot.getChatMember(chat_id, msg['from']['id'])['user']
                 Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
-            elif str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
+            elif str(chat_id) == line.split()[0] and str(line.split()[1]) == line.split()[1]:
                 SendChatAction(cookiebot, chat_id, 'typing')
                 if "".join(msg['text'].upper().split()) == line.split()[4]:
                     DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
