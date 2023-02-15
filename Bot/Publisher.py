@@ -15,6 +15,7 @@ topic_name = 'projects/cookiebot-309512/topics/cookiebot-publisher-topic'
 subscription_path = None
 cache_posts = {}
 postmail_chat_id = -1001869523792
+approval_chat_id = -622990045
 url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
 def AskPublisher(cookiebot, msg, chat_id, language):
@@ -47,8 +48,8 @@ def AskApproval(cookiebot, query_data, from_id, isBombot=False):
     origin_messageid = query_data.split()[3]
     second_messageid = query_data.split()[4]
     origin_userid = from_id
-    Forward(cookiebot, mekhyID, second_chatid, second_messageid, isBombot=isBombot)
-    Send(cookiebot, mekhyID, 'Approve post?', 
+    Forward(cookiebot, approval_chat_id, second_chatid, second_messageid, isBombot=isBombot)
+    Send(cookiebot, approval_chat_id, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️ 10 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 10')],
             [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 3')],
