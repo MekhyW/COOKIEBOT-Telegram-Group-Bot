@@ -56,7 +56,7 @@ def thread_function(msg):
             if isBombot:
                 Send(cookiebot, chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
-                Send(cookiebot, chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *150* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
+                Send(cookiebot, chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *161* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                     #[InlineKeyboardButton(text="Acesse o Site 🌐", url="https://cookiebot-website.vercel.app/")],
                     [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url="https://t.me/CookieMWbot?startgroup=new")],
@@ -144,7 +144,7 @@ def thread_function(msg):
                     Idade(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/genero", "/gender")) and funfunctions == True:
                     Genero(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/rojao", "/rojão")) and funfunctions == True:
+                elif msg['text'].startswith(("/rojao", "/rojão", "/acende", "/fogos")) and funfunctions == True:
                     Rojao(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
                 elif msg['text'].startswith(("/shippar", "/ship")) and funfunctions == True:
                     Shippar(cookiebot, msg, chat_id, language)
