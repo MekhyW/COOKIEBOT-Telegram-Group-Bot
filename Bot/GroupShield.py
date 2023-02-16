@@ -85,6 +85,8 @@ def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
     return final_img
 
 def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
+    if str(chat_id) == '-1001063487371': # Mercado Furry
+        return
     SendChatAction(cookiebot, chat_id, 'typing')
     if limbotimespan > 0:
         try:
