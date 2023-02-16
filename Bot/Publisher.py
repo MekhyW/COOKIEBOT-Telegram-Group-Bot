@@ -190,13 +190,11 @@ def SchedulePost(cookiebot, query_data):
     for group in GetRequestBackend('registers'):
         group_id = group['id']
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(group_id)
-        #Temporary fix for Art Divulge chat
         if publisherMembersOnly:
             members = GetMembersChat(group_id)
             if origin_user is None or origin_user['username'] not in str(members):
-                answer += f"ERROR! Cannot post in {cookiebot.getChat(group_id)['title']} (because you are not a member)\n"
+                answer += f"ERROR! Cannot post in {cookiebot.getChat(group_id)['title']} (because you are not an active member)\n"
                 continue
-        #Continuing
         if publisherpost:
             num_posts_for_group = 0
             for job in jobs:
