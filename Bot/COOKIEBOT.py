@@ -34,7 +34,7 @@ def thread_function(msg):
             thread_id = None
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
-        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 3
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 3, 0
         if chat_type == 'private' and 'reply_to_message' not in msg:
             if 'text' in msg:
                 if msg['text'].startswith("/start"):
@@ -65,7 +65,7 @@ def thread_function(msg):
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
-                FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = GetConfig(chat_id)
+                FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(chat_id)
                 CheckNewName(msg, chat_id)
             if content_type == "new_chat_member":
                 if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
@@ -122,7 +122,7 @@ def thread_function(msg):
                     LeaveAndBlacklist(cookiebot, chat_id)
                 elif msg['text'].startswith(("/reload", "/recarregar")):
                     listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = GetConfig(chat_id, ignorecache=True)
+                    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(chat_id, ignorecache=True)
                     Send(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
                 elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                     if 'reply_to_message' in msg:

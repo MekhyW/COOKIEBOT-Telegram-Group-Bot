@@ -40,10 +40,13 @@ def SetComandosPrivate(cookiebot, chat_id, isBombot=False):
 def GetConfig(chat_id, ignorecache=False):
     if chat_id in cache_configurations and not ignorecache:
         return cache_configurations[chat_id]
-    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 3
+    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 3, 0
     configs = GetRequestBackend(f"configs/{chat_id}")
     if 'error' in configs and configs['error'] == "Not Found":
-        PostRequestBackend(f"configs/{chat_id}", {'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask, 'threadPosts': threadPosts, 'maxPosts': maxPosts})
+        PostRequestBackend(f"configs/{chat_id}", {'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 
+        'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 
+        'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask, 'threadPosts': threadPosts, 'maxPosts': maxPosts, 
+        'publisherMembersOnly': publisherMembersOnly})
     else:
         FurBots = configs['furbots']
         sfw = configs['sfw']
@@ -57,8 +60,9 @@ def GetConfig(chat_id, ignorecache=False):
         publisherask = configs['publisherAsk']
         threadPosts = configs['threadPosts']
         maxPosts = configs['maxPosts']
-    cache_configurations[chat_id] = [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts]
-    return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts]
+        publisherMembersOnly = configs['publisherMembersOnly']
+    cache_configurations[chat_id] = [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
+    return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
 
 
 def Configurar(cookiebot, msg, chat_id, listaadmins, language):
@@ -79,7 +83,8 @@ def Configurar(cookiebot, msg, chat_id, listaadmins, language):
                                     [InlineKeyboardButton(text="Publisher Post",callback_data=f'm CONFIG {chat_id}')],
                                     [InlineKeyboardButton(text="Publisher Ask",callback_data=f'n CONFIG {chat_id}')],
                                     [InlineKeyboardButton(text="Thread Posts",callback_data=f'o CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="Max Posts",callback_data=f'p CONFIG {chat_id}')]
+                                    [InlineKeyboardButton(text="Max Posts",callback_data=f'p CONFIG {chat_id}')],
+                                    [InlineKeyboardButton(text="Publisher Members Only",callback_data=f'q CONFIG {chat_id}')]
                                 ]
                             ))
             Send(cookiebot, chat_id, "Te mandei uma mensagem no chat privado para configurar", msg, language)
@@ -121,8 +126,14 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
             current_configs[10] = int(new_val)
         elif "This is the maximum number of posts I should publish in the chat per day" in msg['reply_to_message']['text']:
             current_configs[11] = int(new_val)
-        PutRequestBackend(f"configs/{chat_to_alter}", {"furbots": current_configs[0], "sfw": current_configs[1], "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], "publisherPost": current_configs[8], "publisherAsk": current_configs[9], "threadPosts": current_configs[10], "maxPosts": current_configs[11]})
-        cache_configurations[chat_id] = [current_configs[0], current_configs[1], current_configs[2], current_configs[3], current_configs[4], current_configs[5], current_configs[6], current_configs[7], current_configs[8], current_configs[9], current_configs[10], current_configs[11]]
+        elif "Use 1 if the bot should only allow members of the channel to use the publisher, or 0 if not" in msg['reply_to_message']['text']:
+            current_configs[12] = bool(int(new_val))
+        PutRequestBackend(f"configs/{chat_to_alter}", {"furbots": current_configs[0], "sfw": current_configs[1], 
+        "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], 
+        "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], 
+        "publisherPost": current_configs[8], "publisherAsk": current_configs[9], "threadPosts": current_configs[10], "maxPosts": current_configs[11],
+        "publisherMembersOnly": current_configs[12]})
+        cache_configurations[chat_id] = current_configs
         cookiebot.sendMessage(chat_id, "Successfully changed the variable!\nSend /reload in the chat if the old config persists", reply_to_message_id=msg['message_id'])
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])
@@ -154,6 +165,8 @@ def ConfigVariableButton(cookiebot, msg, query_data):
         cookiebot.sendMessage(msg['message']['chat']['id'], f"Chat = {chat}\nThis is the id of the topic I should publish posts to if your chat has topics enabled (you can find it out with /analysis command)\n\nREPLY THIS MESSAGE with the new variable value")
     elif query_data.startswith('p'):
         cookiebot.sendMessage(msg['message']['chat']['id'], f"Chat = {chat}\nThis is the maximum number of posts I should publish in the chat per day\n\nREPLY THIS MESSAGE with the new variable value")
+    elif query_data.startswith('q'):
+        cookiebot.sendMessage(msg['message']['chat']['id'], f"Chat = {chat}\nUse 1 if the bot should only allow members of the channel to use the publisher, or 0 if not\n\nREPLY THIS MESSAGE with the new variable value")
 
 
 def AtualizaBemvindo(cookiebot, msg, chat_id):
