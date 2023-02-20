@@ -107,7 +107,7 @@ def ConvertPricesinText(text, code_target):
         if parsed.amount is None or parsed.currency is None:
             final_text += f"{paragraph}\n"
         else:
-            if parsed.currency == '$':
+            if parsed.currency in ('$', 'US$'):
                 code_from = 'USD'
             elif parsed.currency == '€':
                 code_from = 'EUR'
@@ -116,8 +116,11 @@ def ConvertPricesinText(text, code_target):
             elif parsed.currency == 'R$':
                 code_from = 'BRL'
             else:
-                final_text += f"{paragraph}\n"
-                continue
+                try:
+                    code_from = currencyCodes.get_currency_name(parsed.currency)
+                except:
+                    final_text += f"{paragraph}\n"
+                    continue
             if code_from != code_target or code_from != 'USD':
                 try:
                     if code_from != 'USD':
