@@ -61,7 +61,7 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
     Send(cookiebot, chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", msg, language)
 
 def AddtoRandomDatabase(msg, chat_id, photo_id=''):
-    if not 'forward_from' in msg:
+    if not 'forward_from' in msg and not 'forward_from_chat' in msg:
         PostRequestBackend('randomdatabase', {'id': chat_id, 'idMessage': str(msg['message_id']), 'idMedia': photo_id})
 
 def ReplyAleatorio(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
