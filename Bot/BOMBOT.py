@@ -87,9 +87,9 @@ def thread_function(msg):
             elif content_type == "voice":
                 if utilityfunctions == True:
                     audio = GetVoiceMessage(cookiebot, msg, isBombot=isBombot)
-                    duration = int(msg['voice']['duration'])
-                    if duration >= 10 and duration <= 240:
-                        Speech_to_text(cookiebot, msg, chat_id, sfw, audio, language)
+                    #duration = int(msg['voice']['duration'])
+                    #if duration >= 10 and duration <= 240:
+                    #    Speech_to_text(cookiebot, msg, chat_id, sfw, audio, language)
                     Identify_music(cookiebot, msg, chat_id, audio, language)
             elif content_type == "audio":
                 pass
