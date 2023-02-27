@@ -15,7 +15,7 @@ topic_name = 'projects/cookiebot-309512/topics/cookiebot-publisher-topic'
 subscription_path = None
 cache_posts = {}
 postmail_chat_id = -1001869523792
-approval_chat_id = -622990045
+approval_chat_id = -1001659344607
 url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
 def AskPublisher(cookiebot, msg, chat_id, language):
