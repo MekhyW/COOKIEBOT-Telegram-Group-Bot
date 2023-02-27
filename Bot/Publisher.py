@@ -149,20 +149,17 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
         name = name.split('/')[-1].replace('www.', '')
         if len(name) and len(url):
             inline_keyboard.append([InlineKeyboardButton(text=name, url=url[0])])
-    for entity in cached_post['caption_entities']:
-        if 'url' in entity and len(entity['url']):
-            inline_keyboard.append([InlineKeyboardButton(text=str(entity['url']), url=str(entity['url']))])
     if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=f"https://t.me/CookiebotPostmail")])
     caption_pt = ConvertPricesinText(translator.translate(cached_post['caption'], dest='pt').text, 'BRL')
     caption_en = ConvertPricesinText(translator.translate(cached_post['caption'], dest='en').text, 'USD')
     if 'photo' in cached_post:
-        sent_pt = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
-        sent_en = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
+        sent_pt = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), caption_entities=cached_post['caption_entities'])
+        sent_en = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), caption_entities=cached_post['caption_entities'])
     elif 'video' in cached_post:
-        sent_pt = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
-        sent_en = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+        sent_pt = SendVideo(cookiebot, postmail_chat_id, cached_post['video'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), caption_entities=cached_post['caption_entities'])
+        sent_en = SendVideo(cookiebot, postmail_chat_id, cached_post['video'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), caption_entities=cached_post['caption_entities'])
     cache_posts.pop(origin_messageid)
     return sent_pt, sent_en
 
