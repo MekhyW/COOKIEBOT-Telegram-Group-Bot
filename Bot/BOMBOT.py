@@ -263,16 +263,13 @@ def handle_query(msg):
         if 'CONFIG' in query_data:
             ConfigVariableButton(cookiebot, msg, query_data)
         elif 'Pub' in query_data:
-            if str(from_id) in listaadmins_id or str(from_id) == str(mekhyID) or msg['from']['is_bot'] == True:
-                if query_data.startswith('SendToApproval'):
-                    AskApproval(cookiebot, query_data, from_id, isBombot=isBombot)
-                elif query_data.startswith('Approve'):
-                    SchedulePost(cookiebot, query_data)
-                elif query_data.startswith('Deny'):
-                    DenyPost(cookiebot, query_data)
-                DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
-            else:
-                cookiebot.answerCallbackQuery(query_id, text="Only admins can use this.\n(Chats don't work, are you in anonymous mode?)")
+            if query_data.startswith('SendToApproval'):
+                AskApproval(cookiebot, query_data, from_id, isBombot=isBombot)
+            elif query_data.startswith('Approve'):
+                SchedulePost(cookiebot, query_data)
+            elif query_data.startswith('Deny'):
+                DenyPost(cookiebot, query_data)
+            DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data == 'CAPTCHA' and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
             SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot)
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
