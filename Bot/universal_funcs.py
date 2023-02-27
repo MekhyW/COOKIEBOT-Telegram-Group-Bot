@@ -115,7 +115,7 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
             sentphoto = {}
-            sentphoto['message_id'] = json.loads(requests.get(url))['result']['message_id']
+            sentphoto['message_id'] = json.loads(requests.get(url).text)['result']['message_id']
         else:
             sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
@@ -143,7 +143,7 @@ def SendVideo(cookiebot, chat_id, video, caption=None, msg_to_reply=None, langua
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
             sentvideo = {}
-            sentvideo['message_id'] = json.loads(requests.get(url))['result']['message_id']
+            sentvideo['message_id'] = json.loads(requests.get(url).text)['result']['message_id']
         else:
             sentvideo = cookiebot.sendVideo(chat_id, video, caption=caption, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
