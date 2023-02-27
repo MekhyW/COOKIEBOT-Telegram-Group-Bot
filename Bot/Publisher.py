@@ -152,7 +152,7 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     caption_new = cached_post['caption']
     for entity in cached_post['caption_entities']:
         if 'url' in entity and len(entity['url']):
-            text_old = cached_post['caption'][entity['offset']:entity['offset']+entity['length']]
+            text_old = cached_post['caption'][entity['offset']:entity['offset']+entity['length']-1]
             text_new = f'{text_old} ({entity["url"]})'
             caption_new = caption_new.replace(text_old, text_new)
     if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
