@@ -86,6 +86,8 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
             else:
                 token = cookiebotTOKEN
             url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&caption_entities={caption_entities}"
+            if reply_markup is None:
+                url = url.replace('&reply_markup=None', '')
             requests.get(url)
         else:
             cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
@@ -110,7 +112,10 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
             else:
                 token = cookiebotTOKEN
             url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}&caption_entities={caption_entities}"
-            requests.get(url)
+            if reply_markup is None:
+                url = url.replace('&reply_markup=None', '')
+            sentphoto = {}
+            sentphoto['message_id'] = json.loads(requests.get(url))['result']['message_id']
         else:
             sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
@@ -135,7 +140,10 @@ def SendVideo(cookiebot, chat_id, video, caption=None, msg_to_reply=None, langua
             else:
                 token = cookiebotTOKEN
             url = f"https://api.telegram.org/bot{token}/sendVideo?chat_id={chat_id}&video={video}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}&caption_entities={caption_entities}"
-            requests.get(url)
+            if reply_markup is None:
+                url = url.replace('&reply_markup=None', '')
+            sentvideo = {}
+            sentvideo['message_id'] = json.loads(requests.get(url))['result']['message_id']
         else:
             sentvideo = cookiebot.sendVideo(chat_id, video, caption=caption, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
