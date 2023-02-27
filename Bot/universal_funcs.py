@@ -70,7 +70,7 @@ def GetVoiceMessage(cookiebot, msg, isBombot=False):
         r = requests.get(f"https://api.telegram.org/file/bot{token}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=2)
     return r.content
 
-def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None, caption_entities=None):
+def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
     try:
         SendChatAction(cookiebot, chat_id, 'typing')
         if language == 'eng':
@@ -80,12 +80,12 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
             cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
-        elif thread_id is not None or caption_entities is not None:
+        elif thread_id is not None:
             if isBombot:
                 token = bombotTOKEN
             else:
                 token = cookiebotTOKEN
-            url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&caption_entities={caption_entities}"
+            url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
             requests.get(url)
@@ -96,7 +96,7 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
     except TelegramError:
         cookiebot.sendMessage(mekhyID, traceback.format_exc())
 
-def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None, caption_entities=None):
+def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
     try:
         SendChatAction(cookiebot, chat_id, 'upload_photo')
         if language == 'eng' and caption is not None:
@@ -106,12 +106,12 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
             sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_id, reply_markup=reply_markup)
-        elif thread_id is not None or caption_entities is not None:
+        elif thread_id is not None:
             if isBombot:
                 token = bombotTOKEN
             else:
                 token = cookiebotTOKEN
-            url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}&caption_entities={caption_entities}"
+            url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
             sentphoto = {}
@@ -123,34 +123,6 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
     except TelegramError:
         cookiebot.sendMessage(mekhyID, traceback.format_exc())
     return sentphoto['message_id']
-
-def SendVideo(cookiebot, chat_id, video, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None, caption_entities=None):
-    try:
-        SendChatAction(cookiebot, chat_id, 'upload_video')
-        if language == 'eng' and caption is not None:
-            caption = translator.translate(caption, dest='en').text
-        elif language == 'es':
-            caption = translator.translate(caption, dest='es').text
-        if msg_to_reply:
-            reply_id = msg_to_reply['message_id']
-            sentvideo = cookiebot.sendVideo(chat_id, video, caption=caption, reply_to_message_id=reply_id, reply_markup=reply_markup)
-        elif thread_id is not None or caption_entities is not None:
-            if isBombot:
-                token = bombotTOKEN
-            else:
-                token = cookiebotTOKEN
-            url = f"https://api.telegram.org/bot{token}/sendVideo?chat_id={chat_id}&video={video}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}&caption_entities={caption_entities}"
-            if reply_markup is None:
-                url = url.replace('&reply_markup=None', '')
-            sentvideo = {}
-            sentvideo['message_id'] = json.loads(requests.get(url).text)['result']['message_id']
-        else:
-            sentvideo = cookiebot.sendVideo(chat_id, video, caption=caption, reply_markup=reply_markup)
-    except urllib3.exceptions.ProtocolError:
-        SendVideo(cookiebot, chat_id, video, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
-    except TelegramError:
-        cookiebot.sendMessage(mekhyID, traceback.format_exc())
-    return sentvideo['message_id']
 
 def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
     if isBombot:
