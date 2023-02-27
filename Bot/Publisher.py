@@ -203,14 +203,14 @@ def SchedulePost(cookiebot, query_data):
                 continue
         if publisherpost:
             num_posts_for_group = 0
+            target_chattitle = cookiebot.getChat(group_id)['title']
             for job in jobs:
-                if f"--> {group_id}" in job.description:
+                if f"--> {target_chattitle}" in job.description:
                     num_posts_for_group += 1
             try:
                 if maxPosts is None or num_posts_for_group < maxPosts:
                     hour = random.randint(0,23)
                     minute = random.randint(0,59)
-                    target_chattitle = cookiebot.getChat(group_id)['title']
                     if language == 'pt':
                         sent = sent_pt
                     else:
