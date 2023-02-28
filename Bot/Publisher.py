@@ -202,12 +202,12 @@ def SchedulePost(cookiebot, query_data):
                 answer += f"ERROR! Cannot post in {cookiebot.getChat(group_id)['title']} (because you are not an active member)\n"
                 continue
         if publisherpost:
-            num_posts_for_group = 0
-            target_chattitle = cookiebot.getChat(group_id)['title']
-            for job in jobs:
-                if f"--> {target_chattitle}" in job.description:
-                    num_posts_for_group += 1
             try:
+                num_posts_for_group = 0
+                target_chattitle = cookiebot.getChat(group_id)['title']
+                for job in jobs:
+                    if f"--> {target_chattitle}" in job.description:
+                        num_posts_for_group += 1
                 if maxPosts is None or num_posts_for_group < maxPosts:
                     hour = random.randint(0,23)
                     minute = random.randint(0,59)
