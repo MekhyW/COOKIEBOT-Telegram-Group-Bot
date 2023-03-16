@@ -3,9 +3,7 @@ from Configurations import *
 from UserRegisters import *
 from google.cloud import scheduler_v1
 from google.cloud import pubsub_v1
-from forex_python.converter import CurrencyCodes
 from price_parser import Price
-currencyCodes = CurrencyCodes()
 client = scheduler_v1.CloudSchedulerClient.from_service_account_json("cookiebot_pubsub.json")
 subscriber = pubsub_v1.SubscriberClient.from_service_account_json("cookiebot_pubsub.json")
 project_id = "cookiebot-309512"
@@ -107,20 +105,17 @@ def ConvertPricesinText(text, code_target):
         if parsed.amount is None or parsed.currency is None:
             final_text += f"{paragraph}\n"
         else:
-            if parsed.currency in ('$', 'US$'):
+            if parsed.currency in ('$', 'US$', 'USD', 'U$'):
                 code_from = 'USD'
-            elif parsed.currency == '€':
+            elif parsed.currency in ('€', 'EUR'):
                 code_from = 'EUR'
-            elif parsed.currency == '£':
+            elif parsed.currency in ('£', 'GBP'):
                 code_from = 'GBP'
-            elif parsed.currency == 'R$':
+            elif parsed.currency in ('R$', 'BRL'):
                 code_from = 'BRL'
             else:
-                try:
-                    code_from = currencyCodes.get_currency_name(parsed.currency)
-                except:
-                    final_text += f"{paragraph}\n"
-                    continue
+                final_text += f"{paragraph}\n"
+                continue
             if code_from != code_target or code_from != 'USD':
                 try:
                     if code_from != 'USD':
