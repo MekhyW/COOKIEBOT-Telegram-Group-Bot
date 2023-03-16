@@ -1,8 +1,6 @@
-from forex_python.converter import CurrencyCodes
 from price_parser import Price
 import requests, json
 exchangerate_key = ''
-currencyCodes = CurrencyCodes()
 import googletrans
 translator = googletrans.Translator()
 
