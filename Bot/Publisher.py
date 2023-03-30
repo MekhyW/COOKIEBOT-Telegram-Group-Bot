@@ -203,18 +203,19 @@ def SchedulePost(cookiebot, query_data):
                 for job in jobs:
                     if f"--> {target_chattitle}" in job.description:
                         num_posts_for_group += 1
-                if maxPosts is None or num_posts_for_group < maxPosts:
-                    hour = random.randint(0,23)
-                    minute = random.randint(0,59)
-                    if language == 'pt':
-                        sent = sent_pt
-                    else:
-                        sent = sent_en
-                    create_job(origin_chatid+group_id, 
-                    f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
-                    f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid}",
-                    f"{minute} {hour} * * *")
-                    answer += f"{hour}:{minute} - {target_chattitle}\n"
+                    if maxPosts is not None and num_posts_for_group > maxPosts:
+                        delete_job(job.name)
+                hour = random.randint(0,23)
+                minute = random.randint(0,59)
+                if language == 'pt':
+                    sent = sent_pt
+                else:
+                    sent = sent_en
+                create_job(origin_chatid+group_id, 
+                f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
+                f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid}",
+                f"{minute} {hour} * * *")
+                answer += f"{hour}:{minute} - {target_chattitle}\n"
             except Exception as e:
                 print(e)
     try:
