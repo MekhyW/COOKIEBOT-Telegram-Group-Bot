@@ -177,7 +177,7 @@ def thread_function(msg):
                     Hoje(cookiebot, msg, chat_id, language)
                 elif (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True and FurBots == False:
                     Cheiro(cookiebot, msg, chat_id, language)
-                elif any(x in msg['text'].lower() for x in ['eu faço', 'eu faco', 'i do', 'debo hacer']) and '?' in msg['text'] and funfunctions == True and FurBots == False:
+                elif any(x in msg['text'].lower() for x in ['eu faço', 'eu faco', 'i do', 'debo hacer']) and msg['text'].endswith('?') and funfunctions == True and FurBots == False:
                     QqEuFaço(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions == True:
                     IdeiaDesenho(cookiebot, msg, chat_id, language)
