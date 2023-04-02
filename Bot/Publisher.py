@@ -205,6 +205,7 @@ def SchedulePost(cookiebot, query_data):
                         num_posts_for_group += 1
                     if maxPosts is not None and num_posts_for_group > maxPosts:
                         delete_job(job.name)
+                        num_posts_for_group -= 1
                 hour = random.randint(0,23)
                 minute = random.randint(0,59)
                 if language == 'pt':
