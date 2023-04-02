@@ -184,6 +184,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions == True:
                     PromptQualquerCoisa(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/configurar", "/configure")):
+                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     Configurar(cookiebot, msg, chat_id, listaadmins, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                     ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
