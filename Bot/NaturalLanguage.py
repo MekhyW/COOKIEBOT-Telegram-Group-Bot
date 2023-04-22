@@ -1,24 +1,9 @@
 from universal_funcs import *
-from chatterbot import ChatBot
-from chatterbot import comparisons
-from chatterbot import response_selection
-
-AI_ptbr = ChatBot(
-    'Cookiebot_AI',  
-    logic_adapters=[
-        {
-            'import_path': 'chatterbot.logic.BestMatch',
-            'statement_comparison_function': comparisons.LevenshteinDistance,
-            'response_selection_method': response_selection.get_most_frequent_response
-        }
-    ],
-    preprocessors=[
-        'chatterbot.preprocessors.clean_whitespace'
-    ],
-    database_uri='sqlite:///../AI/AI_ptbr.db',
-    read_only=True
-)
-
+import openai
+openai.api_key = openai_key
+data_initial = json.load(open('static/AI_SFW.json'))
+questions_list = [q_a['prompt'] for q_a in data_initial['questions_answers']]
+answers_list = [q_a['completion'] for q_a in data_initial['questions_answers']]
 
 def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
     SendChatAction(cookiebot, chat_id, 'typing')
@@ -32,10 +17,18 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
         AnswerFinal = "?"
     else:
         if sfw == True:
-            if language == "pt":
-                AnswerFinal = AI_ptbr.get_response(message).text.capitalize()
-            else:
-                AnswerFinal = "Sorry, my SFW AI is currently only available in Portuguese."
+            prompt_beginning = "Você é um assistente útil, bobo e furry que adora zoar com os outros. Seu nome é CookieBot, e seu criador/pai se chama Mekhy. Responda as perguntas abaixo e você será recompensado com um biscoito!"
+            messages=[{"role": "system", "content": prompt_beginning}]
+            for i in range(len(questions_list)):
+                messages.append({"role": "user", "content": questions_list[i]})
+                messages.append({"role": "system", "content": answers_list[i], "name": "CookieBot"})
+            messages.append({"role": "user", "content": message})
+            completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
+            AnswerFinal = completion.choices[0].message.content
+            questions_list.pop(0)
+            answers_list.pop(0)
+            questions_list.append(message)
+            answers_list.append(AnswerFinal)
         else:
             if language == "eng":
                 r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': 'en'})

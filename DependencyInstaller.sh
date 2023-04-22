@@ -35,12 +35,4 @@ pip3 install google-cloud-vision
 pip3 install ShazamAPI
 pip3 install opencv-python
 pip3 install price-parser
-pip3 install ChatterBot-corpus
-pip3 install awscli==1.11.18
-pip3 install SQLAlchemy==1.3.6
-pip3 install Mako==1.1.2
-pip3 install levenshtein
-pip3 install ChatterBot==1.0.4
-pip3 install pytz
-pip3 install spacy
-python3 -m spacy download en
+pip3 install openai
