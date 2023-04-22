@@ -226,7 +226,7 @@ def thread_function(msg):
 
 def run_unnatendedthreads():
     num_running_threads = threading.active_count()
-    num_max_threads = 10
+    num_max_threads = 15
     for unnatended_thread in unnatended_threads:
         if unnatended_thread.is_alive():
             unnatended_threads.remove(unnatended_thread)
@@ -237,7 +237,7 @@ def run_unnatendedthreads():
                 unnatended_threads.remove(unnatended_thread)
             except ValueError:
                 pass
-    if len(unnatended_threads) > 3 * num_max_threads:
+    if len(unnatended_threads) > 4 * num_max_threads:
         os.execl(sys.executable, sys.executable, *sys.argv)
     elif len(unnatended_threads) > 0:
         print(f"{len(unnatended_threads)} threads are still unnatended")
