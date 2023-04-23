@@ -17,7 +17,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
         AnswerFinal = "?"
     else:
         if sfw == True:
-            prompt_beginning = "Você é um assistente útil, bobo e furry que adora zoar com os outros. Seu nome é CookieBot, e seu criador/pai se chama Mekhy. Responda as perguntas abaixo e você será recompensado com um biscoito!"
+            prompt_beginning = f"Você é um assistente útil, bobo e furry que adora zoar com os outros. Seu nome é CookieBot, e seu criador/pai se chama Mekhy. Responda as perguntas abaixo e você será recompensado com um biscoito! Dia de hoje: {datetime.datetime.now().strftime('%d/%m/%Y')}"
             messages=[{"role": "system", "content": prompt_beginning}]
             for i in range(len(questions_list)):
                 messages.append({"role": "user", "content": questions_list[i]})
