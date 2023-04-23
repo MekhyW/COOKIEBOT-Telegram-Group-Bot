@@ -46,7 +46,7 @@ def Adm(cookiebot, msg, chat_id, listaadmins):
     for admin in listaadmins:
         response += f"@{admin} "
     if 'username' in msg['from']:
-        response += f"\n\n{msg['from']['username']} chamando todos os administradores!"
+        response += f"\n{msg['from']['username']} chamando todos os administradores!"
     Send(cookiebot, chat_id, response, msg_to_reply=msg)
 
 def Quem(cookiebot, msg, chat_id, language):
