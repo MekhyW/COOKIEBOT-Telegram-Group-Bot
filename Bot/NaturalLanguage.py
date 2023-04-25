@@ -28,7 +28,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
             try:
                 AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1].strip().capitalize()
             except IndexError:
-                AnswerFinal = AnswerFinal.replace("[🔒CLÁSSICO]", "").replace("[🔒CLASSIC]", "").replace("[🔒classic]", "").strip().capitalize()
+                AnswerFinal = AnswerFinal.capitalize()
             questions_list.pop(0)
             answers_list.pop(0)
             questions_list.append(message)
