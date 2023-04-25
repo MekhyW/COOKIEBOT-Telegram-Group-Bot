@@ -25,7 +25,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
             messages.append({"role": "user", "content": message})
             completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
             AnswerFinal = completion.choices[0].message.content
-            AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1].strip().capitalize()
+            AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1].capitalize()
             questions_list.pop(0)
             answers_list.pop(0)
             questions_list.append(message)
