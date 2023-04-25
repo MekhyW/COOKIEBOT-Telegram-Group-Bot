@@ -25,10 +25,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
             messages.append({"role": "user", "content": message})
             completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
             AnswerFinal = completion.choices[0].message.content
-            try:
-                AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1].strip().capitalize()
-            except IndexError:
-                AnswerFinal = AnswerFinal.capitalize()
+            AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1].strip().capitalize()
             questions_list.pop(0)
             answers_list.pop(0)
             questions_list.append(message)
