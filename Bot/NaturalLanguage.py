@@ -26,9 +26,13 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
             completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
             AnswerFinal = completion.choices[0].message.content
             try:
-                AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1].replace("[🔒CLASSIC]", "").replace("Como um dan,", "").replace("como um dan,", "").strip().capitalize()
+                AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1]
             except IndexError:
-                AnswerFinal = AnswerFinal.replace("[🔒CLASSIC]", "").replace("Como um dan,", "").replace("como um dan,", "").strip().capitalize()
+                pass
+            for unwanted_term in ["[🔒CLASSIC]", "Como um dan,", "como um dan,", "Como dan,", "como dan,"]:
+                if unwanted_term in AnswerFinal:
+                    AnswerFinal = AnswerFinal.replace(unwanted_term, "")
+            AnswerFinal = AnswerFinal.strip().capitalize()
             questions_list.pop(0)
             answers_list.pop(0)
             questions_list.append(message)
