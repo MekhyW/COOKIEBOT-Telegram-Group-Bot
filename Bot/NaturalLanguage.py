@@ -29,9 +29,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
                 AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1]
             except IndexError:
                 pass
-            for unwanted_term in ["[🔒CLASSIC]", "Como um dan,", "como um dan,", "Como dan,", "como dan,"]:
-                if unwanted_term in AnswerFinal:
-                    AnswerFinal = AnswerFinal.replace(unwanted_term, "")
+            AnswerFinal = AnswerFinal.replace('dan', "cookie").replace('Dan', "Cookie").replace('DAN', "COOKIE")
             AnswerFinal = AnswerFinal.strip().capitalize()
             questions_list.pop(0)
             answers_list.pop(0)
