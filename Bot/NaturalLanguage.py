@@ -30,6 +30,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
             except IndexError:
                 pass
             AnswerFinal = AnswerFinal.replace('dan', "cookie").replace('Dan', "Cookie").replace('DAN', "COOKIE")
+            AnswerFinal = AnswerFinal.replace('chatgpt', "cookiebot").replace('Chatgpt', "Cookiebot").replace('ChatGPT', "CookieBot").replace('CHATGPT', "COOKIEBOT")
             AnswerFinal = AnswerFinal.strip().capitalize()
             questions_list.pop(0)
             answers_list.pop(0)
