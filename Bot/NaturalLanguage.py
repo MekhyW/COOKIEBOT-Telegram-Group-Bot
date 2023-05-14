@@ -4,6 +4,10 @@ openai.api_key = openai_key
 data_initial = json.load(open('Static/AI_SFW.json'))
 questions_list = [q_a['prompt'] for q_a in data_initial['questions_answers']]
 answers_list = [q_a['completion'] for q_a in data_initial['questions_answers']]
+replacements = {'dan':'cookie', 'Dan':'Cookie', 'DAN':'COOKIE', 'chatgpt':'cookiebot', 'Chatgpt':'Cookiebot', 'ChatGPT':'CookieBot', 'CHATGPT':'COOKIEBOT'}
+
+def replace(match):
+    return replacements[match.group(0)]
 
 def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
     SendChatAction(cookiebot, chat_id, 'typing')
@@ -29,8 +33,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
                 AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1]
             except IndexError:
                 pass
-            AnswerFinal = AnswerFinal.replace('dan', "cookie").replace('Dan', "Cookie").replace('DAN', "COOKIE")
-            AnswerFinal = AnswerFinal.replace('chatgpt', "cookiebot").replace('Chatgpt', "Cookiebot").replace('ChatGPT', "CookieBot").replace('CHATGPT', "COOKIEBOT")
+            AnswerFinal = re.sub(r'\b(' + '|'.join(re.escape(key) for key in replacements.keys()) + r')\b', replace, AnswerFinal)
             AnswerFinal = AnswerFinal.strip().capitalize()
             questions_list.pop(0)
             answers_list.pop(0)
