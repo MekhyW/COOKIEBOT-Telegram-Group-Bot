@@ -205,7 +205,7 @@ def thread_function(msg):
                 else:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
-            if chat_type != 'private' and 'text' in msg:
+            if chat_type != 'private' and content_type != "sticker":
                 StickerCooldownUpdates(msg, chat_id)
             run_unnatendedthreads()
     except TooManyRequestsError:
