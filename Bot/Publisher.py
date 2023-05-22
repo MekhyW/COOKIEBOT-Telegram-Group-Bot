@@ -104,33 +104,35 @@ def ConvertPricesinText(text, code_target):
         parsed = Price.fromstring(paragraph)
         if parsed.amount is None or parsed.currency is None:
             final_text += f"{paragraph}\n"
+            continue
+        if parsed.currency in ('$', 'US$', 'USD', 'U$'):
+            code_from = 'USD'
+        elif parsed.currency in ('€', 'EUR'):
+            code_from = 'EUR'
+        elif parsed.currency in ('£', 'GBP'):
+            code_from = 'GBP'
+        elif parsed.currency in ('R$', 'BRL'):
+            code_from = 'BRL'
+        elif parsed.currency in ('¥', 'JPY'):
+            code_from = 'JPY'
+        elif parsed.currency in ('C$', 'CAD'):
+            code_from = 'CAD'
+        elif parsed.currency in ('A$', 'AUD'):
+            code_from = 'AUD'
+        elif parsed.currency in ('ARS'):
+            code_from = 'ARS'
         else:
-            if parsed.currency in ('$', 'US$', 'USD', 'U$'):
-                code_from = 'USD'
-            elif parsed.currency in ('€', 'EUR'):
-                code_from = 'EUR'
-            elif parsed.currency in ('£', 'GBP'):
-                code_from = 'GBP'
-            elif parsed.currency in ('R$', 'BRL'):
-                code_from = 'BRL'
-            else:
-                final_text += f"{paragraph}\n"
-                continue
-            if code_from != code_target or code_from != 'USD':
-                try:
-                    if code_from != 'USD':
-                        rate = json.loads(requests.get(f"https://v6.exchangerate-api.com/v6/{exchangerate_key}/latest/{code_from}").text)['conversion_rates']['USD']
-                        converted = round(parsed.amount_float * rate, 2)
-                        final_text += f"{paragraph} (USD ≈{converted})\n"
-                    else:
-                        rate = json.loads(requests.get(f"https://v6.exchangerate-api.com/v6/{exchangerate_key}/latest/{code_from}").text)['conversion_rates'][code_target]
-                        converted = round(parsed.amount_float * rate, 2)
-                        final_text += f"{paragraph} ({code_target} ≈{converted})\n"
-                except Exception as e:
-                    print(e)
-                    final_text += f"{paragraph}\n"
-            else:
-                final_text += f"{paragraph}\n"
+            code_from = parsed.currency
+        if code_from == code_target:
+            return text
+        try:
+            rate_url = f"https://v6.exchangerate-api.com/v6/{exchangerate_key}/latest/{code_from}"
+            rate = json.loads(requests.get(rate_url).text)['conversion_rates'][code_target]
+            converted = round(parsed.amount_float * rate, 2)
+            final_text += f"{paragraph} ({code_target} ≈{converted})\n"
+        except Exception as e:
+            print(e)
+            final_text += f"{paragraph}\n"
     return final_text
 
 def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
@@ -153,10 +155,10 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=f"https://t.me/CookiebotPostmail")])
-    #caption_pt = ConvertPricesinText(translator.translate(caption_new, dest='pt').text, 'BRL')
-    #caption_en = ConvertPricesinText(translator.translate(caption_new, dest='en').text, 'USD')
     caption_pt = translator.translate(caption_new, dest='pt').text
     caption_en = translator.translate(caption_new, dest='en').text
+    caption_pt = ConvertPricesinText(caption_pt, 'BRL')
+    caption_en = ConvertPricesinText(caption_en, 'USD')
     if 'photo' in cached_post:
         sent_pt = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
         sent_en = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
