@@ -98,6 +98,8 @@ def edit_job_data(job_name, job_data):
     return response
 
 def ConvertPricesinText(text, code_target):
+    if (code_target == 'BRL') and any([x in text for x in ('R$', 'BRL', 'Reais', 'reais')]):
+        return text
     final_text = ''
     text = text.replace('Reais', 'R$').replace('reais', 'R$')
     for paragraph in text.split('\n'):

@@ -4,10 +4,12 @@ exchangerate_key = ''
 import googletrans
 translator = googletrans.Translator()
 
-raw_text = ".:Raccoon Mix + Fuzzy Fox:.\n🦝🦊🐾🦊🦝\n---------------- -----------\n🇺🇸13$/€ - PayPal \n\n🇧🇷 35R$ - PIX \n\n❌private base (my Base)❌\nT.O.S + Base {nsfw}\n (https://t.me/+vZVpDKszQ5pjOWFh)×××××× ××××××× ××××××\nDM: @RafaAlfa\nCH: @ShopAlfaAdopts"
+raw_text = "♡ Gift I made for my boyfriend a while ago ♡\n\n➵ Funko commissions for only 70$ + shipping 🇺🇸 (R$90 para BRs)\n\n• Channels for More \n@raposastudios\n• DM to claim: \n@IsaFoxy ✩"
 translated_text = translator.translate(raw_text, dest='pt').text
 
 def ConvertPricesinText(text, code_target):
+    if (code_target == 'BRL') and any([x in text for x in ('R$', 'BRL', 'Reais', 'reais')]):
+        return text
     final_text = ''
     text = text.replace('Reais', 'R$').replace('reais', 'R$')
     for paragraph in text.split('\n'):
@@ -45,6 +47,6 @@ def ConvertPricesinText(text, code_target):
             final_text += f"{paragraph}\n"
     return final_text
 
-final_text = ConvertPricesinText(translated_text, 'USD')
+final_text = ConvertPricesinText(translated_text, 'BRL')
 
 print(final_text)
