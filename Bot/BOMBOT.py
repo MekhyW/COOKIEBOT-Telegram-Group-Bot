@@ -57,7 +57,7 @@ def thread_function(msg):
             if isBombot:
                 Send(cookiebot, chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
             else:
-                Send(cookiebot, chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *221* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
+                Send(cookiebot, chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *227* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Speech-to-text.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                     #[InlineKeyboardButton(text="Acesse o Site 🌐", url="https://cookiebot-website.vercel.app/")],
                     [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url="https://t.me/CookieMWbot?startgroup=new")],
@@ -71,11 +71,12 @@ def thread_function(msg):
             if content_type == "new_chat_member":
                 if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
                     isBlacklisted = GetRequestBackend(f"blacklist/{chat_id}")
-                    if not 'error' in isBlacklisted:
+                    chatinfo = cookiebot.getChat(chat_id)
+                    if (not 'error' in isBlacklisted) or len(chatinfo['title']) < 3:
                         LeaveAndBlacklist(cookiebot, chat_id)
                         Send(cookiebot, mekhyID, f"Auto-left:\n{chat_id}")
                         return
-                    Send(cookiebot, mekhyID, f"Added:\n{cookiebot.getChat(chat_id)}")
+                    Send(cookiebot, mekhyID, f"Added:\n{chatinfo}")
                     cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
                     caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW")
                 if msg['new_chat_participant']['id'] != cookiebot.getMe()['id'] and not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
