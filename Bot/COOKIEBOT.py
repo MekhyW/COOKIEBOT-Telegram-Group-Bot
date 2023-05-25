@@ -68,7 +68,14 @@ def thread_function(msg):
                 listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
                 FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(chat_id)
                 CheckNewName(msg, chat_id)
-            if content_type == "new_chat_member":
+            if 'group_chat_created' in msg and msg['group_chat_created'] == True:
+                isCreatorBlacklisted = GetRequestBackend(f"blacklist/{msg['from']['id']}")
+                chatinfo = cookiebot.getChat(chat_id)
+                if (not 'error' in isCreatorBlacklisted) or len(chatinfo['title']) < 3:
+                    LeaveAndBlacklist(cookiebot, chat_id)
+                    Send(cookiebot, mekhyID, f"Auto-left:\n{chat_id}")
+                    return
+            elif content_type == "new_chat_member":
                 if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
                     isBlacklisted = GetRequestBackend(f"blacklist/{chat_id}")
                     chatinfo = cookiebot.getChat(chat_id)
