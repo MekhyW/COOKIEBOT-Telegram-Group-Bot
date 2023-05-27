@@ -4,7 +4,7 @@ openai.api_key = openai_key
 data_initial = json.load(open('Static/AI_SFW.json'))
 questions_list = [q_a['prompt'] for q_a in data_initial['questions_answers']]
 answers_list = [q_a['completion'] for q_a in data_initial['questions_answers']]
-replacements = {'dan':'cookie', 'Dan':'Cookie', 'DAN':'COOKIE', 'chatgpt':'cookiebot', 'Chatgpt':'Cookiebot', 'ChatGPT':'CookieBot', 'CHATGPT':'COOKIEBOT'}
+replacements = {'dan':'cookie', 'Dan':'Cookie', 'DAN':'COOKIE', 'chatgpt':'cookiebot', 'Chatgpt':'Cookiebot', 'ChatGPT':'CookieBot', 'CHATGPT':'COOKIEBOT', '[🔒classic]': '', '[🔒CLASSIC]': ''}
 
 def replace(match):
     return replacements[match.group(0)]
