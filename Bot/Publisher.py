@@ -226,6 +226,7 @@ def SchedulePost(cookiebot, query_data):
             except Exception as e:
                 print(e)
     try:
+        answer += f"OBS: private chats are not listed!"
         Send(cookiebot, origin_userid, answer)
         Send(cookiebot, second_chatid, "Post adicionado à fila de publicação!")
     except Exception as e:
