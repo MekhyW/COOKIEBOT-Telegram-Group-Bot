@@ -26,6 +26,8 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
             for i in range(len(questions_list)):
                 messages.append({"role": "user", "content": questions_list[i]})
                 messages.append({"role": "system", "content": answers_list[i], "name": "CookieBot"})
+            if 'reply_to_message' in msg and msg['reply_to_message']['text'] not in answers_list:
+                messages.append({"role": "system", "content": msg['reply_to_message']['text']})
             messages.append({"role": "user", "content": message})
             try:
                 completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
