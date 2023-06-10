@@ -27,7 +27,10 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
                 messages.append({"role": "user", "content": questions_list[i]})
                 messages.append({"role": "system", "content": answers_list[i], "name": "CookieBot"})
             messages.append({"role": "user", "content": message})
-            completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
+            try:
+                completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
+            except openai.error.RateLimitError:
+                return "Ainda estou processando outros pedidos!\nTente novamente em alguns segundos."
             AnswerFinal = completion.choices[0].message.content
             try:
                 AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1]
