@@ -45,10 +45,10 @@ def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec", msg, language)
 
 def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
-    searchterm = msg['text'].split("@")[0].replace("/", '').replace("@CookieMWbot", '')
-    if searchterm.split()[0] in avoid_search or searchterm.split('/')[0] in avoid_search:
+    searchterm = msg['text'].split("@")[0].replace("/", ' ').replace("@CookieMWbot", '')
+    if searchterm.split()[0] in avoid_search:
         return
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
     if sfw == 0:
         googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'off', 'filetype':'jpg|gif|png'})
     else:
