@@ -34,51 +34,5 @@ commands - Lists bot commands
 configure - Configure the bot
 reload - Reload settings cache
 
-CUSTOM COMMANDS:
-allen - allen
-aly - aly
-arsen - arsen
-blackout - blackout
-bobfirrer - bobfirrer
-cloretodeodio - cloretodeodio
-daieny - daieny
-deltasnep - deltasnep
-doctordirewolf - doctordirewolf
-dr4g40 - dr4g40
-fcking1212 - fcking1212
-focads - focads
-gummypuh - gummypuh
-haura - haura
-juuj - juuj
-klefus - klefus
-kuark - kuark
-kurokkuru - kurokkuru
-leeycarus - leeycarus
-loganartic - loganartic
-louie - louie
-lukit - lukit
-matt - matt
-mekhy - mekhy
-mirai - mirai
-momo - momo
-mousse - mousse
-mrnatmax - mrnatmax
-naja - naja
-narvi - narvi
-nicolas - nicolas
-nina - nina
-nizmot - nizmot
-purplegalaxy - purplegalaxy
-ralph - ralph
-ratenhas - ratenhas
-ruby - ruby
-seive - seive
-shimano - shimano
-sopero - sopero
-tailslunar - tailslunar
-tomecow - tomecow
-tonnyrussel - tonnyrussel
-yoshiro - yoshiro
-
 
 Talk to Mekhy to add your own command or teach the bot something!
