@@ -7,6 +7,10 @@ reverseimagesearcher = vision.ImageAnnotatorClient.from_service_account_json('co
 import cv2
 import numpy as np
 
+with open('Static/avoid_search.txt', 'r') as f:
+    avoid_search = f.readlines()
+avoid_search = [x.strip() for x in avoid_search]
+
 def ReverseImageSearch(cookiebot, msg, chat_id, language):
     try:
         path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
@@ -43,6 +47,8 @@ def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
 def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     searchterm = msg['text'].split("@")[0].replace("/", '').replace("@CookieMWbot", '')
+    if searchterm.split()[0] in avoid_search or searchterm.split('/')[0] in avoid_search:
+        return
     if sfw == 0:
         googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'off', 'filetype':'jpg|gif|png'})
     else:
