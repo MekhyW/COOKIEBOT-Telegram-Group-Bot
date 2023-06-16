@@ -20,7 +20,7 @@ def AskPublisher(cookiebot, msg, chat_id, language):
     if language == "pt":
         answer = "Divulgar postagem?\n(Aperte como usuário, não como canal)"
     else:
-        answer = "Share post?\n(Press as user, not as channel)"
+        answer = "Share post?"
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {msg['forward_from_chat']['id']} {chat_id} {msg['forward_from_message_id']} {msg['message_id']}")],
