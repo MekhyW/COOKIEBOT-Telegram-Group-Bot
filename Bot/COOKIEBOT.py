@@ -172,8 +172,11 @@ def thread_function(msg):
                         Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
                 elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
                     NovasRegras(cookiebot, msg, chat_id)
-                elif msg['text'].startswith(("/regras", "/rules", "/reglas")) and FurBots == False:
-                    Regras(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
+                    if FurBots == False or "CookieMWbot" not in msg['text'].split('@'):
+                        Regras(cookiebot, msg, chat_id, language)
+                    else:
+                        return
                 elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
                     TaVivo(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith("/everyone"):
@@ -182,12 +185,21 @@ def thread_function(msg):
                     Adm(cookiebot, msg, chat_id, listaadmins)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/hoje", "/today", "/hoy")) and funfunctions == True and FurBots == False:
-                    Hoje(cookiebot, msg, chat_id, language)
-                elif (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True and FurBots == False:
-                    Cheiro(cookiebot, msg, chat_id, language)
-                elif any(x in msg['text'].lower() for x in ['eu faço', 'eu faco', 'i do', 'debo hacer']) and msg['text'].endswith('?') and funfunctions == True and FurBots == False:
-                    QqEuFaço(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(("/hoje", "/today", "/hoy")) and funfunctions == True:
+                    if FurBots == False or "CookieMWbot" not in msg['text'].split('@'):
+                        Hoje(cookiebot, msg, chat_id, language)
+                    else:
+                        return
+                elif (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
+                    if FurBots == False or "CookieMWbot" not in msg['text'].split('@'):
+                        Cheiro(cookiebot, msg, chat_id, language)
+                    else:
+                        return
+                elif any(x in msg['text'].lower() for x in ['eu faço', 'eu faco', 'i do', 'debo hacer']) and msg['text'].endswith('?') and funfunctions == True:
+                    if FurBots == False or "CookieMWbot" not in msg['text'].split('@'):
+                        QqEuFaço(cookiebot, msg, chat_id, language)
+                    else:
+                        return
                 elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions == True:
                     IdeiaDesenho(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions == True:
