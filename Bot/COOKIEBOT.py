@@ -159,6 +159,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/shippar", "/ship")) and funfunctions == True:
                     Shippar(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
+                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     if str(msg['from']['username']) in listaadmins:
                         AtualizaBemvindo(cookiebot, msg, chat_id)
                     else:
@@ -166,6 +167,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                     NovoBemvindo(cookiebot, msg, chat_id)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
+                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     if str(msg['from']['username']) in listaadmins:
                         AtualizaRegras(cookiebot, msg, chat_id)
                     else:

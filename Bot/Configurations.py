@@ -89,10 +89,10 @@ def Configurar(cookiebot, msg, chat_id, listaadmins, language):
                             ))
             Send(cookiebot, chat_id, "Te mandei uma mensagem no chat privado para configurar", msg, language)
         except Exception as e:
-            Send(cookiebot, chat_id, "Não consegui te mandar o menu de configuração (vc já mandou /start no meu chat privado?)" , msg, language)
+            Send(cookiebot, chat_id, "Não consegui te mandar o menu de configuração\n(Mande uma mensagem no meu chat privado para que eu consiga fazer isso!)" , msg, language)
             print(e)
     else:
-        Send(cookiebot, chat_id, "Você não tem permissão para configurar o bot!\n(Se está falando como canal, entre e use o comando como user)", msg, language)
+        Send(cookiebot, chat_id, "Você não tem permissão para configurar o bot!\n(Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada!)", msg, language)
 
 
 def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
