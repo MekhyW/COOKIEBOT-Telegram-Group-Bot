@@ -107,12 +107,12 @@ def thread_function(msg):
                 if sfw == 1 and funfunctions == True:
                     photo_id = msg['photo'][-1]['file_id']
                     AddtoRandomDatabase(msg, chat_id, photo_id)
-                if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherask == True:
+                if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and publisherask == True:
                     AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "video":
                 if sfw == 1 and funfunctions == True:
                     AddtoRandomDatabase(msg, chat_id)
-                if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherask == True:
+                if 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and publisherask == True:
                     AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "document":
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
