@@ -56,13 +56,13 @@ def thread_function(msg):
                 elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == mekhyID:
                     Broadcast(cookiebot, msg)
             if isBombot:
-                Send(cookiebot, chat_id, "Olá, sou o BomBot!\nSou um clone do @CookieMWbot criado para os chats da Brasil FurFest (BFF)\n\nSe tiver qualquer dúvida ou quiser a lista de comandos completa, mande uma mensagem para o @MekhyW")
+                Send(cookiebot, chat_id, "Hello, I'm BomBot!\nI'm a clone of @CookieMWbot created for Brasil FurFest (BFF) chats\n\nIf you have any questions or want the complete list of commands, send a message to @MekhyW")
             else:
-                Send(cookiebot, chat_id, "Olá, sou o CookieBot!\n\nAtualmente estou presente em *256* chats!\nSinta-se à vontade para me adicionar no seu\n\nSou um bot com IA de conversa, Defesa de grupos, Pesquisa, Conteúdo customizado e Publicação automática.\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver qualquer dúvida ou quiser que algo seja adicionado, mande uma mensagem para o @MekhyW",
+                Send(cookiebot, chat_id, "Hi, I'm CookieBot!\n\nI'm currently in *270* chats!\nFeel free to add me to yours\n\nI'm a bot with Conversation AI, Group Defense, Search, Custom Content and Auto Publish.\nUse /configure to change my settings (including language)\nUse /commands to see all my features\n\nIf you have any questions or want something added, message @MekhyW",
                 reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                     #[InlineKeyboardButton(text="Acesse o Site 🌐", url="https://cookiebot-website.vercel.app/")],
-                    [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url="https://t.me/CookieMWbot?startgroup=new")],
-                    [InlineKeyboardButton(text="Grupo de teste/assistência 🧪", url="https://t.me/+mX6W3tGXPew2OTIx")]
+                    [InlineKeyboardButton(text="Add me to a Group 👋", url="https://t.me/CookieMWbot?startgroup=new")],
+                    [InlineKeyboardButton(text="Test/assistance Group 🧪", url="https://t.me/+mX6W3tGXPew2OTIx")]
                 ]))
         else:
             if chat_type != 'private':
