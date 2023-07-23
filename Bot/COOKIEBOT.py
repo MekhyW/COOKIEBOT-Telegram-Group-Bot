@@ -61,8 +61,8 @@ def thread_function(msg):
                 else:
                     Send(cookiebot, chat_id, "Olá, eu sou o CookieBot!\n\nAtualmente estou presente em *270* grupos!\nSinta-se livre para me adicionar ao seu :)\n\nSou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática.\nUse /configurar para alterar minhas configurações (incluindo idioma)\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW",
                     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                        [InlineKeyboardButton(text="Add me to a Group 👋", url="https://t.me/CookieMWbot?startgroup=new")],
-                        [InlineKeyboardButton(text="Test/assistance Group 🧪", url="https://t.me/+mX6W3tGXPew2OTIx")]
+                        [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url="https://t.me/CookieMWbot?startgroup=new")],
+                        [InlineKeyboardButton(text="Grupo de teste/assistência 🧪", url="https://t.me/+mX6W3tGXPew2OTIx")]
                     ]))
             else:
                 if isBombot:
