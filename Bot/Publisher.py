@@ -144,6 +144,18 @@ def ConvertPricesinText(text, code_target):
             final_text += f"{paragraph}\n"
     return final_text
 
+def remove_emojis_from_ends(input_string):
+    emoji_pattern = re.compile(
+        r"[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F"
+        r"\U0001F780-\U0001F7FF\U0001F800-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F"
+        r"\U0001FA70-\U0001FAFF\U00002702-\U000027B0\U000024C2-\U0001F251]+"
+    )
+    while emoji_pattern.match(input_string):
+        input_string = input_string[1:]
+    while emoji_pattern.match(input_string[::-1]):
+        input_string = input_string[:-1]
+    return input_string
+
 def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     cached_post = cache_posts[origin_messageid]
     inline_keyboard = []
@@ -154,10 +166,11 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
             name = name[:-1]
         name = name.split('/')[-1].replace('www.', '')
         if len(name) and len(url):
-            inline_keyboard.append([InlineKeyboardButton(text=name, url=url[0])])
+            url_no_emojis_on_ends = remove_emojis_from_ends(url[0])
+            inline_keyboard.append([InlineKeyboardButton(text=name, url=url_no_emojis_on_ends)])
     caption_new = cached_post['caption']
     for entity in cached_post['caption_entities']:
-        if 'url' in entity and len(entity['url']) and len(inline_keyboard) < 3:
+        if 'url' in entity and len(entity['url']) and len(inline_keyboard) < 5:
             inline_keyboard.append([InlineKeyboardButton(text=cached_post['caption'][entity['offset']:entity['offset']+entity['length']], url=entity['url'])])
     if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
