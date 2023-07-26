@@ -33,12 +33,14 @@ def AskPublisher(cookiebot, msg, chat_id, language):
     elif 'video' in msg:
         media_type = 'video'
         media_id = msg['video']['file_id']
+    elif 'animation' in msg:
+        media_type = 'animation'
+        media_id = msg['animation']['file_id']
     caption_entities = []
     if 'caption_entities' in msg:
         for entity in msg['caption_entities']:
             caption_entities.append(entity)
     cache_posts[str(msg['forward_from_message_id'])] = {media_type: media_id, 'caption': msg['caption'], 'caption_entities': caption_entities}
-    print(cache_posts)
 
 def AskApproval(cookiebot, query_data, from_id, isBombot=False):
     origin_chatid = query_data.split()[1]
@@ -186,6 +188,9 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     elif 'video' in cached_post:
         sent_pt = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
         sent_en = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+    elif 'animation' in cached_post:
+        sent_pt = cookiebot.sendAnimation(chat_id=postmail_chat_id, animation=cached_post['animation'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+        sent_en = cookiebot.sendAnimation(chat_id=postmail_chat_id, animation=cached_post['animation'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
     cache_posts.pop(origin_messageid)
     return sent_pt, sent_en
 
