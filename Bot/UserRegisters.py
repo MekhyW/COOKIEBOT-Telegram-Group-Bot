@@ -67,8 +67,17 @@ def Shippar(cookiebot, msg, chat_id, language):
         targetB = msg['text'].split()[2]
     else:
         random.shuffle(members)
-        targetA = members[0]['user']
-        targetB = members[1]['user']
+        try:
+            targetA = members[0]['user']
+            targetB = members[1]['user']
+        except IndexError:
+            Send(cookiebot, chat_id, "Ainda não vi membros suficientes para shippar!", msg, language)
+            return
+        except TypeError:
+            cache_members.pop(chat_id)
+            members = GetMembersChat(chat_id)
+            targetA = members[0]['user']
+            targetB = members[1]['user']
     divorce_prob = str(random.randint(0, 100))
     couple_characteristic = random.choice(['Eles se tratam sempre com respeito, educação e bondade', 'Eles evitam julgamentos precipitados ou tentam mudar a personalidade do outro', 'As diferenças existem como em todas as relações, mas elas são respeitadas e superadas', 'Cada um se responsabiliza por seus próprios atos e sentimentos e não culpa o outro por possíveis frustrações e desilusões', 'Eles sempre se certificam de que estão passando tempo suficiente juntos', 'Vocês conseguem rir um do outro e raramente ficam constrangidos em situações que poderiam ser embaraçosas para grande parte dos casais românticos', 
     'Vocês saem juntos por prazer e nunca por obrigação, já que compartilham dos mesmos gostos e preferências', 'Vocês conseguem se comunicar e se entender com simples trocas de olhares, sem precisar verbalizar o que sentem no momento', 'Mesmo quando tentam disfarçar, sempre sabem exatamente o que o outro está pensando', 'Uma tarde chuvosa em casa se transforma em um excelente programa a dois', 'O silêncio, quando surge entre vocês, nunca é incômodo ou desafiador', 'Vocês possuem um número infinito de piadas internas', 'Vocês não se sentem constrangidos ou intimidados em contar segredos ou mesmo chorar um na frente do outro', 'Quando um dos parceiros está triste, o outro sabe exatamente o que dizer e o que fazer para afastar o sentimento ruim',
