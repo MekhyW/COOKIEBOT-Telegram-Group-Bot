@@ -31,7 +31,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
             messages.append({"role": "user", "content": message})
             try:
                 completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
-            except openai.error.RateLimitError:
+            except (openai.error.RateLimitError, openai.error.ServiceUnavailableError):
                 return "Ainda estou processando outros pedidos!\nTente novamente em alguns segundos."
             AnswerFinal = completion.choices[0].message.content
             try:
