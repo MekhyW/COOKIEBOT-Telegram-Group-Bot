@@ -112,7 +112,7 @@ def thread_function(msg):
                     Identify_music(cookiebot, msg, chat_id, audio, language)
             elif content_type == "audio":
                 pass
-            elif content_type in ["photo", "video", "document", "animation"] and 'sender_chat' in msg and 'from' in msg and msg['from']['first_name'] == 'Telegram' and 'caption' in msg and publisherask == True:
+            elif content_type in ["photo", "video", "document", "animation"] and all(key in msg for key in ['sender_chat', 'forward_from_chat', 'from', 'caption']) and msg['from']['first_name'] == 'Telegram' and publisherpost == True:
                 AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "photo":
                 if sfw == 1 and funfunctions == True:
