@@ -170,7 +170,7 @@ def thread_function(msg):
                     Shippar(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
                     listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    if str(msg['from']['username']) in listaadmins:
+                    if str(msg['from']['id']) in listaadmins_id:
                         AtualizaBemvindo(cookiebot, msg, chat_id)
                     else:
                         Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
@@ -178,7 +178,7 @@ def thread_function(msg):
                     NovoBemvindo(cookiebot, msg, chat_id)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
                     listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    if str(msg['from']['username']) in listaadmins:
+                    if str(msg['from']['id']) in listaadmins_id:
                         AtualizaRegras(cookiebot, msg, chat_id)
                     else:
                         Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
@@ -218,7 +218,7 @@ def thread_function(msg):
                     PromptQualquerCoisa(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/configurar", "/configure")):
                     listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    Configurar(cookiebot, msg, chat_id, listaadmins, language)
+                    Configurar(cookiebot, msg, chat_id, listaadmins_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                     ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
                 elif msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:

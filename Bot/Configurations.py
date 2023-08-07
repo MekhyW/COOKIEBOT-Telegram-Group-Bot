@@ -65,9 +65,9 @@ def GetConfig(chat_id, ignorecache=False):
     return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
 
 
-def Configurar(cookiebot, msg, chat_id, listaadmins, language):
+def Configurar(cookiebot, msg, chat_id, listaadmins_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
-    if str(msg['from']['username']) in listaadmins or str(msg['from']['username']) == "MekhyW":
+    if str(msg['from']['id']) in listaadmins_id or str(msg['from']['id']) == str(mekhyID):
         configs = GetConfig(chat_id)
         variables = f"FurBots: {configs[0]}\n sfw: {configs[1]}\n Sticker Spam Limit: {configs[2]}\n Time Without Sending Images: {configs[3]}\n Time Captcha: {configs[4]}\n Fun Functions: {configs[5]}\n Utility Functions: {configs[6]}\n Language: {configs[7]}\n Publisher Post: {configs[8]}\n Publisher Ask: {configs[9]}\n Thread Posts: {configs[10]}\n Max Posts: {configs[11]}"
         try:
