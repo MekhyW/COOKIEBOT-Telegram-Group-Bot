@@ -51,6 +51,10 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
                 r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': language})
             if 'message' in r.json() and len(r.json()['message']) > 0:
                 AnswerFinal = r.json()['message'].capitalize()
+                selfmoderation_response = openai.Moderation.create(input=AnswerFinal)
+                results = selfmoderation_response['results'][0]['category_scores']
+                if any(x > 0.2 for x in [results['hate'], results['hate/threatening'], results['self-harm'], results['self-harm/instructions'], results['self-harm/intent'], results['sexual/minors'], results['violence/graphic']]):
+                    AnswerFinal = "*" * len(AnswerFinal)
             else:
                 AnswerFinal = "Sorry, I don't understand."
     return AnswerFinal
