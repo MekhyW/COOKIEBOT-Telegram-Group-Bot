@@ -40,14 +40,14 @@ def Everyone(cookiebot, msg, chat_id, listaadmins, language):
                 result += f"@{member['user']} "
         Send(cookiebot, chat_id, result, msg_to_reply=msg)
 
-def Adm(cookiebot, msg, chat_id, listaadmins):
+def Adm(cookiebot, msg, chat_id, listaadmins, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     response = ""
     for admin in listaadmins:
         response += f"@{admin} "
     if 'username' in msg['from']:
         response += f"\n{msg['from']['username']} chamando todos os administradores!"
-    Send(cookiebot, chat_id, response, msg_to_reply=msg)
+    Send(cookiebot, chat_id, response, msg_to_reply=msg, language=language)
 
 def Quem(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')

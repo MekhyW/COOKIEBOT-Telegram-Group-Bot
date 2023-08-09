@@ -59,7 +59,7 @@ def thread_function(msg):
                 if isBombot:
                     Send(cookiebot, chat_id, "Olá, eu sou o BomBot!\nSou um clone do @CookieMWbot criado para os grupos do Brasil FurFest (BFF)\n\nSe tiver alguma dúvida ou quiser a lista completa de comandos, mande uma mensagem para @MekhyW")
                 else:
-                    Send(cookiebot, chat_id, "Olá, eu sou o CookieBot!\n\nAtualmente estou presente em *273* grupos!\nSinta-se livre para me adicionar ao seu :)\n\nSou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática.\nUse /configurar para alterar minhas configurações (incluindo idioma)\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW",
+                    Send(cookiebot, chat_id, "Olá, eu sou o CookieBot!\n\nAtualmente estou presente em *292* grupos!\nSinta-se livre para me adicionar ao seu :)\n\nSou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática.\nUse /configurar para alterar minhas configurações (incluindo idioma)\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW",
                     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                         [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url="https://t.me/CookieMWbot?startgroup=new")],
                         [InlineKeyboardButton(text="Grupo de teste/assistência 🧪", url="https://t.me/+mX6W3tGXPew2OTIx")]
@@ -68,7 +68,7 @@ def thread_function(msg):
                 if isBombot:
                     Send(cookiebot, chat_id, "Hello, I'm BomBot!\nI'm a clone of @CookieMWbot created for Brasil FurFest (BFF) chats\n\nIf you have any questions or want the complete list of commands, send a message to @MekhyW")
                 else:
-                    Send(cookiebot, chat_id, "Hello, I'm CookieBot!\n\nI'm currently present in *273* group chats!\nFeel free to add me to yours :)\n\nI'm a bot with Conversation AI, Group Defense, Search, Custom Content and Auto Publish.\nUse /configure to change my settings (including language)\nUse /commands to see all my features\n\nIf you have any questions or want something added, message @MekhyW",
+                    Send(cookiebot, chat_id, "Hello, I'm CookieBot!\n\nI'm currently present in *292* group chats!\nFeel free to add me to yours :)\n\nI'm a bot with Conversation AI, Group Defense, Search, Custom Content and Auto Publish.\nUse /configure to change my settings (including language)\nUse /commands to see all my features\n\nIf you have any questions or want something added, message @MekhyW",
                     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                         [InlineKeyboardButton(text="Add me to a Group 👋", url="https://t.me/CookieMWbot?startgroup=new")],
                         [InlineKeyboardButton(text="Test/assistance Group 🧪", url="https://t.me/+mX6W3tGXPew2OTIx")]
@@ -194,7 +194,7 @@ def thread_function(msg):
                 elif msg['text'].startswith("/everyone"):
                     Everyone(cookiebot, msg, chat_id, listaadmins, language)
                 elif msg['text'].startswith("/adm"):
-                    Adm(cookiebot, msg, chat_id, listaadmins)
+                    Adm(cookiebot, msg, chat_id, listaadmins, language)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/hoje", "/today", "/hoy")) and funfunctions == True:
