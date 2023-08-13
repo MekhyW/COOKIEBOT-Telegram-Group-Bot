@@ -261,12 +261,12 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language):
     if 'reply_to_message' not in msg:
         Send(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder repostar ela nesse grupo!", msg_to_reply=msg, language=language)
         return
-    if len(msg.split()) < 2 or not msg.split()[1].isnumeric():
+    if len(msg['text'].split()) < 2 or not msg['text'].split()[1].isnumeric():
         Send(cookiebot, chat_id, "Você precisa especificar o número de dias para o autopost repostar nesse grupo!\n\nExemplo: /repostar 10", msg_to_reply=msg, language=language)
         return
     original_msg_id = msg['reply_to_message']['message_id']
     chat = cookiebot.getChat(chat_id)
-    days = msg.split()[1]
+    days = msg['text'].split()[1]
     hour = random.randint(10,17)
     minute = random.randint(0,59)
     create_job(chat_id+chat_id, 
