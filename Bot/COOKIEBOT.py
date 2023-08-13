@@ -149,6 +149,10 @@ def thread_function(msg):
                         Analyze(cookiebot, msg, chat_id, language)
                     else:
                         Send(cookiebot, chat_id, "Responda uma mensagem com o comando para analisar", msg, language)
+                elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
+                    ScheduleAutopost(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
+                    ClearAutoposts(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")):
                     if 'reply_to_message' in msg:
                         ReverseImageSearch(cookiebot, msg['reply_to_message'], chat_id, language)
