@@ -269,7 +269,7 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language):
     days = msg['text'].split()[1]
     hour = random.randint(10,17)
     minute = random.randint(0,59)
-    create_job(chat_id+chat_id, 
+    create_job(str(chat_id)+str(chat_id), 
                 f"{chat['title']} --> {chat['title']}, at {hour}:{minute} ", 
                 f"{days} {chat_id} {chat_id} {original_msg_id} {chat_id}",
                 f"{minute} {hour} * * *")
