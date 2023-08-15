@@ -169,7 +169,10 @@ def ConfigVariableButton(cookiebot, msg, query_data):
         cookiebot.sendMessage(msg['message']['chat']['id'], f"Chat = {chat}\nUse 1 if the bot should only allow members of the channel to use the publisher, or 0 if not\n\nREPLY THIS MESSAGE with the new variable value")
 
 
-def AtualizaBemvindo(cookiebot, msg, chat_id):
+def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id):
+    if str(msg['from']['id']) not in listaadmins_id:
+        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+        return
     SendChatAction(cookiebot, chat_id, 'typing')
     req = PutRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
     if 'error' in req and req['error'] == "Not Found":
@@ -182,7 +185,10 @@ def NovoBemvindo(cookiebot, msg, chat_id):
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group", reply_to_message_id=msg['message_id'])
 
 
-def AtualizaRegras(cookiebot, msg, chat_id):
+def AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id):
+    if str(msg['from']['id']) not in listaadmins_id:
+        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+        return
     SendChatAction(cookiebot, chat_id, 'typing')
     req = PutRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
     if 'error' in req and req['error'] == "Not Found":

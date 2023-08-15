@@ -151,18 +151,12 @@ def thread_function(msg):
                     Shippar(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
                     listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    if str(msg['from']['id']) in listaadmins_id:
-                        AtualizaBemvindo(cookiebot, msg, chat_id)
-                    else:
-                        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+                    AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id)
                 elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                     NovoBemvindo(cookiebot, msg, chat_id)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
                     listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    if str(msg['from']['id']) in listaadmins_id:
-                        AtualizaRegras(cookiebot, msg, chat_id)
-                    else:
-                        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+                    AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id)
                 elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
                     NovasRegras(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
@@ -181,18 +175,12 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/hoje", "/today", "/hoy")) and funfunctions == True:
                     if FurBots == False or "CookieMWbot" in msg['text'].split('@'):
                         Hoje(cookiebot, msg, chat_id, language)
-                    else:
-                        return
                 elif (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
                     if FurBots == False or "CookieMWbot" in msg['text'].split('@'):
                         Cheiro(cookiebot, msg, chat_id, language)
-                    else:
-                        return
                 elif any(x in msg['text'].lower() for x in ['eu faço', 'eu faco', 'i do', 'debo hacer']) and msg['text'].endswith('?') and funfunctions == True:
                     if FurBots == False or "CookieMWbot" in msg['text'].split('@'):
                         QqEuFaço(cookiebot, msg, chat_id, language)
-                    else:
-                        return
                 elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions == True:
                     IdeiaDesenho(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions == True:
