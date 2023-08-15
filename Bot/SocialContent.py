@@ -12,6 +12,9 @@ with open('Static/avoid_search.txt', 'r') as f:
 avoid_search = [x.strip() for x in avoid_search]
 
 def ReverseImageSearch(cookiebot, msg, chat_id, language):
+    if not 'reply_to_message' in msg:
+        Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte", msg, language)
+        return
     try:
         path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
         image_url = f'https://api.telegram.org/file/bot{cookiebotTOKEN}/{path}'
