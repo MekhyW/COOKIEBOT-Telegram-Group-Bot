@@ -130,9 +130,11 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                     Analyze(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
-                    ScheduleAutopost(cookiebot, msg, chat_id, language)
+                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                    ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id)
                 elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
-                    ClearAutoposts(cookiebot, msg, chat_id, language)
+                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                    ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id)
                 elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")):
                     ReverseImageSearch(cookiebot, msg['reply_to_message'], chat_id, language)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")) and funfunctions == True:

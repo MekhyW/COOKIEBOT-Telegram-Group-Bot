@@ -257,7 +257,10 @@ def SchedulePost(cookiebot, query_data):
         Send(cookiebot, mekhyID, traceback.format_exc())
         Send(cookiebot, second_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários. Mande /start no meu PV para eu poder te mandar mensagens.")
 
-def ScheduleAutopost(cookiebot, msg, chat_id, language):
+def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id):
+    if str(msg['from']['id']) not in listaadmins_id:
+        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+        return
     if 'reply_to_message' not in msg:
         Send(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder repostar ela nesse grupo!", msg_to_reply=msg, language=language)
         return
@@ -275,7 +278,10 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language):
                 f"{minute} {hour} * * *")
     Send(cookiebot, chat_id, f"Repostagem programada para o grupo por {days} dias!", msg_to_reply=msg, language=language)
 
-def ClearAutoposts(cookiebot, msg, chat_id, language):
+def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id):
+    if str(msg['from']['id']) not in listaadmins_id:
+        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+        return
     jobs = list_jobs()
     for job in jobs:
         if job.name.startswith(f"{parent}/jobs/{chat_id}"):
