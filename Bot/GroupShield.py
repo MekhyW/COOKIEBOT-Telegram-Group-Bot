@@ -172,7 +172,7 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     photo.close()
     wait_open("Captcha.txt")
     text = open("Captcha.txt", 'a+', encoding='utf-8')
-    text.write(f"{chat_id} {msg['new_chat_participant']['id']} {datetime.datetime.now()} {password} {captchaspawnID}\n")
+    text.write(f"{chat_id} {msg['new_chat_participant']['id']} {datetime.datetime.now()} {password} {captchaspawnID} 5\n")
     text.close()
 
 def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
@@ -183,28 +183,29 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
     text = open("Captcha.txt", 'w+', encoding='utf-8')
     for line in lines:
         if len(line.split()) >= 5:
-            #CHATID userID 2021-05-13 11:45:29.027116 password captcha_id
-            year = int(line.split()[2].split("-")[0])
-            month = int(line.split()[2].split("-")[1])
-            day = int(line.split()[2].split("-")[2])
+            #CHATID userID 2021-05-13 11:45:29.027116 password captcha_id attempts
             hour = int(line.split()[3].split(":")[0])
             minute = int(line.split()[3].split(":")[1])
             second = float(line.split()[3].split(":")[2])
             captchasettime = (hour*3600) + (minute*60) + (second)
             chat = int(line.split()[0])
             user = int(line.split()[1])
-            if chat == chat_id and captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)):
+            captcha_id = int(line.split()[5])
+            attempts = int(line.split()[6])
+            if chat == chat_id and (captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) or attempts <= 0):
+                if attempts <= 0:
+                    reason = "exceder o limite de tentativas para resolver o captcha"
+                else:
+                    reason = "não solucionar o captcha a tempo"
                 cookiebot.kickChatMember(chat_id, user)
-                Send(cookiebot, chat, f"Kickei o usuário com id {user} por não solucionar o captcha a tempo.\nSe isso foi um erro, peça para um staff adicioná-lo de volta", language=language)
+                Send(cookiebot, chat, f"Kickei o usuário com id {user} por {reason}.\nSe isso foi um erro, peça para um staff adicioná-lo de volta", language=language)
                 cookiebot.unbanChatMember(chat_id, user)
-                DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
+                DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
             elif chat == chat_id and user == msg['from']['id']:
                 text.write(line)
                 DeleteMessage(cookiebot, telepot.message_identifier(msg))
             else:    
                 text.write(line)
-        else:
-            pass
     text.close()
 
 def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt', isBombot=False):
@@ -215,20 +216,29 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
     text = open("Captcha.txt", 'w+', encoding='utf-8')
     for line in lines:
         if len(line.split()) >= 5:
-            if str(chat_id) == line.split()[0] and button == True:
+            #CHATID userID 2021-05-13 11:45:29.027116 password captcha_id attempts
+            chat = int(line.split()[0])
+            user = int(line.split()[1])
+            password = line.split()[4]
+            captcha_id = int(line.split()[5])
+            attempts = int(line.split()[6])
+            if str(chat_id) == str(chat) and button == True:
                 SendChatAction(cookiebot, chat_id, 'typing')
-                DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
-                msg['new_chat_member'] = cookiebot.getChatMember(chat_id, line.split()[1])['user']
+                DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
+                msg['new_chat_member'] = cookiebot.getChatMember(chat_id, str(user))['user']
                 Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
-            elif str(chat_id) == line.split()[0] and str(msg['from']['id']) == line.split()[1]:
+            elif str(chat_id) == str(chat) and str(msg['from']['id']) == str(user):
                 SendChatAction(cookiebot, chat_id, 'typing')
-                if "".join(msg['text'].upper().split()) == line.split()[4]:
-                    DeleteMessage(cookiebot, (line.split()[0], line.split()[5]))
+                if "".join(msg['text'].upper().split()) == password:
+                    DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
                     DeleteMessage(cookiebot, telepot.message_identifier(msg))
                     Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
                 else:
                     DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                    Send(cookiebot, chat_id, "Senha incorreta, por favor tente novamente.", language=language)
+                    attempts -= 1
+                    if attempts > 0:
+                        Send(cookiebot, chat_id, "Senha incorreta, por favor tente novamente.", language=language)
+                    line = f"{chat} {user} {datetime.datetime.now()} {password} {captcha_id} {attempts}\n"
                     text.write(line)
             else:
                 text.write(line)
