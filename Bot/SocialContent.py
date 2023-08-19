@@ -85,6 +85,8 @@ def ReplyAleatorio(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
         
 
 def AddtoStickerDatabase(msg, chat_id):
+    if msg['sticker']['emoji'] in ['🍆', '🍑', '🥵', '💦', '🫦']:
+        return
     stickerId = msg['sticker']['file_id']
     PostRequestBackend('stickerdatabase', {'id': stickerId})
 
