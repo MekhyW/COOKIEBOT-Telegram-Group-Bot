@@ -17,6 +17,7 @@ approval_chat_id = -1001659344607
 url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
 def AskPublisher(cookiebot, msg, chat_id, language):
+    SendChatAction(cookiebot, chat_id, 'typing')
     if language == "pt":
         answer = "Divulgar postagem?\n(Aperte como usuário, não como canal)"
     else:
@@ -262,6 +263,7 @@ def SchedulePost(cookiebot, query_data):
         Send(cookiebot, second_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários. Mande /start no meu PV para eu poder te mandar mensagens.")
 
 def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id):
+    SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id:
         Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
@@ -283,6 +285,7 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id):
     Send(cookiebot, chat_id, f"Repostagem programada para o grupo por {days} dias!", msg_to_reply=msg, language=language)
 
 def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id):
+    SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id:
         Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
