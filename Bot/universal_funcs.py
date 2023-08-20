@@ -95,7 +95,10 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
     except urllib3.exceptions.ProtocolError:
         Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup)
     except TelegramError:
-        cookiebot.sendMessage(mekhyID, traceback.format_exc())
+        try:
+            cookiebot.sendMessage(mekhyID, traceback.format_exc())
+        except Exception as e:
+            print(e)
 
 def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
     try:
@@ -122,7 +125,10 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
     except urllib3.exceptions.ProtocolError:
         SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
     except TelegramError:
-        cookiebot.sendMessage(mekhyID, traceback.format_exc())
+        try:
+            cookiebot.sendMessage(mekhyID, traceback.format_exc())
+        except Exception as e:
+            print(e)
     return sentphoto['message_id']
 
 def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
@@ -134,7 +140,7 @@ def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="
     data = {'commands': commands,
             'scope': {'type': 'chat', 'chat_id': scope_chat_id},
             'language_code': language[0:2].lower()}
-    print(requests.get(url, json=data))
+    requests.get(url, json=data)
 
 def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
@@ -144,7 +150,7 @@ def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBomb
         token = cookiebotTOKEN
     if thread_id:
         url_req = f"https://api.telegram.org/bot{token}/forwardMessage?chat_id={chat_id}&from_chat_id={from_chat_id}&message_id={message_id}&message_thread_id={thread_id}"
-        print(requests.get(url_req))
+        requests.get(url_req)
     else:
         cookiebot.forwardMessage(chat_id, from_chat_id, message_id)
 
