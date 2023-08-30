@@ -52,7 +52,6 @@ def thread_function(msg):
                 elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     targetId = msg['text'].split()[1]
                     LeaveAndBlacklist(cookiebot, targetId)
-                    DeleteRequestBackend(f'registers/{targetId}')
                 elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == mekhyID:
                     Broadcast(cookiebot, msg)
             PvDefaultMessage(cookiebot, msg, chat_id, isBombot)

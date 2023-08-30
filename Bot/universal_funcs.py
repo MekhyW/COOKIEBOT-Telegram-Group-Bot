@@ -160,6 +160,8 @@ def BanAndBlacklist(cookiebot, chat_id, user_id):
 
 def LeaveAndBlacklist(cookiebot, chat_id):
     PostRequestBackend(f'blacklist/{chat_id}')
+    DeleteRequestBackend(f'registers/{chat_id}')
+    DeleteRequestBackend(f'configs/{chat_id}')
     cookiebot.leaveChat(chat_id)
 
 def wait_open(filename):
