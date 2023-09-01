@@ -217,8 +217,6 @@ def thread_function(msg):
         errormsg = f"{traceback.format_exc()} {e}"
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle(msg)
-        elif 'Read timed out.' in errormsg:
-            pass
         else:
             Send(cookiebot, mekhyID, traceback.format_exc())
             Send(cookiebot, mekhyID, str(msg))
