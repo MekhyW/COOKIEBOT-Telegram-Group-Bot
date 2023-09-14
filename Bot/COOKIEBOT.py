@@ -135,7 +135,7 @@ def thread_function(msg):
                     listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id)
                 elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")):
-                    ReverseImageSearch(cookiebot, msg['reply_to_message'], chat_id, language)
+                    ReverseImageSearch(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")) and funfunctions == True:
                     ReplyAleatorio(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
                 elif msg['text'].startswith("/meme") and funfunctions == True:
