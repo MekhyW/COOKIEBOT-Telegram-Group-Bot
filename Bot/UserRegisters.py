@@ -40,6 +40,15 @@ def Everyone(cookiebot, msg, chat_id, listaadmins, language):
                 result += f"@{member['user']} "
         Send(cookiebot, chat_id, result, msg_to_reply=msg)
 
+def AdmAsk(cookiebot, msg, chat_id, language):
+    SendChatAction(cookiebot, chat_id, 'typing')
+    Send(cookiebot, chat_id, "Confirma chamar os administradores?", msg_to_reply=msg, language=language, 
+    reply_markup = InlineKeyboardMarkup (inline_keyboard = [
+            [InlineKeyboardButton(text="✔️", callback_data=f"ADM {msg['from']['first_name']} Yes {language}")], 
+            [InlineKeyboardButton(text="❌", callback_data=f"ADM {msg['from']['first_name']} No {language}")]
+        ]
+    ))
+
 def Adm(cookiebot, msg, chat_id, listaadmins, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     response = ""
@@ -47,7 +56,9 @@ def Adm(cookiebot, msg, chat_id, listaadmins, language):
         response += f"@{admin} "
     if 'username' in msg['from']:
         response += f"\n{msg['from']['username']} chamando todos os administradores!"
-    Send(cookiebot, chat_id, response, msg_to_reply=msg, language=language)
+    else:
+        response += f"\n{msg['from']['first_name']} chamando todos os administradores!"
+    Send(cookiebot, chat_id, response, language=language)
 
 def Quem(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')

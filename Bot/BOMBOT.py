@@ -170,7 +170,7 @@ def thread_function(msg):
                 elif msg['text'].startswith("/everyone"):
                     Everyone(cookiebot, msg, chat_id, listaadmins, language)
                 elif msg['text'].startswith("/adm"):
-                    Adm(cookiebot, msg, chat_id, listaadmins, language)
+                    AdmAsk(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/hoje", "/today", "/hoy")) and funfunctions == True:
@@ -275,6 +275,16 @@ def handle_query(msg):
         elif query_data == 'CAPTCHA' and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
             SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot)
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
+        elif query_data.startswith('ADM'):
+            first_name = query_data.split()[1]
+            yesno = query_data.split()[2]
+            language = query_data.split()[3]
+            if(msg['from']['first_name'] == first_name):
+                if yesno == 'Yes':
+                    Adm(cookiebot, msg, chat_id, listaadmins, language)
+                else:
+                    Send(cookiebot, chat_id, "Comando cancelado", language=language)
+                DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         run_unnatendedthreads()
     except Exception as e:
         errormsg = f"{traceback.format_exc()} {e}"
