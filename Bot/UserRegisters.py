@@ -44,8 +44,8 @@ def AdmAsk(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     Send(cookiebot, chat_id, "Confirma chamar os administradores?", msg_to_reply=msg, language=language, 
     reply_markup = InlineKeyboardMarkup (inline_keyboard = [
-            [InlineKeyboardButton(text="✔️", callback_data=f"ADM {msg['from']['first_name']} Yes {language}")], 
-            [InlineKeyboardButton(text="❌", callback_data=f"ADM {msg['from']['first_name']} No {language}")]
+            [InlineKeyboardButton(text="✔️", callback_data=f"ADM Yes {language}")], 
+            [InlineKeyboardButton(text="❌", callback_data=f"ADM No {language}")]
         ]
     ))
 

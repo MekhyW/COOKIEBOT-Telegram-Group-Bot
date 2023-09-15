@@ -276,15 +276,13 @@ def handle_query(msg):
             SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot)
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data.startswith('ADM'):
-            first_name = query_data.split()[1]
-            yesno = query_data.split()[2]
-            language = query_data.split()[3]
-            if(msg['from']['first_name'] == first_name):
-                if yesno == 'Yes':
-                    Adm(cookiebot, msg, chat_id, listaadmins, language)
-                else:
-                    Send(cookiebot, chat_id, "Comando cancelado", language=language)
-                DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
+            yesno = query_data.split()[1]
+            language = query_data.split()[2]
+            if yesno == 'Yes':
+                Adm(cookiebot, msg, chat_id, listaadmins, language)
+            else:
+                Send(cookiebot, chat_id, "Comando cancelado", language=language)
+            DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         run_unnatendedthreads()
     except Exception as e:
         errormsg = f"{traceback.format_exc()} {e}"
