@@ -21,7 +21,6 @@ pesquisaimagem - Pesquisa a fonte de uma obra de arte
 meme - Gera um meme
 aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
-hoje - O que esta acontecendo hoje?
 dado - Roda um ou mais dados quaisquer
 shippar - Shippa um casal com caracteristica
 idade - Te digo quantos anos vc tem

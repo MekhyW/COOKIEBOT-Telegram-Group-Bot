@@ -173,12 +173,6 @@ def thread_function(msg):
                     AdmAsk(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/hoje", "/today", "/hoy")) and funfunctions == True:
-                    if FurBots == False or "CookieMWbot" in msg['text'].split('@'):
-                        Hoje(cookiebot, msg, chat_id, language)
-                elif (msg['text'].startswith("/cheiro") or msg['text'].startswith("/smell")) and funfunctions == True:
-                    if FurBots == False or "CookieMWbot" in msg['text'].split('@'):
-                        Cheiro(cookiebot, msg, chat_id, language)
                 elif any(x in msg['text'].lower() for x in ['eu faço', 'eu faco', 'i do', 'debo hacer']) and msg['text'].endswith('?') and funfunctions == True:
                     if FurBots == False or "CookieMWbot" in msg['text'].split('@'):
                         QqEuFaço(cookiebot, msg, chat_id, language)

@@ -21,7 +21,6 @@ searchimage - Searches for the source of an artwork
 meme - Generate a meme
 random - Send a media from some group
 drawingidea - No more art block
-today - What is happening today?
 dice - Rolls one or more dice
 ship - Shipps a couple with character
 age - tell you how old you are

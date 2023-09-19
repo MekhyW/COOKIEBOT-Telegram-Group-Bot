@@ -73,24 +73,6 @@ def Comandos(cookiebot, msg, chat_id, language):
     text_file.close()
     Send(cookiebot, chat_id, string, msg_to_reply=msg)
 
-def Hoje(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'typing')
-    wait_open("Static/QqEuFaço.txt")
-    text_file = open("Static/QqEuFaço.txt", "r+", encoding='utf8')
-    lines = text_file.readlines()
-    target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
-    Send(cookiebot, chat_id, "Hoje pra vc é dia de "+target, msg, language)
-    text_file.close()
-
-def Cheiro(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'typing')
-    wait_open("Static/Cheiro.txt")
-    text_file = open("Static/Cheiro.txt", "r+", encoding='utf8')
-    lines = text_file.readlines()
-    target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
-    Send(cookiebot, chat_id, "*sniff* *sniff*\nHmmmmmm\n\nVocê está com um cheirin de "+target, msg, language)
-    text_file.close()
-
 def QqEuFaço(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     wait_open("Static/QqEuFaço.txt")
