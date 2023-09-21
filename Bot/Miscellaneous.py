@@ -73,14 +73,8 @@ def Comandos(cookiebot, msg, chat_id, language):
     text_file.close()
     Send(cookiebot, chat_id, string, msg_to_reply=msg)
 
-def QqEuFaço(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'typing')
-    wait_open("Static/QqEuFaço.txt")
-    text_file = open("Static/QqEuFaço.txt", "r+", encoding='utf8')
-    lines = text_file.readlines()
-    target = lines[random.randint(0, len(lines)-1)].replace("\\n","\n")
-    Send(cookiebot, chat_id, "Vai "+target, msg, language)
-    text_file.close()
+def NotifyFunOff(cookiebot, msg, chat_id, language):
+    Send(cookiebot, chat_id, "Funções de diversão estão desativadas nesse chat", msg, language)
 
 def IdeiaDesenho(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')

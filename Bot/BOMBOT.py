@@ -136,20 +136,41 @@ def thread_function(msg):
                     ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id)
                 elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")):
                     ReverseImageSearch(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")) and funfunctions == True:
-                    ReplyAleatorio(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
-                elif msg['text'].startswith("/meme") and funfunctions == True:
-                    Meme(cookiebot, msg, chat_id, language)
-                elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and funfunctions == True:
-                    Dado(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/idade", "/age", "/edad")) and funfunctions == True:
-                    Idade(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/genero", "/gender")) and funfunctions == True:
-                    Genero(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/rojao", "/rojão", "/acende", "/fogos")) and funfunctions == True:
-                    Rojao(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
-                elif msg['text'].startswith(("/shippar", "/ship")) and funfunctions == True:
-                    Shippar(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
+                    if funfunctions:
+                        ReplyAleatorio(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
+                    else:
+                        NotifyFunOff(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith("/meme"):
+                    if funfunctions:
+                        Meme(cookiebot, msg, chat_id, language)
+                    else:
+                        NotifyFunOff(cookiebot, msg, chat_id, language)
+                elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())):
+                    if funfunctions:
+                        Dado(cookiebot, msg, chat_id, language)
+                    else:
+                        NotifyFunOff(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(("/idade", "/age", "/edad")):
+                    if funfunctions:
+                        Idade(cookiebot, msg, chat_id, language)
+                    else:
+                        NotifyFunOff(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(("/genero", "/gender")):
+                    if funfunctions:
+                        Genero(cookiebot, msg, chat_id, language)
+                    else:
+                        NotifyFunOff(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(("/rojao", "/rojão", "/acende", "/fogos")):
+                    if funfunctions:
+                        Rojao(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
+                    else:
+                        NotifyFunOff(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(("/shippar", "/ship")):
+                    if funfunctions:
+                        Shippar(cookiebot, msg, chat_id, language)
+                    else:
+                        NotifyFunOff(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
                     listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id)
@@ -173,9 +194,6 @@ def thread_function(msg):
                     AdmAsk(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, language)
-                elif any(x in msg['text'].lower() for x in ['eu faço', 'eu faco', 'i do', 'debo hacer']) and msg['text'].endswith('?') and funfunctions == True:
-                    if FurBots == False or "CookieMWbot" in msg['text'].split('@'):
-                        QqEuFaço(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions == True:
                     IdeiaDesenho(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions == True:
