@@ -219,33 +219,7 @@ def thread_function(msg):
         if not isBombot:
             SchedulerPull(cookiebot, isBombot=isBombot)
 
-def run_unnatendedthreads():
-    num_running_threads = threading.active_count()
-    num_max_threads = 15
-    for unnatended_thread in unnatended_threads:
-        if unnatended_thread.is_alive():
-            unnatended_threads.remove(unnatended_thread)
-        elif num_running_threads < num_max_threads:
-            unnatended_thread.start()
-            num_running_threads += 1
-            try:
-                unnatended_threads.remove(unnatended_thread)
-            except ValueError:
-                pass
-    if len(unnatended_threads) > 4 * num_max_threads:
-        os.execl(sys.executable, sys.executable, *sys.argv)
-    elif len(unnatended_threads) > 0:
-        print(f"{len(unnatended_threads)} threads are still unnatended")
-
-def handle(msg):
-    try:
-        new_thread = threading.Thread(target=thread_function, args=(msg,))
-        unnatended_threads.append(new_thread)
-        run_unnatendedthreads()
-    except:
-        Send(cookiebot, mekhyID, traceback.format_exc())
-
-def handle_query(msg):
+def thread_function_query(msg):
     try:
         query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
         print('Callback Query:', query_id, from_id, query_data)
@@ -286,6 +260,40 @@ def handle_query(msg):
             Send(cookiebot, mekhyID, traceback.format_exc())
             Send(cookiebot, mekhyID, str(msg))
             Send(cookiebot, mekhyID, str(e))
+
+def run_unnatendedthreads():
+    num_running_threads = threading.active_count()
+    num_max_threads = 15
+    for unnatended_thread in unnatended_threads:
+        if unnatended_thread.is_alive():
+            unnatended_threads.remove(unnatended_thread)
+        elif num_running_threads < num_max_threads:
+            unnatended_thread.start()
+            num_running_threads += 1
+            try:
+                unnatended_threads.remove(unnatended_thread)
+            except ValueError:
+                pass
+    if len(unnatended_threads) > 4 * num_max_threads:
+        os.execl(sys.executable, sys.executable, *sys.argv)
+    elif len(unnatended_threads) > 0:
+        print(f"{len(unnatended_threads)} threads are still unnatended")
+
+def handle(msg):
+    try:
+        new_thread = threading.Thread(target=thread_function, args=(msg,))
+        unnatended_threads.append(new_thread)
+        run_unnatendedthreads()
+    except:
+        Send(cookiebot, mekhyID, traceback.format_exc())
+
+def handle_query(msg):
+    try:
+        new_thread = threading.Thread(target=thread_function_query, args=(msg,))
+        unnatended_threads.append(new_thread)
+        run_unnatendedthreads()
+    except:
+        Send(cookiebot, mekhyID, traceback.format_exc())
         
 
 MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
