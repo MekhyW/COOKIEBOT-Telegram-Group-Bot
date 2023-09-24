@@ -205,7 +205,11 @@ def thread_function(msg):
                     ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
                 elif msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
                     CustomCommand(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/") and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and (FurBots==False or msg['text'].split()[0] not in open("Static/FurBots_functions.txt", "r+", encoding='utf-8').read()) and utilityfunctions == True:
+                elif msg['text'].startswith("/") and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and utilityfunctions == True:
+                    if FurBots == True:
+                        furbots_cmds = open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()
+                        if msg['text'].split()[0].split('@')[0] in furbots_cmds:
+                            return
                     QualquerCoisa(cookiebot, msg, chat_id, sfw, language)
                 elif (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot')) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and funfunctions == True:
                     Quem(cookiebot, msg, chat_id, language)

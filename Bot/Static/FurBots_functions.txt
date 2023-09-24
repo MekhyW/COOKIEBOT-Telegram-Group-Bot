@@ -1,9 +1,9 @@
 /warn
 /ban
 /mute
-/hoje@CookieMWbot
-/cheiro@CookieMWbot
-/today@burrsobot
+/hoje
+/cheiro
+/today
 /speechtotext
 /regression
 /fralda
@@ -11,93 +11,94 @@
 /permababy
 /mix
 /rules
-/rules@burrsobot
-/regras@burrsobot
-/comer@burrsobot
-/eat@burrsobot
-/delete@burrsobot
-/termo@burrsobot
-
-/aniversario@TestBoybot
-/averageyiffometro@TestBoybot
-/yiffometro@TestBoybot
-/welcome@TestBoybot
-/goodbye@TestBoybot
-/ojogo@TestBoybot
-/perdi@TestBoybot
-/gaydar@TestBoybot
-
- /permissions@burrsobot  
- /chatscript@burrsobot  
- /addbd@burrsobot  
- /setarregras@burrsobot  
- /bd@burrsobot  
- /fotogrupo@burrsobot  
- /disable@burrsobot  
- /userpg@burrsobot  
- /disableall@burrsobot  
- /say@burrsobot  
- /ignore@burrsobot  
- /inspect@burrsobot  
- /setwelcome@burrsobot  
- /setgoodbye@burrsobot  
- /revertbd@burrsobot  
- /lang@burrsobot  
- /silent@burrsobot  
- /sfw@burrsobot  
- /nofun@burrsobot  
- /botprotection@burrsobot  
- /botcheck@burrsobot  
- /bansticker@burrsobot  
- /logger@burrsobot  
- /noraid@burrsobot  
- /nomedia@burrsobot  
- /file@burrsobot  
- /onsay@burrsobot  
- /makeagressive@burrsobot  
- /corona@burrsobot 
- /tempo@burrsobot 
- /start@burrsobot 
- /notifyme@burrsobot 
- /notifypurge@burrsobot 
- /notifyinterval@burrsobot 
- /treta@burrsobot 
- /hoje@burrsobot 
- /cheiro@burrsobot 
- /smell@burrsobot 
- /random@burrsobot 
- /commands@burrsobot 
- /namegen@burrsobot 
- /cruzar@burrsobot 
- /time@burrsobot 
- /quote@burrsobot 
- /bolo@burrsobot 
- /revive@burrsobot 
- /roleta@burrsobot 
- /burr@burrsobot 
- /legg@burrsobot 
- /gato@burrsobot 
- /poss@burrsobot 
- /racc@burrsobot 
- /fursona@burrsobot 
- /donate@burrsobot 
- /gbcam@burrsobot 
- /whowins@burrsobot 
- /glitch@burrsobot 
- /marcado@burrsobot 
- /stats@burrsobot 
- /porn@burrsobot 
- /calc@burrsobot 
- /defina@burrsobot 
- /acreate@burrsobot 
- /adisplay@burrsobot 
- /apublish@burrsobot 
- /rpg@burrsobot 
- /ship@burrsobot 
- /ajuda@burrsobot 
- /sorteio@burrsobot 
- /regras@burrsobot 
- /pinpls@burrsobot 
- /gay@burrsobot 
- /tts@burrsobot 
- /wah@burrsobot
+/rules
+/regras
+/comer
+/eat
+/delete
+/termo
+/aniversario
+/averageyiffometro
+/yiffometro
+/welcome
+/goodbye
+/ojogo
+/perdi
+/gaydar
+/permissions
+/chatscript
+/addbd
+/setarregras
+/bd
+/fotogrupo
+/disable
+/userpg
+/disableall
+/say
+/ignore
+/inspect
+/setwelcome
+/setgoodbye
+/revertbd
+/lang
+/silent
+/sfw
+/nofun
+/botprotection
+/botcheck
+/bansticker
+/logger
+/noraid
+/nomedia
+/file
+/onsay
+/makeagressive
+/corona
+/tempo
+/start
+/notifyme
+/notifypurge
+/notifyinterval
+/treta
+/hoje
+/cheiro
+/smell
+/random
+/commands
+/namegen
+/cruzar
+/time
+/quote
+/bolo
+/revive
+/roleta
+/burr
+/legg
+/gato
+/poss
+/racc
+/fursona
+/donate
+/gbcam
+/whowins
+/glitch
+/marcado
+/stats
+/porn
+/calc
+/defina
+/acreate
+/adisplay
+/apublish
+/rpg
+/ship
+/ajuda
+/sorteio
+/regras
+/pinpls
+/gay
+/tts
+/wah
+/lua
+/panel
+/painel
