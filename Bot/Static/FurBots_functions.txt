@@ -1,5 +1,6 @@
 /warn
 /ban
+/kick
 /mute
 /hoje
 /cheiro
@@ -50,6 +51,7 @@
 /logger
 /noraid
 /nomedia
+/nospam
 /file
 /onsay
 /makeagressive
@@ -102,3 +104,4 @@
 /lua
 /panel
 /painel
+/settings
