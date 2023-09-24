@@ -208,6 +208,7 @@ def thread_function(msg):
                 elif msg['text'].startswith("/") and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and utilityfunctions == True:
                     if FurBots == True:
                         furbots_cmds = open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()
+                        furbots_cmds = [x.strip() for x in furbots_cmds]
                         if msg['text'].split()[0].split('@')[0] in furbots_cmds:
                             return
                     QualquerCoisa(cookiebot, msg, chat_id, sfw, language)
