@@ -117,7 +117,7 @@ def CheckHumanFactor(cookiebot, msg, chat_id, language):
         userphotos = cookiebot.getUserProfilePhotos(msg['new_chat_participant']['id'])
         if userphotos['total_count'] == 0:
             cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-            Send(cookiebot, chat_id, "Kickei o novo usuário por suspeita de ser um robô\nSe isso foi um erro, peça para ela adicionar um username (@) e um ADM adicioná-la de volta", language=language)
+            Send(cookiebot, chat_id, "Kickei o novo usuário por suspeita de ser um robô\nSe isso foi um erro, peça para ele adicionar um username (@) ou foto de perfil e um ADM adicioná-lo de volta", language=language)
             cookiebot.unbanChatMember(chat_id, msg['new_chat_participant']['id'])
             return True
     return False
