@@ -20,7 +20,7 @@ backendauth = json.loads(open('cookiebot_backendauth.json', 'r').read())
 login_backend, password_backend, serverIP = backendauth['login'], backendauth['password'], backendauth['serverIP']
 
 def GetRequestBackend(route, params=None):
-    response = requests.get(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=2)
+    response = requests.get(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=5)
     try:
         return json.loads(response.text)
     except Exception as e:
@@ -28,7 +28,7 @@ def GetRequestBackend(route, params=None):
         return ''
 
 def PostRequestBackend(route, params=None):
-    response = requests.post(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=2)
+    response = requests.post(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=5)
     try:
         print("POST: ", response.text)
         return json.loads(response.text)
@@ -37,7 +37,7 @@ def PostRequestBackend(route, params=None):
         return ''
 
 def PutRequestBackend(route, params=None):
-    response = requests.put(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=2)
+    response = requests.put(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=5)
     try:
         print("PUT: ", response.text)
         return json.loads(response.text)
@@ -46,7 +46,7 @@ def PutRequestBackend(route, params=None):
         return ''
 
 def DeleteRequestBackend(route, params=None):
-    response = requests.delete(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=2)
+    response = requests.delete(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=5)
     try:
         print("DELETE: ", response.text)
         return json.loads(response.text)
