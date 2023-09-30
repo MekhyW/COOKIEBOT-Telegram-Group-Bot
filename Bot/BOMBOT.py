@@ -252,17 +252,20 @@ def thread_function_query(msg):
         except Exception as e:
             print(e)
             chat_id = from_id
-            listaadmins_id = []
+            listaadmins, listaadmins_id, listaadmins_status = [], [], []
         if 'CONFIG' in query_data:
             ConfigVariableButton(cookiebot, msg, query_data)
         elif 'Pub' in query_data:
-            if query_data.startswith('SendToApproval'):
-                AskApproval(cookiebot, query_data, from_id, isBombot=isBombot)
-            elif query_data.startswith('Approve'):
-                SchedulePost(cookiebot, query_data)
-            elif query_data.startswith('Deny'):
-                DenyPost(cookiebot, query_data)
-            DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
+            if 'creator' in listaadmins_status and str(from_id) not in listaadmins_id:
+                cookiebot.answerCallbackQuery(query_id, text="Only admins can do this")
+            else:
+                if query_data.startswith('SendToApproval'):
+                    AskApproval(cookiebot, query_data, from_id, isBombot=isBombot)
+                elif query_data.startswith('Approve'):
+                    SchedulePost(cookiebot, query_data)
+                elif query_data.startswith('Deny'):
+                    DenyPost(cookiebot, query_data)
+                DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data == 'CAPTCHA' and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
             SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot)
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))

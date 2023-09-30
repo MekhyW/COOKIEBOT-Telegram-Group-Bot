@@ -252,7 +252,7 @@ def thread_function_query(msg):
         except Exception as e:
             print(e)
             chat_id = from_id
-            listaadmins_id = []
+            listaadmins, listaadmins_id, listaadmins_status = [], [], []
         if 'CONFIG' in query_data:
             ConfigVariableButton(cookiebot, msg, query_data)
         elif 'Pub' in query_data:
