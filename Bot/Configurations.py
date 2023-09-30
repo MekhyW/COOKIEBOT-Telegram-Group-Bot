@@ -5,14 +5,15 @@ cache_admins = {}
 def GetAdmins(cookiebot, msg, chat_id, ignorecache=False):
     if chat_id in cache_admins and not ignorecache:
         admins = cache_admins[chat_id]
-        return admins[0], admins[1]
-    listaadmins, listaadmins_id = [], []
+        return admins[0], admins[1], admins[2]
+    listaadmins, listaadmins_id, listaadmins_status = [], [], []
     for admin in cookiebot.getChatAdministrators(chat_id):
         if 'username' in admin['user']:
             listaadmins.append(str(admin['user']['username']))
         listaadmins_id.append(str(admin['user']['id']))
-    cache_admins[chat_id] = [listaadmins, listaadmins_id]
-    return listaadmins, listaadmins_id
+        listaadmins_status.append(admin['status'])
+    cache_admins[chat_id] = [listaadmins, listaadmins_id, listaadmins_status]
+    return listaadmins, listaadmins_id, listaadmins_status
 
 def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=False):
     wait_open(f"Static/Cookiebot_functions_{language}.txt")

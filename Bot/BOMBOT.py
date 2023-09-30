@@ -57,7 +57,7 @@ def thread_function(msg):
             PvDefaultMessage(cookiebot, msg, chat_id, isBombot)
         else:
             if chat_type != 'private':
-                listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
+                listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id)
                 FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(chat_id)
                 CheckNewName(msg, chat_id)
             if 'group_chat_created' in msg and msg['group_chat_created'] == True:
@@ -123,16 +123,16 @@ def thread_function(msg):
                 elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, chat_id)
                 elif msg['text'].startswith(("/reload", "/recarregar")):
-                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(chat_id, ignorecache=True)
                     Send(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
                 elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                     Analyze(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
-                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id)
                 elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
-                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id)
                 elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")):
                     ReverseImageSearch(cookiebot, msg, chat_id, language)
@@ -172,12 +172,12 @@ def thread_function(msg):
                     else:
                         NotifyFunOff(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
-                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id)
                 elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                     NovoBemvindo(cookiebot, msg, chat_id)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
-                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id)
                 elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
                     NovasRegras(cookiebot, msg, chat_id)
@@ -199,7 +199,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions == True:
                     PromptQualquerCoisa(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/configurar", "/configure")):
-                    listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     Configurar(cookiebot, msg, chat_id, listaadmins_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                     ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
@@ -248,7 +248,7 @@ def thread_function_query(msg):
         print('Callback Query:', query_id, from_id, query_data)
         try:
             chat_id = msg['message']['reply_to_message']['chat']['id']
-            listaadmins, listaadmins_id = GetAdmins(cookiebot, msg, chat_id)
+            listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id)
         except Exception as e:
             print(e)
             chat_id = from_id
