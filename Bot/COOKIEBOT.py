@@ -1,5 +1,4 @@
 from universal_funcs import *
-isBombot = False
 from Configurations import *
 from GroupShield import *
 from UserRegisters import *
@@ -9,9 +8,10 @@ from SocialContent import *
 from Audio import *
 from Miscellaneous import *
 from Publisher import *
-import threading, gc
-unnatended_threads = list()
-gc.enable()
+import threading
+import gc
+
+isBombot = False
 
 if isBombot:
     cookiebot = telepot.Bot(bombotTOKEN)
@@ -22,7 +22,10 @@ if updates:
     last_update_id = updates[-1]['update_id']
     cookiebot.getUpdates(offset=last_update_id+1)
 
+unnatended_threads = list()
 startPublisher(isBombot)
+gc.enable()
+
 Send(cookiebot, mekhyID, 'I am online')
 
 def thread_function(msg):
@@ -78,7 +81,7 @@ def thread_function(msg):
                     Send(cookiebot, mekhyID, f"Added:\n{chatinfo}")
                     cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
                     caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW")
-                if msg['new_chat_participant']['id'] != cookiebot.getMe()['id'] and not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
+                elif not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:

@@ -1,11 +1,13 @@
 # coding=utf8
 from universal_funcs import *
 from captcha.image import ImageCaptcha
-captcha = ImageCaptcha()
+from threading import Timer
 import json, requests
 import cv2
 import numpy as np
 from PIL import ImageFont, ImageDraw, Image
+
+captcha = ImageCaptcha()
 
 emoji_pattern = re.compile("["
         u"\U0001F600-\U0001F64F"  # emoticons
@@ -174,6 +176,21 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     text = open("Captcha.txt", 'a+', encoding='utf-8')
     text.write(f"{chat_id} {msg['new_chat_participant']['id']} {datetime.datetime.now()} {password} {captchaspawnID} 5\n")
     text.close()
+    timer = Timer(captchatimespan+1, CheckCaptcha, kwargs={'cookiebot': cookiebot, 'msg': msg, 'chat_id': chat_id, 'captchatimespan': captchatimespan, 'language': language})
+    timer.start()
+
+def parseLineCaptcha(line):
+    #CHATID userID yy-mm-dd hr:min:sec password captcha_id attempts
+    hour = int(line.split()[3].split(":")[0])
+    minute = int(line.split()[3].split(":")[1])
+    second = float(line.split()[3].split(":")[2])
+    captchasettime = (hour*3600) + (minute*60) + (second)
+    chat = int(line.split()[0])
+    user = int(line.split()[1])
+    password = line.split()[4]
+    captcha_id = int(line.split()[5])
+    attempts = int(line.split()[6])
+    return hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts
 
 def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
     wait_open("Captcha.txt")
@@ -183,15 +200,7 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
     text = open("Captcha.txt", 'w+', encoding='utf-8')
     for line in lines:
         if len(line.split()) >= 5:
-            #CHATID userID 2021-05-13 11:45:29.027116 password captcha_id attempts
-            hour = int(line.split()[3].split(":")[0])
-            minute = int(line.split()[3].split(":")[1])
-            second = float(line.split()[3].split(":")[2])
-            captchasettime = (hour*3600) + (minute*60) + (second)
-            chat = int(line.split()[0])
-            user = int(line.split()[1])
-            captcha_id = int(line.split()[5])
-            attempts = int(line.split()[6])
+            hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parseLineCaptcha(line)
             if chat == chat_id and (captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) or attempts <= 0):
                 if attempts <= 0:
                     reason = "exceder o limite de tentativas para resolver o captcha"
@@ -216,12 +225,7 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
     text = open("Captcha.txt", 'w+', encoding='utf-8')
     for line in lines:
         if len(line.split()) >= 5:
-            #CHATID userID 2021-05-13 11:45:29.027116 password captcha_id attempts
-            chat = int(line.split()[0])
-            user = int(line.split()[1])
-            password = line.split()[4]
-            captcha_id = int(line.split()[5])
-            attempts = int(line.split()[6])
+            hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parseLineCaptcha(line)
             if str(chat_id) == str(chat) and button == True:
                 SendChatAction(cookiebot, chat_id, 'typing')
                 DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
