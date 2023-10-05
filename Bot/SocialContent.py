@@ -7,7 +7,7 @@ import numpy as np
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
 reverseimagesearcher = vision.ImageAnnotatorClient.from_service_account_json('cookiebot_cloudserviceaccount.json')
 
-fullmatch_sources = ['deviantart, pinterest, furaffinity, pixiv, artstation, behance, dribbble, flickr, instagram, twitter, tumblr, weheartit, youtube, vimeo, 500px, imgur, tinypic, photobucket, reddit, flickr, picasa, shutterstock, gettyimages, istockphoto, stock.adobe, stocksnap, unsplash, pexels, freepik, vectorstock, vecteezy, pngtree, flaticon, iconfinder, bsky']
+fullmatch_sources = ['deviantart', 'pinterest', 'furaffinity', 'pixiv', 'artstation', 'behance', 'dribbble', 'flickr', 'instagram', 'twitter', 'tumblr', 'weheartit', 'youtube', 'vimeo', '500px', 'imgur', 'tinypic', 'photobucket', 'reddit', 'flickr', 'picasa', 'shutterstock', 'gettyimages', 'istockphoto', 'stock.adobe', 'stocksnap', 'unsplash', 'pexels', 'freepik', 'vectorstock', 'vecteezy', 'pngtree', 'flaticon', 'iconfinder', 'bsky']
 
 with open('Static/avoid_search.txt', 'r') as f:
     avoid_search = f.readlines()
