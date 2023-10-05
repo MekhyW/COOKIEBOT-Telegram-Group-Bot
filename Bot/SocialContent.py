@@ -44,10 +44,14 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
         elif page.partial_matching_images:
             partial_matches.append(page.url)
     if len(full_matches) or len(partial_matches):
-        answer = 'FULL MATCHES:\n'
+        answer = 'FULL MATCHES:\n\n'
+        if not len(full_matches):
+            answer += "    (none)\n"
         for match in full_matches:
             answer += f"    🔗{match}\n"
-        answer += 'PARTIAL MATCHES:\n'
+        answer += '\nPARTIAL MATCHES:\n\n'
+        if not len(partial_matches):
+            answer += "    (none)\n"
         for match in partial_matches:
             answer += f"    🔗{match}\n"
         Send(cookiebot, chat_id, answer, msg, language)
