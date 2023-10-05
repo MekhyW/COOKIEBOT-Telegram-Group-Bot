@@ -51,6 +51,9 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
             partial_matches.append(page.url)
     for similar in annotations.visually_similar_images:
         similar_images.append(similar.url)
+    full_matches = full_matches[:5]
+    partial_matches = partial_matches[:5]
+    similar_images = similar_images[:5]
     if len(full_matches) or len(partial_matches) or len(similar_images):
         answer = 'FULL MATCHES:\n\n'
         if not len(full_matches):
