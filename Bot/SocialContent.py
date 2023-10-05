@@ -40,6 +40,7 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
     annotations = response.web_detection
     full_matches = []
     partial_matches = []
+    similar_images = []
     for page in annotations.pages_with_matching_images:
         if page.full_matching_images:
             if any(source in page.url for source in fullmatch_sources):
@@ -48,7 +49,9 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
                 partial_matches.append(page.url)
         elif page.partial_matching_images:
             partial_matches.append(page.url)
-    if len(full_matches) or len(partial_matches):
+    for similar in annotations.visually_similar_images:
+        similar_images.append(similar.url)
+    if len(full_matches) or len(partial_matches) or len(similar_images):
         answer = 'FULL MATCHES:\n\n'
         if not len(full_matches):
             answer += "    (none)\n"
@@ -59,6 +62,11 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
             answer += "    (none)\n"
         for match in partial_matches:
             answer += f"    🔗{match}\n"
+        answer += '\nSIMILAR IMAGES:\n\n'
+        if not len(similar_images):
+            answer += "    (none)\n"
+        for similar in similar_images:
+            answer += f"    🔗{similar}\n"
         Send(cookiebot, chat_id, answer, msg, language)
     else:
         Send(cookiebot, chat_id, "Não consegui achar uma correspondência", msg, language)
