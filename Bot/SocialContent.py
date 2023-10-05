@@ -7,6 +7,8 @@ import numpy as np
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
 reverseimagesearcher = vision.ImageAnnotatorClient.from_service_account_json('cookiebot_cloudserviceaccount.json')
 
+fullmatch_sources = ['deviantart, pinterest, furaffinity, pixiv, artstation, behance, dribbble, flickr, instagram, twitter, tumblr, weheartit, youtube, vimeo, 500px, imgur, tinypic, photobucket, reddit, flickr, picasa, shutterstock, gettyimages, istockphoto, stock.adobe, stocksnap, unsplash, pexels, freepik, vectorstock, vecteezy, pngtree, flaticon, iconfinder, bsky']
+
 with open('Static/avoid_search.txt', 'r') as f:
     avoid_search = f.readlines()
 avoid_search = [x.strip() for x in avoid_search]
@@ -40,7 +42,10 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
     partial_matches = []
     for page in annotations.pages_with_matching_images:
         if page.full_matching_images:
-            full_matches.append(page.url)
+            if any(source in page.url for source in fullmatch_sources):
+                full_matches.append(page.url)
+            else:
+                partial_matches.append(page.url)
         elif page.partial_matching_images:
             partial_matches.append(page.url)
     if len(full_matches) or len(partial_matches):
