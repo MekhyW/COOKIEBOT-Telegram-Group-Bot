@@ -50,7 +50,7 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
         answer += 'PARTIAL MATCHES:\n'
         for match in partial_matches:
             answer += f"    🔗{match}\n"
-        Send(cookiebot, chat_id, answer, msg, language, msg_to_reply=msg)
+        Send(cookiebot, chat_id, answer, msg, language)
     else:
         Send(cookiebot, chat_id, "Não consegui achar uma correspondência", msg, language)
 
