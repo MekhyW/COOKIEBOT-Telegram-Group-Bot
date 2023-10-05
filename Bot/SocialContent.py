@@ -1,48 +1,58 @@
 from universal_funcs import *
 from UserRegisters import *
 import google_images_search, io
-googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
 from google.cloud import vision
-reverseimagesearcher = vision.ImageAnnotatorClient.from_service_account_json('cookiebot_cloudserviceaccount.json')
 import cv2
 import numpy as np
+googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
+reverseimagesearcher = vision.ImageAnnotatorClient.from_service_account_json('cookiebot_cloudserviceaccount.json')
 
 with open('Static/avoid_search.txt', 'r') as f:
     avoid_search = f.readlines()
 avoid_search = [x.strip() for x in avoid_search]
 
-def ReverseImageSearch(cookiebot, msg, chat_id, language):
-    if not 'reply_to_message' in msg:
-        Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n\nPara busca direta, use o /qualquercoisa", msg, language)
-        return
+def fetchTempJpg(cookiebot, msg, chat_id):
     try:
-        path = cookiebot.getFile(msg['reply_to_message']['photo'][-1]['file_id'])['file_path']
+        path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
         image_url = f'https://api.telegram.org/file/bot{cookiebotTOKEN}/{path}'
         urllib.request.urlretrieve(image_url, 'temp.jpg')
     except KeyError:
-        path = cookiebot.getFile(msg['reply_to_message']['document']['file_id'])['file_path']
+        path = cookiebot.getFile(msg['document']['file_id'])['file_path']
         video_url = f'https://api.telegram.org/file/bot{cookiebotTOKEN}/{path}'
         urllib.request.urlretrieve(video_url, 'temp.mp4')
         vidcap = cv2.VideoCapture('temp.mp4')
         success, image = vidcap.read()
         cv2.imwrite('temp.jpg', image)
         os.remove('temp.mp4')
+
+def ReverseImageSearch(cookiebot, msg, chat_id, language):
+    SendChatAction(cookiebot, chat_id, 'typing')
+    if not 'reply_to_message' in msg:
+        Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n\nPara busca direta, use o /qualquercoisa", msg, language)
+        return
+    fetchTempJpg(cookiebot, msg['reply_to_message'], chat_id)
     with io.open('temp.jpg', 'rb') as image_file:
         content = image_file.read()
     image = vision.Image(content=content)
     response = reverseimagesearcher.web_detection(image=image)
     annotations = response.web_detection
+    full_matches = []
+    partial_matches = []
     for page in annotations.pages_with_matching_images:
         if page.full_matching_images:
-            SendChatAction(cookiebot, chat_id, 'typing')
-            Send(cookiebot, chat_id, f"SOURCE: 🔗{page.url}", msg_to_reply=msg)
-            return
-    for page in annotations.pages_with_matching_images:
-        if page.partial_matching_images:
-            SendChatAction(cookiebot, chat_id, 'typing')
-            Send(cookiebot, chat_id, f"SOURCE: 🔗{page.url} (partial matching)", msg_to_reply=msg)
-            return
-    Send(cookiebot, chat_id, "Não consegui achar uma correspondência", msg, language)
+            full_matches.append(page.url)
+        elif page.partial_matching_images:
+            partial_matches.append(page.url)
+    if len(full_matches) or len(partial_matches):
+        answer = 'FULL MATCHES:\n'
+        for match in full_matches:
+            answer += f"    🔗{match}\n"
+        answer += 'PARTIAL MATCHES:\n'
+        for match in partial_matches:
+            answer += f"    🔗{match}\n"
+        Send(cookiebot, chat_id, answer, msg, language, msg_to_reply=msg)
+    else:
+        Send(cookiebot, chat_id, "Não consegui achar uma correspondência", msg, language)
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec", msg, language)
