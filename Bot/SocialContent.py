@@ -16,11 +16,11 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
         Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n\nPara busca direta, use o /qualquercoisa", msg, language)
         return
     try:
-        path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
+        path = cookiebot.getFile(msg['reply_to_message']['photo'][-1]['file_id'])['file_path']
         image_url = f'https://api.telegram.org/file/bot{cookiebotTOKEN}/{path}'
         urllib.request.urlretrieve(image_url, 'temp.jpg')
     except KeyError:
-        path = cookiebot.getFile(msg['document']['file_id'])['file_path']
+        path = cookiebot.getFile(msg['reply_to_message']['document']['file_id'])['file_path']
         video_url = f'https://api.telegram.org/file/bot{cookiebotTOKEN}/{path}'
         urllib.request.urlretrieve(video_url, 'temp.mp4')
         vidcap = cv2.VideoCapture('temp.mp4')
