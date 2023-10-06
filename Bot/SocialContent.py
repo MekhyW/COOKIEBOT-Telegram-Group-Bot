@@ -55,12 +55,12 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
     partial_matches = partial_matches[:5]
     similar_images = similar_images[:5]
     if len(full_matches) or len(partial_matches) or len(similar_images):
-        answer = 'FULL MATCHES:\n\n'
+        answer = 'FOUND IN PAGES:\n\n'
         if not len(full_matches):
             answer += "    (none)\n"
         for match in full_matches:
             answer += f"    🔗{match}\n"
-        answer += '\nPARTIAL MATCHES:\n\n'
+        answer += '\POSSIBLE INCLUSIONS:\n\n'
         if not len(partial_matches):
             answer += "    (none)\n"
         for match in partial_matches:
