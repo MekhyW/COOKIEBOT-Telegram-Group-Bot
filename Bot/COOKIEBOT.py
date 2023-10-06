@@ -31,7 +31,8 @@ Send(cookiebot, mekhyID, 'I am online')
 def thread_function(msg):
     try:
         if any(key in msg for key in ['dice', 'poll', 'voice_chat_started', 'voice_chat_ended', 
-                                      'voice_chat_participants_invited', 'video_chat_participants_invited']):
+                                      'voice_chat_participants_invited', 'video_chat_participants_invited',
+                                      'forum_topic_created', 'forum_topic_edited', 'story']):
             return
         if 'message_thread_id' in msg:
             thread_id = msg['message_thread_id']
