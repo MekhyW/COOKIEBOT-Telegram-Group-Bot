@@ -105,3 +105,8 @@
 /panel
 /painel
 /settings
+/txt2img
+/img2img
+/pnginfo
+/queue
+/cancel
