@@ -270,8 +270,8 @@ def thread_function_query(msg):
                 elif query_data.startswith('Deny'):
                     DenyPost(cookiebot, query_data)
                 DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
-        elif query_data == 'CAPTCHA' and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
-            SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot)
+        elif query_data.startswith('CAPTCHA') and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
+            SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot, language=query_data.split()[1])
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data.startswith('ADM'):
             yesno = query_data.split()[1]

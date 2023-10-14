@@ -177,7 +177,7 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     captcha.write(password, 'CAPTCHA.png')
     photo = open('CAPTCHA.png', 'rb')
     caption = f"⚠️Digite o código acima para provar que você não é um robô⚠️\n\nVocê tem {round(captchatimespan/60)} minutos, se não resolver nesse tempo te removerei do chat ⏳\n(OBS: Se não aparecem 4 digitos, abra a foto completa)"
-    captchaspawnID = SendPhoto(cookiebot, chat_id, photo, caption=caption, language=language, msg_to_reply=msg, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Approve",callback_data='CAPTCHA')]]))
+    captchaspawnID = SendPhoto(cookiebot, chat_id, photo, caption=caption, language=language, msg_to_reply=msg, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Approve",callback_data=f'CAPTCHA {language}')]]))
     photo.close()
     wait_open("Captcha.txt")
     text = open("Captcha.txt", 'a+', encoding='utf-8')
