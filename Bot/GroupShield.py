@@ -94,7 +94,7 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
         try:
             cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': True, 'can_send_other_messages': True, 'can_add_web_page_previews': True})
             cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
-            Send(cookiebot, chat_id, f"ATENÇÃO! Você está limitado por {round(limbotimespan/60)} minutos. Por favor se apresente e se enturme na conversa com os demais membros.\nUse o /regras para ver as regras do grupo", language=language)
+            Send(cookiebot, chat_id, f"ATENÇÃO! Suas mídias estão restritas por {round(limbotimespan/60)} minutos. Por favor se apresente e se enturme na conversa com os membros.\nUse o /regras para ver as regras do grupo", language=language)
         except Exception as e:
             print(e)
     welcome = GetRequestBackend(f'welcomes/{chat_id}')
@@ -107,8 +107,15 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
     elif len(welcome['message']) > 0:
         welcome = welcome['message'].replace('\\n', '\n')
     try:
+        if language=='pt':
+            rulesbuttontext = 'Veja as Regras!'
+        elif language=='es':
+            rulesbuttontext = 'Ver las Reglas!'
+        else:
+            rulesbuttontext = 'See the Rules!'
         welcome_card = WelcomeCard(cookiebot, msg, chat_id, language, isBombot)
-        SendPhoto(cookiebot, chat_id, welcome_card, caption=welcome, language=language)
+        SendPhoto(cookiebot, chat_id, welcome_card, caption=welcome, language=language, 
+                  reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=rulesbuttontext,callback_data=f'RULES {language}')]]))
     except Exception as e:
         print(e)
         Send(cookiebot, chat_id, welcome, language=language)
