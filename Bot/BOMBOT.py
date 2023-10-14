@@ -282,7 +282,7 @@ def thread_function_query(msg):
                 Send(cookiebot, chat_id, "Comando cancelado", language=language)
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data.startswith('RULES'):
-            Regras(cookiebot, msg, chat_id, query_data.split()[1])
+            Regras(cookiebot, msg['message'], chat_id, query_data.split()[1])
             cookiebot.editMessageReplyMarkup((chat_id, msg['message']['message_id']))
         run_unnatendedthreads()
     except Exception as e:
