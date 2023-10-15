@@ -1,6 +1,6 @@
 ¡Las funciones de Cookiebot!
 
-PASIVO:
+AUTOMÁTICO:
 Autopublicador - puede usar el bot para publicar comisiones/eventos/avisos en varios grupos durante varios días
 Republicar - también puede usar el bot para volver a publicar en el mismo grupo todos los días
 Chat AI - Responde a cualquier mensaje de texto
@@ -13,7 +13,7 @@ Bienvenido - Mensaje de bienvenida personalizado
 Tarjetas de bienvenida - Imagen de bienvenida personalizada con foto de chat y foto de usuario
 Copia de seguridad de miembros - En caso de que el grupo sea pirateado o eliminado por error, puedo ayudar a recuperar a sus participantes
 
-COMANDOS LIBRES:
+COMANDOS MANUALES:
 everyone - los administradores pueden llamar a todos los miembros del grupo
 adm - Llamar a los administradores del chat
 cualquiercosa - envía una foto de lo que quieres

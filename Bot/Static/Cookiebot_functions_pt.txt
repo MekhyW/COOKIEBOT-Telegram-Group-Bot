@@ -1,6 +1,6 @@
 As Funcionalidades do Cookiebot!
 
-PASSIVAS:
+AUTOMÁTICO:
 Autopublicador - Pode usar o bot para publicar comissões/eventos/avisos em vários grupos por vários dias
 Repost - Também pode usar o bot para repostar no mesmo grupo todos os dias
 IA de conversa - Responde qualquer mensagem de texto
@@ -13,7 +13,7 @@ Welcome - Mensagem customizada de boas vindas
 Cartoes de boas-vindas - Imagem de boas-vindas personalizada com foto do chat e foto do usuário
 Backup de Participantes - Caso o grupo seja hackeado ou apagado por engano, posso ajudar a recuperar seus participantes
 
-COMANDOS LIVRES:
+COMANDOS MANUAIS:
 everyone - Admins podem chamar todos os membros do grupo
 adm - Chama os administradores do chat
 qualquercoisa - Manda uma foto do que vc quiser

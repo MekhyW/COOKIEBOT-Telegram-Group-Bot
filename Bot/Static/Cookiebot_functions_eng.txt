@@ -1,6 +1,6 @@
 Cookiebot Features!
 
-PASSIVE:
+AUTOMATIC FEATURES:
 Publisher - Can use bot to publish commissions/events/notices in multiple groups for multiple days
 Repost - Can also use bot to repost on the same group every day
 Chat AI - Reply to any text message
@@ -13,7 +13,7 @@ Welcome - Customized welcome message
 Welcome Cards - Customized welcome image with chat photo and user photo
 Member Backup - In case the group is hacked or deleted by mistake, I can help recover your participants
 
-FREE COMMANDS:
+MANUAL COMMANDS:
 everyone - Admins can call all group members
 adm - Call chat admins
 anything - send a picture of what you want
