@@ -135,7 +135,7 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
         "publisherPost": current_configs[8], "publisherAsk": current_configs[9], "threadPosts": current_configs[10], "maxPosts": current_configs[11],
         "publisherMembersOnly": current_configs[12]})
         cache_configurations[chat_id] = current_configs
-        cookiebot.sendMessage(chat_id, "Successfully changed the variable!\nSend /reload in the chat if the old config persists", reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, "Successfully changed the variable!\nSend /reload in the chat if the old config persists")
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])
 
@@ -171,13 +171,10 @@ def ConfigVariableButton(cookiebot, msg, query_data):
 
 def SettarLanguage(cookiebot, msg, chat_id, language_code):
     if 'pt' in language_code:
-        SetLanguageComandos(cookiebot, mekhyID, chat_id, 'pt')
         msg['text'] = "pt"
     elif 'es' in language_code:
-        SetLanguageComandos(cookiebot, mekhyID, chat_id, 'es')
         msg['text'] = "es"
     else:
-        SetLanguageComandos(cookiebot, mekhyID, chat_id, 'eng')
         msg['text'] = "eng"
     msg['reply_to_message'] = {}
     msg['reply_to_message']['text'] = f'Chat = {chat_id} \nBot language for the chat. Use pt for portuguese, eng for english or es for spanish'
