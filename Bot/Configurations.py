@@ -169,6 +169,19 @@ def ConfigVariableButton(cookiebot, msg, query_data):
     elif query_data.startswith('q'):
         cookiebot.sendMessage(msg['message']['chat']['id'], f"Chat = {chat}\nUse 1 if the bot should only allow members of the channel to use the publisher, or 0 if not\n\nREPLY THIS MESSAGE with the new variable value")
 
+def SettarLanguage(cookiebot, msg, chat_id, language_code):
+    if 'pt' in language_code:
+        SetLanguageComandos(cookiebot, mekhyID, chat_id, 'pt')
+        msg['text'] = "pt"
+    elif 'es' in language_code:
+        SetLanguageComandos(cookiebot, mekhyID, chat_id, 'es')
+        msg['text'] = "es"
+    else:
+        SetLanguageComandos(cookiebot, mekhyID, chat_id, 'eng')
+        msg['text'] = "eng"
+    msg['reply_to_message']['text'] = f'Chat = {chat_id} \nBot language for the chat. Use pt for portuguese, eng for english or es for spanish'
+    ConfigurarSettar(cookiebot, msg, mekhyID)
+    
 
 def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id):
     if str(msg['from']['id']) not in listaadmins_id:
