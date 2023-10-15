@@ -179,6 +179,7 @@ def SettarLanguage(cookiebot, msg, chat_id, language_code):
     else:
         SetLanguageComandos(cookiebot, mekhyID, chat_id, 'eng')
         msg['text'] = "eng"
+    msg['reply_to_message'] = {}
     msg['reply_to_message']['text'] = f'Chat = {chat_id} \nBot language for the chat. Use pt for portuguese, eng for english or es for spanish'
     ConfigurarSettar(cookiebot, msg, mekhyID)
     
