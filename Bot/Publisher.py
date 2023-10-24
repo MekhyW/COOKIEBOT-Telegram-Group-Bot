@@ -52,7 +52,7 @@ def AskApproval(cookiebot, query_data, from_id, isBombot=False):
     Forward(cookiebot, approval_chat_id, second_chatid, second_messageid, isBombot=isBombot)
     Send(cookiebot, approval_chat_id, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️ 5 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 5')],
+            [InlineKeyboardButton(text="✔️ 7 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7')],
             [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 3')],
             [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 1')],
             [InlineKeyboardButton(text="❌",callback_data=f'DenyPub {origin_messageid}')]
