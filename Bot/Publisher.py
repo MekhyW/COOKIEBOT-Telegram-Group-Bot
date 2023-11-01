@@ -225,7 +225,7 @@ def SchedulePost(cookiebot, query_data):
     answer += "NOW - Cookiebot Mural 📬\n"
     for group in GetRequestBackend('registers'):
         group_id = group['id']
-        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(group_id)
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(group_id, ignorecache=True)
         if publisherMembersOnly:
             members = GetMembersChat(group_id)
             if origin_user is None or origin_user['username'] not in str(members):
