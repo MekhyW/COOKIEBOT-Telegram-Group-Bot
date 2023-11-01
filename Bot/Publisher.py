@@ -221,11 +221,12 @@ def SchedulePost(cookiebot, query_data):
     for job in jobs:
         if job.name.startswith(f"{parent}/jobs/{origin_chatid}"):
             delete_job(job.name)
+            jobs.remove(job)
     answer = f"Post set for the following times ({days} days):\n"
     answer += "NOW - Cookiebot Mural 📬\n"
     for group in GetRequestBackend('registers'):
         group_id = group['id']
-        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(group_id, ignorecache=True)
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(group_id)
         if publisherMembersOnly:
             members = GetMembersChat(group_id)
             if origin_user is None or origin_user['username'] not in str(members):
@@ -235,9 +236,14 @@ def SchedulePost(cookiebot, query_data):
             try:
                 num_posts_for_group = 0
                 target_chattitle = cookiebot.getChat(group_id)['title']
+                oldest_job = None
+                oldest_job_time = None
                 for job in jobs:
                     if f"--> {target_chattitle}" in job.description:
                         num_posts_for_group += 1
+                        if oldest_job_time is None or job.schedule_time < oldest_job_time:
+                            oldest_job = job
+                            oldest_job_time = job.schedule_time
                     if maxPosts is not None and num_posts_for_group > maxPosts:
                         delete_job(job.name)
                         num_posts_for_group -= 1
@@ -254,6 +260,13 @@ def SchedulePost(cookiebot, query_data):
                 answer += f"{hour}:{minute} - {target_chattitle}\n"
             except Exception as e:
                 print(e)
+                if 'RESOURCE_EXHAUSTED' in str(e) and oldest_job is not None:
+                    delete_job(oldest_job.name)
+                    create_job(origin_chatid+group_id, 
+                    f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
+                    f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid}",
+                    f"{minute} {hour} * * *")
+                    answer += f"{hour}:{minute} - {target_chattitle}\n"
     try:
         answer += f"OBS: private chats are not listed!"
         Send(cookiebot, origin_userid, answer)
