@@ -154,3 +154,5 @@
 /labels
 /challenges
 /challengelang
+/dica
+/parar
