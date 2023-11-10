@@ -50,11 +50,14 @@ def modelSFW(message, msg, language):
 
 def modelNSFW(message, language):
     if language == "eng":
-        r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': 'en'})
-    else:    
-        r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': language})
-    if 'message' in r.json() and len(r.json()['message']) > 0:
-        AnswerFinal = r.json()['message'].capitalize()
+        r = requests.get(f'https://simsimi.fun/api/v2/?mode=talk&message={message}&lang=en&filter=false')
+    else:
+        message = translator.translate(message, dest='es').text    
+        r = requests.get(f'https://simsimi.fun/api/v2/?mode=talk&message={message}&lang=es&filter=false')
+    if 'success' in r.json() and len(r.json()['success']) > 0:
+        AnswerFinal = r.json()['success'].capitalize()
+        if language == "pt":
+            AnswerFinal = translator.translate(AnswerFinal, dest='pt').text
         selfmoderation_response = openai.Moderation.create(input=AnswerFinal)
         results = selfmoderation_response['results'][0]['category_scores']
         if any(x > 0.2 for x in [results['hate'], results['hate/threatening'], results['self-harm'], results['self-harm/instructions'], results['self-harm/intent'], results['sexual/minors'], results['violence/graphic']]):
