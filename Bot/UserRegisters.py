@@ -66,8 +66,8 @@ def Report(cookiebot, msg, chat_id, targetid, language):
     Send(cookiebot, mekhyID, f"At chat {chat['title']}")
     Send(cookiebot, mekhyID, f"Account report: {target}",
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="Blacklist", callback_data="Report Blacklist {targetid} {language} {chat_id}")],
-            [InlineKeyboardButton(text="Discard Report", callback_data="Report No {targetid} {language}")]
+            [InlineKeyboardButton(text="Blacklist", callback_data=f"Report Blacklist {targetid} {language} {chat_id}")],
+            [InlineKeyboardButton(text="Discard Report", callback_data=f"Report No {targetid} {language}")]
         ]
     ))
 
