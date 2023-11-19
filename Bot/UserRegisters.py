@@ -51,6 +51,26 @@ def Everyone(cookiebot, msg, chat_id, listaadmins, language):
         for resulting_message in result:
             Send(cookiebot, chat_id, resulting_message, msg_to_reply=msg)
 
+def ReportAsk(cookiebot, msg, chat_id, targetid, language):
+    SendChatAction(cookiebot, chat_id, 'typing')
+    Send(cookiebot, chat_id, "Denunciar como conta falsa/spam?", msg_to_reply=msg, language=language, 
+    reply_markup = InlineKeyboardMarkup (inline_keyboard = [
+            [InlineKeyboardButton(text="✔️", callback_data=f"Report Yes {targetid} {language}")], 
+            [InlineKeyboardButton(text="❌", callback_data=f"Report No")]
+        ]
+    ))
+
+def Report(cookiebot, msg, chat_id, targetid, language):
+    target = cookiebot.getChatMember(chat_id, targetid)
+    chat = cookiebot.getChat(chat_id)
+    Send(cookiebot, mekhyID, f"At chat {chat['title']}")
+    Send(cookiebot, mekhyID, f"Account report: {target}",
+    reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="Blacklist", callback_data="Report Blacklist {targetid} {language} {chat_id}")],
+            [InlineKeyboardButton(text="Discard Report", callback_data="Report No")]
+        ]
+    ))
+
 def AdmAsk(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     Send(cookiebot, chat_id, "Confirma chamar os administradores?", msg_to_reply=msg, language=language, 

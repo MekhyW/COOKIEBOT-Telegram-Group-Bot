@@ -144,26 +144,13 @@ def CheckCAS(cookiebot, msg, chat_id, language):
         return True
     return False
 
-def CheckRaider(cookiebot, msg, chat_id, language):
-    try:
-        r = requests.post('https://burrbot.xyz/noraid.php', data={'id': str(msg['new_chat_participant']['id'])}, timeout=2)
-        is_raider = json.loads(r.text)['raider']
-    except Exception as e:
-        print(e)
-        return False
-    if is_raider == True:
-        BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.", language=language)
-        return True
-    return False
-
 def CheckBlacklist(cookiebot, msg, chat_id, language):
     isBlacklisted = GetRequestBackend(f"blacklist/{msg['new_chat_participant']['id']}")
     if 'error' in isBlacklisted:
         return False
     else:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado como raider em outros chats\n\nSe isso foi um erro, favor entrar em contato com um administrador do grupo.", language=language)
+        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado como conta falsa/spam em outros chats", language=language)
         return True
 
 def Captcha(cookiebot, msg, chat_id, captchatimespan, language):

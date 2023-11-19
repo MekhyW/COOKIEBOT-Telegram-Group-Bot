@@ -85,13 +85,16 @@ def thread_function(msg):
                     if 'language_code' in msg['from']:
                         SettarLanguage(cookiebot, msg, chat_id, msg['from']['language_code'])
                         GetConfig(chat_id, ignorecache=True)
-                elif not CheckCAS(cookiebot, msg, chat_id, language) and not CheckRaider(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
+                elif not CheckCAS(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:
                         Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=isBombot)
             elif content_type == "left_chat_member":
                 left_chat_member(msg, chat_id)
+                if msg['left_chat_member']['id'] != msg['from']['id'] and cookiebot.getMe()['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
+                    if chat_id == '-1001891420773':
+                        ReportAsk(cookiebot, msg, chat_id, msg['left_chat_member']['id'], language)
             elif content_type == "voice":
                 if utilityfunctions == True:
                     audio = GetVoiceMessage(cookiebot, msg, isBombot=isBombot)
@@ -273,6 +276,18 @@ def thread_function_query(msg):
                 elif query_data.startswith('Deny'):
                     DenyPost(cookiebot, query_data)
                 DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
+        elif query_data.startswith('Report'):
+            command = query_data.split()[1]
+            targetid = query_data.split()[2]
+            language = query_data.split()[3]
+            if command == 'Yes':
+                Report(cookiebot, msg, chat_id, targetid, language)
+            elif command == 'Blacklist':
+                origin_chat_id = query_data.split()[4]
+                PostRequestBackend(f'blacklist/{targetid}')
+                Send(cookiebot, mekhyID, f"Blacklisted: {targetid}")
+                Send(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam.\nObrigado pela denúncia!", language=language)
+            DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data.startswith('CAPTCHA') and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
             SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot, language=query_data.split()[1])
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
