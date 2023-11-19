@@ -93,7 +93,7 @@ def thread_function(msg):
             elif content_type == "left_chat_member":
                 left_chat_member(msg, chat_id)
                 if msg['left_chat_member']['id'] != msg['from']['id'] and cookiebot.getMe()['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
-                    if chat_id == '-1001891420773':
+                    if chat_id == -1001891420773:
                         ReportAsk(cookiebot, msg, chat_id, msg['left_chat_member']['id'], language)
             elif content_type == "voice":
                 if utilityfunctions == True:
