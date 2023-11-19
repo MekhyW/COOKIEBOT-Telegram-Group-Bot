@@ -56,7 +56,7 @@ def ReportAsk(cookiebot, msg, chat_id, targetid, language):
     Send(cookiebot, chat_id, "Denunciar como conta falsa/spam?", msg_to_reply=msg, language=language, 
     reply_markup = InlineKeyboardMarkup (inline_keyboard = [
             [InlineKeyboardButton(text="✔️", callback_data=f"Report Yes {targetid} {language}")], 
-            [InlineKeyboardButton(text="❌", callback_data=f"Report No")]
+            [InlineKeyboardButton(text="❌", callback_data=f"Report No {targetid} {language}")]
         ]
     ))
 
@@ -67,7 +67,7 @@ def Report(cookiebot, msg, chat_id, targetid, language):
     Send(cookiebot, mekhyID, f"Account report: {target}",
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="Blacklist", callback_data="Report Blacklist {targetid} {language} {chat_id}")],
-            [InlineKeyboardButton(text="Discard Report", callback_data="Report No")]
+            [InlineKeyboardButton(text="Discard Report", callback_data="Report No {targetid} {language}")]
         ]
     ))
 
