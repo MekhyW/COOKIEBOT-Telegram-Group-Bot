@@ -53,7 +53,7 @@ def modelNSFW(message, language):
     if language == "eng":
         language = "en"
     r = requests.post(f'https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': language}, headers={"User-Agent": USER_AGENT})
-    if 'status' in r.json() and r.json()['status'] == 200:
+    if 'status' in r.json() and int(r.json()['status']) == 200:
         AnswerFinal = r.json()['message'].capitalize()
         selfmoderation_response = openai.Moderation.create(input=AnswerFinal)
         results = selfmoderation_response['results'][0]['category_scores']
@@ -69,9 +69,9 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
     message = ""
     AnswerFinal = ""
     if "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']:
-        message = msg['text'].replace("Cookiebot", '').replace("cookiebot", '').replace("@CookieMWbot", '').replace("COOKIEBOT", '').replace("CookieBot", '').replace("\n", '').capitalize()
+        message = msg['text'].replace("Cookiebot", '').replace("cookiebot", '').replace("@CookieMWbot", '').replace("COOKIEBOT", '').replace("CookieBot", '').replace("\n", ' ').strip().capitalize()
     else:
-        message = msg['text'].replace("\n", '').capitalize()
+        message = msg['text'].replace("\n", ' ').strip().capitalize()
     if len(message) == 0:
         AnswerFinal = "?"
     else:
