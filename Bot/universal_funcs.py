@@ -2,7 +2,6 @@ googleAPIkey = ''
 searchEngineCX = ''
 exchangerate_key = ''
 openai_key = ''
-sim_key = ''
 cookiebotTOKEN = ''
 bombotTOKEN = ''
 mekhyID = 780875868

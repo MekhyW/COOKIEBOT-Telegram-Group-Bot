@@ -5,6 +5,7 @@ data_initial = json.load(open('Static/AI_SFW.json'))
 questions_list = [q_a['prompt'] for q_a in data_initial['questions_answers']]
 answers_list = [q_a['completion'] for q_a in data_initial['questions_answers']]
 replacements = {'dan':'cookie', 'Dan':'Cookie', 'DAN':'COOKIE', 'chatgpt':'cookiebot', 'Chatgpt':'Cookiebot', 'ChatGPT':'CookieBot', 'CHATGPT':'COOKIEBOT', '[🔒classic]': '', '[🔒CLASSIC]': ''}
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36"
 
 def replace(match):
     return replacements[match.group(0)]
@@ -51,13 +52,13 @@ def modelSFW(message, msg, language):
 def modelNSFW(message, language):
     if language == "eng":
         language = "en"
-    r = requests.post(f'https://wsapi.simsimi.com/190410/talk', headers={'Content-Type': "application/json", 'x-api-key': sim_key}, json={'utext': message, 'lang': language})
+    r = requests.post(f'https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': language}, headers={"User-Agent": USER_AGENT})
     if 'status' in r.json() and r.json()['status'] == 200:
-        AnswerFinal = r.json()['atext'].capitalize()
-        #selfmoderation_response = openai.Moderation.create(input=AnswerFinal)
-        #results = selfmoderation_response['results'][0]['category_scores']
-        #if any(x > 0.2 for x in [results['hate'], results['hate/threatening'], results['self-harm'], results['self-harm/instructions'], results['self-harm/intent'], results['sexual/minors'], results['violence/graphic']]):
-        #    AnswerFinal = "*" * len(AnswerFinal)
+        AnswerFinal = r.json()['message'].capitalize()
+        selfmoderation_response = openai.Moderation.create(input=AnswerFinal)
+        results = selfmoderation_response['results'][0]['category_scores']
+        if any(x > 0.2 for x in [results['hate'], results['hate/threatening'], results['self-harm'], results['self-harm/instructions'], results['self-harm/intent'], results['sexual/minors'], results['violence/graphic']]):
+            AnswerFinal = "*" * len(AnswerFinal)
     else:
         AnswerFinal = ""
     return AnswerFinal
