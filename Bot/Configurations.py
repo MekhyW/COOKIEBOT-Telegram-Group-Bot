@@ -62,6 +62,8 @@ def GetConfig(chat_id, ignorecache=False):
         threadPosts = configs['threadPosts']
         maxPosts = configs['maxPosts']
         publisherMembersOnly = configs['publisherMembersOnly']
+    if captchatimespan < 30:
+        captchatimespan = abs(captchatimespan)*60
     cache_configurations[chat_id] = [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
     return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
 
