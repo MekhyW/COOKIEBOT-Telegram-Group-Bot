@@ -96,6 +96,8 @@ def Configurar(cookiebot, msg, chat_id, listaadmins_id, language):
             print(e)
     else:
         Send(cookiebot, chat_id, "Você não tem permissão para configurar o bot!\n(Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada!)", msg, language)
+        with open('Static/remove_anonymous_tutorial.mp4', 'rb') as video:
+            cookiebot.sendVideo(chat_id, video)
 
 
 def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
