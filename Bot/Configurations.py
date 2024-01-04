@@ -211,20 +211,3 @@ def AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id):
 def NovasRegras(cookiebot, msg, chat_id):
     SendChatAction(cookiebot, chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules", reply_to_message_id=msg['message_id'])
-
-def Regras(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'typing')
-    rules = GetRequestBackend(f"rules/{chat_id}")
-    if 'error' in rules and rules['error'] == "Not Found":    
-        Send(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", msg, language)
-    else:
-        regras = rules['rules'].replace('\\n', '\n')
-        if regras.endswith("@MekhyW"):
-            cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
-        else:
-            if language == 'pt':
-                cookiebot.sendMessage(chat_id, regras+"\n\nDúvidas em relação ao bot? Mande para @MekhyW", reply_to_message_id=msg['message_id'])
-            elif language == 'es':
-                cookiebot.sendMessage(chat_id, regras+"\n\n¿Preguntas sobre el bot? Envíalo a @MekhyW", reply_to_message_id=msg['message_id'])
-            else:
-                cookiebot.sendMessage(chat_id, regras+"\n\nQuestions about the bot? Send to @MekhyW", reply_to_message_id=msg['message_id'])

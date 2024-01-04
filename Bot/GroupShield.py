@@ -24,6 +24,36 @@ def openTelegramImage(cookiebot, token, photo_id):
     image = cv2.imdecode(image, cv2.IMREAD_COLOR)
     return image
 
+def SubstituteUsertags(text, msg):
+    if 'new_chat_member' in msg:
+        user = msg['new_chat_member']
+    else:
+        user = msg['from']
+    usertags = ['{user}', '{username}', '{mention}', '$user', '$username', '$(user)', '$(username)', '<user>', '<username>', '<name>']
+    for usertag in usertags:
+        if usertag in text:
+            if 'username' in user:
+                text = text.replace(usertag, f"@{user['username']}")
+            else:
+                text = text.replace(usertag, f"{user['first_name']}")
+
+def Regras(cookiebot, msg, chat_id, language):
+    SendChatAction(cookiebot, chat_id, 'typing')
+    rules = GetRequestBackend(f"rules/{chat_id}")
+    if 'error' in rules and rules['error'] == "Not Found":    
+        Send(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", msg, language)
+    else:
+        regras = rules['rules'].replace('\\n', '\n')
+        regras = SubstituteUsertags(regras, msg)
+        if not regras.endswith("@MekhyW"):
+            if language == 'pt':
+                regras += "\n\nDúvidas em relação ao bot? Mande para @MekhyW"
+            elif language == 'es':
+                regras += "\n\n¿Preguntas sobre el bot? Envíalo a @MekhyW"
+            else:
+                regras += "\n\nQuestions about the bot? Send to @MekhyW"
+    cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
+
 def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
     if 'new_chat_member' in msg:
         user = msg['new_chat_member']
@@ -106,6 +136,7 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
             welcome = f"Olá! As boas-vindas ao grupo!"
     elif len(welcome['message']) > 0:
         welcome = welcome['message'].replace('\\n', '\n')
+        welcome = SubstituteUsertags(welcome, msg)
     try:
         if language=='pt':
             rulesbuttontext = 'Veja as Regras!'
