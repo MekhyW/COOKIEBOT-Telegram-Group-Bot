@@ -36,6 +36,7 @@ def SubstituteUsertags(text, msg):
                 text = text.replace(usertag, f"@{user['username']}")
             else:
                 text = text.replace(usertag, f"{user['first_name']}")
+    return text
 
 def Regras(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
