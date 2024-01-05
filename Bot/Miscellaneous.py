@@ -71,9 +71,8 @@ def Broadcast(cookiebot, msg):
 def Comandos(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     wait_open(f"Static/Cookiebot_functions_{language}.txt")
-    text_file = open(f"Static/Cookiebot_functions_{language}.txt", "r+", encoding='utf8')
-    string = text_file.read()
-    text_file.close()
+    with open(f"Static/Cookiebot_functions_{language}.txt", "r+", encoding='utf8') as text_file:
+        string = text_file.read()
     Send(cookiebot, chat_id, string, msg_to_reply=msg)
 
 def NotifyFunOff(cookiebot, msg, chat_id, language):

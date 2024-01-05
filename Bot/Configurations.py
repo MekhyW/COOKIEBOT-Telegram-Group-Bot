@@ -17,9 +17,8 @@ def GetAdmins(cookiebot, msg, chat_id, ignorecache=False):
 
 def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=False):
     wait_open(f"Static/Cookiebot_functions_{language}.txt")
-    text_file = open(f"Static/Cookiebot_functions_{language}.txt", "r", encoding='utf8')
-    lines = text_file.readlines()
-    text_file.close()
+    with open(f"Static/Cookiebot_functions_{language}.txt", "r", encoding='utf8') as text_file:
+        lines = text_file.readlines()
     comandos = []
     for line in lines:
         if " - " in line:
