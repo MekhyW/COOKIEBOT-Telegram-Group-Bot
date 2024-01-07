@@ -165,7 +165,7 @@ def thread_function(msg):
                         Idade(cookiebot, msg, chat_id, language)
                     else:
                         NotifyFunOff(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/genero", "/gender")):
+                elif msg['text'].startswith(("/genero", "/gênero", "/gender")):
                     if funfunctions:
                         Genero(cookiebot, msg, chat_id, language)
                     else:
