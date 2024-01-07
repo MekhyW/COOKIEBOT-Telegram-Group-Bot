@@ -42,7 +42,7 @@ def Regras(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     rules = GetRequestBackend(f"rules/{chat_id}")
     if 'error' in rules and rules['error'] == "Not Found":    
-        Send(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\nPara tal, use o /novasregras", msg, language)
+        Send(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\nPara colocar regras, use o /novasregras", msg, language)
     else:
         regras = rules['rules'].replace('\\n', '\n')
         regras = SubstituteUsertags(regras, msg)
