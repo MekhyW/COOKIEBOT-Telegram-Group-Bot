@@ -126,8 +126,9 @@ def ReplySticker(cookiebot, msg, chat_id):
 
 def Meme(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
+    members = GetMembersChat(chat_id)
     members_tagged = []
-    if ('@' in msg['text']):
+    if '@' in msg['text']:
         for target in msg['text'].split("@")[1:]:
             if 'CookieMWbot' in target:
                 continue
@@ -135,7 +136,7 @@ def Meme(cookiebot, msg, chat_id, language):
     templates_eng = os.listdir("Meme/English")
     templates_pt = os.listdir("Meme/Portuguese")
     caption = ""
-    for attempt in range(10):
+    for attempt in range(100):
         if 'pt' not in language.lower():
             template = "Meme/English/" + random.choice(templates_eng)
         else:
@@ -149,73 +150,69 @@ def Meme(cookiebot, msg, chat_id, language):
         mask_red = cv2.inRange(template_img, (0, 0, 250), (5, 5, 255))
         contours_green, tree = cv2.findContours(mask_green, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         contours_red, tree = cv2.findContours(mask_red, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    if len(members_tagged) > len(contours_green):
-        return Meme(cookiebot, msg, chat_id, language)
-    else:
-        members = GetMembersChat(chat_id)
-        for green in contours_green:
-            x, y, w, h = cv2.boundingRect(green)
-            for attempt in range(10):
-                if len(members_tagged) != 0:
-                    chosen_member = random.choice(members_tagged)
-                    members_tagged.remove(chosen_member)
-                else:
-                    try:
-                        chosen_member = random.choice(members)
-                    except IndexError:
-                        return Meme(cookiebot, msg, chat_id, language)
-                    members.remove(chosen_member)
-                    if 'user' in chosen_member:
-                        chosen_member = chosen_member['user']
-                    else:
-                        continue
+        if len(members_tagged) <= len(contours_green):
+            break
+    for green in contours_green:
+        x, y, w, h = cv2.boundingRect(green)
+        for attempt in range(100):
+            if len(members_tagged):
+                chosen_member = random.choice(members_tagged)
+                members_tagged.remove(chosen_member)
+            else:
                 try:
-                    url = f"https://telegram.me/{chosen_member}"
+                    chosen_member = random.choice(members)
                 except IndexError:
+                    return Meme(cookiebot, msg, chat_id, language)
+                members.remove(chosen_member)
+                if 'user' in chosen_member:
+                    chosen_member = chosen_member['user']
+                else:
                     continue
-                req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"}) 
-                html = urllib.request.urlopen(req)
-                soup = BeautifulSoup(html, "html.parser")
-                images = list(soup.findAll('img'))
-                if len(images) == 0:
-                    continue
+            try:
+                url = f"https://telegram.me/{chosen_member}"
+            except IndexError:
+                continue
+            req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"}) 
+            html = urllib.request.urlopen(req)
+            soup = BeautifulSoup(html, "html.parser")
+            images = list(soup.findAll('img'))
+            if len(images):
                 break
-            resp = urllib.request.urlopen(images[0]['src'])
-            image = np.asarray(bytearray(resp.read()), dtype="uint8")
-            image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-            image = cv2.resize(image, (w, h), interpolation=cv2.INTER_AREA)
-            mask_green_copy = mask_green[y:y+h, x:x+w]
-            for i in range(y, y+h):
-                for j in range(x, x+w):
-                    if mask_green_copy[i-y, j-x] == 255:
-                        template_img[i, j] = image[i-y, j-x]
-            caption += f"@{chosen_member} "
-        for red in contours_red:
-            x, y, w, h = cv2.boundingRect(red)
-            for attempt in range(10):
-                try:
-                    chosen_photo = GetRequestBackend("randomdatabase")
-                    photo_id = chosen_photo['idMedia']
-                    photo_info = cookiebot.getFile(photo_id)
-                    photo_url = f"https://api.telegram.org/file/bot{cookiebotTOKEN}/{photo_info['file_path']}"
-                    break
-                except Exception as e:
-                    print(e)
-                    continue
-            resp = urllib.request.urlopen(photo_url)
-            image = np.asarray(bytearray(resp.read()), dtype="uint8")
-            image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-            image = cv2.resize(image, (w, h), interpolation=cv2.INTER_AREA)
-            mask_red_copy = mask_red[y:y+h, x:x+w]
-            for i in range(y, y+h):
-                for j in range(x, x+w):
-                    if mask_red_copy[i-y, j-x] == 255:
-                        template_img[i, j] = image[i-y, j-x]
-        cv2.imwrite("meme.png", template_img)
-        final_img = open("meme.png", 'rb')
+        resp = urllib.request.urlopen(images[0]['src'])
+        image = np.asarray(bytearray(resp.read()), dtype="uint8")
+        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        image = cv2.resize(image, (w, h), interpolation=cv2.INTER_AREA)
+        mask_green_copy = mask_green[y:y+h, x:x+w]
+        for i in range(y, y+h):
+            for j in range(x, x+w):
+                if mask_green_copy[i-y, j-x] == 255:
+                    template_img[i, j] = image[i-y, j-x]
+        caption += f"@{chosen_member} "
+    for red in contours_red:
+        x, y, w, h = cv2.boundingRect(red)
+        for attempt in range(100):
+            try:
+                chosen_photo = GetRequestBackend("randomdatabase")
+                photo_id = chosen_photo['idMedia']
+                photo_info = cookiebot.getFile(photo_id)
+                photo_url = f"https://api.telegram.org/file/bot{cookiebotTOKEN}/{photo_info['file_path']}"
+                break
+            except Exception as e:
+                print(e)
+                continue
+        resp = urllib.request.urlopen(photo_url)
+        image = np.asarray(bytearray(resp.read()), dtype="uint8")
+        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        image = cv2.resize(image, (w, h), interpolation=cv2.INTER_AREA)
+        mask_red_copy = mask_red[y:y+h, x:x+w]
+        for i in range(y, y+h):
+            for j in range(x, x+w):
+                if mask_red_copy[i-y, j-x] == 255:
+                    template_img[i, j] = image[i-y, j-x]
+    cv2.imwrite("meme.png", template_img)
+    with open("meme.png", 'rb') as final_img:
         SendPhoto(cookiebot, chat_id, photo=final_img, caption=caption, msg_to_reply=msg)
-        final_img.close()
-        try:
-            os.remove("meme.png")
-        except FileNotFoundError:
-            pass
+    try:
+        os.remove("meme.png")
+    except FileNotFoundError:
+        pass
