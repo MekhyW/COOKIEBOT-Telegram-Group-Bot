@@ -158,6 +158,7 @@ def Meme(cookiebot, msg, chat_id, language):
             if len(members_tagged):
                 chosen_member = random.choice(members_tagged)
                 members_tagged.remove(chosen_member)
+                members = [member for member in members if 'user' not in member or member['user'] != chosen_member]
             else:
                 try:
                     chosen_member = random.choice(members)
