@@ -151,9 +151,6 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
     except Exception as e:
         print(e)
         Send(cookiebot, chat_id, welcome, language=language)
-    for thread in threading.enumerate():
-        if isinstance(thread, threading.Timer) and thread.kwargs['chat_id'] == chat_id and thread.kwargs['msg']['new_chat_participant']['id'] == msg['from']['id']:
-            thread.cancel()
         
 
 def CheckHumanFactor(cookiebot, msg, chat_id, language):
@@ -253,10 +250,11 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
                     Send(cookiebot, chat, f"Kickei o usuário com id {user} por {reason}.\nSe isso foi um erro, peça para um staff adicioná-lo de volta", language=language)
                     cookiebot.unbanChatMember(chat_id, user)
                     DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
-                else:
+                elif chat == chat_id and user == msg['from']['id']:
                     text.write(line)
-                    if chat == chat_id and user == msg['from']['id']:
-                        DeleteMessage(cookiebot, telepot.message_identifier(msg))
+                    DeleteMessage(cookiebot, telepot.message_identifier(msg))
+                else:    
+                    text.write(line)
 
 def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt', isBombot=False):
     wait_open("Captcha.txt")
@@ -280,11 +278,9 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
                     else:
                         DeleteMessage(cookiebot, telepot.message_identifier(msg))
                         attempts -= 1
-                        line = f"{chat} {user} {datetime.datetime.now()} {password} {captcha_id} {attempts}\n"
-                        text.write(line)
                         if attempts > 0:
                             Send(cookiebot, chat_id, "Senha incorreta, por favor tente novamente.", language=language)
-                        else:
-                            CheckCaptcha(cookiebot, msg, chat_id, 0, language)
+                        line = f"{chat} {user} {datetime.datetime.now()} {password} {captcha_id} {attempts}\n"
+                        text.write(line)
                 else:
                     text.write(line)

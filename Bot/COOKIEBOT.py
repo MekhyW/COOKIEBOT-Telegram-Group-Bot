@@ -233,6 +233,7 @@ def thread_function(msg):
                         pass
                 else:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
+                    CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
             if chat_type != 'private' and content_type != "sticker":
                 StickerCooldownUpdates(msg, chat_id)
             run_unnatendedthreads()
