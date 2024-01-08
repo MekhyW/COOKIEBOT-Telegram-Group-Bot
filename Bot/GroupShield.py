@@ -1,7 +1,7 @@
 # coding=utf8
 from universal_funcs import *
 from captcha.image import ImageCaptcha
-from threading import Timer
+import threading
 import json, requests
 import cv2
 import numpy as np
@@ -198,9 +198,20 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
         caption = f"⚠️Digite o código acima para provar que você não é um robô⚠️\n\nVocê tem {round(captchatimespan/60)} minutos, se não resolver nesse tempo te removerei do chat ⏳\n(OBS: Se não aparecem 4 digitos, abra a foto completa)"
         captchaspawnID = SendPhoto(cookiebot, chat_id, photo, caption=caption, language=language, msg_to_reply=msg, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Approve",callback_data=f'CAPTCHA {language}')]]))
     wait_open("Captcha.txt")
-    with open("Captcha.txt", 'a+', encoding='utf-8') as text:
+    with open("Captcha.txt", 'r', encoding='utf-8') as text:
+        lines = text.readlines()
+    with open("Captcha.txt", 'w+', encoding='utf-8') as text:
+        for line in lines:
+            if len(line.split()) >= 5:
+                hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parseLineCaptcha(line)
+                if chat == chat_id and user == msg['new_chat_participant']['id']:
+                    for thread in threading.enumerate():
+                        if isinstance(thread, threading.Timer) and thread.kwargs['chat_id'] == chat_id and thread.kwargs['msg']['new_chat_participant']['id'] == msg['new_chat_participant']['id']:
+                            thread.cancel()
+                else:
+                    text.write(line)
         text.write(f"{chat_id} {msg['new_chat_participant']['id']} {datetime.datetime.now()} {password} {captchaspawnID} 5\n")
-    timer = Timer(captchatimespan+1, CheckCaptcha, kwargs={'cookiebot': cookiebot, 'msg': msg, 'chat_id': chat_id, 'captchatimespan': captchatimespan, 'language': language})
+    timer = threading.Timer(captchatimespan+1, CheckCaptcha, kwargs={'cookiebot': cookiebot, 'msg': msg, 'chat_id': chat_id, 'captchatimespan': captchatimespan, 'language': language})
     timer.start()
 
 def parseLineCaptcha(line):
