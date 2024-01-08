@@ -199,14 +199,7 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
         caption = f"⚠️Digite o código acima para provar que você não é um robô⚠️\n\nVocê tem {round(captchatimespan/60)} minutos, se não resolver nesse tempo te removerei do chat ⏳\n(OBS: Se não aparecem 4 digitos, abra a foto completa)"
         captchaspawnID = SendPhoto(cookiebot, chat_id, photo, caption=caption, language=language, msg_to_reply=msg, reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="ADMINS: Approve",callback_data=f'CAPTCHA {language}')]]))
     wait_open("Captcha.txt")
-    with open("Captcha.txt", 'r', encoding='utf-8') as text:
-        lines = text.readlines()
-    with open("Captcha.txt", 'w+', encoding='utf-8') as text:
-        for line in lines:
-            if len(line.split()) >= 5:
-                hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parseLineCaptcha(line)
-                if chat != chat_id or user != msg['new_chat_participant']['id']:
-                    text.write(line)
+    with open("Captcha.txt", 'a+', encoding='utf-8') as text:
         text.write(f"{chat_id} {msg['new_chat_participant']['id']} {datetime.datetime.now()} {password} {captchaspawnID} 5\n")
     for timer in active_captcha_timers:
         if timer['chat_id'] == chat_id and timer['user_id'] == msg['new_chat_participant']['id']:
