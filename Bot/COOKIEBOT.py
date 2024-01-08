@@ -287,7 +287,7 @@ def thread_function_query(msg):
                 Send(cookiebot, mekhyID, f"Blacklisted: {targetid}")
                 Send(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam.\nObrigado pela denúncia!", language=language)
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
-        elif query_data.startswith('CAPTCHA') and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID)):
+        elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
             SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot, language=query_data.split()[1])
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data.startswith('ADM'):
