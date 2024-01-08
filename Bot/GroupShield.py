@@ -54,7 +54,7 @@ def Regras(cookiebot, msg, chat_id, language):
                 regras += "\n\n¿Preguntas sobre el bot? Envíalo a @MekhyW"
             else:
                 regras += "\n\nQuestions about the bot? Send to @MekhyW"
-    cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
+        cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
 
 def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
     if 'new_chat_member' in msg:
