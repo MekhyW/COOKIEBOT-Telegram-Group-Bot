@@ -7,7 +7,6 @@ import cv2
 import numpy as np
 from PIL import ImageFont, ImageDraw, Image
 
-active_captcha_timers = []
 captcha = ImageCaptcha()
 
 emoji_pattern = re.compile("["
@@ -201,17 +200,8 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     wait_open("Captcha.txt")
     with open("Captcha.txt", 'a+', encoding='utf-8') as text:
         text.write(f"{chat_id} {msg['new_chat_participant']['id']} {datetime.datetime.now()} {password} {captchaspawnID} 5\n")
-    for timer in active_captcha_timers:
-        if timer['chat_id'] == chat_id and timer['user_id'] == msg['new_chat_participant']['id']:
-            timer['timer'].cancel()
-            active_captcha_timers.remove(timer)
-            try:
-                cookiebot.DeleteMessage((str(chat_id), str(timer['captcha_msg_id'])))
-            except Exception as e:
-                print(e)
-    timer = Timer(captchatimespan+1, CheckCaptcha, kwargs={'cookiebot': cookiebot, 'msg': msg, 'chat_id': chat_id, 'captchatimespan': captchatimespan, 'language': language, 'is_timer': True})
+    timer = Timer(captchatimespan+1, CheckCaptcha, kwargs={'cookiebot': cookiebot, 'msg': msg, 'chat_id': chat_id, 'captchatimespan': captchatimespan, 'language': language})
     timer.start()
-    active_captcha_timers.append({'chat_id': chat_id, 'user_id': msg['new_chat_participant']['id'], 'captcha_msg_id': captchaspawnID, 'timer': timer})
 
 def parseLineCaptcha(line):
     #CHATID userID yy-mm-dd hr:min:sec password captcha_id attempts
@@ -226,7 +216,7 @@ def parseLineCaptcha(line):
     attempts = int(line.split()[6])
     return hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts
 
-def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language, is_timer=False):
+def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
     wait_open("Captcha.txt")
     with open("Captcha.txt", 'r', encoding='utf-8') as text:
         lines = text.readlines()
@@ -241,21 +231,16 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language, is_timer=Fa
                         reason = "não solucionar o captcha a tempo"
                     try:
                         cookiebot.kickChatMember(chat_id, user)
-                        Send(cookiebot, chat, f"Kickei o usuário com id {user} por {reason}.\nSe isso foi um erro, peça para um staff adicioná-lo de volta", language=language)
-                        cookiebot.unbanChatMember(chat_id, user)
                     except Exception as e:
                         print(e)
+                    Send(cookiebot, chat, f"Kickei o usuário com id {user} por {reason}.\nSe isso foi um erro, peça para um staff adicioná-lo de volta", language=language)
+                    cookiebot.unbanChatMember(chat_id, user)
                     DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
                 elif chat == chat_id and user == msg['from']['id']:
                     text.write(line)
                     DeleteMessage(cookiebot, telepot.message_identifier(msg))
                 else:    
                     text.write(line)
-    if is_timer:
-        for timer in active_captcha_timers:
-            if timer['chat_id'] == chat_id and timer['user_id'] == msg['new_chat_participant']['id']:
-                active_captcha_timers.remove(timer)
-                break
 
 def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt', isBombot=False):
     wait_open("Captcha.txt")
