@@ -62,7 +62,7 @@ def thread_function(msg):
         else:
             if chat_type != 'private':
                 listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id)
-                FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(chat_id)
+                FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(cookiebot, chat_id)
                 CheckNewName(msg, chat_id)
             if 'group_chat_created' in msg and msg['group_chat_created'] == True:
                 isCreatorBlacklisted = GetRequestBackend(f"blacklist/{msg['from']['id']}")
@@ -84,7 +84,7 @@ def thread_function(msg):
                     caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW")
                     if 'language_code' in msg['from']:
                         SettarLanguage(cookiebot, msg, chat_id, msg['from']['language_code'])
-                        GetConfig(chat_id, ignorecache=True)
+                        GetConfig(cookiebot, chat_id, ignorecache=True)
                 elif not CheckCAS(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
@@ -133,7 +133,7 @@ def thread_function(msg):
                     LeaveAndBlacklist(cookiebot, chat_id)
                 elif msg['text'].startswith(("/reload", "/recarregar")):
                     GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    GetConfig(chat_id, ignorecache=True)
+                    GetConfig(cookiebot, chat_id, ignorecache=True)
                     Send(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
                 elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                     Analyze(cookiebot, msg, chat_id, language)

@@ -226,7 +226,7 @@ def SchedulePost(cookiebot, query_data):
     answer += "NOW - Cookiebot Mural 📬\n"
     for group in GetRequestBackend('registers'):
         group_id = group['id']
-        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(group_id)
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(cookiebot, group_id)
         if publisherMembersOnly:
             members = GetMembersChat(group_id)
             if origin_user is None or origin_user['username'] not in str(members):
@@ -327,7 +327,7 @@ def SchedulerPull(cookiebot, isBombot=False):
         try:
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
-                config = GetConfig(group_id)
+                config = GetConfig(cookiebot, group_id)
                 Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, thread_id=int(config[10]), isBombot=isBombot)
             else:
                 Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, isBombot=isBombot)

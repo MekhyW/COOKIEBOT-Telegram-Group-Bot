@@ -15,7 +15,7 @@ def GetAdmins(cookiebot, msg, chat_id, ignorecache=False):
     cache_admins[chat_id] = [listaadmins, listaadmins_id, listaadmins_status]
     return listaadmins, listaadmins_id, listaadmins_status
 
-def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=False):
+def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=False, silent=False):
     wait_open(f"Static/Cookiebot_functions_{language}.txt")
     with open(f"Static/Cookiebot_functions_{language}.txt", "r", encoding='utf8') as text_file:
         lines = text_file.readlines()
@@ -32,12 +32,13 @@ def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=Fa
     else:
         SetMyCommands(cookiebot, comandos, chat_to_alter, isBombot=isBombot, language=language)
         SetMyCommands(cookiebot, comandos, chat_id, isBombot=isBombot, language=language)
-        Send(cookiebot, chat_id, f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}", language=language)
+        if not silent:
+            Send(cookiebot, chat_id, f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}", language=language)
 
 def SetComandosPrivate(cookiebot, chat_id, isBombot=False):
     SetLanguageComandos(cookiebot, chat_id, chat_id, "private", isBombot)
 
-def GetConfig(chat_id, ignorecache=False):
+def GetConfig(cookiebot, chat_id, ignorecache=False):
     if chat_id in cache_configurations and not ignorecache:
         return cache_configurations[chat_id]
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 1, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
@@ -64,13 +65,17 @@ def GetConfig(chat_id, ignorecache=False):
     if captchatimespan < 30:
         captchatimespan = abs(captchatimespan)*60
     cache_configurations[chat_id] = [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
+    try:
+        SetLanguageComandos(cookiebot, chat_id, chat_id, language, isBombot=False, silent=True)
+    except Exception as e:
+        print(e)
     return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
 
 
 def Configurar(cookiebot, msg, chat_id, listaadmins_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) in listaadmins_id or str(msg['from']['id']) == str(mekhyID):
-        configs = GetConfig(chat_id)
+        configs = GetConfig(cookiebot, chat_id)
         variables = f"FurBots: {configs[0]}\n sfw: {configs[1]}\n Sticker Spam Limit: {configs[2]}\n Time Without Sending Images: {configs[3]}\n Time Captcha: {configs[4]}\n Fun Functions: {configs[5]}\n Utility Functions: {configs[6]}\n Language: {configs[7]}\n Publisher Post: {configs[8]}\n Publisher Ask: {configs[9]}\n Thread Posts: {configs[10]}\n Max Posts: {configs[11]}"
         try:
             cookiebot.sendMessage(msg['from']['id'],"Current settings:\n\n" + variables + '\n\nChoose the variable you would like to change\n\n(If you want to change rules or welcome message, use /newrules or /newwelcome on the group)', reply_markup = InlineKeyboardMarkup(inline_keyboard=[
@@ -102,7 +107,7 @@ def Configurar(cookiebot, msg, chat_id, listaadmins_id, language):
 def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
     chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
-    current_configs = GetConfig(chat_to_alter)
+    current_configs = GetConfig(cookiebot, chat_to_alter)
     new_val = msg['text'].lower()
     if new_val or new_val in ["pt", "eng", "es"]:
         if "Bot language for the chat. Use pt for portuguese, eng for english or es for spanish" in msg['reply_to_message']['text']:
