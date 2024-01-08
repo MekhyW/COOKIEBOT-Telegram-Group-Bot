@@ -32,7 +32,9 @@ def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=Fa
     else:
         SetMyCommands(cookiebot, comandos, chat_to_alter, isBombot=isBombot, language=language)
         SetMyCommands(cookiebot, comandos, chat_id, isBombot=isBombot, language=language)
-        if not silent:
+        if silent:
+            print(f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}")
+        else:
             Send(cookiebot, chat_id, f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}", language=language)
 
 def SetComandosPrivate(cookiebot, chat_id, isBombot=False):
