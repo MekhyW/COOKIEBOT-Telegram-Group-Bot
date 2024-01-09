@@ -262,8 +262,7 @@ def thread_function_query(msg):
             print(e)
             try:
                 chat_id = msg['chat']['id']
-            except Exception as e:
-                print(e)
+            except:
                 chat_id = from_id
             listaadmins, listaadmins_id, listaadmins_status = [], [], []
         if 'CONFIG' in query_data:
