@@ -270,8 +270,8 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
                 if str(chat_id) == str(chat) and button == True:
                     SendChatAction(cookiebot, chat_id, 'typing')
                     DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
-                    msg['new_chat_member'] = cookiebot.getChatMember(chat_id, str(user))['user']
-                    Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
+                    msg['new_chat_member'] = cookiebot.getChatMember(chat, str(user))['user']
+                    Bemvindo(cookiebot, msg, chat, limbotimespan, language, isBombot)
                 elif str(chat_id) == str(chat) and str(msg['from']['id']) == str(user):
                     SendChatAction(cookiebot, chat_id, 'typing')
                     if "".join(msg['text'].upper().split()) == password:
