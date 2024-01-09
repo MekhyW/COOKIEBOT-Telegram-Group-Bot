@@ -255,10 +255,13 @@ def thread_function_query(msg):
     try:
         query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
         print('Callback Query:', query_id, from_id, query_data)
-        chat_id = msg['chat']['id']
+        chat_id = from_id
         listaadmins, listaadmins_id, listaadmins_status = [], [], []
         try:
-            chat_id = msg['message']['reply_to_message']['chat']['id']
+            if 'reply_to_message' in msg:
+                chat_id = msg['message']['reply_to_message']['chat']['id']
+            else:
+                chat_id = msg['chat']['id']
             listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id)
         except Exception as e:
             print(e)
