@@ -92,7 +92,7 @@ def thread_function(msg):
                         Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=isBombot)
             elif content_type == "left_chat_member":
                 left_chat_member(msg, chat_id)
-                if msg['left_chat_member']['id'] != msg['from']['id'] and cookiebot.getMe()['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
+                if not msg['left_chat_member']['is_bot'] and msg['left_chat_member']['id'] != msg['from']['id'] and cookiebot.getMe()['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
                     ReportAsk(cookiebot, msg, chat_id, msg['left_chat_member']['id'], language)
             elif content_type == "voice":
                 if utilityfunctions == True:
