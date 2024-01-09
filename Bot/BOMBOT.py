@@ -260,7 +260,10 @@ def thread_function_query(msg):
             listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id)
         except Exception as e:
             print(e)
-            chat_id = from_id
+            try:
+                chat_id = msg['chat']['id']
+            except:
+                chat_id = from_id
             listaadmins, listaadmins_id, listaadmins_status = [], [], []
         if 'CONFIG' in query_data:
             ConfigVariableButton(cookiebot, msg, query_data)
@@ -289,7 +292,6 @@ def thread_function_query(msg):
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
             SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot, language=query_data.split()[1])
-            DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data.startswith('ADM'):
             yesno = query_data.split()[1]
             language = query_data.split()[2]
