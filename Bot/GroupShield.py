@@ -8,6 +8,7 @@ import numpy as np
 from PIL import ImageFont, ImageDraw, Image
 
 captcha = ImageCaptcha()
+active_captchas = []
 
 emoji_pattern = re.compile("["
         u"\U0001F600-\U0001F64F"  # emoticons
@@ -25,8 +26,8 @@ def openTelegramImage(cookiebot, token, photo_id):
     return image
 
 def SubstituteUsertags(text, msg):
-    if 'new_chat_member' in msg:
-        user = msg['new_chat_member']
+    if 'new_chat_participant' in msg:
+        user = msg['new_chat_participant']
     else:
         user = msg['from']
     usertags = ['{user}', '{username}', '{mention}', '$user', '$username', '$(user)', '$(username)', '<user>', '<username>', '<name>']
@@ -56,8 +57,8 @@ def Regras(cookiebot, msg, chat_id, language):
         cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
 
 def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
-    if 'new_chat_member' in msg:
-        user = msg['new_chat_member']
+    if 'new_chat_participant' in msg:
+        user = msg['new_chat_participant']
     else:
         user = msg['from']
     # Get base images
@@ -151,9 +152,9 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
     except Exception as e:
         print(e)
         Send(cookiebot, chat_id, welcome, language=language)
-    for thread in threading.enumerate():
-        if isinstance(thread, threading.Timer) and thread.kwargs['chat_id'] == chat_id and thread.kwargs['msg']['new_chat_participant']['id'] == msg['from']['id']:
-            thread.cancel()
+    if 'new_chat_participant' in msg:
+        active_captchas = [captcha for captcha in active_captchas if captcha['userID'] != msg['new_chat_participant']['id']]
+    active_captchas = [captcha for captcha in active_captchas if captcha['userID'] != msg['from']['id']]
         
 
 def CheckHumanFactor(cookiebot, msg, chat_id, language):
@@ -203,87 +204,47 @@ def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
             [InlineKeyboardButton(text="I'm not a Robot!",callback_data=f'CAPTCHASELF {language} {msg["new_chat_participant"]["id"]}')],
             [InlineKeyboardButton(text="ADMINS: Approve",callback_data=f'CAPTCHAAPPROVE {language} 0')]
         ]))
-    wait_open("Captcha.txt")
-    with open("Captcha.txt", 'r', encoding='utf-8') as text:
-        lines = text.readlines()
-    with open("Captcha.txt", 'w+', encoding='utf-8') as text:
-        for line in lines:
-            if len(line.split()) >= 5:
-                hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parseLineCaptcha(line)
-                if chat == chat_id and user == msg['new_chat_participant']['id']:
-                    for thread in threading.enumerate():
-                        if isinstance(thread, threading.Timer) and thread.kwargs['chat_id'] == chat_id and thread.kwargs['msg']['new_chat_participant']['id'] == msg['new_chat_participant']['id']:
-                            thread.cancel()
-                else:
-                    text.write(line)
-        text.write(f"{chat_id} {msg['new_chat_participant']['id']} {datetime.datetime.now()} {password} {captchaspawnID} 5\n")
+    active_captchas = [captcha for captcha in active_captchas if captcha['userID'] != msg['new_chat_participant']['id']]
+    captchadict = {'chat_id': chat_id, 'userID': msg['new_chat_participant']['id'], 'time': datetime.datetime.now(), 'password': password, 'captcha_id': captchaspawnID, 'attempts': 5}
+    active_captchas.append(captchadict)
     timer = threading.Timer(captchatimespan+1, CheckCaptcha, kwargs={'cookiebot': cookiebot, 'msg': msg, 'chat_id': chat_id, 'captchatimespan': captchatimespan, 'language': language})
     timer.start()
 
-def parseLineCaptcha(line):
-    #CHATID userID yy-mm-dd hr:min:sec password captcha_id attempts
-    hour = int(line.split()[3].split(":")[0])
-    minute = int(line.split()[3].split(":")[1])
-    second = float(line.split()[3].split(":")[2])
-    captchasettime = (hour*3600) + (minute*60) + (second)
-    chat = int(line.split()[0])
-    user = int(line.split()[1])
-    password = line.split()[4]
-    captcha_id = int(line.split()[5])
-    attempts = int(line.split()[6])
-    return hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts
-
 def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
-    wait_open("Captcha.txt")
-    with open("Captcha.txt", 'r', encoding='utf-8') as text:
-        lines = text.readlines()
-    with open("Captcha.txt", 'w+', encoding='utf-8') as text:
-        for line in lines:
-            if len(line.split()) >= 5:
-                hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parseLineCaptcha(line)
-                if chat == chat_id and (captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) or attempts <= 0):
-                    if attempts <= 0:
-                        reason = "exceder o limite de tentativas para resolver o captcha"
-                    else:
-                        reason = "não solucionar o captcha a tempo"
-                    try:
-                        cookiebot.kickChatMember(chat_id, user)
-                    except Exception as e:
-                        print(e)
-                    Send(cookiebot, chat, f"Kickei o usuário com id {user} por {reason}.\nSe isso foi um erro, peça para um staff adicioná-lo de volta", language=language)
-                    cookiebot.unbanChatMember(chat_id, user)
-                    DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
-                elif chat == chat_id and user == msg['from']['id']:
-                    text.write(line)
-                    DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                else:    
-                    text.write(line)
+    for active_captcha in active_captchas:
+        if active_captcha['chat_id'] == chat_id and (active_captcha['time']+datetime.timedelta(seconds=captchatimespan) <= datetime.datetime.now() or active_captcha['attempts'] <= 0):
+            if active_captcha['attempts'] <= 0:
+                reason = "exceder o limite de tentativas para resolver o captcha"
+            else:
+                reason = "não solucionar o captcha a tempo"
+            try:
+                cookiebot.kickChatMember(chat_id, active_captcha['userID'])
+                Send(cookiebot, chat_id, f"Kickei o usuário com id {active_captcha['userID']} por {reason}.\nSe isso foi um erro, peça para um staff adicioná-lo de volta", language=language)
+                cookiebot.unbanChatMember(chat_id, active_captcha['userID'])
+                DeleteMessage(cookiebot, (str(chat_id), str(active_captcha['captcha_id'])))
+            except Exception as e:
+                print(e)
+            active_captchas.remove(active_captcha)
+        elif active_captcha['chat_id'] == chat_id and active_captcha['userID'] == msg['from']['id']:
+            DeleteMessage(cookiebot, telepot.message_identifier(msg))
 
 def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt', isBombot=False):
-    wait_open("Captcha.txt")
-    with open("Captcha.txt", 'r', encoding='utf-8') as text:
-        lines = text.readlines()
-    with open("Captcha.txt", 'w+', encoding='utf-8') as text:
-        for line in lines:
-            if len(line.split()) >= 5:
-                hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parseLineCaptcha(line)
-                if str(chat_id) == str(chat) and button == True:
-                    SendChatAction(cookiebot, chat_id, 'typing')
-                    DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
-                    msg['new_chat_member'] = cookiebot.getChatMember(chat_id, str(user))['user']
+    for active_captcha in active_captchas:
+        if chat_id == active_captcha['chat_id']:
+            if button:
+                SendChatAction(cookiebot, chat_id, 'typing')
+                DeleteMessage(cookiebot, (str(chat_id), str(active_captcha['captcha_id'])))
+                msg['new_chat_participant'] = cookiebot.getChatMember(chat_id, str(active_captcha['userID']))['user']
+                Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
+            elif msg['from']['id'] == active_captcha['userID']:
+                SendChatAction(cookiebot, chat_id, 'typing')
+                if "".join(msg['text'].upper().split()) == str(active_captcha['password']):
+                    DeleteMessage(cookiebot, (str(chat_id), str(active_captcha['captcha_id'])))
+                    DeleteMessage(cookiebot, telepot.message_identifier(msg))
                     Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
-                elif str(chat_id) == str(chat) and str(msg['from']['id']) == str(user):
-                    SendChatAction(cookiebot, chat_id, 'typing')
-                    if "".join(msg['text'].upper().split()) == password:
-                        DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
-                        DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                        Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
-                    else:
-                        DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                        attempts -= 1
-                        if attempts > 0:
-                            Send(cookiebot, chat_id, "Senha incorreta, por favor tente novamente.", language=language)
-                        line = f"{chat} {user} {datetime.datetime.now()} {password} {captcha_id} {attempts}\n"
-                        text.write(line)
                 else:
-                    text.write(line)
+                    DeleteMessage(cookiebot, telepot.message_identifier(msg))
+                    active_captcha['attempts'] -= 1
+                    if active_captcha['attempts'] > 0:
+                        Send(cookiebot, chat_id, "Senha incorreta, por favor tente novamente.", language=language)
+                    active_captcha['time'] = datetime.datetime.now()
