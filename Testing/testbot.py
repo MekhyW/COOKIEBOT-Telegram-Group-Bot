@@ -8,8 +8,10 @@ mekhyID = 780875868
 testgroupID = -1001499400382
 bot = telepot.Bot(token)
 
-bot.sendMessage(testgroupID, 'test query', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                   [InlineKeyboardButton(text='test', callback_data='test')]]))
+#bot.sendMessage(testgroupID, 'test query', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+#                   [InlineKeyboardButton(text='test', callback_data='test')]]))
+with open("Bot/Static/reclamacao/teste8khz.wav", 'rb') as hold_audio:
+        hold_msg = bot.sendVoice(mekhyID, hold_audio, caption="Teste")
 
 def changecmds(bot):
     url = 'https://api.telegram.org/bot{}/setMyCommands'.format(token)
