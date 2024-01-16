@@ -23,6 +23,7 @@ if updates:
     cookiebot.getUpdates(offset=last_update_id+1)
 
 unnatended_threads = list()
+num_max_threads = 20
 startPublisher(isBombot)
 gc.enable()
 
@@ -125,112 +126,113 @@ def thread_function(msg):
                 if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions:
                     ReplySticker(cookiebot, msg, chat_id)
             elif 'text' in msg:
-                if msg['text'].startswith("/start@CookieMWbot") or msg['text'].startswith("/start@MekhysBombot"):
-                    cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
-                    caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW",
-                    reply_to_message_id=msg['message_id'])
-                elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
-                    LeaveAndBlacklist(cookiebot, chat_id)
-                elif msg['text'].startswith(("/reload", "/recarregar")):
-                    GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    GetConfig(cookiebot, chat_id, ignorecache=True)
-                    Send(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
-                elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
-                    Analyze(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
-                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id)
-                elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
-                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id)
-                elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")) and utilityfunctions:
-                    ReverseImageSearch(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
-                    if funfunctions:
-                        ReplyAleatorio(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
-                    else:
-                        NotifyFunOff(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith("/meme"):
-                    if funfunctions:
-                        Meme(cookiebot, msg, chat_id, language)
-                    else:
-                        NotifyFunOff(cookiebot, msg, chat_id, language)
-                elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())):
-                    if funfunctions:
-                        Dado(cookiebot, msg, chat_id, language)
-                    else:
-                        NotifyFunOff(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/idade", "/age", "/edad")):
-                    if funfunctions:
-                        Idade(cookiebot, msg, chat_id, language)
-                    else:
-                        NotifyFunOff(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/genero", "/gênero", "/gender")):
-                    if funfunctions:
-                        Genero(cookiebot, msg, chat_id, language)
-                    else:
-                        NotifyFunOff(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/rojao", "/rojão", "/acende", "/fogos")):
-                    if funfunctions:
-                        Rojao(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
-                    else:
-                        NotifyFunOff(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/shippar", "/ship")):
-                    if funfunctions:
-                        Shippar(cookiebot, msg, chat_id, language)
-                    else:
-                        NotifyFunOff(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
-                    if funfunctions:
-                        Reclamacao(cookiebot, msg, chat_id, language)
-                    else:
-                        NotifyFunOff(cookiebot, msg, chat_id, language)
+                if msg['text'].startswith("/"):
+                    if msg['text'].startswith("/start@CookieMWbot") or msg['text'].startswith("/start@MekhysBombot"):
+                        cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
+                        caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW",
+                        reply_to_message_id=msg['message_id'])
+                    elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
+                        LeaveAndBlacklist(cookiebot, chat_id)
+                    elif msg['text'].startswith(("/reload", "/recarregar")):
+                        GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                        GetConfig(cookiebot, chat_id, ignorecache=True)
+                        Send(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
+                    elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
+                        Analyze(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
+                        listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                        ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id)
+                    elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
+                        listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                        ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id)
+                    elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")) and utilityfunctions:
+                        ReverseImageSearch(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
+                        if funfunctions:
+                            ReplyAleatorio(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
+                        else:
+                            NotifyFunOff(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith("/meme"):
+                        if funfunctions:
+                            Meme(cookiebot, msg, chat_id, language)
+                        else:
+                            NotifyFunOff(cookiebot, msg, chat_id, language)
+                    elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())):
+                        if funfunctions:
+                            Dado(cookiebot, msg, chat_id, language)
+                        else:
+                            NotifyFunOff(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/idade", "/age", "/edad")):
+                        if funfunctions:
+                            Idade(cookiebot, msg, chat_id, language)
+                        else:
+                            NotifyFunOff(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/genero", "/gênero", "/gender")):
+                        if funfunctions:
+                            Genero(cookiebot, msg, chat_id, language)
+                        else:
+                            NotifyFunOff(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/rojao", "/rojão", "/acende", "/fogos")):
+                        if funfunctions:
+                            Rojao(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
+                        else:
+                            NotifyFunOff(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/shippar", "/ship")):
+                        if funfunctions:
+                            Shippar(cookiebot, msg, chat_id, language)
+                        else:
+                            NotifyFunOff(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
+                        if funfunctions:
+                            Reclamacao(cookiebot, msg, chat_id, language)
+                        else:
+                            NotifyFunOff(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
+                        NovoBemvindo(cookiebot, msg, chat_id)
+                    elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
+                        NovasRegras(cookiebot, msg, chat_id)
+                    elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
+                        if not FurBots or "CookieMWbot" in msg['text'].split('@'):
+                            Regras(cookiebot, msg, chat_id, language)
+                        else:
+                            return
+                    elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
+                        TaVivo(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith("/everyone"):
+                        Everyone(cookiebot, msg, chat_id, listaadmins, language)
+                    elif msg['text'].startswith("/adm"):
+                        AdmAsk(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/comandos", "/commands")):
+                        Comandos(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions:
+                        IdeiaDesenho(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions:
+                        PromptQualquerCoisa(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/configurar", "/configure")):
+                        listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
+                        Configurar(cookiebot, msg, chat_id, listaadmins_id, language)
+                    elif " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions:
+                        CustomCommand(cookiebot, msg, chat_id)
+                    elif "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and utilityfunctions:
+                        if FurBots:
+                            furbots_cmds = open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()
+                            furbots_cmds = [x.strip() for x in furbots_cmds]
+                            if msg['text'].split()[0].split('@')[0] in furbots_cmds:
+                                return
+                        QualquerCoisa(cookiebot, msg, chat_id, sfw, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id)
-                elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
-                    NovoBemvindo(cookiebot, msg, chat_id)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id)
-                elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
-                    NovasRegras(cookiebot, msg, chat_id)
-                elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
-                    if not FurBots or "CookieMWbot" in msg['text'].split('@'):
-                        Regras(cookiebot, msg, chat_id, language)
-                    else:
-                        return
-                elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
-                    TaVivo(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith("/everyone"):
-                    Everyone(cookiebot, msg, chat_id, listaadmins, language)
-                elif msg['text'].startswith("/adm"):
-                    AdmAsk(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/comandos", "/commands")):
-                    Comandos(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions:
-                    IdeiaDesenho(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions:
-                    PromptQualquerCoisa(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/configurar", "/configure")):
-                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    Configurar(cookiebot, msg, chat_id, listaadmins_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                     ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
-                elif msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions:
-                    CustomCommand(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/") and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and utilityfunctions:
-                    if FurBots:
-                        furbots_cmds = open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()
-                        furbots_cmds = [x.strip() for x in furbots_cmds]
-                        if msg['text'].split()[0].split('@')[0] in furbots_cmds:
-                            return
-                    QualquerCoisa(cookiebot, msg, chat_id, sfw, language)
                 elif (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot')) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and funfunctions:
                     Quem(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and str(round(captchatimespan/60)) in msg['reply_to_message']['caption']:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
-                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and any(x in msg['reply_to_message']['text'].lower() for x in ['Milton do RH.', 'Milton from HR.']) and funfunctions:
+                elif 'reply_to_message' in msg and 'caption' in msg['reply_to_message'] and any(x in msg['reply_to_message']['caption'] for x in ['Milton do RH.', 'Milton from HR.']) and funfunctions:
                     ReclamacaoAnswer(cookiebot, msg, chat_id, language)
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions:
                     AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw)
@@ -322,7 +324,6 @@ def thread_function_query(msg):
 
 def run_unnatendedthreads():
     num_running_threads = threading.active_count()
-    num_max_threads = 15
     for unnatended_thread in unnatended_threads:
         if unnatended_thread.is_alive():
             unnatended_threads.remove(unnatended_thread)
