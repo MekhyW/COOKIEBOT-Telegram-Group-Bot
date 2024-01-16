@@ -184,7 +184,7 @@ def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_audio')
     protocol = f"{random.randint(10, 99)}-{random.randint(100000, 999999)}/{datetime.datetime.now().year}"
     with open(f"Static/reclamacao/{random.choice([file for file in os.listdir('Static/reclamacao') if file.endswith('.wav')])}", 'rb') as hold_audio:
-        hold_msg = cookiebot.sendAudio(chat_id, hold_audio, caption=f"Protocol: {protocol}", msg_to_reply=msg)
+        hold_msg = cookiebot.sendAudio(chat_id, hold_audio, caption=f"Protocol: {protocol}", reply_to_message_id=msg['message_id'])
     time.sleep(random.randint(5, 10))
     DeleteMessage(cookiebot, telepot.message_identifier(hold_msg))
     with open('Static/reclamacao/answers.txt', 'rb', encoding='utf8') as answers:
