@@ -22,6 +22,7 @@ meme - Generate a meme
 random - Send a media from some group
 drawingidea - No more art block
 dice - Rolls one or more dice
+complaint - Summon Milton the complaints master
 ship - Shipps a couple with character
 age - tell you how old you are
 gender - Is it a boy or a girl

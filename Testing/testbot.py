@@ -2,15 +2,14 @@ import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
 import requests
-import urllib3, traceback, re
+import urllib3
 token = ''
 mekhyID = 780875868
 testgroupID = -1001499400382
 bot = telepot.Bot(token)
 
-#bot.sendMessage(mekhyID, 'test query', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-#                   [InlineKeyboardButton(text='test', callback_data='test')]]))
-#bot.sendAnimation(mekhyID, 'https://www.wine-searcher.com/images/labels/67/00/11156700.jpg?width=260&height=260&fit=bounds&canvas=260,260', caption='test')
+bot.sendMessage(testgroupID, 'test query', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                   [InlineKeyboardButton(text='test', callback_data='test')]]))
 
 def changecmds(bot):
     url = 'https://api.telegram.org/bot{}/setMyCommands'.format(token)
@@ -22,7 +21,7 @@ def changecmds(bot):
 
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
-    print(msg)
+    print(content_type, msg)
     if content_type == 'photo':
         path = bot.getFile(msg['photo'][-1]['file_id'])['file_path']
         image_url = 'https://api.telegram.org/file/bot{}/{}'.format(token, path)
@@ -35,18 +34,11 @@ def handle(msg):
 
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
-    #print('Callback Query:', query_id, from_id, query_data)
+    print('Callback Query:', query_id, from_id, query_data)
     print(msg)
-
-def SendChatAction(cookiebot, chat_id, action):
-    try:
-        cookiebot.sendChatAction(chat_id, action)
-    except urllib3.exceptions.ProtocolError:
-        cookiebot.sendChatAction(chat_id, action)
 
 def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
     try:
-        SendChatAction(cookiebot, chat_id, 'typing')
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
             cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
@@ -61,5 +53,4 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
         print(e)
 
 
-#changecmds(bot)
 MessageLoop(bot, {'chat': handle, 'callback_query': handle_query}).run_forever()

@@ -21,7 +21,8 @@ buscarimagen - Busca la fuente de una obra de arte
 meme - Generar un meme
 aleatorio - Enviar un medio de algún grupo
 ideadibujo - no mas bloques de arte
-dado - tira uno o mas dados.
+dado - tira uno o mas dados
+queja - Invocar a Milton el maestro de las quejas
 shippar - Shippa una pareja con caracter
 edad - te dice cuantos años tienes
 genero - ¿Es niño o niña?

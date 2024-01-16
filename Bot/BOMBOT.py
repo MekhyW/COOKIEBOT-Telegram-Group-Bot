@@ -143,7 +143,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id)
-                elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")):
+                elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")) and utilityfunctions == True:
                     ReverseImageSearch(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
                     if funfunctions:
@@ -178,6 +178,11 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/shippar", "/ship")):
                     if funfunctions:
                         Shippar(cookiebot, msg, chat_id, language)
+                    else:
+                        NotifyFunOff(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith(("/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
+                    if funfunctions:
+                        Reclamacao(cookiebot, msg, chat_id, language)
                     else:
                         NotifyFunOff(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
@@ -225,6 +230,8 @@ def thread_function(msg):
                     Quem(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and str(round(captchatimespan/60)) in msg['reply_to_message']['caption']:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and any(x in msg['reply_to_message']['text'].lower() for x in ['Milton do RH.', 'Milton from HR.']) and funfunctions == True:
+                    ReclamacaoAnswer(cookiebot, msg, chat_id, language)
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions == True:
                     AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw)
                     try:

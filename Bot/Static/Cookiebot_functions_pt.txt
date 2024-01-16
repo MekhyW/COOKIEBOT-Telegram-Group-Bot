@@ -22,6 +22,7 @@ meme - Gera um meme
 aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
 dado - Roda um ou mais dados quaisquer
+reclamacao - Invoca o Milton o mestre das reclamações
 shippar - Shippa um casal com caracteristica
 idade - Te digo quantos anos vc tem
 genero - Sera que e menino ou menina

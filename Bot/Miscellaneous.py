@@ -1,7 +1,7 @@
 from universal_funcs import *
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
-num_chats = 434
+num_chats = 436
 
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -166,3 +166,27 @@ def Rojao(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
         Send(cookiebot, chat_id, "pra "*n, thread_id=thread_id, isBombot=isBombot)
         amount -= n
     Send(cookiebot, chat_id, "💥POOOOOOOWW💥", thread_id=thread_id, isBombot=isBombot)
+
+def Reclamacao(cookiebot, msg, chat_id, language):
+    if language == 'pt':
+        with open('Static/reclamacao/milton_pt.jpg', 'rb') as photo:
+            SendPhoto(cookiebot, chat_id, photo, 
+                      caption=f"Bom dia/tarde/noite, {msg['from']['first_name']},\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem. Se não, seguimos com nossas atividades.\nAtenciosamente,\nMilton do RH.", 
+                      msg_to_reply=msg)
+    else:
+        with open('Static/reclamacao/milton_eng.jpg', 'rb') as photo:
+            SendPhoto(cookiebot, chat_id, photo, 
+                      caption=f"Good morning/afternoon/evening, {msg['from']['first_name']},\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.", 
+                      msg_to_reply=msg)
+            
+def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
+    DeleteMessage(cookiebot, chat_id, msg['reply_to_message']['message_id'])
+    protocol = f"{random.randint(10, 99)}-{random.randint(100000, 999999)}/{datetime.datetime.now().year}"
+    with open(random.choice(filter(lambda x: x.endswith('.wav'), os.listdir('Static/reclamacao'))), 'rb') as hold_audio:
+        hold_msg = cookiebot.sendAudio(chat_id, hold_audio, caption=f"Protocol: {protocol}", msg_to_reply=msg)
+    time.sleep(random.randint(5, 10))
+    DeleteMessage(cookiebot, chat_id, hold_msg['message_id'])
+    with open('Static/reclamacao/answers.txt', 'rb', encoding='utf8') as answers:
+        answer = random.choice(answers.readlines())
+        answer += '\n\nAtenciosamente,\nMilton do RH.'
+    Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)
