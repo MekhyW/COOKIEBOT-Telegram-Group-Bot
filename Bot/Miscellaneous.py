@@ -180,12 +180,13 @@ def Reclamacao(cookiebot, msg, chat_id, language):
                       msg_to_reply=msg)
             
 def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
-    DeleteMessage(cookiebot, chat_id, msg['reply_to_message']['message_id'])
+    DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
+    SendChatAction(cookiebot, chat_id, 'upload_audio')
     protocol = f"{random.randint(10, 99)}-{random.randint(100000, 999999)}/{datetime.datetime.now().year}"
     with open(random.choice(filter(lambda x: x.endswith('.wav'), os.listdir('Static/reclamacao'))), 'rb') as hold_audio:
         hold_msg = cookiebot.sendAudio(chat_id, hold_audio, caption=f"Protocol: {protocol}", msg_to_reply=msg)
     time.sleep(random.randint(5, 10))
-    DeleteMessage(cookiebot, chat_id, hold_msg['message_id'])
+    DeleteMessage(cookiebot, telepot.message_identifier(hold_msg))
     with open('Static/reclamacao/answers.txt', 'rb', encoding='utf8') as answers:
         answer = random.choice(answers.readlines())
         answer += '\n\nAtenciosamente,\nMilton do RH.'
