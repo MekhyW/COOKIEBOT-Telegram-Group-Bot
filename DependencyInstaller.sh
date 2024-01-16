@@ -21,18 +21,7 @@ sudo apt install -y ffmpeg
 sudo apt-get install git-lfs
 git-lfs install
 pip3 install --upgrade pip
-pip3 install urllib3
-pip3 install beautifulsoup4
-pip3 install Pillow
-pip3 install telepota
-pip3 install captcha
-pip3 install googletrans==3.1.0a0
-pip3 install Google-Images-Search
-pip3 install google-cloud-speech
-pip3 install google-cloud-pubsub
-pip3 install google-cloud-scheduler
-pip3 install google-cloud-vision
-pip3 install ShazamAPI
-pip3 install opencv-python
-pip3 install price-parser
-pip3 install openai
+pip3 install -r requirements.txt
+git clone https://github.com/MekhyW/telepota.git
+cd telepota
+python3 setup.py install
