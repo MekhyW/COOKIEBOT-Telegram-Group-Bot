@@ -64,7 +64,7 @@ def thread_function(msg):
                 listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id)
                 FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(cookiebot, chat_id)
                 CheckNewName(msg, chat_id)
-            if 'group_chat_created' in msg and msg['group_chat_created'] == True:
+            if 'group_chat_created' in msg and msg['group_chat_created']:
                 isCreatorBlacklisted = GetRequestBackend(f"blacklist/{msg['from']['id']}")
                 chatinfo = cookiebot.getChat(chat_id)
                 if (not 'error' in isCreatorBlacklisted) or len(chatinfo['title']) < 3:
@@ -95,7 +95,7 @@ def thread_function(msg):
                 if not msg['left_chat_member']['is_bot'] and msg['left_chat_member']['id'] != msg['from']['id'] and cookiebot.getMe()['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
                     ReportAsk(cookiebot, msg, chat_id, msg['left_chat_member']['id'], language)
             elif content_type == "voice":
-                if utilityfunctions == True:
+                if utilityfunctions:
                     audio = GetVoiceMessage(cookiebot, msg, isBombot=isBombot)
                     #duration = int(msg['voice']['duration'])
                     #if duration >= 10 and duration <= 240:
@@ -103,26 +103,26 @@ def thread_function(msg):
                     Identify_music(cookiebot, msg, chat_id, audio, language)
             elif content_type == "audio":
                 pass
-            elif content_type in ["photo", "video", "document", "animation"] and all(key in msg for key in ['sender_chat', 'forward_from_chat', 'from', 'caption']) and msg['from']['first_name'] == 'Telegram' and publisherask == True:
+            elif content_type in ["photo", "video", "document", "animation"] and all(key in msg for key in ['sender_chat', 'forward_from_chat', 'from', 'caption']) and msg['from']['first_name'] == 'Telegram' and publisherask:
                 AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "photo":
-                if sfw == True and funfunctions == True:
+                if sfw and funfunctions:
                     photo_id = msg['photo'][-1]['file_id']
                     AddtoRandomDatabase(msg, chat_id, photo_id)
             elif content_type == "video":
-                if sfw == True and funfunctions == True:
+                if sfw and funfunctions:
                     AddtoRandomDatabase(msg, chat_id)
             elif content_type == "document":
-                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
+                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions:
                     ReplySticker(cookiebot, msg, chat_id)
             elif content_type == "animation":
-                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
+                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions:
                     ReplySticker(cookiebot, msg, chat_id)
             elif content_type == "sticker":
                 Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language)
-                if sfw == True:
+                if sfw:
                     AddtoStickerDatabase(msg, chat_id)
-                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions == True:
+                if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions:
                     ReplySticker(cookiebot, msg, chat_id)
             elif 'text' in msg:
                 if msg['text'].startswith("/start@CookieMWbot") or msg['text'].startswith("/start@MekhysBombot"):
@@ -143,7 +143,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id)
-                elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")) and utilityfunctions == True:
+                elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")) and utilityfunctions:
                     ReverseImageSearch(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
                     if funfunctions:
@@ -196,7 +196,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
                     NovasRegras(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
-                    if FurBots == False or "CookieMWbot" in msg['text'].split('@'):
+                    if not FurBots or "CookieMWbot" in msg['text'].split('@'):
                         Regras(cookiebot, msg, chat_id, language)
                     else:
                         return
@@ -208,31 +208,31 @@ def thread_function(msg):
                     AdmAsk(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions == True:
+                elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions:
                     IdeiaDesenho(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions == True:
+                elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions:
                     PromptQualquerCoisa(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/configurar", "/configure")):
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     Configurar(cookiebot, msg, chat_id, listaadmins_id, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                     ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
-                elif msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions == True:
+                elif msg['text'].startswith("/") and " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions:
                     CustomCommand(cookiebot, msg, chat_id)
-                elif msg['text'].startswith("/") and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and utilityfunctions == True:
-                    if FurBots == True:
+                elif msg['text'].startswith("/") and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and utilityfunctions:
+                    if FurBots:
                         furbots_cmds = open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()
                         furbots_cmds = [x.strip() for x in furbots_cmds]
                         if msg['text'].split()[0].split('@')[0] in furbots_cmds:
                             return
                     QualquerCoisa(cookiebot, msg, chat_id, sfw, language)
-                elif (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot')) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and funfunctions == True:
+                elif (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot')) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and funfunctions:
                     Quem(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and str(round(captchatimespan/60)) in msg['reply_to_message']['caption']:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
-                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and any(x in msg['reply_to_message']['text'].lower() for x in ['Milton do RH.', 'Milton from HR.']) and funfunctions == True:
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and any(x in msg['reply_to_message']['text'].lower() for x in ['Milton do RH.', 'Milton from HR.']) and funfunctions:
                     ReclamacaoAnswer(cookiebot, msg, chat_id, language)
-                elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions == True:
+                elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions:
                     AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw)
                     try:
                         Send(cookiebot, chat_id, AnswerFinal, msg_to_reply=msg)

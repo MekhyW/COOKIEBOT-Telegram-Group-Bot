@@ -75,7 +75,7 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
     if len(message) == 0:
         AnswerFinal = "?"
     else:
-        if sfw == True:
+        if sfw:
             AnswerFinal = modelSFW(message, msg, language)
         else:
             AnswerFinal = modelNSFW(message, language)

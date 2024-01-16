@@ -173,7 +173,7 @@ def CheckCAS(cookiebot, msg, chat_id, language):
     except Exception as e:
         print(e)
         return False
-    if in_banlist == True:
+    if in_banlist:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
         Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado pelo sistema anti-ban CAS https://cas.chat/", language=language)
         return True
@@ -267,7 +267,7 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
         for line in lines:
             if len(line.split()) >= 5:
                 hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parseLineCaptcha(line)
-                if str(chat_id) == str(chat) and button == True:
+                if str(chat_id) == str(chat) and button:
                     SendChatAction(cookiebot, chat_id, 'typing')
                     DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
                     msg['new_chat_member'] = cookiebot.getChatMember(chat, str(user))['user']
