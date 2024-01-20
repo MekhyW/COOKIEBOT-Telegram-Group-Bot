@@ -129,6 +129,7 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
         except Exception as e:
             print(e)
+        return None
     return sentphoto['message_id']
 
 def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
