@@ -90,7 +90,7 @@ def thread_function(msg):
                 elif not CheckCAS(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
                     if msg['new_chat_participant']['is_bot']:
                         Send(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\nCaso algum comando entre em conflito, fale com o Mekhy", msg, language)
-                    elif captchatimespan > 0 and myself['username'] in listaadmins and msg['from']['id'] != msg['new_chat_participant']['id']:
+                    elif captchatimespan > 0 and myself['username'] in listaadmins and msg['from']['id'] == msg['new_chat_participant']['id']:
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:
                         Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=isBombot)
