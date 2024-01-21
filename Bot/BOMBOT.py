@@ -17,6 +17,7 @@ if isBombot:
     cookiebot = telepot.Bot(bombotTOKEN)
 else:
     cookiebot = telepot.Bot(cookiebotTOKEN)
+myself = cookiebot.getMe()
 updates = cookiebot.getUpdates()
 if updates:
     last_update_id = updates[-1]['update_id']
@@ -73,7 +74,7 @@ def thread_function(msg):
                     Send(cookiebot, mekhyID, f"Auto-left:\n{chat_id}")
                     return
             elif content_type == "new_chat_member":
-                if 'username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in ["MekhysBombot", "CookieMWbot"]:
+                if msg['new_chat_participant']['id'] == myself['id']:
                     isBlacklisted = GetRequestBackend(f"blacklist/{chat_id}")
                     chatinfo = cookiebot.getChat(chat_id)
                     if (not 'error' in isBlacklisted) or len(chatinfo['title']) < 3:
@@ -87,13 +88,15 @@ def thread_function(msg):
                         SettarLanguage(cookiebot, msg, chat_id, msg['from']['language_code'])
                         GetConfig(cookiebot, chat_id, ignorecache=True)
                 elif not CheckCAS(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
-                    if captchatimespan > 0 and ("CookieMWbot" in listaadmins or "MekhysBombot" in listaadmins):
+                    if msg['new_chat_participant']['is_bot']:
+                        Send(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\nCaso algum comando entre em conflito, fale com o Mekhy", msg, language)
+                    elif captchatimespan > 0 and myself['username'] in listaadmins and msg['from']['id'] != msg['new_chat_participant']['id']:
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:
                         Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=isBombot)
             elif content_type == "left_chat_member":
                 left_chat_member(msg, chat_id)
-                if not msg['left_chat_member']['is_bot'] and msg['left_chat_member']['id'] != msg['from']['id'] and cookiebot.getMe()['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
+                if not msg['left_chat_member']['is_bot'] and msg['left_chat_member']['id'] != msg['from']['id'] and myself['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
                     ReportAsk(cookiebot, msg, chat_id, msg['left_chat_member']['id'], language)
             elif content_type == "voice":
                 if utilityfunctions:
