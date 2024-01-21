@@ -12,6 +12,7 @@ parent = f"{project_path}/locations/southamerica-east1"
 topic_name = 'projects/cookiebot-309512/topics/cookiebot-publisher-topic'
 subscription_path = None
 cache_posts = {}
+postmail_chat_link = "https://t.me/CookiebotPostmail"
 postmail_chat_id = -1001869523792
 approval_chat_id = -1001659344607
 url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
@@ -182,7 +183,7 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
             inline_keyboard.append([InlineKeyboardButton(text=name, url=entity['url'])])
     if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
-    inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=f"https://t.me/CookiebotPostmail")])
+    inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=postmail_chat_link)])
     caption_pt = translator.translate(caption_new, dest='pt').text
     caption_en = translator.translate(caption_new, dest='en').text
     caption_pt = ConvertPricesinText(caption_pt, 'BRL')

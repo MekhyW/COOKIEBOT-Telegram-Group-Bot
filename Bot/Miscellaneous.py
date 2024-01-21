@@ -1,4 +1,5 @@
 from universal_funcs import *
+from Publisher import postmail_chat_link
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
 num_chats = 436
@@ -14,6 +15,7 @@ def PvDefaultMessage(cookiebot, msg, chat_id, isBombot):
             Send(cookiebot, chat_id, f"Olá, eu sou o CookieBot!\n\nAtualmente estou presente em *{num_chats}* grupos ativos!\nSinta-se livre para me adicionar ao seu :)\n\nSou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática.\nUse /configurar para alterar minhas configurações (incluindo idioma)\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url=newchat_link)],
+                [InlineKeyboardButton(text="Mural de Divulgações 📬", url=postmail_chat_link)],
                 [InlineKeyboardButton(text="Grupo de teste/assistência 🧪", url=testchat_link)]
             ]))
     else:
@@ -23,6 +25,7 @@ def PvDefaultMessage(cookiebot, msg, chat_id, isBombot):
             Send(cookiebot, chat_id, f"Hello, I'm CookieBot!\n\nI'm currently present in *{num_chats}* active group chats!\nFeel free to add me to yours :)\n\nI'm a bot with Conversation AI, Group Defense, Search, Custom Content and Auto Publish.\nUse /configure to change my settings (including language)\nUse /commands to see all my features\n\nIf you have any questions or want something added, message @MekhyW",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Add me to a Group 👋", url=newchat_link)],
+                [InlineKeyboardButton(text="Shared Posts 📬", url=postmail_chat_link)],
                 [InlineKeyboardButton(text="Test/assistance Group 🧪", url=testchat_link)]
             ]))
 
