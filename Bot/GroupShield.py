@@ -263,6 +263,9 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
     wait_open("Captcha.txt")
     with open("Captcha.txt", 'r', encoding='utf-8') as text:
         lines = text.readlines()
+    if len(lines) == 0 and button:
+        DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
+        return
     with open("Captcha.txt", 'w+', encoding='utf-8') as text:
         for line in lines:
             if len(line.split()) >= 5:
