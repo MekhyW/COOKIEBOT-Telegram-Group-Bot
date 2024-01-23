@@ -12,3 +12,4 @@ ShazamAPI
 opencv-python
 price-parser
 openai
+PyJWT
