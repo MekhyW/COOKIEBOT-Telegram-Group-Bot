@@ -80,18 +80,18 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
             text = translator.translate(text, dest='es').text
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
-            cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
+            cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode='Markdown')
         elif thread_id is not None:
             if isBombot:
                 token = bombotTOKEN
             else:
                 token = cookiebotTOKEN
-            url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}"
+            url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode=Markdown"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
             requests.get(url)
         else:
-            cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
+            cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode='Markdown')
     except urllib3.exceptions.ProtocolError:
         Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup)
     except TelegramError:
@@ -109,19 +109,19 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
             caption = translator.translate(caption, dest='es').text
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
-            sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_id, reply_markup=reply_markup)
+            sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode='Markdown')
         elif thread_id is not None:
             if isBombot:
                 token = bombotTOKEN
             else:
                 token = cookiebotTOKEN
-            url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"
+            url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode=Markdown"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
             sentphoto = {}
             sentphoto['message_id'] = json.loads(requests.get(url).text)['result']['message_id']
         else:
-            sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup)
+            sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup, parse_mode='Markdown')
     except urllib3.exceptions.ProtocolError:
         return SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
     except TelegramError:
@@ -184,3 +184,10 @@ def check_if_string_in_file(file_name, string_to_search):
         if string_to_search in line:
             return True
     return False
+
+def number_to_emojis(number):
+    emojis = {'0': '0️⃣', '1': '1️⃣', '2': '2️⃣', '3': '3️⃣', '4': '4️⃣', '5': '5️⃣', '6': '6️⃣', '7': '7️⃣', '8': '8️⃣', '9': '9️⃣'}
+    emojis_string = ''
+    for digit in str(number):
+        emojis_string += emojis[digit]
+    return emojis_string
