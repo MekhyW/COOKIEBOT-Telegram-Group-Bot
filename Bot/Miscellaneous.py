@@ -194,3 +194,18 @@ def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
         answer = random.choice(answers.readlines()).replace('\n', '')
         answer += '\n\nAtenciosamente,\nMilton do RH.'
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)
+
+def Patas(cookiebot, msg, chat_id):
+    gif = random.choice(['https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjM4ZjNieW43M29iNnA1bmhjb3NudnA4ZWVjZzI4bGM5NnY3a2dxZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/moX3akZy7lwjVU7H2Z/giphy.gif',
+                         'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2NmangyMGJ0MGpndmtpNzczeHljNnp4cnJscXBqbjY2NmlkNjNqdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NTg8iLFd7p2UF8972z/giphy.gif',
+                         'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXFiZWM0MW81dHJzcXIxdmUzeGl4ZHl5YWtmZzVtcm1jczMwb2I0MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f6dQeiBYTh4q6rCCdF/giphy-downsized-large.gif',
+                         'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjU4a3BtYWJnZXh3bGJpam55bHg3czU5dWRkOTB6emd6eDlsZWt6YyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9VnPfwJwqosTte1sKH/giphy-downsized-large.gif'])
+    calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP!',
+                                  'Este é um evento beneficiente em formato de convenção, para promover e celebrar a cultura de apreciação animais antropomóficos na região de Sorocaba. Foi criado para ajudar as entidades que prestam apoio aos idosos da região.',
+                                  'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!',
+                                  'As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais!'])
+    daysremaining = (datetime.datetime(datetime.datetime.now().year, 5, 17) - datetime.datetime.now()).days
+    if daysremaining < 0:
+        daysremaining += 365
+    caption = f"*Faltam {number_to_emojis(daysremaining)} dias para o Patas!*\n_{calltoaction}_\n🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌\n\n📆 17 a 19/5, Sorocaba Park Hotel\n💻 Ingressos em: https://patas.site/\n📲 Grupo do evento: @bananaa2024"
+    cookiebot.sendAnimation(chat_id, gif, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='Markdown')

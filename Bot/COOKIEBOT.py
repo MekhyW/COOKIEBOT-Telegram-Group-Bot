@@ -150,46 +150,29 @@ def thread_function(msg):
                         ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id)
                     elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")) and utilityfunctions:
                         ReverseImageSearch(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
-                        if funfunctions:
+                    elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
+                                                 "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", 
+                                                 "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
+                        if not funfunctions:
+                            NotifyFunOff(cookiebot, msg, chat_id, language)
+                        elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
                             ReplyAleatorio(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
-                        else:
-                            NotifyFunOff(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith("/meme"):
-                        if funfunctions:
+                        elif msg['text'].startswith("/meme"):
                             Meme(cookiebot, msg, chat_id, language)
-                        else:
-                            NotifyFunOff(cookiebot, msg, chat_id, language)
-                    elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())):
-                        if funfunctions:
-                            Dado(cookiebot, msg, chat_id, language)
-                        else:
-                            NotifyFunOff(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/idade", "/age", "/edad")):
-                        if funfunctions:
+                        elif msg['text'].startswith(("/idade", "/age", "/edad")):
                             Idade(cookiebot, msg, chat_id, language)
-                        else:
-                            NotifyFunOff(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/genero", "/gênero", "/gender")):
-                        if funfunctions:
+                        elif msg['text'].startswith(("/genero", "/gênero", "/gender")):
                             Genero(cookiebot, msg, chat_id, language)
-                        else:
-                            NotifyFunOff(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/rojao", "/rojão", "/acende", "/fogos")):
-                        if funfunctions:
+                        elif msg['text'].startswith(("/rojao", "/rojão", "/acende", "/fogos", "/firecracker")):
                             Rojao(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
-                        else:
-                            NotifyFunOff(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/shippar", "/ship")):
-                        if funfunctions:
+                        elif msg['text'].startswith(("/shippar", "/ship")):
                             Shippar(cookiebot, msg, chat_id, language)
-                        else:
-                            NotifyFunOff(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
-                        if funfunctions:
+                        elif msg['text'].startswith(("/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
                             Reclamacao(cookiebot, msg, chat_id, language)
-                        else:
-                            NotifyFunOff(cookiebot, msg, chat_id, language)
+                    elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and utilityfunctions:
+                        Dado(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith("/patas") and utilityfunctions:
+                        Patas(cookiebot, msg, chat_id)
                     elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                         NovoBemvindo(cookiebot, msg, chat_id)
                     elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
