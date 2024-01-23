@@ -171,6 +171,7 @@ def Rojao(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
     Send(cookiebot, chat_id, "💥POOOOOOOWW💥", thread_id=thread_id, isBombot=isBombot)
 
 def Reclamacao(cookiebot, msg, chat_id, language):
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
     if language == 'pt':
         with open('Static/reclamacao/milton_pt.jpg', 'rb') as photo:
             SendPhoto(cookiebot, chat_id, photo, 
@@ -196,6 +197,7 @@ def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)
 
 def Patas(cookiebot, msg, chat_id):
+    SendChatAction(cookiebot, chat_id, 'typing')
     gif = random.choice(['https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjM4ZjNieW43M29iNnA1bmhjb3NudnA4ZWVjZzI4bGM5NnY3a2dxZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/moX3akZy7lwjVU7H2Z/giphy.gif',
                          'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2NmangyMGJ0MGpndmtpNzczeHljNnp4cnJscXBqbjY2NmlkNjNqdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NTg8iLFd7p2UF8972z/giphy.gif',
                          'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXFiZWM0MW81dHJzcXIxdmUzeGl4ZHl5YWtmZzVtcm1jczMwb2I0MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f6dQeiBYTh4q6rCCdF/giphy-downsized-large.gif',
@@ -207,5 +209,5 @@ def Patas(cookiebot, msg, chat_id):
     daysremaining = (datetime.datetime(datetime.datetime.now().year, 5, 17) - datetime.datetime.now()).days
     if daysremaining < 0:
         daysremaining += 365
-    caption = f"*Faltam {number_to_emojis(daysremaining)} dias para o Patas!*\n_{calltoaction}_\n🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌\n\n📆 17 a 19/5, Sorocaba Park Hotel\n💻 Ingressos em: https://patas.site/\n📲 Grupo do evento: @bananaa2024"
+    caption = f"*Faltam {number_to_emojis(daysremaining)} dias para o Patas!*\n\n_{calltoaction}_\n🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌\n\n📆 17 a 19/5, Sorocaba Park Hotel\n💻 Ingressos em: https://patas.site/\n📲 Grupo do evento: @bananaa2024"
     cookiebot.sendAnimation(chat_id, gif, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='Markdown')
