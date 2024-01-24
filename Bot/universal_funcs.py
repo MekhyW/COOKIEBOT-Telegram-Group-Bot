@@ -91,7 +91,10 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
                 url = url.replace('&reply_markup=None', '')
             requests.get(url)
         else:
-            cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode='Markdown')
+            try:
+                cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode='Markdown')
+            except telepot.exception.TelegramError:
+                cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
         Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup)
     except TelegramError:
