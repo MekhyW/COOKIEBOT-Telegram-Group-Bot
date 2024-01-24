@@ -191,3 +191,13 @@ def number_to_emojis(number):
     for digit in str(number):
         emojis_string += emojis[digit]
     return emojis_string
+
+def emojis_to_numbers(text):
+    emojis = {'0️⃣': '0', '1️⃣': '1', '2️⃣': '2', '3️⃣': '3', '4️⃣': '4', '5️⃣': '5', '6️⃣': '6', '7️⃣': '7', '8️⃣': '8', '9️⃣': '9'}
+    text_without_emojis = ''
+    for char in text:
+        if char in emojis:
+            text_without_emojis += emojis[char]
+        else:
+            text_without_emojis += char
+    return text_without_emojis

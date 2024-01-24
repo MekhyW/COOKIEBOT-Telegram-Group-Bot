@@ -173,7 +173,7 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
             url_no_emojis_on_ends = remove_emojis_from_ends(url[0])
             inline_keyboard.append([InlineKeyboardButton(text=name, url=url_no_emojis_on_ends)])
             cached_post['caption'] = cached_post['caption'].replace(url[0], url_no_emojis_on_ends)
-    caption_new = cached_post['caption']
+    caption_new = emojis_to_numbers(cached_post['caption'])
     for entity in cached_post['caption_entities']:
         if 'url' in entity and len(entity['url']) and len(inline_keyboard) < 5:
             name = entity['url']
