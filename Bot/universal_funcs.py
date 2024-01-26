@@ -112,7 +112,10 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
             caption = translator.translate(caption, dest='es').text
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
-            sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode='Markdown')
+            try:
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode='Markdown')
+            except telepot.exception.TelegramError:
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_id, reply_markup=reply_markup)
         elif thread_id is not None:
             if isBombot:
                 token = bombotTOKEN
