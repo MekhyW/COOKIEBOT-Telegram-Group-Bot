@@ -4,7 +4,6 @@ Pillow
 captcha
 googletrans==3.1.0a0
 Google-Images-Search
-google-cloud-speech
 google-cloud-pubsub
 google-cloud-scheduler
 google-cloud-vision

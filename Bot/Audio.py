@@ -1,12 +1,6 @@
 from universal_funcs import *
 import ShazamAPI
-from google.cloud import speech
-from google.oauth2 import service_account
-from google.api_core.exceptions import InvalidArgument
-credentials = service_account.Credentials.from_service_account_file('cookiebot_cloudserviceaccount.json')
-client_stt = speech.SpeechClient(credentials=credentials)
-minimum_words_STT = 3
-confidence_threshold = 0.25
+import openai
 
 def Identify_music(cookiebot, msg, chat_id, content, language):
     shazam = ShazamAPI.Shazam(content)
@@ -23,31 +17,7 @@ def Identify_music(cookiebot, msg, chat_id, content, language):
         else:
             Send(cookiebot, chat_id, f"SONG: 🎵 {title} - {subtitle} 🎵", msg, language)
 
-def Speech_to_text(cookiebot, msg, chat_id, sfw, content, language):
-    profanityFilter = sfw == 1
-    if language == 'pt':
-        language_code = 'pt-BR'
-    elif language == 'es':
-        language_code = 'es-AR'
-    else:
-        language_code = 'en-US'
-    audio = speech.RecognitionAudio(content=content)
-    config = speech.RecognitionConfig(encoding='OGG_OPUS', sample_rate_hertz=48000, language_code=language_code, alternative_language_codes=["en-US"], enable_word_confidence=True, enable_automatic_punctuation=True, profanity_filter=profanityFilter, model="default", use_enhanced=True,)
-    try:
-        response = client_stt.recognize(config=config, audio=audio)
-    except InvalidArgument as e:
-        return
-    Text = ''
-    print(response.results)
-    for i, result in enumerate(response.results):
-        alternative = result.alternatives[0]
-        Paragraph = alternative.transcript.capitalize()
-        for word in alternative.words:
-            if word.confidence < confidence_threshold and len(word.word) > minimum_words_STT:
-                Paragraph = Paragraph.replace(word.word, '(?)')
-        Text += Paragraph
-        if i < len(response.results) - 1:
-            Text += '\n'
-    if len(Text.split()) >= minimum_words_STT:
-        SendChatAction(cookiebot, chat_id, 'typing')
-        Send(cookiebot, chat_id, f'(2.2) Text:\n"{Text}"', msg_to_reply=msg, language=language)
+def Speech_to_text(content):
+    transcript = openai.Audio.transcribe("whisper-1", content)['text']
+    transcript = transcript.capitalize()
+    return transcript

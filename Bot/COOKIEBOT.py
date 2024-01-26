@@ -99,12 +99,13 @@ def thread_function(msg):
                 if not msg['left_chat_member']['is_bot'] and msg['left_chat_member']['id'] != msg['from']['id'] and myself['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
                     ReportAsk(cookiebot, msg, chat_id, msg['left_chat_member']['id'], language)
             elif content_type == "voice":
-                if utilityfunctions:
+                if utilityfunctions or funfunctions:
                     audio = GetVoiceMessage(cookiebot, msg, isBombot=isBombot)
-                    #duration = int(msg['voice']['duration'])
-                    #if duration >= 10 and duration <= 240:
-                    #    Speech_to_text(cookiebot, msg, chat_id, sfw, audio, language)
-                    Identify_music(cookiebot, msg, chat_id, audio, language)
+                    if utilityfunctions:
+                        Identify_music(cookiebot, msg, chat_id, audio, language)
+                    if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id']:
+                        msg['text'] = Speech_to_text(audio)
+                        Send(cookiebot, chat_id, InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
             elif content_type == "audio":
                 pass
             elif content_type in ["photo", "video", "document", "animation"] and all(key in msg for key in ['sender_chat', 'forward_from_chat', 'from', 'caption']) and msg['from']['first_name'] == 'Telegram' and publisherask:
@@ -178,10 +179,9 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
                         NovasRegras(cookiebot, msg, chat_id)
                     elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
-                        if not FurBots or "CookieMWbot" in msg['text'].split('@'):
-                            Regras(cookiebot, msg, chat_id, language)
-                        else:
+                        if FurBots and myself['username'] not in msg['text'].split('@'):
                             return
+                        Regras(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
                         TaVivo(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith("/everyone"):
@@ -214,18 +214,14 @@ def thread_function(msg):
                     AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                     ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
-                elif (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot')) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and funfunctions:
+                elif (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'])) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and funfunctions:
                     Quem(cookiebot, msg, chat_id, language)
                 elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and str(round(captchatimespan/60)) in msg['reply_to_message']['caption']:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
                 elif 'reply_to_message' in msg and 'caption' in msg['reply_to_message'] and any(x in msg['reply_to_message']['caption'] for x in ['Milton do RH.', 'Milton from HR.']) and funfunctions:
                     ReclamacaoAnswer(cookiebot, msg, chat_id, language)
-                elif (('reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions:
-                    AnswerFinal = InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw)
-                    try:
-                        Send(cookiebot, chat_id, AnswerFinal, msg_to_reply=msg)
-                    except TelegramError:
-                        pass
+                elif (('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'] and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions:
+                    Send(cookiebot, chat_id, InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
                 else:
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
