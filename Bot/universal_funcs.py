@@ -80,12 +80,12 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
             text = translator.translate(text, dest='es').text
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
-            cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode='Markdown')
+            try:
+                cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode='Markdown')
+            except telepot.exception.TelegramError:
+                cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
         elif thread_id is not None:
-            if isBombot:
-                token = bombotTOKEN
-            else:
-                token = cookiebotTOKEN
+            token = bombotTOKEN if isBombot else cookiebotTOKEN
             url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode=Markdown"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
@@ -111,16 +111,12 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
         elif language == 'es':
             caption = translator.translate(caption, dest='es').text
         if msg_to_reply:
-            reply_id = msg_to_reply['message_id']
             try:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode='Markdown')
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup, parse_mode='Markdown')
             except telepot.exception.TelegramError:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_id, reply_markup=reply_markup)
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup)
         elif thread_id is not None:
-            if isBombot:
-                token = bombotTOKEN
-            else:
-                token = cookiebotTOKEN
+            token = bombotTOKEN if isBombot else cookiebotTOKEN
             url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode=Markdown"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
