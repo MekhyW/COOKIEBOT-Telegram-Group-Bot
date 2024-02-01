@@ -146,7 +146,8 @@ def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="
     data = {'commands': commands,
             'scope': {'type': 'chat', 'chat_id': scope_chat_id},
             'language_code': language[0:2].lower()}
-    requests.get(url, json=data)
+    r = requests.get(url, json=data)
+    print(r.text)
 
 def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
