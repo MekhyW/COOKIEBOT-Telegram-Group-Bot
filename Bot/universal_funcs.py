@@ -23,6 +23,8 @@ def GetRequestBackend(route, params=None):
     response = requests.get(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=10)
     try:
         return json.loads(response.text)
+    except json.JSONDecodeError:
+        return ''
     except Exception as e:
         print(e)
         return ''
@@ -32,6 +34,8 @@ def PostRequestBackend(route, params=None):
     try:
         print("POST: ", response.text)
         return json.loads(response.text)
+    except json.JSONDecodeError:
+        return ''
     except Exception as e:
         print(e)
         return ''
@@ -41,6 +45,8 @@ def PutRequestBackend(route, params=None):
     try:
         print("PUT: ", response.text)
         return json.loads(response.text)
+    except json.JSONDecodeError:
+        return ''
     except Exception as e:
         print(e)
         return ''
@@ -50,6 +56,8 @@ def DeleteRequestBackend(route, params=None):
     try:
         print("DELETE: ", response.text)
         return json.loads(response.text)
+    except json.JSONDecodeError:
+        return ''
     except Exception as e:
         print(e)
         return ''
@@ -147,7 +155,7 @@ def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="
             'scope': {'type': 'chat', 'chat_id': scope_chat_id},
             'language_code': language[0:2].lower()}
     r = requests.get(url, json=data)
-    print(r.text)
+    return r.text
 
 def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
