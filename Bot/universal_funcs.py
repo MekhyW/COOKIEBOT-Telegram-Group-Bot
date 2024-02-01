@@ -22,9 +22,10 @@ login_backend, password_backend, serverIP = backendauth['login'], backendauth['p
 def GetRequestBackend(route, params=None):
     response = requests.get(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=10)
     try:
-        return json.loads(response.text)
-    except json.JSONDecodeError:
-        return ''
+        if len(response.text):
+            return json.loads(response.text)
+        else:
+            return ''
     except Exception as e:
         print(e)
         return ''
@@ -32,10 +33,11 @@ def GetRequestBackend(route, params=None):
 def PostRequestBackend(route, params=None):
     response = requests.post(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=10)
     try:
-        print("POST: ", response.text)
-        return json.loads(response.text)
-    except json.JSONDecodeError:
-        return ''
+        if len(response.text):
+            print("POST: ", response.text)
+            return json.loads(response.text)
+        else:
+            return ''
     except Exception as e:
         print(e)
         return ''
@@ -43,10 +45,11 @@ def PostRequestBackend(route, params=None):
 def PutRequestBackend(route, params=None):
     response = requests.put(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=10)
     try:
-        print("PUT: ", response.text)
-        return json.loads(response.text)
-    except json.JSONDecodeError:
-        return ''
+        if len(response.text):
+            print("PUT: ", response.text)
+            return json.loads(response.text)
+        else:
+            return ''
     except Exception as e:
         print(e)
         return ''
@@ -54,10 +57,11 @@ def PutRequestBackend(route, params=None):
 def DeleteRequestBackend(route, params=None):
     response = requests.delete(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=10)
     try:
-        print("DELETE: ", response.text)
-        return json.loads(response.text)
-    except json.JSONDecodeError:
-        return ''
+        if len(response.text):
+            print("DELETE: ", response.text)
+            return json.loads(response.text)
+        else:
+            return ''
     except Exception as e:
         print(e)
         return ''
