@@ -238,9 +238,10 @@ def Batalha(cookiebot, msg, chat_id, language):
         cv2.imwrite("user.jpg", user_image)
         user_image = open("user.jpg", 'rb')
     else:
-        user = msg['from']['first_name']
-        if 'last_name' in msg['from']:
-            user += " " + msg['from']['last_name']
+        if 'username' in msg['from']:
+            user = msg['from']['username']
+        else:
+            user = msg['from']['first_name']
         user_image = cookiebot.getUserProfilePhotos(msg['from']['id'], limit=1)['photos'][0][-1]['file_id']
     if language == 'pt':
         fighters = [fighters_eng, fighters_pt]
