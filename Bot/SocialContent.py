@@ -242,7 +242,11 @@ def Batalha(cookiebot, msg, chat_id, language):
             user = msg['from']['username']
         else:
             user = msg['from']['first_name']
-        user_image = cookiebot.getUserProfilePhotos(msg['from']['id'], limit=1)['photos'][0][-1]['file_id']
+        try:
+            user_image = cookiebot.getUserProfilePhotos(msg['from']['id'], limit=1)['photos'][0][-1]['file_id']
+        except IndexError:
+            Send(cookiebot, chat_id, "Você precisa ter uma foto de perfil (ou está privado)", msg, language)
+            return
     if language == 'pt':
         fighters = [fighters_eng, fighters_pt]
         fighter = random.choice(random.choices(fighters, weights=map(len, fighters))[0])
