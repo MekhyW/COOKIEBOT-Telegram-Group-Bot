@@ -19,6 +19,7 @@ adm - Chama os administradores do chat
 qualquercoisa - Manda uma foto do que vc quiser
 pesquisaimagem - Pesquisa a fonte de uma obra de arte
 meme - Gera um meme
+batalha - Quem ganha em uma luta
 aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
 dado - Roda um ou mais dados quaisquer

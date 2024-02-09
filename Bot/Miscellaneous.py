@@ -83,9 +83,9 @@ def NotifyFunOff(cookiebot, msg, chat_id, language):
 
 def IdeiaDesenho(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
-    ideiasdesenho = os.listdir('IdeiaDesenho')
+    ideiasdesenho = os.listdir('Static/IdeiaDesenho')
     ideiaID = random.randint(0, len(ideiasdesenho)-1)
-    photo = open('IdeiaDesenho'+'/'+ideiasdesenho[ideiaID], 'rb')
+    photo = open('Static/IdeiaDesenho'+'/'+ideiasdesenho[ideiaID], 'rb')
     if language == 'pt':
         caption = f"Referência com ID {ideiaID}\n\nNão trace sem dar créditos! (use a busca reversa do google images)"
     elif language == 'es':
@@ -98,9 +98,9 @@ def IdeiaDesenho(cookiebot, msg, chat_id, language):
 def CustomCommand(cookiebot, msg, chat_id):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     button = InlineKeyboardButton(text="Again", callback_data=f"REPEAT custom {msg['text']} {msg['message_id']}")
-    images = os.listdir("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", ''))
+    images = os.listdir("Static/Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", ''))
     imageID = random.randint(0, len(images)-1)
-    photo = open("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')+'/'+images[imageID], 'rb')
+    photo = open("Static/Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')+'/'+images[imageID], 'rb')
     SendPhoto(cookiebot, chat_id, photo, msg_to_reply=msg)
     photo.close()
 
@@ -173,12 +173,12 @@ def Rojao(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
 def Reclamacao(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     if language == 'pt':
-        with open('Static/reclamacao/milton_pt.jpg', 'rb') as photo:
+        with open('Static/Reclamacao/milton_pt.jpg', 'rb') as photo:
             SendPhoto(cookiebot, chat_id, photo, 
                       caption=f"Bom dia/tarde/noite, {msg['from']['first_name']},\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem. Se não, seguimos com nossas atividades.\nAtenciosamente,\nMilton do RH.", 
                       msg_to_reply=msg)
     else:
-        with open('Static/reclamacao/milton_eng.jpg', 'rb') as photo:
+        with open('Static/Reclamacao/milton_eng.jpg', 'rb') as photo:
             SendPhoto(cookiebot, chat_id, photo, 
                       caption=f"Good morning/afternoon/evening, {msg['from']['first_name']},\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.", 
                       msg_to_reply=msg)
@@ -187,11 +187,11 @@ def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
     SendChatAction(cookiebot, chat_id, 'upload_audio')
     protocol = f"{random.randint(10, 99)}-{random.randint(100000, 999999)}/{datetime.datetime.now().year}"
-    with open(f"Static/reclamacao/{random.choice([file for file in os.listdir('Static/reclamacao') if file.endswith('.wav')])}", 'rb') as hold_audio:
+    with open(f"Static/Reclamacao/{random.choice([file for file in os.listdir('Static/Reclamacao') if file.endswith('.wav')])}", 'rb') as hold_audio:
         hold_msg = cookiebot.sendVoice(chat_id, hold_audio, caption=f"Protocol: {protocol}", reply_to_message_id=msg['message_id'])
     time.sleep(random.randint(10, 20))
     DeleteMessage(cookiebot, telepot.message_identifier(hold_msg))
-    with open('Static/reclamacao/answers.txt', 'r', encoding='utf8') as answers:
+    with open('Static/Reclamacao/answers.txt', 'r', encoding='utf8') as answers:
         answer = random.choice(answers.readlines()).replace('\n', '')
         answer += '\n\nAtenciosamente,\nMilton do RH.'
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)

@@ -19,6 +19,7 @@ adm - Llamar a los administradores del chat
 cualquiercosa - envía una foto de lo que quieres
 buscarimagen - Busca la fuente de una obra de arte
 meme - Generar un meme
+batalla - ¿Quién gana en una pelea?
 aleatorio - Enviar un medio de algún grupo
 ideadibujo - no mas bloques de arte
 dado - tira uno o mas dados

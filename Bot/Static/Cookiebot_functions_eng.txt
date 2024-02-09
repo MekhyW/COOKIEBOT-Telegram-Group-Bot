@@ -19,6 +19,7 @@ adm - Call chat admins
 anything - send a picture of what you want
 searchimage - Searches for the source of an artwork
 meme - Generate a meme
+battle - Who wins in a fight
 random - Send a media from some group
 drawingidea - No more art block
 dice - Rolls one or more dice

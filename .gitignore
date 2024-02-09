@@ -1,2 +1,3 @@
 *.pyc
 result-master-ptbr.csv
+.vscode*

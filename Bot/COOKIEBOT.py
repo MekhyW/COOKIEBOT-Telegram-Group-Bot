@@ -34,7 +34,7 @@ def thread_function(msg):
     try:
         if any(key in msg for key in ['dice', 'poll', 'voice_chat_started', 'voice_chat_ended', 
                                       'voice_chat_participants_invited', 'video_chat_participants_invited',
-                                      'forum_topic_created', 'forum_topic_edited', 'story']):
+                                      'forum_topic_created', 'forum_topic_edited', 'story', 'poll_answer']):
             return
         if 'message_thread_id' in msg:
             thread_id = msg['message_thread_id']
@@ -152,14 +152,16 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")) and utilityfunctions:
                         ReverseImageSearch(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
-                                                 "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", 
-                                                 "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
+                                                 "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
+                                                 "/batalha", "/battle", "/batalla")):
                         if not funfunctions:
                             NotifyFunOff(cookiebot, msg, chat_id, language)
                         elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
                             ReplyAleatorio(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
                         elif msg['text'].startswith("/meme"):
                             Meme(cookiebot, msg, chat_id, language)
+                        elif msg['text'].startswith(("/batalha", "/battle", "/batalla")):
+                            Batalha(cookiebot, msg, chat_id, language)
                         elif msg['text'].startswith(("/idade", "/age", "/edad")):
                             Idade(cookiebot, msg, chat_id, language)
                         elif msg['text'].startswith(("/genero", "/gênero", "/gender")):
@@ -197,7 +199,7 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/configurar", "/configure")):
                         listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                         Configurar(cookiebot, msg, chat_id, listaadmins_id, language)
-                    elif " " not in msg['text'] and os.path.exists("Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions:
+                    elif " " not in msg['text'] and os.path.exists("Static/Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions:
                         CustomCommand(cookiebot, msg, chat_id)
                     elif "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and utilityfunctions:
                         if FurBots:

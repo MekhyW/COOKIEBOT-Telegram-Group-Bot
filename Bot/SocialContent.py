@@ -6,8 +6,10 @@ import cv2
 import numpy as np
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
 reverseimagesearcher = vision.ImageAnnotatorClient.from_service_account_json('cookiebot_cloudserviceaccount.json')
-templates_eng = os.listdir("Meme/English")
-templates_pt = os.listdir("Meme/Portuguese")
+templates_eng = os.listdir("Static/Meme/English")
+templates_pt = os.listdir("Static/Meme/Portuguese")
+fighters_eng = os.listdir("Static/Fight/English")
+fighters_pt = os.listdir("Static/Fight/Portuguese")
 fullmatch_sources = ['deviantart', 'pinterest', 'furaffinity', 'pixiv', 'artstation', 'behance', 'dribbble', 'flickr', 'instagram', 'twitter', 'tumblr', 'weheartit', 'youtube', 'vimeo', '500px', 'imgur', 'tinypic', 'photobucket', 'reddit', 'flickr', 'picasa', 'shutterstock', 'gettyimages', 'istockphoto', 'stock.adobe', 'stocksnap', 'unsplash', 'pexels', 'freepik', 'vectorstock', 'vecteezy', 'pngtree', 'flaticon', 'iconfinder', 'bsky']
 
 with open('Static/avoid_search.txt', 'r') as f:
@@ -27,6 +29,15 @@ def fetchTempJpg(cookiebot, msg, chat_id):
         success, image = vidcap.read()
         cv2.imwrite('temp.jpg', image)
         os.remove('temp.mp4')
+
+def getMembersTagged(msg):
+    members_tagged = []
+    if '@' in msg['text']:
+        for target in msg['text'].split("@")[1:]:
+            if 'CookieMWbot' in target:
+                continue
+            members_tagged.append(target)
+    return members_tagged
 
 def ReverseImageSearch(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
@@ -113,7 +124,6 @@ def ReplyAleatorio(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
             break
         except Exception as e:
             print(e)
-        
 
 def AddtoStickerDatabase(msg, chat_id):
     if 'emoji' in msg['sticker'] and msg['sticker']['emoji'] in ['🍆', '🍑', '🥵', '💦', '🫦']:
@@ -128,22 +138,17 @@ def ReplySticker(cookiebot, msg, chat_id):
 def Meme(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     members = GetMembersChat(chat_id)
-    members_tagged = []
-    if '@' in msg['text']:
-        for target in msg['text'].split("@")[1:]:
-            if 'CookieMWbot' in target:
-                continue
-            members_tagged.append(target)
+    members_tagged = getMembersTagged(msg)
     caption = ""
     for attempt in range(100):
         if 'pt' not in language.lower():
-            template = "Meme/English/" + random.choice(templates_eng)
+            template = "Static/Meme/English/" + random.choice(templates_eng)
         else:
             template_id = random.randint(0, len(templates_pt)+len(templates_eng)-1)
             if template_id > len(templates_eng)-1:
-                template = "Meme/Portuguese/" + templates_pt[template_id-len(templates_eng)]
+                template = "Static/Meme/Portuguese/" + templates_pt[template_id-len(templates_eng)]
             else:
-                template = "Meme/English/" + templates_eng[template_id]
+                template = "Static/Meme/English/" + templates_eng[template_id]
         template_img = cv2.imread(template)
         mask_green = cv2.inRange(template_img, (0, 250, 0), (5, 255, 5))
         mask_red = cv2.inRange(template_img, (0, 0, 250), (5, 5, 255))
@@ -181,7 +186,7 @@ def Meme(cookiebot, msg, chat_id, language):
         resp = urllib.request.urlopen(images[0]['src'])
         image = np.asarray(bytearray(resp.read()), dtype="uint8")
         image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        image = cv2.resize(image, (w, h), interpolation=cv2.INTER_AREA)
+        image = cv2.resize(image, (w, h), interpolation=cv2.INTER_NEAREST)
         mask_green_copy = mask_green[y:y+h, x:x+w]
         for i in range(y, y+h):
             for j in range(x, x+w):
@@ -203,7 +208,7 @@ def Meme(cookiebot, msg, chat_id, language):
         resp = urllib.request.urlopen(photo_url)
         image = np.asarray(bytearray(resp.read()), dtype="uint8")
         image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        image = cv2.resize(image, (w, h), interpolation=cv2.INTER_AREA)
+        image = cv2.resize(image, (w, h), interpolation=cv2.INTER_NEAREST)
         mask_red_copy = mask_red[y:y+h, x:x+w]
         for i in range(y, y+h):
             for j in range(x, x+w):
@@ -216,3 +221,41 @@ def Meme(cookiebot, msg, chat_id, language):
         os.remove("meme.png")
     except FileNotFoundError:
         pass
+
+def Batalha(cookiebot, msg, chat_id, language):
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
+    members_tagged = getMembersTagged(msg)
+    if len(members_tagged):
+        user = members_tagged[0]
+        html = urllib.request.urlopen(urllib.request.Request(f"https://telegram.me/{user}", headers={'User-Agent' : "Magic Browser"}))
+        soup = BeautifulSoup(html, "html.parser")
+        images = list(soup.findAll('img'))
+        if not len(images):
+            Send(cookiebot, chat_id, "Não consegui extrair a foto de perfil desse usuário", msg, language)
+            return
+        resp = urllib.request.urlopen(images[0]['src'])
+        user_image = cv2.imdecode(np.asarray(bytearray(resp.read()), dtype="uint8"), cv2.IMREAD_COLOR)
+    else:
+        user = msg['from']['first_name']
+        if 'last_name' in msg['from']:
+            user += " " + msg['from']['last_name']
+        user_image = cookiebot.getUserProfilePhotos(msg['from']['id'], limit=1)['photos'][0][-1]['file_id']
+    if language == 'pt':
+        fighters = [fighters_eng, fighters_pt]
+        fighter = random.choice(random.choices(fighters, weights=map(len, fighters))[0])
+        if fighter in fighters_eng:
+            fighter_image = cv2.imread("Static/Fight/English/" + fighter)
+        else:
+            fighter_image = cv2.imread("Static/Fight/Portuguese/" + fighter)
+        poll_title = "QUEM VENCE " + random.choice(["NO TAPA", "NO X1", "NO SOCO", "NA MÃO", "NA PORRADA", "NO ARGUMENTO", "NO DUELO", "NA VIDA"]) + "?"
+    else:
+        fighter = random.choice(fighters_eng)
+        fighter_image = cv2.imread("Static/Fight/English/" + fighter)
+        if language == 'es':
+            poll_title = "¿QUIÉN GANA?"
+        else:
+            poll_title = "WHO WINS?"
+    fighter_image = cv2.resize(fighter_image, (user_image.shape[1], user_image.shape[0]), interpolation=cv2.INTER_NEAREST)
+    fighter = fighter.replace(".png", "").replace(".jpg", "").replace(".jpeg", "").replace("_", " ").capitalize()
+    cookiebot.sendMediaGroup(chat_id, [telepot.helper.create_file_like('user.jpg', user_image), telepot.helper.create_file_like('fighter.jpg', fighter_image)], reply_to_message_id=msg['message_id'])
+    cookiebot.sendPoll(chat_id, poll_title, [user, fighter], is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'], open_period=600)
