@@ -255,7 +255,8 @@ def Batalha(cookiebot, msg, chat_id, language):
             poll_title = "¿QUIÉN GANA?"
         else:
             poll_title = "WHO WINS?"
-    fighter_image = cv2.resize(fighter_image, (user_image.shape[1], user_image.shape[0]), interpolation=cv2.INTER_NEAREST)
     fighter = fighter.replace(".png", "").replace(".jpg", "").replace(".jpeg", "").replace("_", " ").capitalize()
-    cookiebot.sendMediaGroup(chat_id, [telepot.helper.create_file_like('user.jpg', user_image), telepot.helper.create_file_like('fighter.jpg', fighter_image)], reply_to_message_id=msg['message_id'])
-    cookiebot.sendPoll(chat_id, poll_title, [user, fighter], is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'], open_period=600)
+    cv2.imwrite("fighter.jpg", fighter_image)
+    with open("fighter.jpg", 'rb') as fighter_image_binary:
+        cookiebot.sendMediaGroup(chat_id, [{'type': 'photo', 'media': user_image}, {'type': 'photo', 'media': fighter_image_binary}], reply_to_message_id=msg['message_id'])
+        cookiebot.sendPoll(chat_id, poll_title, [user, fighter], is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'], open_period=600)
