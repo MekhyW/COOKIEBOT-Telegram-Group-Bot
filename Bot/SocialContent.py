@@ -263,5 +263,6 @@ def Batalha(cookiebot, msg, chat_id, language):
         medias, caption, choices = [{'type': 'photo', 'media': user_image}, {'type': 'photo', 'media': fighter_image_binary}], f"{user} VS {fighter}", [user, fighter]
         if random.choice([0, 1]):
             medias, caption, choices = [medias[1], medias[0]], f"{fighter} VS {user}", [fighter, user]
-        cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'], caption=caption)
+        medias[0]['caption'] = caption
+        cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'])
         cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'], open_period=600)
