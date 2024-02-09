@@ -235,6 +235,8 @@ def Batalha(cookiebot, msg, chat_id, language):
             return
         resp = urllib.request.urlopen(images[0]['src'])
         user_image = cv2.imdecode(np.asarray(bytearray(resp.read()), dtype="uint8"), cv2.IMREAD_COLOR)
+        cv2.imwrite("user.jpg", user_image)
+        user_image = open("user.jpg", 'rb')
     else:
         user = msg['from']['first_name']
         if 'last_name' in msg['from']:
@@ -258,5 +260,8 @@ def Batalha(cookiebot, msg, chat_id, language):
     fighter = fighter.replace(".png", "").replace(".jpg", "").replace(".jpeg", "").replace("_", " ").capitalize()
     cv2.imwrite("fighter.jpg", fighter_image)
     with open("fighter.jpg", 'rb') as fighter_image_binary:
-        cookiebot.sendMediaGroup(chat_id, [{'type': 'photo', 'media': user_image}, {'type': 'photo', 'media': fighter_image_binary}], reply_to_message_id=msg['message_id'])
-        cookiebot.sendPoll(chat_id, poll_title, [user, fighter], is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'], open_period=600)
+        medias, caption, choices = [{'type': 'photo', 'media': user_image}, {'type': 'photo', 'media': fighter_image_binary}], f"{user} VS {fighter}", [user, fighter]
+        if random.choice([0, 1]):
+            medias, caption, choices = [medias[1], medias[0]], f"{fighter} VS {user}", [fighter, user]
+        cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'], caption=caption)
+        cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'], open_period=600)
