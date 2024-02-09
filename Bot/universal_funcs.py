@@ -124,9 +124,9 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
         elif language == 'es':
             caption = translator.translate(caption, dest='es').text
         if msg_to_reply:
-            try:
+            if caption and all(caption.count(x)%2 == 0 for x in ['*', '_', '`', '[', ']', '(', ')', '~', '|']):
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup, parse_mode='Markdown')
-            except:
+            else:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup)
         elif thread_id is not None:
             token = bombotTOKEN if isBombot else cookiebotTOKEN
@@ -136,9 +136,9 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
             sentphoto = {}
             sentphoto['message_id'] = json.loads(requests.get(url).text)['result']['message_id']
         else:
-            try:
+            if caption and all(caption.count(x)%2 == 0 for x in ['*', '_', '`', '[', ']', '(', ')', '~', '|']):
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup, parse_mode='Markdown')
-            except:
+            else:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
         return SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
