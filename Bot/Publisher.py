@@ -168,7 +168,7 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
         name = url[0]
         if name.endswith('/'):
             name = name[:-1]
-        name = name.split('/')[-1].replace('www.', '')
+        name = name.replace('www.', '').replace('http://', '').replace('https://', '')
         if len(name) and len(url):
             url_no_emojis_on_ends = remove_emojis_from_ends(url[0])
             inline_keyboard.append([InlineKeyboardButton(text=name, url=url_no_emojis_on_ends)])
@@ -179,7 +179,7 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
             name = entity['url']
             if name.endswith('/'):
                 name = name[:-1]
-            name = name.split('/')[-1].replace('www.', '')
+            name = name.replace('www.', '').replace('http://', '').replace('https://', '')
             inline_keyboard.append([InlineKeyboardButton(text=name, url=entity['url'])])
     if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
@@ -270,6 +270,7 @@ def SchedulePost(cookiebot, query_data):
                     answer += f"{hour}:{minute} - {target_chattitle}\n"
     try:
         answer += f"OBS: private chats are not listed!"
+        Send(cookiebot, mekhyID, answer)
         Send(cookiebot, origin_userid, answer)
         Send(cookiebot, second_chatid, "Post adicionado à fila de publicação!")
     except Exception as e:

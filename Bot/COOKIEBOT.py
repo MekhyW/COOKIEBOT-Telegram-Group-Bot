@@ -264,13 +264,16 @@ def thread_function_query(msg):
             if 'creator' in listaadmins_status and str(from_id) not in listaadmins_id:
                 cookiebot.answerCallbackQuery(query_id, text="Only admins can do this")
             else:
+                try:
+                    DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
+                except:
+                    pass
                 if query_data.startswith('SendToApproval'):
                     AskApproval(cookiebot, query_data, from_id, isBombot=isBombot)
                 elif query_data.startswith('Approve'):
                     SchedulePost(cookiebot, query_data)
                 elif query_data.startswith('Deny'):
                     DenyPost(cookiebot, query_data)
-                DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data.startswith('Report'):
             command = query_data.split()[1]
             targetid = query_data.split()[2]
