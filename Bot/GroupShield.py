@@ -1,6 +1,7 @@
 # coding=utf8
 from universal_funcs import *
 from captcha.image import ImageCaptcha
+import spamwatch
 import threading
 import json, requests
 import cv2
@@ -8,6 +9,7 @@ import numpy as np
 from PIL import ImageFont, ImageDraw, Image
 
 captcha = ImageCaptcha()
+spamwatch_client = spamwatch.Client(spamwatch_token)
 
 emoji_pattern = re.compile("["
         u"\U0001F600-\U0001F64F"  # emoticons
@@ -176,6 +178,19 @@ def CheckCAS(cookiebot, msg, chat_id, language):
     if in_banlist:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
         Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado pelo sistema anti-ban CAS https://cas.chat/", language=language)
+        return True
+    return False
+
+def CheckSpamwatch(cookiebot, msg, chat_id, language):
+    try:
+        spamwatch_client = spamwatch.Client(spamwatch_token)
+        ban = spamwatch_client.get_ban(int(msg['new_chat_participant']['id']))
+    except Exception as e:
+        print(e)
+        return False
+    if ban:
+        BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
+        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por ser flagrado pelo sistema anti-ban Spamwatch", language=language)
         return True
     return False
 

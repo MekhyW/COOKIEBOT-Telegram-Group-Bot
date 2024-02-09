@@ -87,10 +87,13 @@ def thread_function(msg):
                     if 'language_code' in msg['from']:
                         SettarLanguage(cookiebot, msg, chat_id, msg['from']['language_code'])
                         GetConfig(cookiebot, chat_id, ignorecache=True)
-                elif not CheckCAS(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
+                elif msg['from']['id'] != msg['new_chat_participant']['id']:
                     if msg['new_chat_participant']['is_bot']:
                         Send(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\nCaso algum comando entre em conflito, fale com o Mekhy", msg, language)
-                    elif captchatimespan > 0 and myself['username'] in listaadmins and msg['from']['id'] == msg['new_chat_participant']['id']:
+                    else:
+                        Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=isBombot)
+                elif not CheckCAS(cookiebot, msg, chat_id, language) and not CheckSpamwatch(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
+                    if captchatimespan > 0 and myself['username'] in listaadmins:
                         Captcha(cookiebot, msg, chat_id, captchatimespan, language)
                     else:
                         Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=isBombot)
