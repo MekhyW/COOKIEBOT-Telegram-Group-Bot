@@ -126,7 +126,7 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
         if msg_to_reply:
             try:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup, parse_mode='Markdown')
-            except telepot.exception.TelegramError:
+            except:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup)
         elif thread_id is not None:
             token = bombotTOKEN if isBombot else cookiebotTOKEN
@@ -138,7 +138,7 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
         else:
             try:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup, parse_mode='Markdown')
-            except telepot.exception.TelegramError:
+            except:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
         return SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
