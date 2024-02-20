@@ -164,14 +164,14 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     cached_post = cache_posts[origin_messageid]
     inline_keyboard = []
     inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
-    for url in re.findall(url_regex, cached_post['caption']):
+    for url in set(re.findall(url_regex, cached_post['caption'])):
         name = url[0]
         if name.endswith('/'):
             name = name[:-1]
         name = name.replace('www.', '').replace('http://', '').replace('https://', '')
-        if len(name) and len(url):
+        if len(name) and len(url) and url != f"https://t.me/{origin_chat['username']}":
             url_no_emojis_on_ends = remove_emojis_from_ends(url[0])
-            inline_keyboard.append([InlineKeyboardButton(text=name, url=url_no_emojis_on_ends)])
+            inline_keyboard.append([InlineKeyboardButton(text=name, url=url_no_emojis_on_ends, parse_mode='HTML')])
             cached_post['caption'] = cached_post['caption'].replace(url[0], url_no_emojis_on_ends)
     caption_new = emojis_to_numbers(cached_post['caption'])
     for entity in cached_post['caption_entities']:
