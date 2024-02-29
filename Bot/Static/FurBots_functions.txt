@@ -166,3 +166,6 @@
 /snek
 /year_progress
 /subscribe
+/source
+/mirror
+/manage
