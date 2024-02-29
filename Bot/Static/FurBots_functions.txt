@@ -156,3 +156,13 @@
 /challengelang
 /dica
 /parar
+/addcumple
+/listacumples
+/delcumple
+/status
+/invitameauncafe
+/buymeacookie
+/temp
+/snek
+/year_progress
+/subscribe
