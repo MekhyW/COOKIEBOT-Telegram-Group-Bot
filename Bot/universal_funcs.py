@@ -15,8 +15,7 @@ from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
 from telepot.exception import *
-import googletrans
-translator = googletrans.Translator()
+from deep_translator import GoogleTranslator
 backendauth = json.loads(open('cookiebot_backendauth.json', 'r').read())
 login_backend, password_backend, serverIP = backendauth['login'], backendauth['password'], backendauth['serverIP']
 
@@ -88,9 +87,9 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
     try:
         SendChatAction(cookiebot, chat_id, 'typing')
         if language == 'eng':
-            text = translator.translate(text, dest='en').text
+            text = GoogleTranslator(source='auto', target='en').translate(text)
         elif language == 'es':
-            text = translator.translate(text, dest='es').text
+            text = GoogleTranslator(source='auto', target='es').translate(text)
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
             try:
@@ -120,9 +119,9 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
     try:
         SendChatAction(cookiebot, chat_id, 'upload_photo')
         if language == 'eng' and caption is not None:
-            caption = translator.translate(caption, dest='en').text
+            caption = GoogleTranslator(source='auto', target='en').translate(caption)
         elif language == 'es':
-            caption = translator.translate(caption, dest='es').text
+            caption = GoogleTranslator(source='auto', target='es').translate(caption)
         if msg_to_reply:
             if caption and all(caption.count(x)%2 == 0 for x in ['*', '_', '`', '[', ']', '(', ')', '~', '|']):
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup, parse_mode='Markdown')

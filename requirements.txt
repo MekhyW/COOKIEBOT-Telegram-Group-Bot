@@ -2,7 +2,7 @@ urllib3
 beautifulsoup4
 Pillow
 captcha
-googletrans
+deep-translator
 Google-Images-Search
 google-cloud-pubsub
 google-cloud-scheduler

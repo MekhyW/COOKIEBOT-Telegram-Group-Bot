@@ -184,8 +184,8 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=postmail_chat_link)])
-    caption_pt = translator.translate(caption_new, dest='pt').text
-    caption_en = translator.translate(caption_new, dest='en').text
+    caption_pt = GoogleTranslator(source='auto', target='pt').translate(caption_new)
+    caption_en = GoogleTranslator(source='auto', target='en').translate(caption_new)
     caption_pt = ConvertPricesinText(caption_pt, 'BRL')
     caption_en = ConvertPricesinText(caption_en, 'USD')
     if 'photo' in cached_post:
