@@ -1,6 +1,6 @@
 from universal_funcs import *
 import openai
-openai_client = openai.OpenAI(openai_key)
+openai_client = openai.OpenAI(api_key=openai_key)
 data_initial = json.load(open('Static/AI_SFW.json'))
 questions_list = [q_a['prompt'] for q_a in data_initial['questions_answers']]
 answers_list = [q_a['completion'] for q_a in data_initial['questions_answers']]
