@@ -2,7 +2,7 @@ urllib3
 beautifulsoup4
 Pillow
 captcha
-googletrans==3.1.0a0
+googletrans
 Google-Images-Search
 google-cloud-pubsub
 google-cloud-scheduler

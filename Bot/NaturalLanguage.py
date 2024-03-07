@@ -55,10 +55,10 @@ def modelNSFW(message, language):
     r = requests.post(f'https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': language}, headers={"User-Agent": USER_AGENT})
     if 'status' in r.json() and int(r.json()['status']) == 200:
         AnswerFinal = r.json()['message'].capitalize()
-        selfmoderation_response = openai.Moderation.create(input=AnswerFinal)
-        results = selfmoderation_response['results'][0]['category_scores']
-        if any(x > 0.2 for x in [results['hate'], results['hate/threatening'], results['self-harm'], results['self-harm/instructions'], results['self-harm/intent'], results['sexual/minors'], results['violence/graphic']]):
-            AnswerFinal = "*" * len(AnswerFinal)
+        #selfmoderation_response = openai.Moderation.create(input=AnswerFinal)
+        #results = selfmoderation_response['results'][0]['category_scores']
+        #if any(x > 0.2 for x in [results['hate'], results['hate/threatening'], results['self-harm'], results['self-harm/instructions'], results['self-harm/intent'], results['sexual/minors'], results['violence/graphic']]):
+        #    AnswerFinal = "*" * len(AnswerFinal)
     else:
         print(r.json())
         AnswerFinal = ""
