@@ -1,6 +1,6 @@
 from universal_funcs import *
 import openai
-openai.api_key = openai_key
+openai_client = openai.OpenAI(openai_key)
 data_initial = json.load(open('Static/AI_SFW.json'))
 questions_list = [q_a['prompt'] for q_a in data_initial['questions_answers']]
 answers_list = [q_a['completion'] for q_a in data_initial['questions_answers']]
@@ -29,10 +29,10 @@ def modelSFW(message, msg, language):
         message += '\n\nReducir la respuesta tanto como sea posible.'
     messages.append({"role": "user", "content": message})
     try:
-        completion = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
-    except (openai.error.RateLimitError, openai.error.ServiceUnavailableError):
+        completion = openai_client.chat.completions.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
+    except (openai.RateLimitError, openai.ServiceUnavailableError):
         return "Ainda estou processando outros pedidos!\nTente novamente em alguns segundos."
-    except openai.error.InvalidRequestError:
+    except openai.InvalidRequestError:
         questions_list = [q_a['prompt'] for q_a in data_initial['questions_answers']]
         answers_list = [q_a['completion'] for q_a in data_initial['questions_answers']]
         return "Ainda estou processando outros pedidos!\nTente novamente em alguns segundos."
@@ -55,10 +55,6 @@ def modelNSFW(message, language):
     r = requests.post(f'https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': language}, headers={"User-Agent": USER_AGENT})
     if 'status' in r.json() and int(r.json()['status']) == 200:
         AnswerFinal = r.json()['message'].capitalize()
-        #selfmoderation_response = openai.Moderation.create(input=AnswerFinal)
-        #results = selfmoderation_response['results'][0]['category_scores']
-        #if any(x > 0.2 for x in [results['hate'], results['hate/threatening'], results['self-harm'], results['self-harm/instructions'], results['self-harm/intent'], results['sexual/minors'], results['violence/graphic']]):
-        #    AnswerFinal = "*" * len(AnswerFinal)
     else:
         print(r.json())
         AnswerFinal = ""
