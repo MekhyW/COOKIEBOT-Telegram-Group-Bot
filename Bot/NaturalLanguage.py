@@ -22,11 +22,11 @@ def modelSFW(message, msg, language):
     if 'reply_to_message' in msg and msg['reply_to_message']['text'] not in answers_list:
         messages.append({"role": "system", "content": msg['reply_to_message']['text']})
     if language == 'eng':
-        message += '\n\nTry to reduce the answer a lot.'
+        message += '\n\nTry to reduce the answer.'
     elif language == 'pt':
-        message += '\n\nTente reduzir bastante a resposta.'
+        message += '\n\nTente reduzir a resposta.'
     elif language == 'es':
-        message += '\n\nIntenta reducir mucho la respuesta.'
+        message += '\n\nIntenta reducir la respuesta.'
     messages.append({"role": "user", "content": message})
     try:
         completion = openai_client.chat.completions.create(model="gpt-4", messages=messages, temperature=1)
@@ -43,6 +43,8 @@ def modelSFW(message, msg, language):
         pass
     AnswerFinal = re.sub(r'\b(' + '|'.join(re.escape(key) for key in replacements.keys()) + r')\b', replace, AnswerFinal)
     AnswerFinal = AnswerFinal.strip().capitalize()
+    if AnswerFinal[-1] == ".":
+        AnswerFinal = AnswerFinal[:-1]
     questions_list.pop(0)
     answers_list.pop(0)
     questions_list.append(message)
