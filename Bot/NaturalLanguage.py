@@ -22,14 +22,14 @@ def modelSFW(message, msg, language):
     if 'reply_to_message' in msg and msg['reply_to_message']['text'] not in answers_list:
         messages.append({"role": "system", "content": msg['reply_to_message']['text']})
     if language == 'eng':
-        message += '\n\nReduce the answer as much as possible.'
+        message += '\n\nTry to reduce the answer a lot.'
     elif language == 'pt':
-        message += '\n\nReduza a resposta o máximo possível.'
+        message += '\n\nTente reduzir bastante a resposta.'
     elif language == 'es':
-        message += '\n\nReducir la respuesta tanto como sea posible.'
+        message += '\n\nIntenta reducir mucho la respuesta.'
     messages.append({"role": "user", "content": message})
     try:
-        completion = openai_client.chat.completions.create(model="gpt-3.5-turbo", messages=messages, temperature=0.9)
+        completion = openai_client.chat.completions.create(model="gpt-4", messages=messages, temperature=1)
     except (openai.RateLimitError, openai.ServiceUnavailableError):
         return "Ainda estou processando outros pedidos!\nTente novamente em alguns segundos."
     except openai.InvalidRequestError:
