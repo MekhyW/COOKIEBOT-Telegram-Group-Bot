@@ -29,12 +29,8 @@ def modelSFW(message, msg, language):
         message += '\n\nIntenta reducir la respuesta.'
     messages.append({"role": "user", "content": message})
     try:
-        completion = openai_client.chat.completions.create(model="gpt-4", messages=messages, temperature=1)
-    except (openai.RateLimitError, openai.ServiceUnavailableError):
-        return "Ainda estou processando outros pedidos!\nTente novamente em alguns segundos."
-    except openai.InvalidRequestError:
-        questions_list = [q_a['prompt'] for q_a in data_initial['questions_answers']]
-        answers_list = [q_a['completion'] for q_a in data_initial['questions_answers']]
+        completion = openai_client.chat.completions.create(model="gpt-4-turbo-preview", messages=messages, temperature=1)
+    except (openai.RateLimitError, openai.APIConnectionError, openai.APIStatusError):
         return "Ainda estou processando outros pedidos!\nTente novamente em alguns segundos."
     AnswerFinal = completion.choices[0].message.content
     try:
@@ -73,7 +69,8 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
     if len(message) == 0:
         AnswerFinal = "?"
     else:
-        if sfw:
+        num_members = cookiebot.getChatMembersCount(chat_id)
+        if sfw and num_members >= 3:
             AnswerFinal = modelSFW(message, msg, language)
         else:
             AnswerFinal = modelNSFW(message, language)

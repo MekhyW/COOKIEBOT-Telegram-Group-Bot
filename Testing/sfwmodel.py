@@ -16,7 +16,7 @@ message = 'Não lembro o que é um cachorro-quente. Pode me ajudar?'
 message += '\n\nTente reduzir bastante a resposta.'
 messages.append({"role": "user", "content": message})
 
-completion = openai_client.chat.completions.create(model="gpt-4", messages=messages, temperature=1)
+completion = openai_client.chat.completions.create(model="gpt-4-turbo-preview", messages=messages, temperature=1)
 AnswerFinal = completion.choices[0].message.content
 try:
     AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1]
