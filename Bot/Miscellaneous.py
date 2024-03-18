@@ -173,12 +173,12 @@ def Rojao(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
 def Reclamacao(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     if language == 'pt':
-        with open('Static/Reclamacao/milton_pt.jpg', 'rb') as photo:
+        with open('Static/reclamacao/milton_pt.jpg', 'rb') as photo:
             SendPhoto(cookiebot, chat_id, photo, 
                       caption=f"Bom dia/tarde/noite, {msg['from']['first_name']},\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem. Se não, seguimos com nossas atividades.\nAtenciosamente,\nMilton do RH.", 
                       msg_to_reply=msg)
     else:
-        with open('Static/Reclamacao/milton_eng.jpg', 'rb') as photo:
+        with open('Static/reclamacao/milton_eng.jpg', 'rb') as photo:
             SendPhoto(cookiebot, chat_id, photo, 
                       caption=f"Good morning/afternoon/evening, {msg['from']['first_name']},\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.", 
                       msg_to_reply=msg)
