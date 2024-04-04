@@ -120,7 +120,7 @@ def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
     return final_img
 
 def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
-    if str(chat_id) == '-1001063487371': # Mercado Furry
+    if str(chat_id) in ['-1001063487371', '-1001649779623']: # Groups where the bot should not welcome new members
         return
     SendChatAction(cookiebot, chat_id, 'typing')
     if limbotimespan > 0:

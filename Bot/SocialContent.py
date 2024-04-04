@@ -112,6 +112,8 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
     Send(cookiebot, chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", msg, language)
 
 def AddtoRandomDatabase(msg, chat_id, photo_id=''):
+    if any(x in msg['chat']['title'].lower() for x in ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']):
+        return
     if not 'forward_from' in msg and not 'forward_from_chat' in msg:
         PostRequestBackend('randomdatabase', {'id': chat_id, 'idMessage': str(msg['message_id']), 'idMedia': photo_id})
 
@@ -126,6 +128,8 @@ def ReplyAleatorio(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
             print(e)
 
 def AddtoStickerDatabase(msg, chat_id):
+    if any(x in msg['chat']['title'].lower() for x in ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']):
+        return
     if 'emoji' in msg['sticker'] and msg['sticker']['emoji'] in ['🍆', '🍑', '🥵', '💦', '🫦']:
         return
     stickerId = msg['sticker']['file_id']

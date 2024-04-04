@@ -7,10 +7,10 @@ token = ''
 mekhyID = 780875868
 testgroupID = -1001499400382
 bot = telepot.Bot(token)
-
-pfps = bot.getUserProfilePhotos(mekhyID, limit=1)
-bot.sendPhoto(mekhyID, pfps['photos'][0][-1]['file_id'])
-bot.sendPoll(mekhyID, 'Teste de enquete', ['Opção 1', 'Opção 2'], is_anonymous=False, allows_multiple_answers=False, open_period=60)
+updates = bot.getUpdates()
+if updates:
+    last_update_id = updates[-1]['update_id']
+    bot.getUpdates(offset=last_update_id+1)
 
 def changecmds(bot):
     url = 'https://api.telegram.org/bot{}/setMyCommands'.format(token)
