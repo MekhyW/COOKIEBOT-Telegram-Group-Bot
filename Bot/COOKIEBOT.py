@@ -11,7 +11,10 @@ from Publisher import *
 import threading
 import gc
 
-isBombot = False
+if len(sys.argv) < 2:
+    print("Usage: python COOKIEBOT.py [isBombot]")
+    sys.exit(0)
+isBombot = sys.argv[1].lower() == 'true'
 
 if isBombot:
     cookiebot = telepot.Bot(bombotTOKEN)
