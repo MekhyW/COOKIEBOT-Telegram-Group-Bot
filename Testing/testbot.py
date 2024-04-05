@@ -2,7 +2,7 @@ import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
 import requests, json
-token = ''
+token = json.loads(open('Bot/cookiebot_basecredentials.json', 'r').read())['testbotTOKEN']
 mekhyID = 780875868
 testgroupID = -1001499400382
 bot = telepot.Bot(token)
