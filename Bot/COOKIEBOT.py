@@ -148,15 +148,15 @@ def thread_function(msg):
                         GetConfig(cookiebot, chat_id, ignorecache=True)
                         Send(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
                     elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
-                        Analyze(cookiebot, msg, chat_id, language)
+                        Analyze(cookiebot, msg, chat_id, language, isBombot=isBombot)
                     elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
                         listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                        ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id)
+                        ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=isBombot)
                     elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
                         listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                        ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id)
+                        ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=isBombot)
                     elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")) and utilityfunctions:
-                        ReverseImageSearch(cookiebot, msg, chat_id, language)
+                        ReverseImageSearch(cookiebot, msg, chat_id, language, isBombot=isBombot)
                     elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
                                                  "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
                                                  "/batalha", "/battle", "/batalla")):
@@ -167,7 +167,7 @@ def thread_function(msg):
                         elif msg['text'].startswith("/meme"):
                             Meme(cookiebot, msg, chat_id, language)
                         elif msg['text'].startswith(("/batalha", "/battle", "/batalla")):
-                            Batalha(cookiebot, msg, chat_id, language)
+                            Batalha(cookiebot, msg, chat_id, language, isBombot=isBombot)
                         elif msg['text'].startswith(("/idade", "/age", "/edad")):
                             Idade(cookiebot, msg, chat_id, language)
                         elif msg['text'].startswith(("/genero", "/gênero", "/gender")):
@@ -175,7 +175,7 @@ def thread_function(msg):
                         elif msg['text'].startswith(("/rojao", "/rojão", "/acende", "/fogos", "/firecracker")):
                             Rojao(cookiebot, msg, chat_id, thread_id=thread_id, isBombot=isBombot)
                         elif msg['text'].startswith(("/shippar", "/ship")):
-                            Shippar(cookiebot, msg, chat_id, language)
+                            Shippar(cookiebot, msg, chat_id, language, isBombot=isBombot)
                         elif msg['text'].startswith(("/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
                             Reclamacao(cookiebot, msg, chat_id, language)
                     elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and utilityfunctions:
@@ -191,9 +191,9 @@ def thread_function(msg):
                             return
                         Regras(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
-                        TaVivo(cookiebot, msg, chat_id, language)
+                        TaVivo(cookiebot, msg, chat_id, language, isBombot=isBombot)
                     elif msg['text'].startswith("/everyone"):
-                        Everyone(cookiebot, msg, chat_id, listaadmins, language)
+                        Everyone(cookiebot, msg, chat_id, listaadmins, language, isBombot=isBombot)
                     elif msg['text'].startswith("/adm"):
                         AdmAsk(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/comandos", "/commands")):
@@ -216,10 +216,10 @@ def thread_function(msg):
                         QualquerCoisa(cookiebot, msg, chat_id, sfw, language)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id)
+                    AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id, isBombot=isBombot)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id)
+                    AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id, isBombot=isBombot)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                     ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
                 elif (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'])) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and funfunctions:

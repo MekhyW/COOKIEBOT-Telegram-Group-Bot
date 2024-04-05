@@ -1,8 +1,7 @@
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
-import requests
-import urllib3
+import requests, json
 token = ''
 mekhyID = 780875868
 testgroupID = -1001499400382
@@ -11,14 +10,7 @@ updates = bot.getUpdates()
 if updates:
     last_update_id = updates[-1]['update_id']
     bot.getUpdates(offset=last_update_id+1)
-
-def changecmds(bot):
-    url = 'https://api.telegram.org/bot{}/setMyCommands'.format(token)
-    data = {'commands': [{'command': 'start', 'description': 'start bot'},
-                         {'command': 'help', 'description': 'help'},
-                         {'command': 'test', 'description': 'test'}],
-            'scope': {'type': 'chat', 'chat_id': mekhyID}}
-    requests.get(url, json=data)
+bot.sendMessage(mekhyID, 'testbot started')
 
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
@@ -37,21 +29,5 @@ def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
     print('Callback Query:', query_id, from_id, query_data)
     print(msg)
-
-def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
-    try:
-        if msg_to_reply:
-            reply_id = msg_to_reply['message_id']
-            cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
-        elif thread_id is not None:
-            url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}"
-            requests.get(url)
-        else:
-            cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
-    except urllib3.exceptions.ProtocolError:
-        Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup)
-    except Exception as e:
-        print(e)
-
 
 MessageLoop(bot, {'chat': handle, 'callback_query': handle_query}).run_forever()

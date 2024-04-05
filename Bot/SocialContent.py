@@ -39,7 +39,7 @@ def getMembersTagged(msg):
             members_tagged.append(target)
     return members_tagged
 
-def ReverseImageSearch(cookiebot, msg, chat_id, language):
+def ReverseImageSearch(cookiebot, msg, chat_id, language, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
         Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n\nPara busca direta, use o /qualquercoisa", msg, language)
@@ -84,12 +84,13 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language):
             answer += f"    🔗{similar}\n"
         Send(cookiebot, chat_id, answer, msg, language)
     else:
+        ReactToMessage(msg, '🤷', is_big=False, isBombot=isBombot)
         Send(cookiebot, chat_id, "Não consegui achar uma correspondência", msg, language)
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec", msg, language)
 
-def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
+def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isBombot=False):
     searchterm = msg['text'].split("@")[0].replace("/", ' ').replace("@CookieMWbot", '')
     if searchterm.split()[0] in avoid_search:
         return
@@ -109,6 +110,7 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language):
             return 1
         except Exception as e:
             print(e)
+    ReactToMessage(msg, '🤷', is_big=False, isBombot=isBombot)
     Send(cookiebot, chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", msg, language)
 
 def AddtoRandomDatabase(msg, chat_id, photo_id=''):
@@ -226,7 +228,8 @@ def Meme(cookiebot, msg, chat_id, language):
     except FileNotFoundError:
         pass
 
-def Batalha(cookiebot, msg, chat_id, language):
+def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
+    ReactToMessage(msg, '🔥', isBombot=isBombot)
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     members_tagged = getMembersTagged(msg)
     if len(members_tagged):

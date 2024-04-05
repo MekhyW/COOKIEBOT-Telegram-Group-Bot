@@ -73,10 +73,7 @@ def SendChatAction(cookiebot, chat_id, action):
         cookiebot.sendChatAction(chat_id, action)
 
 def GetVoiceMessage(cookiebot, msg, isBombot=False):
-    if isBombot:
-        token = bombotTOKEN
-    else:
-        token = cookiebotTOKEN
+    token = bombotTOKEN if isBombot else cookiebotTOKEN
     try:
         r = requests.get(f"https://api.telegram.org/file/bot{token}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=10)
     except urllib3.exceptions.ProtocolError:
@@ -150,10 +147,7 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
     return sentphoto['message_id']
 
 def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
-    if isBombot:
-        token = bombotTOKEN
-    else:
-        token = cookiebotTOKEN
+    token = bombotTOKEN if isBombot else cookiebotTOKEN
     url = f'https://api.telegram.org/bot{token}/setMyCommands'
     data = {'commands': commands,
             'scope': {'type': 'chat', 'chat_id': scope_chat_id},
@@ -163,15 +157,19 @@ def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="
 
 def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
-    if isBombot:
-        token = bombotTOKEN
-    else:
-        token = cookiebotTOKEN
+    token = bombotTOKEN if isBombot else cookiebotTOKEN
     if thread_id:
         url_req = f"https://api.telegram.org/bot{token}/forwardMessage?chat_id={chat_id}&from_chat_id={from_chat_id}&message_id={message_id}&message_thread_id={thread_id}"
         requests.get(url_req)
     else:
         cookiebot.forwardMessage(chat_id, from_chat_id, message_id)
+
+def ReactToMessage(msg, emoji, is_big=True, isBombot=False):
+    token = bombotTOKEN if isBombot else cookiebotTOKEN
+    reaction = [{'type': 'emoji', 'emoji': emoji}]
+    reaction_json = json.dumps(reaction)
+    url = f'https://api.telegram.org/bot{token}/setMessageReaction?chat_id={msg["chat"]["id"]}&message_id={msg["message_id"]}&reaction={reaction_json}&is_big={is_big}'
+    requests.get(url)
 
 def BanAndBlacklist(cookiebot, chat_id, user_id):
     PostRequestBackend(f'blacklist/{user_id}')

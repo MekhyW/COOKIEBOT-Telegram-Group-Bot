@@ -30,13 +30,15 @@ def PvDefaultMessage(cookiebot, msg, chat_id, isBombot):
             ]))
 
 
-def TaVivo(cookiebot, msg, chat_id, language):
+def TaVivo(cookiebot, msg, chat_id, language, isBombot=False):
+    ReactToMessage(msg, '👍', isBombot=isBombot)
     Send(cookiebot, chat_id, "Estou vivo\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
 
-def Analyze(cookiebot, msg, chat_id, language):
+def Analyze(cookiebot, msg, chat_id, language, isBombot=False):
     if not 'reply_to_message' in msg:
         Send(cookiebot, chat_id, "Responda uma mensagem com o comando para analisar", msg, language)
         return
+    ReactToMessage(msg, '🤔', isBombot=isBombot)
     result = ''
     for item in msg['reply_to_message']:
         result += str(item) + ': ' + str(msg['reply_to_message'][item]) + '\n'
@@ -158,6 +160,7 @@ def Genero(cookiebot, msg, chat_id, language):
             Send(cookiebot, chat_id, f"É uma menina! 👩\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes", msg, language)
 
 def Rojao(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
+    ReactToMessage(msg, '🎉', isBombot=isBombot)
     Send(cookiebot, chat_id, "fiiiiiiii.... ", msg_to_reply=msg)
     time.sleep(0.1)
     amount = random.randint(5, 20)

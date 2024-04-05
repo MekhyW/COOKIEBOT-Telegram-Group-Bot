@@ -146,6 +146,7 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
         "publisherPost": current_configs[8], "publisherAsk": current_configs[9], "threadPosts": current_configs[10], "maxPosts": current_configs[11],
         "publisherMembersOnly": current_configs[12]})
         cache_configurations[chat_id] = current_configs
+        ReactToMessage(msg, '👍', isBombot=isBombot)
         cookiebot.sendMessage(chat_id, "Successfully changed the variable!\nSend /reload in the chat if the old config persists")
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])
@@ -192,7 +193,7 @@ def SettarLanguage(cookiebot, msg, chat_id, language_code):
     ConfigurarSettar(cookiebot, msg, mekhyID)
     
 
-def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id):
+def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
     if str(msg['from']['id']) not in listaadmins_id:
         Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
@@ -200,6 +201,7 @@ def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id):
     req = PutRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
     if 'error' in req and req['error'] == "Not Found":
         PostRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
+    ReactToMessage(msg, '👍', isBombot=isBombot)
     cookiebot.sendMessage(chat_id, "Welcome message updated! ✅", reply_to_message_id=msg['message_id'])
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 
@@ -208,7 +210,7 @@ def NovoBemvindo(cookiebot, msg, chat_id):
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group", reply_to_message_id=msg['message_id'])
 
 
-def AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id):
+def AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
     if str(msg['from']['id']) not in listaadmins_id:
         Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
@@ -216,6 +218,7 @@ def AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id):
     req = PutRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
     if 'error' in req and req['error'] == "Not Found":
         PostRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
+    ReactToMessage(msg, '👍', isBombot=isBombot)
     cookiebot.sendMessage(chat_id, "Updated rules message! ✅", reply_to_message_id=msg['message_id'])
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 

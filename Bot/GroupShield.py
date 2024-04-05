@@ -63,10 +63,7 @@ def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
     else:
         user = msg['from']
     # Get base images
-    if isBombot:
-        token = bombotTOKEN
-    else:
-        token = cookiebotTOKEN
+    token = bombotTOKEN if isBombot else cookiebotTOKEN
     try:
         photo_id = cookiebot.getUserProfilePhotos(user['id'])['photos'][0][-1]['file_id']
         user_img = openTelegramImage(cookiebot, token, photo_id)

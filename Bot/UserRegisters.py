@@ -28,12 +28,16 @@ def left_chat_member(msg, chat_id):
         if msg['left_chat_member']['username'] in cache_members[chat_id]:
             cache_members[chat_id].remove(msg['left_chat_member']['username'])
 
-def Everyone(cookiebot, msg, chat_id, listaadmins, language):
+def Everyone(cookiebot, msg, chat_id, listaadmins, language, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
     if len(listaadmins) > 0 and 'from' in msg and str(msg['from']['username']) not in listaadmins:
         Send(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo!\n(Se está falando como canal, entre e use o comando como user)", msg, language)
     else:
         members = GetMembersChat(chat_id)
+        if len(members) < 2:
+            Send(cookiebot, chat_id, "Ainda não vi nenhum membro no chat para chamar!\nCom o tempo, o bot vai reconhecer os membros e permitir chamar todos.", msg, language)
+            return
+        ReactToMessage(msg, '🫡', isBombot=isBombot)
         usernames_list = []
         result = [f"Number of known users: {len(members)}\n"]
         top_message_index = 0
@@ -101,7 +105,8 @@ def Quem(cookiebot, msg, chat_id, language):
     LocucaoAdverbial = random.choice(["Com certeza o(a) ", "Sem sombra de dúvidas o(a) ", "Suponho que o(a) ", "Aposto que o(a) ", "Talvez o(a) ", "Quem sabe o(a) ", "Aparentemente o(a) "])
     Send(cookiebot, chat_id, LocucaoAdverbial+"@"+chosen, msg, language)
 
-def Shippar(cookiebot, msg, chat_id, language):
+def Shippar(cookiebot, msg, chat_id, language, isBombot=False):
+    ReactToMessage(msg, '❤️', isBombot=isBombot)
     SendChatAction(cookiebot, chat_id, 'typing')
     members = GetMembersChat(chat_id)
     if len(msg['text'].split()) >= 3:
