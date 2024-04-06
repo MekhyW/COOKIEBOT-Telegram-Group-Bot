@@ -27,5 +27,5 @@ def Speech_to_text(content):
             file=audio_file, 
             response_format="text"
         )
-    transcript = transcript.text.capitalize()
+    transcript = transcript.capitalize()
     return transcript
