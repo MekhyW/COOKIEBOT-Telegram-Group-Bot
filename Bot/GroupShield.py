@@ -160,7 +160,7 @@ def CheckHumanFactor(cookiebot, msg, chat_id, language):
         userphotos = cookiebot.getUserProfilePhotos(msg['new_chat_participant']['id'])
         if userphotos['total_count'] == 0:
             cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-            Send(cookiebot, chat_id, "Kickei o novo usuário por *suspeita de ser um robô*\n>Se isso foi um erro, peça para ele adicionar um username \(@\) ou foto de perfil e um ADM adicioná-lo de volta", language=language)
+            Send(cookiebot, chat_id, "Kickei o novo usuário por *suspeita de ser um robô*\n>Se isso foi um erro, peça para ele adicionar um username \(@\) ou foto de perfil e um ADM adicioná\-lo de volta", language=language)
             cookiebot.unbanChatMember(chat_id, msg['new_chat_participant']['id'])
             return True
     return False
@@ -262,7 +262,7 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
                         cookiebot.kickChatMember(chat_id, user)
                     except Exception as e:
                         print(e)
-                    Send(cookiebot, chat, f"Kickei o usuário com id *{user}* por *{reason}*\.\n>Se isso foi um erro, peça para um staff adicioná-lo de volta", language=language)
+                    Send(cookiebot, chat, f"Kickei o usuário com id *{user}* por *{reason}*\.\n>Se isso foi um erro, peça para um staff adicioná\-lo de volta", language=language)
                     cookiebot.unbanChatMember(chat_id, user)
                     DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
                 elif chat == chat_id and user == msg['from']['id']:
