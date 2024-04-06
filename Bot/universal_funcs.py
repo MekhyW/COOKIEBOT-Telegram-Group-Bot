@@ -110,27 +110,25 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
 def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
     try:
         SendChatAction(cookiebot, chat_id, 'upload_photo')
-        if language == 'eng' and caption is not None:
-            caption = GoogleTranslator(source='auto', target='en').translate(caption)
-        elif language == 'es':
-            caption = GoogleTranslator(source='auto', target='es').translate(caption)
-        if msg_to_reply:
-            if caption and all(caption.count(x)%2 == 0 for x in ['*', '_', '`', '[', ']', '(', ')', '~', '|']):
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup, parse_mode='MarkdownV2')
-            else:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup)
-        elif thread_id is not None:
+        if language in ['eng', 'es']:
+            caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
+        if caption and all(caption.count(x) % 2 == 0 for x in ['*', '_', '`', '[', ']', '(', ')', '~', '|']):
+            parse_mode = 'MarkdownV2'
+        else:
+            parse_mode = None
+        if thread_id is not None:
             token = bombotTOKEN if isBombot else cookiebotTOKEN
-            url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode=MarkdownV2"
+            url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode={parse_mode}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
-            sentphoto = {}
-            sentphoto['message_id'] = json.loads(requests.get(url).text)['result']['message_id']
+            response = requests.get(url)
+            sentphoto = {'message_id': json.loads(response.text)['result']['message_id']}
         else:
-            if caption and all(caption.count(x)%2 == 0 for x in ['*', '_', '`', '[', ']', '(', ')', '~', '|']):
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup, parse_mode='MarkdownV2')
-            else:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_markup=reply_markup)
+            reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
+            try:
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode=parse_mode)
+            except telepot.exception.TelegramError:
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
         return SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
     except TelegramError:
