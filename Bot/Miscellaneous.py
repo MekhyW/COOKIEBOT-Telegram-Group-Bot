@@ -89,11 +89,11 @@ def IdeiaDesenho(cookiebot, msg, chat_id, language):
     ideiaID = random.randint(0, len(ideiasdesenho)-1)
     photo = open('Static/IdeiaDesenho'+'/'+ideiasdesenho[ideiaID], 'rb')
     if language == 'pt':
-        caption = f"Referência com ID {ideiaID}\n\nNão trace sem dar créditos! (use a busca reversa do google images)"
+        caption = f"Referência com ID {ideiaID}\n\nNão trace sem dar créditos\! \(use a busca reversa do google images\)"
     elif language == 'es':
-        caption = f"Referencia con ID {ideiaID}\n\n¡No rastrear sin dar créditos! (utilice la búsqueda inversa de imágenes de Google)"
+        caption = f"Referencia con ID {ideiaID}\n\n¡No rastrear sin dar créditos\! \(utilice la búsqueda inversa de imágenes de Google\)"
     else:
-        caption = f"Reference ID {ideiaID}\n\nDo not trace without credits! (use the reverse google images search)"
+        caption = f"Reference ID {ideiaID}\n\nDo not trace without credits\! \(use the reverse google images search\)"
     SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
     photo.close()
 
@@ -178,12 +178,12 @@ def Reclamacao(cookiebot, msg, chat_id, language):
     if language == 'pt':
         with open('Static/reclamacao/milton_pt.jpg', 'rb') as photo:
             SendPhoto(cookiebot, chat_id, photo, 
-                      caption=f"Bom dia/tarde/noite, {msg['from']['first_name']},\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem. Se não, seguimos com nossas atividades.\nAtenciosamente,\nMilton do RH.", 
+                      caption=f"Bom dia/tarde/noite, {msg['from']['first_name']},\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem\. Se não, seguimos com nossas atividades\.\nAtenciosamente,\nMilton do RH\.", 
                       msg_to_reply=msg)
     else:
         with open('Static/reclamacao/milton_eng.jpg', 'rb') as photo:
             SendPhoto(cookiebot, chat_id, photo, 
-                      caption=f"Good morning/afternoon/evening, {msg['from']['first_name']},\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.", 
+                      caption=f"Good morning/afternoon/evening, {msg['from']['first_name']},\nIf you have any complaints, feel free to reply to this message\. If not, we continue with our activities\.\nSincerely,\nMilton from HR\.", 
                       msg_to_reply=msg)
             
 def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
