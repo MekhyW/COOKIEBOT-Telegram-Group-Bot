@@ -171,7 +171,7 @@ def Rojao(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
             n = 1
         Send(cookiebot, chat_id, "pra "*n, thread_id=thread_id, isBombot=isBombot)
         amount -= n
-    Send(cookiebot, chat_id, "💥POOOOOOOWW💥", thread_id=thread_id, isBombot=isBombot)
+    Send(cookiebot, chat_id, "*💥POOOOOOOWW💥*", thread_id=thread_id, isBombot=isBombot)
 
 def Reclamacao(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
