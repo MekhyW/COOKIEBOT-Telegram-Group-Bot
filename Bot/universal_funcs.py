@@ -112,22 +112,18 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
         SendChatAction(cookiebot, chat_id, 'upload_photo')
         if language in ['eng', 'es']:
             caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
-        if caption and all(caption.count(x) % 2 == 0 for x in ['*', '_', '`', '[', ']', '(', ')', '~', '|']):
-            parse_mode = 'MarkdownV2'
-        else:
-            parse_mode = None
         if thread_id is not None:
             token = bombotTOKEN if isBombot else cookiebotTOKEN
-            url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode={parse_mode}"
+            url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
             response = requests.get(url)
             sentphoto = {'message_id': json.loads(response.text)['result']['message_id']}
         else:
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
-            try:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode=parse_mode)
-            except:
+            if reply_markup is None:
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id)
+            else:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
         return SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
