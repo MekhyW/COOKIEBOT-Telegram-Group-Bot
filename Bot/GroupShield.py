@@ -174,7 +174,7 @@ def CheckCAS(cookiebot, msg, chat_id, language):
         return False
     if in_banlist:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por *ser flagrado pelo [sistema anti-ban CAS](https://cas.chat/)*", language=language)
+        Send(cookiebot, chat_id, "Bani o usuário recém\-chegado por *ser flagrado pelo [sistema anti\-ban CAS](https://cas.chat/)*", language=language)
         return True
     return False
 
@@ -187,7 +187,7 @@ def CheckSpamwatch(cookiebot, msg, chat_id, language):
         return False
     if ban:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por *ser flagrado pelo sistema anti-ban Spamwatch*", language=language)
+        Send(cookiebot, chat_id, "Bani o usuário recém\-chegado por *ser flagrado pelo sistema anti\-ban Spamwatch*", language=language)
         return True
     return False
 
@@ -197,7 +197,7 @@ def CheckBlacklist(cookiebot, msg, chat_id, language):
         return False
     else:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        Send(cookiebot, chat_id, "Bani o usuário recém-chegado por *ser flagrado como conta falsa/spam em outros chats*", language=language)
+        Send(cookiebot, chat_id, "Bani o usuário recém\-chegado por *ser flagrado como conta falsa/spam em outros chats*", language=language)
         return True
 
 def Captcha(cookiebot, msg, chat_id, captchatimespan, language):

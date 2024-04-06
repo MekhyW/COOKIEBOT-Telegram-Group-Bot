@@ -12,7 +12,7 @@ def PvDefaultMessage(cookiebot, msg, chat_id, isBombot):
         if isBombot:
             Send(cookiebot, chat_id, "*Olá, eu sou o BomBot\!*\nSou um clone do @CookieMWbot criado para os grupos da Brasil FurFest \(BFF\)\n\nSe tiver alguma dúvida ou quiser a lista completa de comandos, mande uma mensagem para @MekhyW")
         else:
-            Send(cookiebot, chat_id, f"*Olá, eu sou o CookieBot\!*\n\nAtualmente estou presente em {number_to_emojis(num_chats)} grupos ativos\!\nSinta-se livre para me adicionar ao seu \:\)\n\nSou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática\.\nUse /configurar para alterar minhas configurações \(incluindo idioma\)\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW",
+            Send(cookiebot, chat_id, f"*Olá, eu sou o CookieBot\!*\n\nAtualmente estou presente em {number_to_emojis(num_chats)} grupos ativos\!\nSinta\-se livre para me adicionar ao seu \:\)\n\nSou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática\.\nUse /configurar para alterar minhas configurações \(incluindo idioma\)\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW",
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url=newchat_link)],
                 [InlineKeyboardButton(text="Mural de Divulgações 📬", url=postmail_chat_link)],
