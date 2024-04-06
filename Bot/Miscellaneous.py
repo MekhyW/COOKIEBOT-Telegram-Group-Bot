@@ -108,9 +108,9 @@ def CustomCommand(cookiebot, msg, chat_id):
 
 def Dado(cookiebot, msg, chat_id, language):
     if msg['text'].startswith("/dado"):
-        Send(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n>EXEMPLO\: /d20 5\n\(Roda um d20 5 vezes\)")
+        Send(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n>EXEMPLO\: /d20 5\n>\(Roda um d20 5 vezes\)")
     elif msg['text'].startswith("/dice"):
-        Send(cookiebot, chat_id, "Roll a dice from 1 to x, n times\n>EXAMPLE\: /d20 5\n\(Rotate a d20 5 times\)")
+        Send(cookiebot, chat_id, "Roll a dice from 1 to x, n times\n>EXAMPLE\: /d20 5\n>\(Rolls a d20 5 times\)")
     else:
         if len(msg['text'].split()) == 1:
             vezes = 1
@@ -131,7 +131,7 @@ def Dado(cookiebot, msg, chat_id, language):
 
 def Idade(cookiebot, msg, chat_id, language):
     if not " " in msg['text']:
-        Send(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n>Exemplo\: '/idade Mekhy'\n\(obs\: só o primeiro nome conta\)", msg, language)
+        Send(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n>Exemplo\: '/idade Mekhy'\n>\(obs\: só o primeiro nome conta\)", msg, language)
     else:
         Nome = msg['text'].replace("/idade ", '').replace("/edad ", '').replace("/age ", '').replace("/idade@CookieMWbot", '').replace("/age@CookieMWbot", '').replace("/edad@CookieMWbot", '').split()[0]
         response = json.loads(requests.get(f"https://api.agify.io?name={Nome}", timeout=10).text)
@@ -145,7 +145,7 @@ def Idade(cookiebot, msg, chat_id, language):
 def Genero(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     if not " " in msg['text']:
-        Send(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero\!\n>Exemplo\: '/genero Mekhy'\n\(obs\: só o primeiro nome conta\)\n\(obs 2\: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA\)", msg, language)
+        Send(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero\!\n>Exemplo\: '/genero Mekhy'\n>\(obs\: só o primeiro nome conta\)\n>\(obs 2\: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA\)", msg, language)
     else:
         Nome = msg['text'].replace("/genero ", '').replace("/gênero ", '').replace("/gender ", '').replace("/genero@CookieMWbot", '').replace("/gênero@CookieMWbot", '').replace("/gender@CookieMWbot", '').split()[0]
         response = json.loads(requests.get(f"https://api.genderize.io?name={Nome}", timeout=10).text)
