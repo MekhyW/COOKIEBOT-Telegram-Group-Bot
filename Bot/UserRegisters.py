@@ -31,11 +31,11 @@ def left_chat_member(msg, chat_id):
 def Everyone(cookiebot, msg, chat_id, listaadmins, language, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
     if len(listaadmins) > 0 and 'from' in msg and str(msg['from']['username']) not in listaadmins:
-        Send(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo!\n(Se está falando como canal, entre e use o comando como user)", msg, language)
+        Send(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo\!\n>\(Se está falando como canal, entre e use o comando como user\)", msg, language)
     else:
         members = GetMembersChat(chat_id)
         if len(members) < 2:
-            Send(cookiebot, chat_id, "Ainda não vi nenhum membro no chat para chamar!\nCom o tempo, o bot vai reconhecer os membros e permitir chamar todos.", msg, language)
+            Send(cookiebot, chat_id, "Ainda não vi nenhum membro no chat para chamar\!\nCom o tempo, o bot vai reconhecer os membros e permitir chamar todos.", msg, language)
             return
         ReactToMessage(msg, '🫡', isBombot=isBombot)
         usernames_list = []
@@ -68,7 +68,7 @@ def Report(cookiebot, msg, chat_id, targetid, language):
     target = cookiebot.getChatMember(chat_id, targetid)
     chat = cookiebot.getChat(chat_id)
     Send(cookiebot, mekhyID, f"At chat {chat['title']}")
-    Send(cookiebot, mekhyID, f"Account report: {target}",
+    Send(cookiebot, mekhyID, f"Account report\: {target}",
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="Blacklist", callback_data=f"Report Blacklist {targetid} {language} {chat_id}")],
             [InlineKeyboardButton(text="Discard Report", callback_data=f"Report No {targetid} {language}")]
@@ -90,9 +90,9 @@ def Adm(cookiebot, msg, chat_id, listaadmins, language):
     for admin in listaadmins:
         response += f"@{admin} "
     if 'username' in msg['from']:
-        response += f"\n{msg['from']['username']} chamando todos os administradores!"
+        response += f"\n*{msg['from']['username']}* chamando todos os administradores\!"
     else:
-        response += f"\n{msg['from']['first_name']} chamando todos os administradores!"
+        response += f"\n*{msg['from']['first_name']}* chamando todos os administradores\!"
     Send(cookiebot, chat_id, response, language=language)
 
 def Quem(cookiebot, msg, chat_id, language):
@@ -118,7 +118,7 @@ def Shippar(cookiebot, msg, chat_id, language, isBombot=False):
             targetA = members[0]['user']
             targetB = members[1]['user']
         except IndexError:
-            Send(cookiebot, chat_id, "Ainda não vi membros suficientes para shippar!", msg, language)
+            Send(cookiebot, chat_id, "Ainda não vi membros suficientes para shippar\!", msg, language)
             return
         except TypeError:
             cache_members.pop(chat_id)

@@ -42,7 +42,7 @@ def getMembersTagged(msg):
 def ReverseImageSearch(cookiebot, msg, chat_id, language, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
-        Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n\nPara busca direta, use o /qualquercoisa", msg, language)
+        Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n>\(Para busca direta, use o /qualquercoisa\)", msg, language)
         return
     fetchTempJpg(cookiebot, msg['reply_to_message'], chat_id)
     with io.open('temp.jpg', 'rb') as image_file:
@@ -88,7 +88,7 @@ def ReverseImageSearch(cookiebot, msg, chat_id, language, isBombot=False):
         Send(cookiebot, chat_id, "Não consegui achar uma correspondência", msg, language)
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
-    Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n\nEXEMPLO: /fennec", msg, language)
+    Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n>EXEMPLO: /fennec", msg, language)
 
 def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isBombot=False):
     searchterm = msg['text'].split("@")[0].replace("/", ' ').replace("@CookieMWbot", '')
@@ -111,7 +111,7 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isBombot=False):
         except Exception as e:
             print(e)
     ReactToMessage(msg, '🤷', is_big=False, isBombot=isBombot)
-    Send(cookiebot, chat_id, "Não consegui achar uma imagem (ou era NSFW e eu filtrei)", msg, language)
+    Send(cookiebot, chat_id, "Não consegui achar uma imagem _\(ou era NSFW e eu filtrei\)_", msg, language)
 
 def AddtoRandomDatabase(msg, chat_id, photo_id=''):
     if any(x in msg['chat']['title'].lower() for x in ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']):
@@ -252,7 +252,7 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
         try:
             user_image = cookiebot.getUserProfilePhotos(msg['from']['id'], limit=1)['photos'][0][-1]['file_id']
         except IndexError:
-            Send(cookiebot, chat_id, "Você precisa ter uma foto de perfil (ou está privado)", msg, language)
+            Send(cookiebot, chat_id, "Você precisa ter uma foto de perfil _\(ou está privado\)_", msg, language)
             return
     if language == 'pt':
         fighters = [fighters_eng, fighters_pt]

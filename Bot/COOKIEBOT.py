@@ -74,7 +74,7 @@ def thread_function(msg):
                 chatinfo = cookiebot.getChat(chat_id)
                 if (not 'error' in isCreatorBlacklisted) or len(chatinfo['title']) < 3:
                     LeaveAndBlacklist(cookiebot, chat_id)
-                    Send(cookiebot, mekhyID, f"Auto-left:\n{chat_id}")
+                    Send(cookiebot, mekhyID, f"Auto-left\n{chat_id}")
                     return
             elif content_type == "new_chat_member":
                 if msg['new_chat_participant']['id'] == myself['id']:
@@ -82,9 +82,9 @@ def thread_function(msg):
                     chatinfo = cookiebot.getChat(chat_id)
                     if (not 'error' in isBlacklisted) or len(chatinfo['title']) < 3:
                         LeaveAndBlacklist(cookiebot, chat_id)
-                        Send(cookiebot, mekhyID, f"Auto-left:\n{chat_id}")
+                        Send(cookiebot, mekhyID, f"Auto-left\n{chat_id}")
                         return
-                    Send(cookiebot, mekhyID, f"Added:\n{chatinfo}")
+                    Send(cookiebot, mekhyID, f"Added\n{chatinfo}")
                     cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
                     caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW")
                     if 'language_code' in msg['from']:
@@ -92,7 +92,7 @@ def thread_function(msg):
                         GetConfig(cookiebot, chat_id, ignorecache=True)
                 elif msg['from']['id'] != msg['new_chat_participant']['id']:
                     if msg['new_chat_participant']['is_bot']:
-                        Send(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\nCaso algum comando entre em conflito, fale com o Mekhy", msg, language)
+                        Send(cookiebot, chat_id, "Um novo companheiro bot foi adicionado\!\n>Caso algum comando entre em conflito, fale com o Mekhy", msg, language)
                     else:
                         Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=isBombot)
                 elif not CheckCAS(cookiebot, msg, chat_id, language) and not CheckSpamwatch(cookiebot, msg, chat_id, language) and not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language):
@@ -146,7 +146,7 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/reload", "/recarregar")):
                         GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                         GetConfig(cookiebot, chat_id, ignorecache=True)
-                        Send(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
+                        Send(cookiebot, chat_id, "Memória recarregada com sucesso\!", msg, language)
                     elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                         Analyze(cookiebot, msg, chat_id, language, isBombot=isBombot)
                     elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
@@ -289,8 +289,8 @@ def thread_function_query(msg):
             elif command == 'Blacklist':
                 origin_chat_id = query_data.split()[4]
                 PostRequestBackend(f'blacklist/{targetid}')
-                Send(cookiebot, mekhyID, f"Blacklisted: {targetid}")
-                Send(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam.\nObrigado pela denúncia!", language=language)
+                Send(cookiebot, mekhyID, f"Blacklisted {targetid}")
+                Send(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam\n>Obrigado pela denúncia\!", language=language)
             DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
         elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
             SolveCaptcha(cookiebot, msg, chat_id, True, isBombot=isBombot, language=query_data.split()[1])

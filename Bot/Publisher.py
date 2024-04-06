@@ -20,7 +20,7 @@ url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^
 def AskPublisher(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     if language == "pt":
-        answer = "Divulgar postagem?\n(Aperte como usuário, não como canal)"
+        answer = "Divulgar postagem?"
     else:
         answer = "Share post?"
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, 
@@ -272,21 +272,21 @@ def SchedulePost(cookiebot, query_data):
         answer += f"OBS: private chats are not listed!"
         Send(cookiebot, mekhyID, answer)
         Send(cookiebot, origin_userid, answer)
-        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação!")
+        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação\!")
     except Exception as e:
         Send(cookiebot, mekhyID, traceback.format_exc())
-        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários. Mande /start no meu PV para eu poder te mandar mensagens.")
+        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários\.\n>Mande /start no meu PV para eu poder te mandar mensagens\.")
 
 def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id:
-        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+        Send(cookiebot, chat_id, "You are not a group admin\!", msg_to_reply=msg)
         return
     if 'reply_to_message' not in msg:
-        Send(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder repostar ela nesse grupo!", msg_to_reply=msg, language=language)
+        Send(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder repostar ela nesse grupo\!", msg_to_reply=msg, language=language)
         return
     if len(msg['text'].split()) < 2 or not msg['text'].split()[1].isnumeric():
-        Send(cookiebot, chat_id, "Você precisa especificar o número de dias para o autopost repostar nesse grupo!\n\nExemplo: /repostar 10", msg_to_reply=msg, language=language)
+        Send(cookiebot, chat_id, "Você precisa especificar o número de dias para o autopost repostar nesse grupo\!\n>Exemplo\: /repostar 10", msg_to_reply=msg, language=language)
         return
     original_msg_id = msg['reply_to_message']['message_id']
     chat = cookiebot.getChat(chat_id)
@@ -298,19 +298,19 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isBombot
                 f"{days} {chat_id} {chat_id} {original_msg_id} {chat_id}",
                 f"{minute} {hour} * * *")
     ReactToMessage(msg, '👍', isBombot=isBombot)
-    Send(cookiebot, chat_id, f"Repostagem programada para o grupo por {days} dias!", msg_to_reply=msg, language=language)
+    Send(cookiebot, chat_id, f"Repostagem programada para o grupo por *{days} dias\!*", msg_to_reply=msg, language=language)
 
 def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id:
-        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+        Send(cookiebot, chat_id, "You are not a group admin\!", msg_to_reply=msg)
         return
     jobs = list_jobs()
     for job in jobs:
         if job.name.startswith(f"{parent}/jobs/{chat_id}"):
             delete_job(job.name)
     ReactToMessage(msg, '👍', isBombot=isBombot)
-    Send(cookiebot, chat_id, "Repostagens do grupo canceladas!", msg_to_reply=msg, language=language)
+    Send(cookiebot, chat_id, "Repostagens do grupo canceladas\!", msg_to_reply=msg, language=language)
 
 def SchedulerPull(cookiebot, isBombot=False):
     response = subscriber.pull(subscription=subscription_path, max_messages=100, return_immediately=True)

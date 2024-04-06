@@ -14,9 +14,9 @@ def Identify_music(cookiebot, msg, chat_id, content, language):
         title = response[1]['track']['title']
         subtitle = response[1]['track']['subtitle']
         if language in ['pt', 'es']:
-            Send(cookiebot, chat_id, f"MÚSICA: 🎵 {title} - {subtitle} 🎵", msg, language)
+            Send(cookiebot, chat_id, f"MÚSICA: 🎵 _{title}_ \- _{subtitle}_ 🎵", msg, language)
         else:
-            Send(cookiebot, chat_id, f"SONG: 🎵 {title} - {subtitle} 🎵", msg, language)
+            Send(cookiebot, chat_id, f"SONG: 🎵 _{title}_ \- _{subtitle}_ 🎵", msg, language)
 
 def Speech_to_text(content):
     with open('stt.ogg', 'wb') as audio_file:
