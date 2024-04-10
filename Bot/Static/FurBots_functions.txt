@@ -169,3 +169,4 @@
 /source
 /mirror
 /manage
+/draw
