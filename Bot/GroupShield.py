@@ -289,7 +289,8 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
                     Bemvindo(cookiebot, msg, chat, limbotimespan, language, isBombot)
                 elif str(chat_id) == str(chat) and str(msg['from']['id']) == str(user):
                     SendChatAction(cookiebot, chat_id, 'typing')
-                    if "".join(msg['text'].upper().split()) == password:
+                    solveattempt = "".join(msg['text'].upper().split())
+                    if solveattempt.isnumeric() and len(solveattempt) == 4:
                         DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
                         DeleteMessage(cookiebot, telepot.message_identifier(msg))
                         Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
