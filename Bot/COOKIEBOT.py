@@ -27,7 +27,7 @@ if updates:
     cookiebot.getUpdates(offset=last_update_id+1)
 
 unnatended_threads = list()
-num_max_threads = 20
+num_max_threads = 50
 startPublisher(isBombot)
 gc.enable()
 
