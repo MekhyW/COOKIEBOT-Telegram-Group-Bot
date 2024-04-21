@@ -273,10 +273,10 @@ def SchedulePost(cookiebot, query_data):
         answer += f"OBS: private chats are not listed!"
         Send(cookiebot, mekhyID, answer)
         Send(cookiebot, origin_userid, answer)
-        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação\!", msg_to_reply=second_messageid)
+        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação\!", msg_to_reply={'message_id': second_messageid})
     except Exception as e:
         Send(cookiebot, mekhyID, traceback.format_exc())
-        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários\.\n>Mande /start no meu PV para eu poder te mandar mensagens\.", msg_to_reply=second_messageid)
+        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários\.\n>Mande /start no meu PV para eu poder te mandar mensagens\.", msg_to_reply={'message_id': second_messageid})
 
 def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
