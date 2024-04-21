@@ -39,7 +39,10 @@ def thread_function(msg):
                                       'voice_chat_participants_invited', 'video_chat_participants_invited',
                                       'forum_topic_created', 'forum_topic_edited', 'story', 'poll_answer']):
             return
-        thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
+        if 'message_thread_id' in msg:
+            thread_id = msg['message_thread_id']
+        else:
+            thread_id = None
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
@@ -56,7 +59,8 @@ def thread_function(msg):
                 elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == mekhyID:
                     os.execl(sys.executable, sys.executable, *sys.argv)
                 elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
-                    LeaveAndBlacklist(cookiebot, msg['text'].split()[1])
+                    targetId = msg['text'].split()[1]
+                    LeaveAndBlacklist(cookiebot, targetId)
                 elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == mekhyID:
                     Broadcast(cookiebot, msg)
             PvDefaultMessage(cookiebot, msg, chat_id, isBombot)
@@ -100,8 +104,6 @@ def thread_function(msg):
                 left_chat_member(msg, chat_id)
                 if not msg['left_chat_member']['is_bot'] and msg['left_chat_member']['id'] != msg['from']['id'] and myself['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
                     ReportAsk(cookiebot, msg, chat_id, msg['left_chat_member']['id'], language)
-            elif 'edit_date' in msg and 'caption' in msg:
-                CheckEditedPost(cookiebot, msg, chat_id)
             elif content_type == "voice":
                 if utilityfunctions or funfunctions:
                     audio = GetVoiceMessage(cookiebot, msg, isBombot=isBombot)
@@ -116,7 +118,8 @@ def thread_function(msg):
                 AskPublisher(cookiebot, msg, chat_id, language)
             elif content_type == "photo":
                 if sfw and funfunctions:
-                    AddtoRandomDatabase(msg, chat_id, msg['photo'][-1]['file_id'])
+                    photo_id = msg['photo'][-1]['file_id']
+                    AddtoRandomDatabase(msg, chat_id, photo_id)
             elif content_type == "video":
                 if sfw and funfunctions:
                     AddtoRandomDatabase(msg, chat_id)
