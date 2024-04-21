@@ -19,10 +19,7 @@ url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^
 
 def AskPublisher(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
-    if language == "pt":
-        answer = "Divulgar postagem?"
-    else:
-        answer = "Share post?"
+    answer = "Divulgar postagem?" if language == "pt" else "Share post?"
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {msg['forward_from_chat']['id']} {chat_id} {msg['forward_from_message_id']} {msg['message_id']}")],
@@ -340,9 +337,14 @@ def SchedulerPull(cookiebot, isBombot=False):
             delete_job(origin_chatid+group_id)
     return received_messages
 
+def CheckEditedPost(cookiebot, msg, chat_id):
+    jobs = list_jobs()
+    for job in jobs:
+        if str(msg['message_id']) in job.data and str(chat_id) in job.data:
+            days, postmail_chat_id, group_id, sent, origin_chatid = job.data.split()
+            cookiebot.editMessageCaption((postmail_chat_id, sent), caption=msg['caption'])
+
 def startPublisher(isBombot):
     global subscription_path
-    if isBombot:
-        subscription_path = subscriber.subscription_path(project_id, "bombot-subscription")
-    else:
-        subscription_path = subscriber.subscription_path(project_id, "cookiebot-subscription")
+    subscription_name = "bombot-subscription" if isBombot else "cookiebot-subscription"
+    subscription_path = subscriber.subscription_path(project_id, subscription_name)
