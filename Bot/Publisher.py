@@ -340,9 +340,8 @@ def SchedulerPull(cookiebot, isBombot=False):
 def CheckEditedPost(cookiebot, msg, chat_id):
     jobs = list_jobs()
     for job in jobs:
-        data = job.pubsub_target.data.decode('utf-8')
-        if str(msg['message_id']) in data and str(chat_id) in data:
-            days, postmail_chat_id, group_id, sent, origin_chatid = data.split()
+        if str(msg['message_id']) in job.data and str(chat_id) in job.data:
+            days, postmail_chat_id, group_id, sent, origin_chatid = job.data.split()
             cookiebot.editMessageCaption((postmail_chat_id, sent), caption=msg['caption'])
 
 def startPublisher(isBombot):
