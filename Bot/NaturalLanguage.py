@@ -71,7 +71,8 @@ def InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw):
     else:
         num_members = cookiebot.getChatMembersCount(chat_id)
         if sfw and num_members >= 3:
-            AnswerFinal = modelSFW(message, msg, language)
+            #AnswerFinal = modelSFW(message, msg, language)
+            AnswerFinal = "IA SFW está temporariamente em manutenção. Tente novamente mais tarde.\n- Mekhy"
         else:
             AnswerFinal = modelNSFW(message, language)
     return AnswerFinal
