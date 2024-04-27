@@ -87,6 +87,7 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
             try:
                 cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode='MarkdownV2')
             except telepot.exception.TelegramError:
+                text = text.replace('\\', '').replace('>', '')
                 cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
         elif thread_id is not None:
             token = bombotTOKEN if isBombot else cookiebotTOKEN
@@ -98,6 +99,7 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
             try:
                 cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode='MarkdownV2')
             except telepot.exception.TelegramError:
+                text = text.replace('\\', '').replace('>', '')
                 cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
         Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup)
