@@ -251,10 +251,7 @@ def SchedulePost(cookiebot, query_data):
                         num_posts_for_group -= 1
                 hour = random.randint(0,23)
                 minute = random.randint(0,59)
-                if language == 'pt':
-                    sent = sent_pt
-                else:
-                    sent = sent_en
+                sent = sent_pt if language == 'pt' else sent_en
                 create_job(origin_chatid+group_id, 
                 f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
                 f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid}",
@@ -266,17 +263,17 @@ def SchedulePost(cookiebot, query_data):
                     delete_job(oldest_job.name)
                     create_job(origin_chatid+group_id, 
                     f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
-                    f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid}",
+                    f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid} {second_chatid} {second_messageid}",
                     f"{minute} {hour} * * *")
                     answer += f"{hour}:{minute} - {target_chattitle}\n"
     try:
         answer += f"OBS: private chats are not listed!"
         Send(cookiebot, mekhyID, answer)
         Send(cookiebot, origin_userid, answer)
-        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação\!", msg_to_reply={'message_id': second_messageid})
+        Send(cookiebot, second_chatid, "Post added to the publication queue\!", msg_to_reply={'message_id': second_messageid})
     except Exception as e:
         Send(cookiebot, mekhyID, traceback.format_exc())
-        Send(cookiebot, second_chatid, "Post adicionado à fila de publicação, mas não consegui te mandar os horários\.\n>Mande /start no meu PV para eu poder te mandar mensagens\.", msg_to_reply={'message_id': second_messageid})
+        Send(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n>Send /start in my DM so I can send you messages\.", msg_to_reply={'message_id': second_messageid})
 
 def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
@@ -296,7 +293,7 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isBombot
     minute = random.randint(0,59)
     create_job(str(chat_id)+str(chat_id), 
                 f"{chat['title']} --> {chat['title']}, at {hour}:{minute} ", 
-                f"{days} {chat_id} {chat_id} {original_msg_id} {chat_id}",
+                f"{days} {chat_id} {chat_id} {original_msg_id} {chat_id} 0 0",
                 f"{minute} {hour} * * *")
     ReactToMessage(msg, '👍', isBombot=isBombot)
     Send(cookiebot, chat_id, f"Repostagem programada para o grupo por *{days} dias\!*", msg_to_reply=msg, language=language)
@@ -340,6 +337,20 @@ def SchedulerPull(cookiebot, isBombot=False):
             Send(cookiebot, mekhyID, traceback.format_exc())
             delete_job(origin_chatid+group_id)
     return received_messages
+
+def CheckNotifyPostReply(cookiebot, msg, chat_id, language):
+    jobs = list_jobs()
+    for job in jobs:
+        if job.description.startswith(f"{parent}/jobs/{msg['reply_to_message']['inline_keyboard'][0]['text']} --> {msg['chat']['title']}"):
+            job_data = job.pubsub_target.data.decode('utf-8')
+            if(len(job_data.split()) < 7):
+                return
+            second_chatid = job_data.split()[5]
+            second_messageid = job_data.split()[6]
+            text = f'@{msg['from']['username']}' if 'username' in msg['from'] else f'{msg['from']['first_name']} {msg['from']['last_name']}'
+            text += f' replied:\n"{msg['reply_to_message']['text']}"\n\nIn chat {msg['chat']['title']}'
+            Send(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid}, language=language)
+            return
 
 def startPublisher(isBombot):
     global subscription_path

@@ -27,7 +27,7 @@ if updates:
     cookiebot.getUpdates(offset=last_update_id+1)
 
 unnatended_threads = list()
-num_max_threads = 50
+num_max_threads = 25
 startPublisher(isBombot)
 gc.enable()
 
@@ -39,10 +39,7 @@ def thread_function(msg):
                                       'voice_chat_participants_invited', 'video_chat_participants_invited',
                                       'forum_topic_created', 'forum_topic_edited', 'story', 'poll_answer']):
             return
-        if 'message_thread_id' in msg:
-            thread_id = msg['message_thread_id']
-        else:
-            thread_id = None
+        thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
@@ -228,6 +225,8 @@ def thread_function(msg):
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
                 elif 'reply_to_message' in msg and 'caption' in msg['reply_to_message'] and any(x in msg['reply_to_message']['caption'] for x in ['Milton do RH.', 'Milton from HR.']) and funfunctions:
                     ReclamacaoAnswer(cookiebot, msg, chat_id, language)
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['from']['id'] == myself['id'] and 'reply_markup' in msg:
+                    CheckNotifyPostReply(cookiebot, msg, chat_id, language)
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'] and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions:
                     Send(cookiebot, chat_id, InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
                 else:
@@ -327,7 +326,7 @@ def run_unnatendedthreads():
                 unnatended_threads.remove(unnatended_thread)
             except ValueError:
                 pass
-    if len(unnatended_threads) > 4 * num_max_threads:
+    if len(unnatended_threads) > 20 * num_max_threads:
         os.execl(sys.executable, sys.executable, *sys.argv)
     elif len(unnatended_threads) > 0:
         print(f"{len(unnatended_threads)} threads are still unnatended")
