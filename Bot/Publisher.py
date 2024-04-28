@@ -347,7 +347,7 @@ def CheckNotifyPostReply(cookiebot, msg, chat_id, language):
                 return
             second_chatid = job_data.split()[5]
             second_messageid = job_data.split()[6]
-            text = f'@{msg['from']['username']}' if 'username' in msg['from'] else f'{msg['from']['first_name']} {msg['from']['last_name']}'
+            text = f"@{msg['from']['username']}" if 'username' in msg['from'] else f"{msg['from']['first_name']} {msg['from']['last_name']}"
             text += f' replied:\n"{msg['reply_to_message']['text']}"\n\nIn chat {msg['chat']['title']}'
             Send(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid}, language=language)
             return
