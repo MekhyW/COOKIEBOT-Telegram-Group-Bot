@@ -211,7 +211,7 @@ def thread_function(msg):
                             if msg['text'].split()[0].split('@')[0] in furbots_cmds:
                                 return
                         QualquerCoisa(cookiebot, msg, chat_id, sfw, language)
-                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group":
+                elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name":
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id, isBombot=isBombot)
                 elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":

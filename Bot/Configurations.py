@@ -207,7 +207,7 @@ def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
 
 def NovoBemvindo(cookiebot, msg, chat_id):
     SendChatAction(cookiebot, chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group", reply_to_message_id=msg['message_id'])
+    cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name", reply_to_message_id=msg['message_id'])
 
 
 def AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
