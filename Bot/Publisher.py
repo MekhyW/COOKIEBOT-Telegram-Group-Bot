@@ -342,7 +342,7 @@ def CheckNotifyPostReply(cookiebot, msg, chat_id, language):
     jobs = list_jobs()
     for job in jobs:
         print(job.description)
-        if job.description.startswith(f"{parent}/jobs/{msg['reply_to_message']['reply_markup']['inline_keyboard'][0]['text']} --> {msg['chat']['title']}"):
+        if job.description.startswith(f"{parent}/jobs/{msg['reply_to_message']['reply_markup']['inline_keyboard'][0][0]['text']} --> {msg['chat']['title']}"):
             job_data = job.pubsub_target.data.decode('utf-8')
             if(len(job_data.split()) < 7):
                 return
