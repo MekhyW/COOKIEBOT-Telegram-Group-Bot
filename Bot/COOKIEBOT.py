@@ -41,9 +41,7 @@ def thread_function(msg):
             return
         thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
         content_type, chat_type, chat_id = telepot.glance(msg)
-        #print(content_type, chat_type, chat_id, msg['message_id'])
-        if 'reply_to_message' in msg:
-            print(msg['reply_to_message']['from']['id'] == myself['id'], 'reply_markup' in msg['reply_to_message'])
+        print(content_type, chat_type, chat_id, msg['message_id'])
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
         if chat_type == 'private' and 'reply_to_message' not in msg:
             if 'text' in msg:
