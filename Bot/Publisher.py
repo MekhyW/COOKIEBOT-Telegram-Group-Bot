@@ -342,8 +342,9 @@ def CheckNotifyPostReply(cookiebot, msg, chat_id, language):
     jobs = list_jobs()
     for job in jobs:
         print(job.description)
-        if job.description.startswith(f"{parent}/jobs/{msg['reply_to_message']['reply_markup']['inline_keyboard'][0][0]['text']} --> {msg['chat']['title']}"):
+        if job.description.startswith(msg['reply_to_message']['reply_markup']['inline_keyboard'][0][0]['text']):
             job_data = job.pubsub_target.data.decode('utf-8')
+            print(job_data)
             if(len(job_data.split()) < 7):
                 return
             second_chatid = job_data.split()[5]
@@ -351,6 +352,7 @@ def CheckNotifyPostReply(cookiebot, msg, chat_id, language):
             text = f"@{msg['from']['username']}" if 'username' in msg['from'] else f"{msg['from']['first_name']} {msg['from']['last_name']}"
             text += f" replied:\n'{msg['reply_to_message']['text']}'\n\nIn chat {msg['chat']['title']}"
             Send(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid}, language=language)
+            Send(cookiebot, chat_id, "Resposta enviada ao dono do post\!", msg_to_reply=msg, language=language)
             return
 
 def startPublisher(isBombot):
