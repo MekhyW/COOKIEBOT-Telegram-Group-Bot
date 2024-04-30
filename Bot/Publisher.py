@@ -254,7 +254,7 @@ def SchedulePost(cookiebot, query_data):
                 sent = sent_pt if language == 'pt' else sent_en
                 create_job(origin_chatid+group_id, 
                 f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
-                f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid}",
+                f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid} {second_chatid} {second_messageid}",
                 f"{minute} {hour} * * *")
                 answer += f"{hour}:{minute} - {target_chattitle}\n"
             except Exception as e:
