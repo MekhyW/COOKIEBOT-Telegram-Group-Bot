@@ -322,10 +322,12 @@ def SchedulerPull(cookiebot, isBombot=False):
         group_id = data.split()[2]
         origin_messageid = data.split()[3]
         origin_chatid = data.split()[4]
+        second_chatid = data.split()[5]
+        second_messageid = data.split()[6]
         if remaining_times <= 0:
             delete_job(origin_chatid+group_id)
         else:
-            edit_job_data(origin_chatid+group_id, f"{remaining_times} {postmail_chat_id} {group_id} {origin_messageid} {origin_chatid}")
+            edit_job_data(origin_chatid+group_id, f"{remaining_times} {postmail_chat_id} {group_id} {origin_messageid} {origin_chatid} {second_chatid} {second_messageid}")
         try:
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
