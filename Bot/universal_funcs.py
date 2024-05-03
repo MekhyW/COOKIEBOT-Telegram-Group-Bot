@@ -15,7 +15,7 @@ googleAPIkey, searchEngineCX, exchangerate_key, openai_key, spamwatch_token, coo
 mekhyID = 780875868
 
 def GetRequestBackend(route, params=None):
-    response = requests.get(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=10)
+    response = requests.get(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=60)
     try:
         if len(response.text):
             return json.loads(response.text)
@@ -26,7 +26,7 @@ def GetRequestBackend(route, params=None):
         return ''
 
 def PostRequestBackend(route, params=None):
-    response = requests.post(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=10)
+    response = requests.post(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=60)
     try:
         if len(response.text):
             print("POST: ", response.text)
@@ -38,7 +38,7 @@ def PostRequestBackend(route, params=None):
         return ''
 
 def PutRequestBackend(route, params=None):
-    response = requests.put(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=10)
+    response = requests.put(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=60)
     try:
         if len(response.text):
             print("PUT: ", response.text)
@@ -50,7 +50,7 @@ def PutRequestBackend(route, params=None):
         return ''
 
 def DeleteRequestBackend(route, params=None):
-    response = requests.delete(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=10)
+    response = requests.delete(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=60)
     try:
         if len(response.text):
             print("DELETE: ", response.text)
