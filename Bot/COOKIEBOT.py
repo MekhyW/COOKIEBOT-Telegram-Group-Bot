@@ -228,8 +228,11 @@ def thread_function(msg):
                 elif 'reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'] and 'reply_markup' in msg['reply_to_message']:
                     CheckNotifyPostReply(cookiebot, msg, chat_id, language)
                 elif (('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'] and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions:
-                    Send(cookiebot, chat_id, InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
+                    decrease_remaining_responses_ai(msg['from']['id'])
+                    if remaining_responses_ai[msg['from']['id']] > 0:
+                        Send(cookiebot, chat_id, InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
                 else:
+                    increase_remaining_responses_ai(msg['from']['id'])
                     SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
                     CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
             if chat_type != 'private' and content_type != "sticker":
