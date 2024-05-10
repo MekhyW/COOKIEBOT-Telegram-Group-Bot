@@ -152,8 +152,8 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
                         listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                         ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=isBombot)
-                    elif msg['text'].startswith(("/pesquisaimagem", "/searchimage", "/buscarimagen")) and utilityfunctions:
-                        ReverseImageSearch(cookiebot, msg, chat_id, language, isBombot=isBombot)
+                    elif msg['text'].startswith(("/buscarfonte", "/searchsource", "/buscarfuente")) and utilityfunctions:
+                        ReverseSearch(cookiebot, msg, chat_id, language, isBombot=isBombot)
                     elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
                                                  "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
                                                  "/batalha", "/battle", "/batalla")):

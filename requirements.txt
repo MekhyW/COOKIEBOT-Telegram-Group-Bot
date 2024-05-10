@@ -7,7 +7,7 @@ deep-translator
 Google-Images-Search
 google-cloud-pubsub
 google-cloud-scheduler
-google-cloud-vision
+saucenao_api
 ShazamAPI
 opencv-python
 price-parser

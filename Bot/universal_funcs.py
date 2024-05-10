@@ -11,7 +11,7 @@ from deep_translator import GoogleTranslator
 baseauth = json.loads(open('cookiebot_basecredentials.json', 'r').read())
 backendauth = json.loads(open('cookiebot_backendauth.json', 'r').read())
 login_backend, password_backend, serverIP = backendauth['login'], backendauth['password'], backendauth['serverIP']
-googleAPIkey, searchEngineCX, exchangerate_key, openai_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN = baseauth['googleAPIkey'], baseauth['searchEngineCX'], baseauth['exchangerate_key'], baseauth['openai_key'], baseauth['spamwatch_token'], baseauth['cookiebotTOKEN'], baseauth['bombotTOKEN']
+googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN = baseauth['googleAPIkey'], baseauth['searchEngineCX'], baseauth['exchangerate_key'], baseauth['openai_key'], baseauth['saucenao_key'], baseauth['spamwatch_token'], baseauth['cookiebotTOKEN'], baseauth['bombotTOKEN']
 mekhyID = 780875868
 
 def GetRequestBackend(route, params=None):

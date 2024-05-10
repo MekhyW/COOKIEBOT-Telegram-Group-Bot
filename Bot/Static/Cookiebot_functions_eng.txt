@@ -17,7 +17,7 @@ MANUAL COMMANDS:
 everyone - Admins can call all group members
 adm - Call chat admins
 anything - send a picture of what you want
-searchimage - Searches for the source of an artwork
+searchsource - Searches for the source of an artwork
 meme - Generate a meme
 battle - Who wins in a fight
 random - Send a media from some group
