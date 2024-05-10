@@ -56,19 +56,18 @@ def ReverseSearch(cookiebot, msg, chat_id, language, isBombot=False):
     except errors.LongLimitReachedError:
         Send(cookiebot, chat_id, "Limite diário de busca atingido, aguarde e tente novamente", msg, language)
         return
-    if results:
-        answer = 'Resultados da busca reversa:\n\n'
-        for result in results:
-            if result.urls:
-                answer += f'"{result.title}"'
-                if result.author:
-                    answer +=  f" - {result.author}"
-                answer += f"\n{result.urls[0]}\n\n"
+    if results and results[0].urls and results[0].similarity > 80:
+        best = results[0]
+        answer = 'Melhor correspondência encontrada:\n\n'
+        answer += f'"{best.title}"'
+        if best.author:
+            answer +=  f" - {best.author}"
+        answer += f"\n{best.urls[0]}\n\n"
         ReactToMessage(msg, '🫡', is_big=False, isBombot=isBombot)
         Send(cookiebot, chat_id, answer, msg, language)
     else:
         ReactToMessage(msg, '🤷', is_big=False, isBombot=isBombot)
-        Send(cookiebot, chat_id, "A busca não encontrou resultados, parece ser uma imagem original!", msg, language)
+        Send(cookiebot, chat_id, "A busca não encontrou correspondência, parece ser uma imagem original!", msg, language)
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n>EXEMPLO: /fennec", msg, language)
