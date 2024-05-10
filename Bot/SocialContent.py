@@ -59,7 +59,11 @@ def ReverseSearch(cookiebot, msg, chat_id, language, isBombot=False):
     if results:
         answer = 'Resultados da busca reversa:\n\n'
         for result in results:
-            answer += f"'{result.title}' - {result.author}\n{result.urls}\n\n"
+            if result.urls:
+                answer += f'"{result.title}"'
+                if result.author:
+                    answer +=  f" - {result.author}"
+                answer += f"\n{result.urls[0]}\n\n"
         ReactToMessage(msg, '🫡', is_big=False, isBombot=isBombot)
         Send(cookiebot, chat_id, answer, msg, language)
     else:
