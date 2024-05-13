@@ -1,2 +1,35 @@
 # COOKIEBOT-Telegram-Group-Bot
-Conversational AI group bot for Telegram. It can also do speech-to-text, combat raiders/spammers, generate memes, scrape images, provide drawing ideas, call all members of the group and more!
+
+Telegram chatbot responsible for protecting chats against spammers, conversating using natural language, perform speech-to-text, search media, schedule posts and provides fun features for events.
+
+## Installation on Ubuntu
+
+```bash
+sudo apt update
+sudo apt-get install git-all
+sudo apt install python3.11
+sudo apt install python3-pip
+sudo apt install ffmpeg
+sudo apt-get install screen
+git clone https://github.com/MekhyW/COOKIEBOT-Telegram-Group-Bot.git
+cd COOKIEBOT-Telegram-Group-Bot
+pip3 install -r requirements.txt --break-system-packages
+```
+
+## Provide credentials
+
+```bash
+cd Bot
+nano cookiebot_backendauth.json # Add your credentials
+nano cookiebot_basecredentials.json # Add your credentials
+nano cookiebot_cloudserviceaccount.json # Add your credentials
+nano cookiebot_pubsub.json # Add your credentials
+```
+
+## Run the bot
+
+```bash
+screen
+python3.11 COOKIEBOT.py
+# Press CTRL+A+D to detach from the screen
+```
