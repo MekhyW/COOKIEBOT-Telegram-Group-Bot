@@ -1,7 +1,7 @@
 import openai
 import json
 import datetime
-openai_client = openai.OpenAI(api_key='')
+openai_client = openai.OpenAI(api_key=json.loads(open('Bot/cookiebot_basecredentials.json', 'r').read())['openai_key'])
 data_initial = json.load(open('Bot/Static/AI_SFW.json'))
 
 questions_list = [q_a['prompt'] for q_a in data_initial['questions_answers']]
