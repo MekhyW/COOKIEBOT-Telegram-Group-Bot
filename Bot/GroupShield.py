@@ -106,7 +106,7 @@ def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
     chat_title = emoji_pattern.sub(r'', cookiebot.getChat(chat_id)['title'].strip())
     user_firstname = emoji_pattern.sub(r'', user['first_name'].strip())             
     text = f'{welcome} {chat_title}, {user_firstname}!'
-    textW, textH = draw.textsize(text, font=font)
+    textW, textH = draw.textbbox((0, 0), text, font=font)[2:]
     textX = int(((size[1]*2.2) - textW) / 2)
     textY = int(((size[0]*0.69) + textH) / 2)
     draw.text((textX, textY), text, font = font, fill = (255, 255, 255, 0))
