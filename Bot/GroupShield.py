@@ -10,6 +10,7 @@ from PIL import ImageFont, ImageDraw, Image
 
 captcha = ImageCaptcha()
 #spamwatch_client = spamwatch.Client(spamwatch_token)
+spamwatch_client = None
 
 emoji_pattern = re.compile("["
         u"\U0001F600-\U0001F64F"  # emoticons
