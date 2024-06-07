@@ -49,6 +49,8 @@ def Regras(cookiebot, msg, chat_id, language):
     else:
         regras = rules['rules'].replace('\\n', '\n')
         regras = SubstituteUsertags(regras, msg)
+        if not len(regras):
+            return
         if not regras.endswith("@MekhyW"):
             if language == 'pt':
                 regras += "\n\nDúvidas em relação ao bot? Mande para @MekhyW"
