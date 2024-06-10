@@ -1,5 +1,5 @@
 from universal_funcs import *
-max_consecutive_responses_ai = 5
+max_consecutive_responses_ai = 7
 remaining_responses_ai = {}
 
 def Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language):
@@ -17,7 +17,7 @@ def Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language):
 def increase_remaining_responses_ai(user_id):
     if user_id in remaining_responses_ai:
         if remaining_responses_ai[user_id] < max_consecutive_responses_ai:
-            remaining_responses_ai[user_id] += 0.5
+            remaining_responses_ai[user_id] += 1
     else:
         remaining_responses_ai[user_id] = max_consecutive_responses_ai
 
