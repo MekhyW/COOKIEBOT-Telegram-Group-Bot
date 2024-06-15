@@ -200,6 +200,7 @@ def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)
 
 def Countdown(cookiebot, msg, chat_id, language, isBombot):
+    ReactToMessage(msg, '🔥', isBombot=isBombot)
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     if msg['text'].lower().startswith('/patas'):
         directory = 'Static/Countdown/Patas'
