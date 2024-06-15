@@ -208,6 +208,9 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                                   'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!',
                                   'As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais!'])
         day, month = 18, 4
+        daysremaining = (datetime.datetime(datetime.datetime.now().year, month, day) - datetime.datetime.now()).days
+        if daysremaining < 0:
+            daysremaining += 365
         caption = f"*Faltam {number_to_emojis(daysremaining)} dias para o Patas!*\n\n_{calltoaction}_\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @bananaa2024"
     elif msg['text'].lower().startswith('/bff'):
         pic = random.choice(os.listdir('Static/Countdown/BFF'))
@@ -219,8 +222,8 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                                   'Entre as atividades planejadas, temos atividades de social mixer (dinâmicas de grupo) no início do evento para que você engrene os primeiros contatos com os demais participantes no evento.',
                                   'Bombom nasceu na Fantástica Fábrica de Doces com intuito de reunir os furries na Brasil FurFest para muita festa e diversão. Aliás, se a festa tiver caipirinhas melhor ainda!'])
         day, month = 19, 7
+        daysremaining = (datetime.datetime(datetime.datetime.now().year, month, day) - datetime.datetime.now()).days
+        if daysremaining < 0:
+            daysremaining += 365
         caption = f"*Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest!*\n\n_{calltoaction}_\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos em: brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest\n👾 Discord: discord.gg/ztABTT737H\n🎥 YouTube: youtube.com/brasilfurfest"
-    daysremaining = (datetime.datetime(datetime.datetime.now().year, month, day) - datetime.datetime.now()).days
-    if daysremaining < 0:
-        daysremaining += 365
     cookiebot.sendphoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='Markdown')
