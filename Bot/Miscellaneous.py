@@ -204,28 +204,27 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
     if msg['text'].lower().startswith('/patas'):
         directory = 'Static/Countdown/Patas'
         pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
-        calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP!',
+        calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP\!',
                                   'Este é um evento beneficiente em formato de convenção, para promover e celebrar a cultura de apreciação animais antropomóficos na região de Sorocaba. Foi criado para ajudar as entidades que prestam apoio aos idosos da região.',
-                                  'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!',
-                                  'As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais!'])
+                                  'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento\!',
+                                  'As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais\!'])
         day, month = 18, 4
         daysremaining = (datetime.datetime(datetime.datetime.now().year, month, day) - datetime.datetime.now()).days
         if daysremaining < 0:
             daysremaining += 365
-        caption = f"*Faltam {number_to_emojis(daysremaining)} dias para o Patas!*\n\n_{calltoaction}_\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @bananaa2024"
+        caption = f"*Faltam {number_to_emojis(daysremaining)} dias para o Patas\!*\n\n_{calltoaction}_\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @bananaa2024"
     elif msg['text'].lower().startswith('/bff'):
         directory = 'Static/Countdown/BFF'
         pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
         calltoaction = random.choice(['O Sheraton Santos Hotel é reconhecidamente o melhor hotel de Santos. Localizado em frente ao Shopping Praiamar, o maior centro de compras da cidade, o hotel conta com ampla infraestrutura para atender o evento.',
                                   'A Brasil FurFest tem, entre outros objetivos, levantar fundos para caridade em prol do Projeto Social SOS Vida Pet Litoral, que ajuda protetores a manter abrigos para animais de rua na Baixada Santista',
-                                  'Um Hotel Mal-Assombrado repleto de muita diversão! A sétima edição da Brasil FurFest será incrível! Venha participar desta grande festa do furry fandom brasileiro com o hotel inteiro fechado para o evento!',
-                                  'Quem são os furries? O que é a Brasil FurFest? Descubra em youtube.com/watch?v=vuFGHSL8X34&ab_channel=BrasilFurFest',
-                                  'Esperamos para ver todos os furries nas praias da maravilhosa cidade de Santos para essa festa que será inesquecível!',
+                                  'Um Hotel Mal-Assombrado repleto de muita diversão! A sétima edição da Brasil FurFest será incrível! Venha participar desta grande festa do furry fandom brasileiro com o hotel inteiro fechado para o evento\!',
+                                  'Esperamos para ver todos os furries nas praias da maravilhosa cidade de Santos para essa festa que será inesquecível\!',
                                   'Entre as atividades planejadas, temos atividades de social mixer (dinâmicas de grupo) no início do evento para que você engrene os primeiros contatos com os demais participantes no evento.',
-                                  'Bombom nasceu na Fantástica Fábrica de Doces com intuito de reunir os furries na Brasil FurFest para muita festa e diversão. Aliás, se a festa tiver caipirinhas melhor ainda!'])
+                                  'Bombom nasceu na Fantástica Fábrica de Doces com intuito de reunir os furries na Brasil FurFest para muita festa e diversão. Aliás, se a festa tiver caipirinhas melhor ainda\!'])
         day, month = 19, 7
         daysremaining = (datetime.datetime(datetime.datetime.now().year, month, day) - datetime.datetime.now()).days
         if daysremaining < 0:
             daysremaining += 365
-        caption = f"*Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest!*\n\n_{calltoaction}_\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos em: brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest\n👾 Discord: discord.gg/ztABTT737H\n🎥 YouTube: youtube.com/brasilfurfest"
+        caption = f"*Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest\!*\n\n_{calltoaction}_\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos em: brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest\n👾 Discord: discord.gg/ztABTT737H\n🎥 YouTube: youtube.com/brasilfurfest"
     cookiebot.sendPhoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='MarkdownV2')
