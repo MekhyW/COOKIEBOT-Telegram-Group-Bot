@@ -202,7 +202,8 @@ def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
 def Countdown(cookiebot, msg, chat_id, language, isBombot):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     if msg['text'].lower().startswith('/patas'):
-        pic = open(random.choice(os.listdir('Static/Countdown/Patas')), 'rb')
+        directory = 'Static/Countdown/Patas'
+        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
         calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP!',
                                   'Este é um evento beneficiente em formato de convenção, para promover e celebrar a cultura de apreciação animais antropomóficos na região de Sorocaba. Foi criado para ajudar as entidades que prestam apoio aos idosos da região.',
                                   'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!',
@@ -213,7 +214,8 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
             daysremaining += 365
         caption = f"*Faltam {number_to_emojis(daysremaining)} dias para o Patas!*\n\n_{calltoaction}_\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @bananaa2024"
     elif msg['text'].lower().startswith('/bff'):
-        pic = random.choice(os.listdir('Static/Countdown/BFF'))
+        directory = 'Static/Countdown/BFF'
+        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
         calltoaction = random.choice(['O Sheraton Santos Hotel é reconhecidamente o melhor hotel de Santos. Localizado em frente ao Shopping Praiamar, o maior centro de compras da cidade, o hotel conta com ampla infraestrutura para atender o evento.',
                                   'A Brasil FurFest tem, entre outros objetivos, levantar fundos para caridade em prol do Projeto Social SOS Vida Pet Litoral, que ajuda protetores a manter abrigos para animais de rua na Baixada Santista',
                                   'Um Hotel Mal-Assombrado repleto de muita diversão! A sétima edição da Brasil FurFest será incrível! Venha participar desta grande festa do furry fandom brasileiro com o hotel inteiro fechado para o evento!',
