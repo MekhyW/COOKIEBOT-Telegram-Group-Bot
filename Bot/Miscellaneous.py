@@ -2,7 +2,7 @@ from universal_funcs import *
 from Publisher import postmail_chat_link
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
-num_chats = 561
+num_chats = 566
 
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -199,18 +199,28 @@ def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
         answer += '\n\nAtenciosamente,\nMilton do RH.'
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)
 
-def Patas(cookiebot, msg, chat_id):
-    SendChatAction(cookiebot, chat_id, 'typing')
-    gif = random.choice(['https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYjM4ZjNieW43M29iNnA1bmhjb3NudnA4ZWVjZzI4bGM5NnY3a2dxZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/moX3akZy7lwjVU7H2Z/giphy.gif',
-                         'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExd2NmangyMGJ0MGpndmtpNzczeHljNnp4cnJscXBqbjY2NmlkNjNqdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/NTg8iLFd7p2UF8972z/giphy.gif',
-                         'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdXFiZWM0MW81dHJzcXIxdmUzeGl4ZHl5YWtmZzVtcm1jczMwb2I0MCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/f6dQeiBYTh4q6rCCdF/giphy-downsized-large.gif',
-                         'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdjU4a3BtYWJnZXh3bGJpam55bHg3czU5dWRkOTB6emd6eDlsZWt6YyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9VnPfwJwqosTte1sKH/giphy-downsized-large.gif'])
-    calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP!',
+def Countdown(cookiebot, msg, chat_id, language, isBombot):
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
+    if msg.lower().startswith('/patas'):
+        pic = random.choice(os.listdir('Static/Countdown/Patas'))
+        calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP!',
                                   'Este é um evento beneficiente em formato de convenção, para promover e celebrar a cultura de apreciação animais antropomóficos na região de Sorocaba. Foi criado para ajudar as entidades que prestam apoio aos idosos da região.',
                                   'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!',
                                   'As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais!'])
-    daysremaining = (datetime.datetime(datetime.datetime.now().year, 5, 17) - datetime.datetime.now()).days
+        day, month = 18, 4
+        caption = f"*Faltam {number_to_emojis(daysremaining)} dias para o Patas!*\n\n_{calltoaction}_\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @bananaa2024"
+    elif msg.lower().startswith('/bff'):
+        pic = random.choice(os.listdir('Static/Countdown/BFF'))
+        calltoaction = random.choice(['O Sheraton Santos Hotel é reconhecidamente o melhor hotel de Santos. Localizado em frente ao Shopping Praiamar, o maior centro de compras da cidade, o hotel conta com ampla infraestrutura para atender o evento.',
+                                  'A Brasil FurFest tem, entre outros objetivos, levantar fundos para caridade em prol do Projeto Social SOS Vida Pet Litoral, que ajuda protetores a manter abrigos para animais de rua na Baixada Santista',
+                                  'Um Hotel Mal-Assombrado repleto de muita diversão! A sétima edição da Brasil FurFest será incrível! Venha participar desta grande festa do furry fandom brasileiro com o hotel inteiro fechado para o evento!',
+                                  'Quem são os furries? O que é a Brasil FurFest? Descubra em youtube.com/watch?v=vuFGHSL8X34&ab_channel=BrasilFurFest',
+                                  'Esperamos para ver todos os furries nas praias da maravilhosa cidade de Santos para essa festa que será inesquecível!',
+                                  'Entre as atividades planejadas, temos atividades de social mixer (dinâmicas de grupo) no início do evento para que você engrene os primeiros contatos com os demais participantes no evento.',
+                                  'Bombom nasceu na Fantástica Fábrica de Doces com intuito de reunir os furries na Brasil FurFest para muita festa e diversão. Aliás, se a festa tiver caipirinhas melhor ainda!'])
+        day, month = 19, 7
+        caption = f"*Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest!*\n\n_{calltoaction}_\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos em: brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest\n👾 Discord: discord.gg/ztABTT737H\n🎥 YouTube: youtube.com/brasilfurfest"
+    daysremaining = (datetime.datetime(datetime.datetime.now().year, month, day) - datetime.datetime.now()).days
     if daysremaining < 0:
         daysremaining += 365
-    caption = f"*Faltam {number_to_emojis(daysremaining)} dias para o Patas!*\n\n_{calltoaction}_\n🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌🐾🍌\n\n📆 17 a 19/5, Sorocaba Park Hotel\n💻 Ingressos em: https://patas.site/\n📲 Grupo do evento: @bananaa2024"
-    cookiebot.sendAnimation(chat_id, gif, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='Markdown')
+    cookiebot.sendphoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='Markdown')
