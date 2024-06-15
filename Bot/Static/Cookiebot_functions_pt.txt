@@ -29,6 +29,7 @@ idade - Te digo quantos anos vc tem
 genero - Sera que e menino ou menina
 rojao - Pra pra pra pra poooow
 patas - Evento furry de hotel em sorocaba
+bff - Evento furry de hotel em santos
 tavivo - Manda um ping de teste com data do servidor
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo

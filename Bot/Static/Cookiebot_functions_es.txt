@@ -29,6 +29,7 @@ edad - te dice cuantos años tienes
 genero - ¿Es niño o niña?
 rojao - Pra pra pra pra poooow
 patas - Evento furry de hotel en brasil
+bff - Evento furry de hotel en brasil
 estavivo - Envía un ping de prueba con la fecha del servidor
 reglas - Muestra las reglas del grupo
 nuevasreglas - Actualiza las reglas del grupo

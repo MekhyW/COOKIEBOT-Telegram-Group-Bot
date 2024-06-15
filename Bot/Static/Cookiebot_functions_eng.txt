@@ -29,6 +29,7 @@ age - tell you how old you are
 gender - Is it a boy or a girl
 firecracker - Pra pra pra pra poooow
 patas - Hotel furry event in brazil
+bff - Hotel furry event in brazil
 isalive - Send a test ping with server date
 rules - Shows the group's rules
 newrules - Updates group rules
