@@ -202,7 +202,7 @@ def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
 def Countdown(cookiebot, msg, chat_id, language, isBombot):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     if msg['text'].lower().startswith('/patas'):
-        pic = random.choice(os.listdir('Static/Countdown/Patas'))
+        pic = open(random.choice(os.listdir('Static/Countdown/Patas')), 'rb')
         calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP!',
                                   'Este é um evento beneficiente em formato de convenção, para promover e celebrar a cultura de apreciação animais antropomóficos na região de Sorocaba. Foi criado para ajudar as entidades que prestam apoio aos idosos da região.',
                                   'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!',
@@ -226,4 +226,4 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
         if daysremaining < 0:
             daysremaining += 365
         caption = f"*Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest!*\n\n_{calltoaction}_\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos em: brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest\n👾 Discord: discord.gg/ztABTT737H\n🎥 YouTube: youtube.com/brasilfurfest"
-    cookiebot.sendPhoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='Markdown')
+    cookiebot.sendPhoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='MarkdownV2')
