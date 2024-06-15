@@ -226,4 +226,4 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
         if daysremaining < 0:
             daysremaining += 365
         caption = f"*Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest!*\n\n_{calltoaction}_\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos em: brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest\n👾 Discord: discord.gg/ztABTT737H\n🎥 YouTube: youtube.com/brasilfurfest"
-    cookiebot.sendphoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='Markdown')
+    cookiebot.sendPhoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='Markdown')
