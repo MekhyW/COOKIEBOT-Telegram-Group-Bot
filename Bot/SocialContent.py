@@ -138,8 +138,8 @@ def Meme(cookiebot, msg, chat_id, language):
             else:
                 template = "Static/Meme/English/" + templates_eng[template_id]
         template_img = cv2.imread(template)
-        mask_green = cv2.inRange(template_img, (0, 250, 0), (5, 255, 5))
-        mask_red = cv2.inRange(template_img, (0, 0, 250), (5, 5, 255))
+        mask_green = cv2.inRange(template_img, (0, 210, 0), (40, 255, 40))
+        mask_red = cv2.inRange(template_img, (0, 0, 210), (40, 40, 255))
         contours_green, tree = cv2.findContours(mask_green, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(members_tagged) <= len(contours_green):
             break
