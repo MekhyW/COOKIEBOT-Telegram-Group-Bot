@@ -228,6 +228,6 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
         daysremaining = (datetime.datetime(datetime.datetime.now().year, month, day) - datetime.datetime.now()).days
         if daysremaining < 0:
             daysremaining += 365
-        caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest!</b>\n\n<i>{calltoaction}</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos em: brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest\n👾 Discord: discord.gg/ztABTT737H\n🎥 YouTube: youtube.com/brasilfurfest"
+        caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2024 - Hotel Assombrado!</b>\n\n<i>{calltoaction}\n#fiquenosheraton</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos à venda na porta, upgrades  até 23/06/24 através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
     cookiebot.sendPhoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='HTML')
     pic.close()
