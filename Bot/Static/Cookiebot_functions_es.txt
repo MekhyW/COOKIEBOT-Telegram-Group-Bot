@@ -28,6 +28,7 @@ shippar - Shippa una pareja con caracter
 edad - te dice cuantos años tienes
 genero - ¿Es niño o niña?
 rojao - Pra pra pra pra poooow
+desenterrar - Desenterrar un mensaje antiguo
 patas - Evento furry de hotel en brasil
 bff - Evento furry de hotel en brasil
 estavivo - Envía un ping de prueba con la fecha del servidor

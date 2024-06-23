@@ -28,6 +28,7 @@ ship - Shipps a couple with character
 age - tell you how old you are
 gender - Is it a boy or a girl
 firecracker - Pra pra pra pra poooow
+unearth - Unearth a message from the past
 patas - Hotel furry event in brazil
 bff - Hotel furry event in brazil
 isalive - Send a test ping with server date
