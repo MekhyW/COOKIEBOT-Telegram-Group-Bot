@@ -253,15 +253,15 @@ def Morte(cookiebot, msg, chat_id, language):
     if language == 'pt':
         caption += ' foi de ' + random.choice(['ARRASTA PRA CIMA', 'AMERICANAS', 'F NO CHAT', 'HEXA 2022', 'COMES E BEBES', 'WAKANDA FOREVER NA HORIZONTAL', 'VOLANTE NO VASCO', 'DRAKE E JOSH', 'OLAVO DE CARVALHO', 'SEGUE PRA PARTE 2', 'TELA AZUL', 'FUNDADOR DA FAROFA YOKI', 'ESTAMPA DE CAMISA', 'CPF CANCELADO', 'KICK DO SERVIDOR', 'CARRINHO BATE BATE', 'SAMBARILOVE', 'ESTUDAR EM REALENGO', 'FISH AND CHIPS', 'LINK NA BIO', 'TOBOGÃ PRO INFERNO', 'CRINJOLAS', 'FRAIDI NAITES ATE FREDE']) + '! 💀💀💀'
     else:
-        caption += random.choice(['ESTÁ MORTO', 'FOI-SE EMBORA', 'FALECEU']) + '! 💀💀💀'
+        caption += random.choice([' ESTÁ MORTO', ' FOI-SE EMBORA', ' FALECEU']) + '! 💀💀💀'
     with open('Static/death.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
     caption += '\n\nMotivo: <b>' + line + '</b> 🔥\nF no chat. 🫡'
     if path.endswith('.gif'):
         animation = open(path, 'rb')
-        SendAnimation(cookiebot, chat_id, animation, caption=caption, msg_to_reply=msg)
+        SendAnimation(cookiebot, chat_id, animation, caption=caption, msg_to_reply=msg, language=language)
     else:
         photo = open(path, 'rb')
-        SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
+        SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg, language=language)
         photo.close()
