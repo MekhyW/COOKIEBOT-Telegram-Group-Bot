@@ -258,6 +258,9 @@ def Morte(cookiebot, msg, chat_id, language):
         line = random.choice(f.readlines())
     caption += '\n\nMotivo: <b>' + line + '</b>\nF no chat.'
     if path.endswith('.gif'):
+        animation = open(path, 'rb')
         SendAnimation(cookiebot, chat_id, path, caption=caption, msg_to_reply=msg)
     else:
-        SendPhoto(cookiebot, chat_id, path, caption=caption, msg_to_reply=msg)
+        photo = open(path, 'rb')
+        SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
+        photo.close()
