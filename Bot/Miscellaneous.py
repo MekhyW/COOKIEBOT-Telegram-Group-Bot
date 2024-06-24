@@ -274,6 +274,7 @@ def Sorte(cookiebot, msg, chat_id, language):
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
     answer = f'Sua sorte:\n 🥠 <span class="tg-spoiler">" {line} "</span> 🥠'
+    answer += f'\nSeus números da sorte: <span class="tg-spoiler">{random.randint(1, 99)} {random.randint(1, 99)} {random.randint(1, 99)} {random.randint(1, 99)} {random.randint(1, 99)} {random.randint(1, 99)}</span>'
     time.sleep(4)
     DeleteMessage(cookiebot, (str(chat_id), str(anim_id)))
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
