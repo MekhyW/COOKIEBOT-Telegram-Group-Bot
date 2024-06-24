@@ -124,9 +124,9 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
         else:
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
             if reply_markup is None:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id)
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, parse_mode='HTML')
             else:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode='HTML')
     except urllib3.exceptions.ProtocolError:
         return SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
     except TelegramError:
@@ -152,9 +152,9 @@ def SendAnimation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None
         else:
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
             if reply_markup is None:
-                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id)
+                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, parse_mode='HTML')
             else:
-                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
+                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode='HTML')
     except urllib3.exceptions.ProtocolError:
         return SendAnimation(cookiebot, chat_id, animation, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
     except TelegramError:

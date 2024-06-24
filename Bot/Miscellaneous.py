@@ -245,18 +245,18 @@ def Morte(cookiebot, msg, chat_id, language):
     ReactToMessage(msg, '👻')
     path = 'Static/Death/' + random.choice(os.listdir('Static/Death'))
     if len(msg['text'].split()) > 1:
-        caption = msg['text'].split()[1]
+        caption = '💀💀💀 ' + msg['text'].split()[1] + ' 💀💀💀'
     elif 'reply_to_message' in msg:
-        caption = msg['reply_to_message']['from']['first_name']
+        caption = '💀💀💀 ' + msg['reply_to_message']['from']['first_name'] + ' 💀💀💀'
     else:
-        caption = '@'+msg['from']['username'] if 'username' in msg['from'] else msg['from']['first_name']
+        caption = '💀💀💀 ' + '@'+msg['from']['username'] if 'username' in msg['from'] else msg['from']['first_name'] + ' 💀💀💀'
     if language == 'pt':
         caption += ' foi de ' + random.choice(['ARRASTA PRA CIMA', 'AMERICANAS', 'F NO CHAT', 'HEXA 2022', 'COMES E BEBES', 'WAKANDA FOREVER NA HORIZONTAL', 'VOLANTE NO VASCO', 'DRAKE E JOSH', 'OLAVO DE CARVALHO', 'SEGUE PRA PARTE 2', 'TELA AZUL', 'FUNDADOR DA FAROFA YOKI', 'ESTAMPA DE CAMISA', 'CPF CANCELADO', 'KICK DO SERVIDOR', 'CARRINHO BATE BATE', 'SAMBARILOVE', 'ESTUDAR EM REALENGO', 'FISH AND CHIPS', 'LINK NA BIO', 'TOBOGÃ PRO INFERNO', 'CRINJOLAS', 'FRAIDI NAITES ATE FREDE']) + '!'
     else:
         caption += random.choice(['ESTÁ MORTO', 'FOI-SE EMBORA', 'FALECEU']) + '!'
     with open('Static/death.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
-    caption += '\n\nMotivo: <b>' + line + '</b>\nF no chat.'
+    caption += '\n\nMotivo: 🔥 <b>' + line + '</b>\nF no chat. 🫡'
     if path.endswith('.gif'):
         animation = open(path, 'rb')
         SendAnimation(cookiebot, chat_id, animation, caption=caption, msg_to_reply=msg)
