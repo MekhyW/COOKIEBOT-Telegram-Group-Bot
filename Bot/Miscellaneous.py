@@ -275,5 +275,5 @@ def Sorte(cookiebot, msg, chat_id, language):
         line = line.replace('\n', '')
     answer = 'Sua sorte:\n 🥠 <span class="tg-spoiler">" + line + "</span> 🥠'
     time.sleep(2)
-    cookiebot.deleteMessage(chat_id, anim_id)
+    cookiebot.deleteMessage(anim_id)
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)
