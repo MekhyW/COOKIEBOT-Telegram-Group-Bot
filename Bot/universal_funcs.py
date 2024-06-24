@@ -139,7 +139,7 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
 
 def SendAnimation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
     try:
-        SendChatAction(cookiebot, chat_id, 'upload_animation')
+        SendChatAction(cookiebot, chat_id, 'upload_photo')
         if language in ['eng', 'es']:
             caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
         if thread_id is not None:
