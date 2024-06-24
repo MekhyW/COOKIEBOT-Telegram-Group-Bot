@@ -273,8 +273,14 @@ def Sorte(cookiebot, msg, chat_id, language):
     with open('Static/Sorte/sorte.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
+    numbers = []
+    while len(numbers) < 6:
+        number = random.randint(1, 99)
+        if number % 10 not in numbers:
+            numbers.append(number)
+    numbers_str = ' '.join([str(number) for number in numbers])
     answer = f'Sua sorte:\n 🥠 <span class="tg-spoiler">" {line} "</span> 🥠'
-    answer += f'\nSeus números da sorte: <span class="tg-spoiler">{random.randint(1, 99)} {random.randint(1, 99)} {random.randint(1, 99)} {random.randint(1, 99)} {random.randint(1, 99)} {random.randint(1, 99)}</span>'
+    answer += f'\nSeus números da sorte: <span class="tg-spoiler">{numbers_str}</span>'
     time.sleep(4)
     DeleteMessage(cookiebot, (str(chat_id), str(anim_id)))
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
