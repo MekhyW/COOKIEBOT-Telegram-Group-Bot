@@ -259,7 +259,7 @@ def Morte(cookiebot, msg, chat_id, language):
     caption += '\n\nMotivo: <b>' + line + '</b>\nF no chat.'
     if path.endswith('.gif'):
         animation = open(path, 'rb')
-        SendAnimation(cookiebot, chat_id, path, caption=caption, msg_to_reply=msg)
+        SendAnimation(cookiebot, chat_id, animation, caption=caption, msg_to_reply=msg)
     else:
         photo = open(path, 'rb')
         SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
