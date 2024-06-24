@@ -244,7 +244,12 @@ def Desenterrar(cookiebot, msg, chat_id, thread_id=None):
 def Morte(cookiebot, msg, chat_id, language):
     ReactToMessage(msg, '👻')
     path = 'Static/Death/' + random.choice(os.listdir('Static/Death'))
-    caption = '@'+msg['from']['username'] if 'username' in msg['from'] else msg['from']['first_name']
+    if len(msg['text'].split()) > 1:
+        caption = msg['text'].split()[1]
+    elif 'reply_to_message' in msg:
+        caption = msg['reply_to_message']['from']['first_name']
+    else:
+        caption = '@'+msg['from']['username'] if 'username' in msg['from'] else msg['from']['first_name']
     if language == 'pt':
         caption += ' foi de ' + random.choice(['ARRASTA PRA CIMA', 'AMERICANAS', 'F NO CHAT', 'HEXA 2022', 'COMES E BEBES', 'WAKANDA FOREVER NA HORIZONTAL', 'VOLANTE NO VASCO', 'DRAKE E JOSH', 'OLAVO DE CARVALHO', 'SEGUE PRA PARTE 2', 'TELA AZUL', 'FUNDADOR DA FAROFA YOKI', 'ESTAMPA DE CAMISA', 'CPF CANCELADO', 'KICK DO SERVIDOR', 'CARRINHO BATE BATE', 'SAMBARILOVE', 'ESTUDAR EM REALENGO', 'FISH AND CHIPS', 'LINK NA BIO', 'TOBOGÃ PRO INFERNO', 'CRINJOLAS', 'FRAIDI NAITES ATE FREDE']) + '!'
     else:
@@ -253,6 +258,6 @@ def Morte(cookiebot, msg, chat_id, language):
         line = random.choice(f.readlines())
     caption += '\n\nMotivo: <b>' + line + '</b>\nF no chat.'
     if path.endswith('.gif'):
-        SendAnimation(cookiebot, chat_id, path, caption=caption, reply_to_message_id=msg['message_id'])
+        SendAnimation(cookiebot, chat_id, path, caption=caption, msg_to_reply=msg)
     else:
-        SendPhoto(cookiebot, chat_id, path, caption=caption, reply_to_message_id=msg['message_id'])
+        SendPhoto(cookiebot, chat_id, path, caption=caption, msg_to_reply=msg)
