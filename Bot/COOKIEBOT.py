@@ -158,7 +158,7 @@ def thread_function(msg):
                     ReverseSearch(cookiebot, msg, chat_id, language, isBombot=isBombot)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
                                                 "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
-                                                "/batalha", "/battle", "/batalla", "/desenterrar", "unearth")):
+                                                "/batalha", "/battle", "/batalla", "/desenterrar", "/unearth", "/morte", "/death", "/muerte")):
                     if not funfunctions:
                         NotifyFunOff(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
@@ -179,6 +179,8 @@ def thread_function(msg):
                         Reclamacao(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/desenterrar", "unearth")):
                         Desenterrar(cookiebot, msg, chat_id, thread_id=thread_id)
+                    elif msg['text'].startswith(("/morte", "/muerte", "/death")):
+                        Morte(cookiebot, msg, chat_id, language)
                 elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and utilityfunctions:
                     Dado(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/patas", "/bff")):

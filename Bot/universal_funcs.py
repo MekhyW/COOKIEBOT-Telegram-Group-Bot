@@ -137,6 +137,34 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
         return None
     return sentphoto['message_id']
 
+def SendAnimation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
+    try:
+        SendChatAction(cookiebot, chat_id, 'upload_animation')
+        if language in ['eng', 'es']:
+            caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
+        if thread_id is not None:
+            token = bombotTOKEN if isBombot else cookiebotTOKEN
+            url = f"https://api.telegram.org/bot{token}/sendAnimation?chat_id={chat_id}&animation={animation}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"
+            if reply_markup is None:
+                url = url.replace('&reply_markup=None', '')
+            response = requests.get(url)
+            sentanimation = {'message_id': json.loads(response.text)['result']['message_id']}
+        else:
+            reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
+            if reply_markup is None:
+                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id)
+            else:
+                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup)
+    except urllib3.exceptions.ProtocolError:
+        return SendAnimation(cookiebot, chat_id, animation, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
+    except TelegramError:
+        try:
+            cookiebot.sendMessage(mekhyID, traceback.format_exc())
+        except Exception as e:
+            print(e)
+        return None
+    return sentanimation['message_id']
+
 def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
     token = bombotTOKEN if isBombot else cookiebotTOKEN
     url = f'https://api.telegram.org/bot{token}/setMyCommands'

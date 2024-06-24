@@ -2,7 +2,7 @@ from universal_funcs import *
 from Publisher import postmail_chat_link
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
-num_chats = 566
+num_chats = 579
 
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -233,7 +233,6 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
     pic.close()
 
 def Desenterrar(cookiebot, msg, chat_id, thread_id=None):
-    ReactToMessage(msg, '👻')
     for attempt in range(10):
         try:
             chosenid = random.randint(1, msg['message_id'])
@@ -241,3 +240,19 @@ def Desenterrar(cookiebot, msg, chat_id, thread_id=None):
             return
         except:
             pass
+
+def Morte(cookiebot, msg, chat_id, language):
+    ReactToMessage(msg, '👻')
+    path = 'Static/Death/' + random.choice(os.listdir('Static/Death'))
+    caption = '@'+msg['from']['username'] if 'username' in msg['from'] else msg['from']['first_name']
+    if language == 'pt':
+        caption += ' foi de ' + random.choice(['ARRASTA PRA CIMA', 'AMERICANAS', 'F NO CHAT', 'HEXA 2022', 'COMES E BEBES', 'WAKANDA FOREVER NA HORIZONTAL', 'VOLANTE NO VASCO', 'DRAKE E JOSH', 'OLAVO DE CARVALHO', 'SEGUE PRA PARTE 2', 'TELA AZUL', 'FUNDADOR DA FAROFA YOKI', 'ESTAMPA DE CAMISA', 'CPF CANCELADO', 'KICK DO SERVIDOR', 'CARRINHO BATE BATE', 'SAMBARILOVE', 'ESTUDAR EM REALENGO', 'FISH AND CHIPS', 'LINK NA BIO', 'TOBOGÃ PRO INFERNO', 'CRINJOLAS', 'FRAIDI NAITES ATE FREDE']) + '!'
+    else:
+        caption += random.choice(['ESTÁ MORTO', 'FOI-SE EMBORA', 'FALECEU']) + '!'
+    with open(path, 'r', encoding='utf-8') as f:
+        line = random.choice(f.readlines())
+    caption += '\n\nMotivo: <b>' + line + '</b>\nF no chat.'
+    if path.endswith('.gif'):
+        SendAnimation(cookiebot, chat_id, path, caption=caption, reply_to_message_id=msg['message_id'])
+    else:
+        SendPhoto(cookiebot, chat_id, path, caption=caption, reply_to_message_id=msg['message_id'])

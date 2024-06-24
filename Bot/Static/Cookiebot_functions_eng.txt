@@ -23,6 +23,7 @@ battle - Who wins in a fight
 random - Send a media from some group
 drawingidea - No more art block
 dice - Rolls one or more dice
+death - How did you die
 complaint - Summon Milton the complaints master
 ship - Shipps a couple with character
 age - tell you how old you are
