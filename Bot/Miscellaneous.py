@@ -261,7 +261,19 @@ def Morte(cookiebot, msg, chat_id, language):
     if path.endswith('.gif'):
         animation = open(path, 'rb')
         SendAnimation(cookiebot, chat_id, animation, caption=caption, msg_to_reply=msg, language=language)
+        animation.close()
     else:
         photo = open(path, 'rb')
         SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg, language=language)
         photo.close()
+
+def Sorte(cookiebot, msg, chat_id, language):
+    with open('Static/Sorte/sorte.txt', 'r', encoding='utf-8') as f:
+        anim_id = SendAnimation(cookiebot, chat_id, f, msg_to_reply=msg, language=language)
+    with open('Static/Sorte/sorte.txt', 'r', encoding='utf-8') as f:
+        line = random.choice(f.readlines())
+        line = line.replace('\n', '')
+    answer = 'Sua sorte:\n 🥠 <span class="tg-spoiler">" + line + "</span> 🥠'
+    time.sleep(2)
+    cookiebot.deleteMessage(chat_id, anim_id)
+    Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)

@@ -20,6 +20,7 @@ qualquercoisa - Manda uma foto do que vc quiser
 buscarfonte - Pesquisa a fonte de uma obra de arte
 meme - Gera um meme
 batalha - Quem ganha em uma luta
+sorte - Biscoito da sorte
 aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
 dado - Roda um ou mais dados quaisquer

@@ -20,6 +20,7 @@ anything - send a picture of what you want
 searchsource - Searches for the source of an artwork
 meme - Generate a meme
 battle - Who wins in a fight
+fortunecookie - Open a fortune cookie
 random - Send a media from some group
 drawingidea - No more art block
 dice - Rolls one or more dice
