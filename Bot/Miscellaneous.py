@@ -268,7 +268,7 @@ def Morte(cookiebot, msg, chat_id, language):
         photo.close()
 
 def Sorte(cookiebot, msg, chat_id, language):
-    with open('Static/Sorte/sorte.gif', 'r') as f:
+    with open('Static/Sorte/sorte.gif', 'rb') as f:
         anim_id = SendAnimation(cookiebot, chat_id, f, msg_to_reply=msg, language=language)
     with open('Static/Sorte/sorte.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
