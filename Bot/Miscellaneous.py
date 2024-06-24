@@ -273,7 +273,7 @@ def Sorte(cookiebot, msg, chat_id, language):
     with open('Static/Sorte/sorte.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
-    answer = 'Sua sorte:\n 🥠 <span class="tg-spoiler">" + line + "</span> 🥠'
+    answer = f'Sua sorte:\n 🥠 <span class="tg-spoiler">" {line} "</span> 🥠'
     time.sleep(2)
     DeleteMessage(cookiebot, (str(chat_id), str(anim_id)))
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
