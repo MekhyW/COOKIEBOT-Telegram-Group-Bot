@@ -75,7 +75,7 @@ def GetVoiceMessage(cookiebot, msg, isBombot=False):
         r = requests.get(f"https://api.telegram.org/file/bot{token}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=10)
     return r.content
 
-def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
+def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None, parse_mode='MarkdownV2'):
     try:
         SendChatAction(cookiebot, chat_id, 'typing')
         if language == 'eng':
@@ -85,7 +85,7 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
             try:
-                cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode='MarkdownV2')
+                cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode=parse_mode)
             except telepot.exception.TelegramError:
                 text = text.replace('\\', '').replace('>', '')
                 cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
@@ -97,12 +97,12 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
             requests.get(url)
         else:
             try:
-                cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode='MarkdownV2')
+                cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
             except telepot.exception.TelegramError:
                 text = text.replace('\\', '').replace('>', '')
                 cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
-        Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup)
+        Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup, parse_mode)
     except TelegramError:
         try:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
