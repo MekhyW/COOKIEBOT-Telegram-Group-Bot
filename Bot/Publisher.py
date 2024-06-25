@@ -4,6 +4,7 @@ from UserRegisters import *
 from google.cloud import scheduler_v1
 from google.cloud import pubsub_v1
 from price_parser import Price
+import html
 client = scheduler_v1.CloudSchedulerClient.from_service_account_json("cookiebot_pubsub.json")
 subscriber = pubsub_v1.SubscriberClient.from_service_account_json("cookiebot_pubsub.json")
 project_id = "cookiebot-309512"
@@ -186,8 +187,8 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=postmail_chat_link)])
     caption_pt = GoogleTranslator(source='auto', target='pt').translate(caption_new)
     caption_en = GoogleTranslator(source='auto', target='en').translate(caption_new)
-    caption_pt = ConvertPricesinText(caption_pt, 'BRL')
-    caption_en = ConvertPricesinText(caption_en, 'USD')
+    caption_pt = html.escape(ConvertPricesinText(caption_pt, 'BRL'))
+    caption_en = html.escape(ConvertPricesinText(caption_en, 'USD'))
     if 'photo' in cached_post:
         sent_pt = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
         sent_en = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
