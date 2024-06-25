@@ -274,10 +274,12 @@ def Sorte(cookiebot, msg, chat_id, language):
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
     numbers = []
+    tens = []
     while len(numbers) < 6:
         number = random.randint(1, 99)
-        if number % 10 not in numbers:
+        if math.floor(number / 10) not in tens:
             numbers.append(number)
+            tens.append(math.floor(number / 10))
     numbers_str = ' '.join([str(number) for number in numbers])
     answer = f'Sua sorte:\n 🥠 <span class="tg-spoiler">" {line} "</span> 🥠'
     answer += f'\nSeus números da sorte: <span class="tg-spoiler">{numbers_str}</span>'
