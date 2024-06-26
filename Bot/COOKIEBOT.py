@@ -241,8 +241,9 @@ def thread_function(msg):
                     Send(cookiebot, chat_id, InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
             else:
                 increase_remaining_responses_ai(msg['from']['id'])
-                SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
-                CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
+                if captchatimespan > 0 and myself['username'] in listaadmins:
+                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
+                    CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
         if chat_type != 'private' and content_type != "sticker":
             StickerCooldownUpdates(msg, chat_id)
         run_unnatendedthreads()
