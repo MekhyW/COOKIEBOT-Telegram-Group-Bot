@@ -9,8 +9,11 @@ import numpy as np
 from PIL import ImageFont, ImageDraw, Image
 
 captcha = ImageCaptcha()
-#spamwatch_client = spamwatch.Client(spamwatch_token)
-spamwatch_client = None
+try:
+    spamwatch_client = spamwatch.Client(spamwatch_token)
+except Exception as e:
+    print(e)
+    spamwatch_client = None
 
 emoji_pattern = re.compile("["
         u"\U0001F600-\U0001F64F"  # emoticons
@@ -183,12 +186,11 @@ def CheckCAS(cookiebot, msg, chat_id, language):
 
 def CheckSpamwatch(cookiebot, msg, chat_id, language):
     try:
-        spamwatch_client = spamwatch.Client(spamwatch_token)
-        ban = spamwatch_client.get_ban(int(msg['new_chat_participant']['id']))
+        isbanned = spamwatch_client.get_ban(int(msg['new_chat_participant']['id']))
     except Exception as e:
         print(e)
         return False
-    if ban:
+    if isbanned:
         BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
         Send(cookiebot, chat_id, "Bani o usuário recém\-chegado por *ser flagrado pelo sistema anti\-ban Spamwatch*", language=language)
         return True
