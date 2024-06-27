@@ -38,7 +38,7 @@ def thread_function(msg):
         if any(key in msg for key in ['dice', 'poll', 'voice_chat_started', 'voice_chat_ended', 'video_chat_scheduled', 'video_chat_started', 'video_chat_ended', 
                                       'voice_chat_participants_invited', 'video_chat_participants_invited',
                                       'forum_topic_created', 'forum_topic_edited','forum_topic_closed', 'forum_topic_reopened', 'story', 'poll_answer',
-                                      'boost_added', 'removed_chat_boost', 'message_auto_delete_timer_changed']):
+                                      'boost_added', 'chat_boost', 'removed_chat_boost', 'message_auto_delete_timer_changed']):
             return
         thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
         content_type, chat_type, chat_id = telepot.glance(msg)
