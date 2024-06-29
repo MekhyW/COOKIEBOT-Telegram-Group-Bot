@@ -5,8 +5,6 @@ Pillow
 captcha
 deep-translator
 Google-Images-Search
-google-cloud-pubsub
-google-cloud-scheduler
 saucenao_api
 ShazamAPI
 opencv-python

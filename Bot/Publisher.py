@@ -1,17 +1,13 @@
 from universal_funcs import *
 from Configurations import *
 from UserRegisters import *
-from google.cloud import scheduler_v1
-from google.cloud import pubsub_v1
+import sqlite3
 from price_parser import Price
 import html
-client = scheduler_v1.CloudSchedulerClient.from_service_account_json("cookiebot_pubsub.json")
-subscriber = pubsub_v1.SubscriberClient.from_service_account_json("cookiebot_pubsub.json")
-project_id = "cookiebot-309512"
-project_path = f"projects/{project_id}"
-parent = f"{project_path}/locations/southamerica-east1"
-topic_name = 'projects/cookiebot-309512/topics/cookiebot-publisher-topic'
-subscription_path = None
+publisher_db = sqlite3.connect('Publisher.db', check_same_thread=False)
+publisher_cursor = publisher_db.cursor()
+publisher_cursor.execute("CREATE TABLE IF NOT EXISTS publisher (name TEXT, days INT, next_time TEXT, target_chat_id INT, postmail_chat_id INT, second_chatid INT, postmail_message_id INT, second_messageid INT, origin_userid INT)")
+publisher_db.commit()
 cache_posts = {}
 postmail_chat_link = "https://t.me/CookiebotPostmail"
 postmail_chat_id = -1001869523792
@@ -61,46 +57,44 @@ def AskApproval(cookiebot, query_data, from_id, isBombot=False):
         ]
     ))
 
-def create_job(job_name, job_description, job_data, job_schedule):
-    job = {
-        'name': client.job_path(project_id, 'southamerica-east1', job_name),
-        'description': job_description,
-        'pubsub_target': {
-            'topic_name': topic_name,
-            'data': bytes(job_data,'utf-8'),
-        },
-        'schedule': job_schedule,
-    }
-    response = client.create_job(parent=parent, job=job)
-    print(f'Created job: {response.name}')
-    return response
+def create_job(hour, minute, name, days, target_chat_id, postmail_chat_id, second_chatid, postmail_message_id, second_messageid, origin_userid):
+    current_time = datetime.datetime.now()
+    if current_time.hour < hour or (current_time.hour == hour and current_time.minute < minute):
+        next_time = str(datetime.datetime(current_time.year, current_time.month, current_time.day, hour, minute))
+    else:
+        next_time = str(datetime.datetime(current_time.year, current_time.month, current_time.day, hour, minute) + datetime.timedelta(days=1))
+    publisher_cursor.execute("INSERT INTO publisher VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (name, days, next_time, target_chat_id, postmail_chat_id, second_chatid, postmail_message_id, second_messageid, origin_userid))
+    publisher_db.commit()
+    print(f'Created job: {name}')
+    return name
 
 def list_jobs():
-    response = client.list_jobs(parent=parent)
+    publisher_cursor.execute("SELECT * FROM publisher")
     jobs = []
-    for job in response:
+    for row in publisher_cursor.fetchall():
+        job = {
+            'name': row[0],
+            'days': row[1],
+            'next_time': row[2],
+            'target_chat_id': row[3],
+            'postmail_chat_id': row[4],
+            'second_chatid': row[5],
+            'postmail_message_id': row[6],
+            'second_messageid': row[7],
+            'origin_userid': row[8]
+        }
         jobs.append(job)
     return jobs
 
 def delete_job(job_name):
-    try:
-        response = client.delete_job(name=client.job_path(project_id, 'southamerica-east1', job_name))
-    except:
-        response = client.delete_job(name=job_name)
-    print(f'Deleted job: {response}')
-    return response
+    publisher_cursor.execute("DELETE FROM publisher WHERE name = ?", (job_name,))
+    print(f'Deleted job: {job_name}')
+    return job_name
 
-def edit_job_data(job_name, job_data):
-    job = {
-        'name': client.job_path(project_id, 'southamerica-east1', job_name),
-        'pubsub_target': {
-            'topic_name': topic_name,
-            'data': bytes(job_data,'utf-8'),
-        },
-    }
-    response = client.update_job(job=job, update_mask={'paths': ['pubsub_target']})
-    print(f'Updated job: {response.name}')
-    return response
+def edit_job_data(job_name, param, value):
+    publisher_cursor.execute(f"UPDATE publisher SET {param} = ? WHERE name = ?", (value, job_name))
+    print(f'Edited job: {job_name}')
+    return job_name
 
 def ConvertPricesinText(text, code_target):
     if (code_target == 'BRL') and any([x in text for x in ('R$', 'BRL', 'Reais', 'reais')]):
@@ -208,12 +202,7 @@ def DenyPost(cookiebot, query_data):
     cache_posts.pop(origin_messageid)
 
 def SchedulePost(cookiebot, query_data):
-    origin_chatid = query_data.split()[1]
-    second_chatid = query_data.split()[2]
-    origin_messageid = query_data.split()[3]
-    origin_userid = query_data.split()[4]
-    days = query_data.split()[5]
-    second_messageid = query_data.split()[6]
+    approve, origin_chatid, second_chatid, origin_messageid, origin_userid, days, second_messageid = query_data.split()[:7]
     origin_chat = cookiebot.getChat(origin_chatid)
     try:
         origin_user = cookiebot.getChatMember(origin_chatid, origin_userid)['user']
@@ -222,51 +211,39 @@ def SchedulePost(cookiebot, query_data):
     sent_pt, sent_en = PreparePost(cookiebot, origin_messageid, origin_chat, origin_user)
     jobs = list_jobs()
     for job in jobs:
-        if job.name.startswith(f"{parent}/jobs/{origin_chatid}"):
-            delete_job(job.name)
+        if str(job['origin_chatid']) == str(origin_chatid):
+            delete_job(job['name'])
             jobs.remove(job)
     answer = f"Post set for the following times ({days} days):\n"
     answer += "NOW - Cookiebot Mural 📬\n"
     for group in GetRequestBackend('registers'):
         group_id = group['id']
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(cookiebot, group_id)
+        if not publisherpost:
+            continue
         if publisherMembersOnly:
             members = GetMembersChat(group_id)
             if origin_user is None or origin_user['username'] not in str(members):
                 answer += f"ERROR! Cannot post in {cookiebot.getChat(group_id)['title']} (because you are not an active member)\n"
                 continue
-        if publisherpost:
-            try:
-                num_posts_for_group = 0
-                target_chattitle = cookiebot.getChat(group_id)['title']
-                oldest_job = None
-                oldest_job_time = None
-                for job in jobs:
-                    if f"--> {target_chattitle}" in job.description:
-                        num_posts_for_group += 1
-                        if oldest_job_time is None or job.schedule_time < oldest_job_time:
-                            oldest_job = job
-                            oldest_job_time = job.schedule_time
-                    if maxPosts is not None and num_posts_for_group > maxPosts:
-                        delete_job(job.name)
-                        num_posts_for_group -= 1
-                hour = random.randint(0,23)
-                minute = random.randint(0,59)
-                sent = sent_pt if language == 'pt' else sent_en
-                create_job(origin_chatid+group_id, 
-                f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
-                f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid} {second_chatid} {second_messageid}",
-                f"{minute} {hour} * * *")
-                answer += f"{hour}:{minute} - {target_chattitle}\n"
-            except Exception as e:
-                print(e)
-                if 'RESOURCE_EXHAUSTED' in str(e) and oldest_job is not None:
-                    delete_job(oldest_job.name)
-                    create_job(origin_chatid+group_id, 
-                    f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute} ", 
-                    f"{days} {postmail_chat_id} {group_id} {sent} {origin_chatid} {second_chatid} {second_messageid}",
-                    f"{minute} {hour} * * *")
-                    answer += f"{hour}:{minute} - {target_chattitle}\n"
+        try:
+            num_posts_for_group = 0
+            target_chattitle = cookiebot.getChat(group_id)['title']
+            for job in jobs:
+                if f"--> {target_chattitle}" in job['name']:
+                    num_posts_for_group += 1
+                if maxPosts is not None and num_posts_for_group > maxPosts:
+                    delete_job(job['name'])
+                    jobs.remove(job)
+                    num_posts_for_group -= 1
+            hour = random.randint(0,23)
+            minute = random.randint(0,59)
+            postmail_message_id = sent_pt if language == 'pt' else sent_en
+            create_job(hour, minute, f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute}", int(days), int(group_id),
+                       int(postmail_chat_id), int(second_chatid), int(postmail_message_id), int(second_messageid), int(origin_userid))
+            answer += f"{hour}:{minute} - {target_chattitle}\n"
+        except Exception as e:
+            print(e)
     try:
         answer += f"OBS: private chats are not listed!"
         Send(cookiebot, mekhyID, answer)
@@ -292,10 +269,7 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isBombot
     days = msg['text'].split()[1]
     hour = random.randint(10,17)
     minute = random.randint(0,59)
-    create_job(str(chat_id)+str(chat_id), 
-                f"{chat['title']} --> {chat['title']}, at {hour}:{minute} ", 
-                f"{days} {chat_id} {chat_id} {original_msg_id} {chat_id} 0 0",
-                f"{minute} {hour} * * *")
+    create_job(hour, minute, f"{chat['title']} --> {chat['title']}, at {hour}:{minute} ", int(days), int(chat_id), int(chat_id), int(chat_id), int(original_msg_id), int(original_msg_id), int(msg['from']['id']))
     ReactToMessage(msg, '👍', isBombot=isBombot)
     Send(cookiebot, chat_id, f"Repostagem programada para o grupo por *{days} dias\!*", msg_to_reply=msg, language=language)
 
@@ -304,32 +278,24 @@ def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=F
     if str(msg['from']['id']) not in listaadmins_id:
         Send(cookiebot, chat_id, "You are not a group admin\!", msg_to_reply=msg)
         return
-    jobs = list_jobs()
-    for job in jobs:
-        if job.name.startswith(f"{parent}/jobs/{chat_id}"):
-            delete_job(job.name)
+    for job in list_jobs():
+        if str(job['postmail_chat_id']) == str(chat_id):
+            delete_job(job['name'])
     ReactToMessage(msg, '👍', isBombot=isBombot)
     Send(cookiebot, chat_id, "Repostagens do grupo canceladas\!", msg_to_reply=msg, language=language)
 
 def SchedulerPull(cookiebot, isBombot=False):
-    response = subscriber.pull(subscription=subscription_path, max_messages=100, return_immediately=True)
-    received_messages = response.received_messages
-    for message in received_messages:
-        subscriber.acknowledge(subscription=subscription_path, ack_ids=[message.ack_id])
-        print(message.message.data)
-        data = message.message.data.decode('utf-8')
-        remaining_times = int(data.split()[0]) - 1
-        postmail_chat_id = data.split()[1]
-        group_id = data.split()[2]
-        origin_messageid = data.split()[3]
-        origin_chatid = data.split()[4]
-        second_chatid = data.split()[5]
-        second_messageid = data.split()[6]
-        if remaining_times <= 0:
-            delete_job(origin_chatid+group_id)
+    current_time = datetime.datetime.now()
+    for job in list_jobs():
+        if current_time < datetime.datetime.strptime(job['next_time'], '%Y-%m-%d %H:%M:%S'):
+            continue
+        if job['days'] <= 1:
+            delete_job(job['name'])
         else:
-            edit_job_data(origin_chatid+group_id, f"{remaining_times} {postmail_chat_id} {group_id} {origin_messageid} {origin_chatid} {second_chatid} {second_messageid}")
+            edit_job_data(job['name'], 'days', job['days'] - 1)
         try:
+            group_id = str(job['target_chat_id'])
+            origin_messageid = str(job['postmail_message_id'])
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
                 config = GetConfig(cookiebot, group_id)
@@ -338,29 +304,15 @@ def SchedulerPull(cookiebot, isBombot=False):
                 Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, isBombot=isBombot)
         except TelegramError as e:
             Send(cookiebot, mekhyID, traceback.format_exc())
-            delete_job(origin_chatid+group_id)
-    return received_messages
+            delete_job(job['name'])
 
 def CheckNotifyPostReply(cookiebot, msg, chat_id, language):
-    jobs = list_jobs()
-    for job in jobs:
-        print(job.description)
-        if job.description.startswith(msg['reply_to_message']['reply_markup']['inline_keyboard'][0][0]['text']):
-            job_data = job.pubsub_target.data.decode('utf-8')
-            print(job_data)
-            if(len(job_data.split()) < 7):
-                return
-            second_chatid = job_data.split()[5]
-            second_messageid = job_data.split()[6]
+    for job in list_jobs():
+        if job['name'].startswith(msg['reply_to_message']['reply_markup']['inline_keyboard'][0][0]['text']):
+            second_chatid = str(job['second_chatid'])
+            second_messageid = str(job['second_messageid'])
             text = f"@{msg['from']['username']}" if 'username' in msg['from'] else f"{msg['from']['first_name']} {msg['from']['last_name']}"
             text += f" replied:\n'{msg['text']}'\n\nIn chat {msg['chat']['title']}"
             Send(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid}, language=language)
             Send(cookiebot, chat_id, "Resposta enviada ao dono do post\!", msg_to_reply=msg, language=language)
             return
-
-def startPublisher(isBombot):
-    global subscription_path
-    if isBombot:
-        subscription_path = subscriber.subscription_path(project_id, "bombot-subscription")
-    else:
-        subscription_path = subscriber.subscription_path(project_id, "cookiebot-subscription")

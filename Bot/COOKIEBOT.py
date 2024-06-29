@@ -28,7 +28,6 @@ if updates:
 
 unnatended_threads = list()
 num_max_threads = 25
-startPublisher(isBombot)
 gc.enable()
 
 Send(cookiebot, mekhyID, 'I am online')
@@ -257,9 +256,6 @@ def thread_function(msg):
             Send(cookiebot, mekhyID, traceback.format_exc())
             Send(cookiebot, mekhyID, str(msg))
             Send(cookiebot, mekhyID, str(e))
-    finally:
-        if not isBombot:
-            SchedulerPull(cookiebot, isBombot=isBombot)
 
 def thread_function_query(msg):
     try:
@@ -358,6 +354,11 @@ def handle_query(msg):
         run_unnatendedthreads()
     except:
         Send(cookiebot, mekhyID, traceback.format_exc())
-        
 
+def scheduler_check():
+    SchedulerPull(cookiebot, isBombot=isBombot)
+    timer_scheduler_check = threading.Timer(300, scheduler_check)
+    timer_scheduler_check.start()
+        
+scheduler_check()
 MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
