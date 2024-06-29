@@ -293,6 +293,7 @@ def SchedulerPull(cookiebot, isBombot=False):
             delete_job(job['name'])
         else:
             edit_job_data(job['name'], 'days', job['days'] - 1)
+            edit_job_data(job['name'], 'next_time', str(current_time + datetime.timedelta(days=1)))
         try:
             group_id = str(job['target_chat_id'])
             origin_messageid = str(job['postmail_message_id'])
