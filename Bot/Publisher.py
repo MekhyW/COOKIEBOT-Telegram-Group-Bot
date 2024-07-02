@@ -303,7 +303,7 @@ def SchedulerPull(cookiebot, isBombot=False):
                 Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, thread_id=int(config[10]), isBombot=isBombot)
             else:
                 Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, isBombot=isBombot)
-        except TelegramError as e:
+        except Exception as e:
             Send(cookiebot, mekhyID, traceback.format_exc())
             delete_job(job['name'])
 
