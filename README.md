@@ -26,6 +26,13 @@ nano cookiebot_cloudserviceaccount.json # Add your credentials
 nano cookiebot_pubsub.json # Add your credentials
 ```
 
+## Set timezone
+
+```bash
+tzselect # Select your timezone
+timedatectl
+```
+
 ## Run the bot
 
 ```bash
