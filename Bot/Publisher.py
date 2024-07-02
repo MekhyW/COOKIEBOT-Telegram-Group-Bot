@@ -211,7 +211,7 @@ def SchedulePost(cookiebot, query_data):
     sent_pt, sent_en = PreparePost(cookiebot, origin_messageid, origin_chat, origin_user)
     jobs = list_jobs()
     for job in jobs:
-        if str(job['origin_chatid']) == str(origin_chatid):
+        if job['name'].split('-->')[0].strip() == origin_chat['title'].strip():
             delete_job(job['name'])
             jobs.remove(job)
     answer = f"Post set for the following times ({days} days):\n"
