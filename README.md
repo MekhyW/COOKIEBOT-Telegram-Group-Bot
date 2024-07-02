@@ -29,7 +29,8 @@ nano cookiebot_pubsub.json # Add your credentials
 ## Set timezone
 
 ```bash
-tzselect # Select your timezone
+timedatectl list-timezones
+sudo timedatectl set-timezone <your_time_zone>
 timedatectl
 ```
 
