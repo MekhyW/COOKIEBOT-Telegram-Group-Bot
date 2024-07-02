@@ -356,9 +356,14 @@ def handle_query(msg):
         Send(cookiebot, mekhyID, traceback.format_exc())
 
 def scheduler_check():
-    SchedulerPull(cookiebot, isBombot=isBombot)
-    timer_scheduler_check = threading.Timer(300, scheduler_check)
-    timer_scheduler_check.start()
+    print("SCHEDULER CHECK")
+    try:
+        SchedulerPull(cookiebot, isBombot=isBombot)
+    except:
+        Send(cookiebot, mekhyID, traceback.format_exc())
+    finally:
+        timer_scheduler_check = threading.Timer(300, scheduler_check)
+        timer_scheduler_check.start()
         
 scheduler_check()
 MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
