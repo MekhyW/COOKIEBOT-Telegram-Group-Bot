@@ -88,11 +88,13 @@ def list_jobs():
 
 def delete_job(job_name):
     publisher_cursor.execute("DELETE FROM publisher WHERE name = ?", (job_name,))
+    publisher_db.commit()
     print(f'Deleted job: {job_name}')
     return job_name
 
 def edit_job_data(job_name, param, value):
     publisher_cursor.execute(f"UPDATE publisher SET {param} = ? WHERE name = ?", (value, job_name))
+    publisher_db.commit()
     print(f'Edited job: {job_name}')
     return job_name
 
