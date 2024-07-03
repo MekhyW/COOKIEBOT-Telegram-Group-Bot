@@ -286,6 +286,7 @@ def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=F
 
 def SchedulerPull(cookiebot, isBombot=False):
     current_time = datetime.datetime.now()
+    current_time = datetime.datetime(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute, current_time.second)
     for job in list_jobs():
         if current_time < datetime.datetime.strptime(job['next_time'], '%Y-%m-%d %H:%M:%S'):
             continue
