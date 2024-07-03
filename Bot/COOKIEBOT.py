@@ -365,5 +365,6 @@ def scheduler_check():
         timer_scheduler_check = threading.Timer(300, scheduler_check)
         timer_scheduler_check.start()
         
-scheduler_check()
+if not isBombot:
+    scheduler_check()
 MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
