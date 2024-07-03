@@ -157,7 +157,7 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
         print(e)
         Send(cookiebot, chat_id, welcome, language=language)
     for thread in threading.enumerate():
-        if isinstance(thread, threading.Timer) and thread.kwargs['chat_id'] == chat_id and thread.kwargs['msg']['new_chat_participant']['id'] == msg['from']['id']:
+        if isinstance(thread, threading.Timer) and 'chat_id' in thread.kwargs and thread.kwargs['chat_id'] == chat_id and 'msg' in thread.kwargs and thread.kwargs['msg']['new_chat_participant']['id'] == msg['from']['id']:
             thread.cancel()
         
 
