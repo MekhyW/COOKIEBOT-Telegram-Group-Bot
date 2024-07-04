@@ -10,8 +10,6 @@ from Miscellaneous import *
 from Publisher import *
 import threading
 import gc
-import subprocess
-import psutil
 
 if len(sys.argv) < 2:
     print("Usage: python COOKIEBOT.py [isBombot]")
@@ -368,20 +366,7 @@ def scheduler_check():
     finally:
         timer_scheduler_check = threading.Timer(300, scheduler_check)
         timer_scheduler_check.start()
-
-def is_monitor_running():
-    for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
-        if 'Monitor.py' in proc.info['cmdline'] and sys.executable in proc.info['cmdline']:
-            return True
-    return False
-
-def start_monitor(args):
-    print("MONITOR STARTED")
-    return subprocess.Popen([sys.executable, 'Monitor.py'] + args)
-
-if __name__ == "__main__":
-    if not is_monitor_running():
-        start_monitor(sys.argv[1:])
-    if not isBombot:
-        scheduler_check()
-    MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
+        
+if not isBombot:
+    scheduler_check()
+MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
