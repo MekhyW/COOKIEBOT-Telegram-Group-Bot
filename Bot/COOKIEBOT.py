@@ -13,19 +13,14 @@ import gc
 
 if len(sys.argv) < 2:
     print("Usage: python COOKIEBOT.py [isBombot]")
-    sys.exit(0)
+    sys.exit(1)
 isBombot = sys.argv[1].lower() == 'true'
-
-if isBombot:
-    cookiebot = telepot.Bot(bombotTOKEN)
-else:
-    cookiebot = telepot.Bot(cookiebotTOKEN)
+cookiebot = telepot.Bot(bombotTOKEN) if isBombot else telepot.Bot(cookiebotTOKEN)
 myself = cookiebot.getMe()
 updates = cookiebot.getUpdates()
 if updates:
     last_update_id = updates[-1]['update_id']
     cookiebot.getUpdates(offset=last_update_id+1)
-
 unnatended_threads = list()
 num_max_threads = 25
 gc.enable()
