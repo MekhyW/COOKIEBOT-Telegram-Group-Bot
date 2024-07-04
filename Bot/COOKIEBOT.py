@@ -382,7 +382,6 @@ def start_monitor(args):
 if __name__ == "__main__":
     if not is_monitor_running():
         start_monitor(sys.argv[1:])
-        sys.exit()
     if not isBombot:
         scheduler_check()
     MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
