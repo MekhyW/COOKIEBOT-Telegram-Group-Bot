@@ -22,7 +22,7 @@ if updates:
     last_update_id = updates[-1]['update_id']
     cookiebot.getUpdates(offset=last_update_id+1)
 unnatended_threads = list()
-num_max_threads = 25
+num_max_threads = 50
 gc.enable()
 
 Send(cookiebot, mekhyID, 'I am online')
