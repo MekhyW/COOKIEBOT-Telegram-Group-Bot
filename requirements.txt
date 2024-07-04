@@ -12,3 +12,4 @@ price-parser
 openai
 PyJWT
 spamwatch
+psutil
