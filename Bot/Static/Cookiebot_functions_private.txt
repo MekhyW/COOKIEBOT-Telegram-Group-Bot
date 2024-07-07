@@ -1,1 +1,2 @@
 commands - Lists bot commands
+privacy - Privacy policy

@@ -46,6 +46,8 @@ def thread_function(msg):
                     Grupos(cookiebot, msg, chat_id, 'eng')
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, 'eng')
+                elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
+                    Privacy(cookiebot, msg, chat_id, 'eng')
                 elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == mekhyID:
                     os._exit(0)
                 elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == mekhyID:
@@ -136,6 +138,8 @@ def thread_function(msg):
                     reply_to_message_id=msg['message_id'])
                 elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     LeaveAndBlacklist(cookiebot, chat_id)
+                elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
+                    Privacy(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/reload", "/recarregar")):
                     GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     GetConfig(cookiebot, chat_id, ignorecache=True)

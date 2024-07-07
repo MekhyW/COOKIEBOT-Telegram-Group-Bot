@@ -29,6 +29,10 @@ def PvDefaultMessage(cookiebot, msg, chat_id, isBombot):
                 [InlineKeyboardButton(text="Test/assistance Group 🧪", url=testchat_link)]
             ]))
 
+def Privacy(cookiebot, msg, chat_id, language):
+    with open('Static/privacy.html', 'r') as file:
+        privacy_text = file.read()
+    Send(cookiebot, chat_id, privacy_text, msg_to_reply=msg, language=language, parse_mode='HTML')
 
 def TaVivo(cookiebot, msg, chat_id, language, isBombot=False):
     ReactToMessage(msg, '👍', isBombot=isBombot)

@@ -43,6 +43,6 @@ analysis - Inspect elements of a message
 commands - Lists bot commands
 configure - Configure the bot
 reload - Reload settings cache
-
+privacy - Privacy policy
 
 Talk to Mekhy to add your own command or teach the bot something!

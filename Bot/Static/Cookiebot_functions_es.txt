@@ -43,6 +43,6 @@ analisis - Analizar mensaje
 comandos - enumera los comandos del bot
 configurar - Configurar el bot
 reload - Recarregar cache de configuracion
-
+privacidad - Política de privacidad
 
 ¡Habla con Mekhy para agregar tu propio comando o enseñarle algo al bot!
