@@ -22,8 +22,6 @@ pip3 install -r requirements.txt --break-system-packages
 cd Bot
 nano cookiebot_backendauth.json # Add your credentials
 nano cookiebot_basecredentials.json # Add your credentials
-nano cookiebot_cloudserviceaccount.json # Add your credentials
-nano cookiebot_pubsub.json # Add your credentials
 ```
 
 ## Set timezone
