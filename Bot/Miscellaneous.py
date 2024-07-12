@@ -293,9 +293,23 @@ def Sorte(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
 
 def Destroy(cookiebot, msg, chat_id, language, isBombot=False):
-    instru = "Responda a um vídeo, foto, audio, gif ou sticker com o comando para distorcer (ou use /distort pfp)"
+    if language == 'pt':
+        instru = "Responda a um vídeo, foto, audio, gif ou sticker com o comando para distorcer (ou use /zoar pfp)"
+    else:
+        instru = "Reply to a video, photo, audio, gif or sticker with the command to distort (or use /destroy pfp)"
     if msg['text'].endswith('pfp'):
-        pass
+        SendChatAction(cookiebot, chat_id, 'upload_photo')
+        token = bombotTOKEN if isBombot else cookiebotTOKEN
+        file_path_telegram = cookiebot.getFile(cookiebot.getUserProfilePhotos(msg['from']['id'])['photos'][0][-1]['file_id'])['file_path']
+        r = requests.get(f"https://api.telegram.org/file/bot{token}/{file_path_telegram}", allow_redirects=True, timeout=10)
+        filename = file_path_telegram.split('/')[-1]
+        with open(filename, 'wb') as f:
+            f.write(r.content)
+        Distortioner.distortioner(filename)
+        with open('distorted.jpg', 'rb') as photo:
+            cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
+        os.remove('distorted.jpg')
+        os.remove(filename)
     elif not 'reply_to_message' in msg:
         Send(cookiebot, chat_id, instru, msg, language)
         return
@@ -336,5 +350,13 @@ def Destroy(cookiebot, msg, chat_id, language, isBombot=False):
             cookiebot.sendSticker(chat_id, sticker, reply_to_message_id=msg['message_id'])
         os.remove('distorted.png')
         os.remove(sticker_file)
+    elif 'animation' in msg['reply_to_message']:
+        SendChatAction(cookiebot, chat_id, 'upload_video')
+        animation_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'animation', isBombot=isBombot, downloadfile=True)
+        Distortioner.distortioner(animation_file)
+        with open('distorted.mp4', 'rb') as animation:
+            cookiebot.sendAnimation(chat_id, animation, reply_to_message_id=msg['message_id'])
+        os.remove('distorted.mp4')
+        os.remove(animation_file)
     else:
         Send(cookiebot, chat_id, instru, msg, language)
