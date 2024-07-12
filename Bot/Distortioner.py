@@ -140,8 +140,7 @@ def distortioner(input_filename):
             pass
         try:
             semaphore_images = True
-            output_path = 'distorted.jpg' if input_path.suffix.lower() == '.jpg' else 'distorted.png'
-            process_image(input_filename, output_path, 25)
+            process_image(input_filename, 'distorted.jpg', 25)
         except Exception as e:
             print(e)
         finally:
