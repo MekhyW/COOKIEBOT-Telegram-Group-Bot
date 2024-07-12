@@ -183,7 +183,7 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/sorte", "/fortunecookie", "/suerte")):
                         Sorte(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/distort", "/distorcer", "/distorsionar")):
-                        Distort(cookiebot, msg, chat_id, language)
+                        Distort(cookiebot, msg, chat_id, language, isBombot=isBombot)
                 elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and utilityfunctions:
                     Dado(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/patas", "/bff")):
