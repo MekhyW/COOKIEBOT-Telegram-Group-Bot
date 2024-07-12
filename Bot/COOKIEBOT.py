@@ -157,7 +157,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
                                                 "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
                                                 "/batalha", "/battle", "/batalla", "/desenterrar", "/unearth", "/morte", "/death", "/muerte", "/sorte", "/fortunecookie", "/suerte",
-                                                "/distort", "/distorcer", "/distorsionar")):
+                                                "/zoar", "/destroy", "/destruir")):
                     if not funfunctions:
                         NotifyFunOff(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
@@ -182,8 +182,8 @@ def thread_function(msg):
                         Morte(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/sorte", "/fortunecookie", "/suerte")):
                         Sorte(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/distort", "/distorcer", "/distorsionar")):
-                        Distort(cookiebot, msg, chat_id, language, isBombot=isBombot)
+                    elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
+                        Destroy(cookiebot, msg, chat_id, language, isBombot=isBombot)
                 elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and utilityfunctions:
                     Dado(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/patas", "/bff")):

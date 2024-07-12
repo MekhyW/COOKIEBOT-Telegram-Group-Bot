@@ -20,7 +20,7 @@ anything - send a picture of what you want
 searchsource - Searches for the source of an artwork
 meme - Generate a meme
 battle - Who wins in a fight
-distort - Distorts anything you want
+destroy - Distorts a video image gif sticker audio or pfp
 fortunecookie - Open a fortune cookie
 random - Send a media from some group
 drawingidea - No more art block

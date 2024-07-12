@@ -292,7 +292,7 @@ def Sorte(cookiebot, msg, chat_id, language):
     DeleteMessage(cookiebot, (str(chat_id), str(anim_id)))
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
 
-def Distort(cookiebot, msg, chat_id, language, isBombot=False):
+def Destroy(cookiebot, msg, chat_id, language, isBombot=False):
     instru = "Responda a um vídeo, foto, audio, gif ou sticker com o comando para distorcer (ou use /distort pfp)"
     if msg['text'].endswith('pfp'):
         pass

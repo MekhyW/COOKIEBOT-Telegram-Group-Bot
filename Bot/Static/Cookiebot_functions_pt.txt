@@ -20,7 +20,7 @@ qualquercoisa - Manda uma foto do que vc quiser
 buscarfonte - Pesquisa a fonte de uma obra de arte
 meme - Gera um meme
 batalha - Quem ganha em uma luta
-distorcer - Distorce o que vc quiser
+zoar - Distorce um video imagem gif sticker audio ou pfp
 sorte - Biscoito da sorte
 aleatorio - Manda uma mídia de algum grupo
 ideiadesenho - Chega de art block
