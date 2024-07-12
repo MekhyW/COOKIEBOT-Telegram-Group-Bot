@@ -304,6 +304,7 @@ def Distort(cookiebot, msg, chat_id, language, isBombot=False):
         with open('distorted.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
         os.remove('distorted.mp4')
+        os.remove(video_file)
     elif 'photo' in msg['reply_to_message']:
         SendChatAction(cookiebot, chat_id, 'upload_photo')
         photo_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'photo', isBombot=isBombot, downloadfile=True)
@@ -311,6 +312,7 @@ def Distort(cookiebot, msg, chat_id, language, isBombot=False):
         with open('distorted.jpg', 'rb') as photo:
             cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
         os.remove('distorted.jpg')
+        os.remove(photo_file)
     elif 'audio' in msg['reply_to_message'] or 'voice' in msg['reply_to_message']:
         SendChatAction(cookiebot, chat_id, 'upload_voice')
         if 'audio' in msg['reply_to_message']:
@@ -321,6 +323,7 @@ def Distort(cookiebot, msg, chat_id, language, isBombot=False):
         with open('distorted.mp3', 'rb') as audio:
             cookiebot.sendAudio(chat_id, audio, reply_to_message_id=msg['message_id'])
         os.remove('distorted.mp3')
+        os.remove(audio_file)
     elif 'sticker' in msg['reply_to_message']:
         SendChatAction(cookiebot, chat_id, 'upload_photo')
         sticker_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'sticker', isBombot=isBombot, downloadfile=True)
@@ -328,5 +331,6 @@ def Distort(cookiebot, msg, chat_id, language, isBombot=False):
         with open('distorted.png', 'rb') as sticker:
             cookiebot.sendSticker(chat_id, sticker, reply_to_message_id=msg['message_id'])
         os.remove('distorted.png')
+        os.remove(sticker_file)
     else:
         Send(cookiebot, chat_id, instru, msg, language)
