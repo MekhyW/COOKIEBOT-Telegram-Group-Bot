@@ -107,7 +107,7 @@ def distort_audiofile(in_audio, audio_freq, audio_mod, out_filename):
     audio = ffmpeg.input(in_audio).audio.filter("vibrato", f=audio_freq, d=audio_mod)
     audio.output(out_filename).run(overwrite_output=True)
 
-def distortioner(input_filename):
+def distortioner(input_filename, is_gif=False):
     global semaphore_videos, semaphore_audios, semaphore_images
     input_path = Path(input_filename)
     if input_path.suffix.lower() in ['.mp4', '.mov', '.avi']:
@@ -125,7 +125,10 @@ def distortioner(input_filename):
             asyncio.run(distort_video(capture, output, 60, None, frames - 1))
             capture.release()
             output.release()
-            distort_audio('tmp.mp4', 'preprocessed.mp4', 10, 1, 'output.mp4')
+            if is_gif:
+                subprocess.run(['ffmpeg', '-i', 'tmp.mp4', '-vf', 'fps=10,scale=-2:360:flags=lanczos', 'output.mp4', '-y'], check=True)
+            else:
+                distort_audio('tmp.mp4', 'preprocessed.mp4', 10, 1, 'output.mp4')
         except Exception as e:
             print(e)
         finally:

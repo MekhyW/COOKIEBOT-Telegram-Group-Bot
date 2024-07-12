@@ -312,8 +312,7 @@ def Destroy(cookiebot, msg, chat_id, language, isBombot=False):
         os.remove(filename)
     elif not 'reply_to_message' in msg:
         Send(cookiebot, chat_id, instru, msg, language)
-        return
-    if 'video' in msg['reply_to_message']:
+    elif 'video' in msg['reply_to_message']:
         thismighttakeawhile = cookiebot.sendMessage(chat_id, "(hold on, this might take a while...)", reply_to_message_id=msg['message_id'])
         SendChatAction(cookiebot, chat_id, 'upload_video')
         video_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'video', isBombot=isBombot, downloadfile=True)
@@ -353,7 +352,7 @@ def Destroy(cookiebot, msg, chat_id, language, isBombot=False):
     elif 'animation' in msg['reply_to_message']:
         SendChatAction(cookiebot, chat_id, 'upload_video')
         animation_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'animation', isBombot=isBombot, downloadfile=True)
-        Distortioner.distortioner(animation_file)
+        Distortioner.distortioner(animation_file, is_gif=True)
         with open('distorted.mp4', 'rb') as animation:
             cookiebot.sendAnimation(chat_id, animation, reply_to_message_id=msg['message_id'])
         os.remove('distorted.mp4')
