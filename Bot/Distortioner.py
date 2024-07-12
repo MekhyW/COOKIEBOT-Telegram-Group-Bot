@@ -122,7 +122,7 @@ def distortioner(input_filename):
             video_height = int(capture.get(cv2.CAP_PROP_FRAME_HEIGHT))
             frames = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
             output = cv2.VideoWriter('tmp.mp4', cv2.VideoWriter_fourcc(*'mp4v'), fps, (video_width, video_height))
-            asyncio.run(distort_video(capture, output, 50, None, frames - 1))
+            asyncio.run(distort_video(capture, output, 60, None, frames - 1))
             capture.release()
             output.release()
             distort_audio('tmp.mp4', 'preprocessed.mp4', 10, 1, 'output.mp4')
