@@ -126,7 +126,7 @@ def distortioner(input_filename, is_gif=False):
             capture.release()
             output.release()
             if is_gif:
-                subprocess.run(['ffmpeg', '-i', 'tmp.mp4', '-vf', 'fps=10,scale=-2:360:flags=lanczos', 'output.mp4', '-y'], check=True)
+                subprocess.run(['ffmpeg', '-i', 'tmp.mp4', '-vf', 'fps=10,scale=-2:360:flags=lanczos', 'distorted.mp4', '-y'], check=True)
             else:
                 distort_audio('tmp.mp4', 'preprocessed.mp4', 10, 1, 'output.mp4')
         except Exception as e:
