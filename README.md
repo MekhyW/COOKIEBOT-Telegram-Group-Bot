@@ -10,6 +10,7 @@ sudo apt-get install git-all
 sudo apt install python3.11
 sudo apt install python3-pip
 sudo apt install ffmpeg
+sudo apt-get install libmagickwand-dev
 sudo apt-get install screen
 git clone https://github.com/MekhyW/COOKIEBOT-Telegram-Group-Bot.git
 cd COOKIEBOT-Telegram-Group-Bot
