@@ -73,7 +73,7 @@ def GetMediaContent(cookiebot, msg, media_type, isBombot=False, downloadfile=Fal
         try:
             file_path_telegram = cookiebot.getFile(msg[media_type]['file_id'])['file_path']
         except TypeError:
-            file_path_telegram = cookiebot.getFile(msg[media_type][0]['file_id'])['file_path']
+            file_path_telegram = cookiebot.getFile(msg[media_type][-1]['file_id'])['file_path']
         url = f"https://api.telegram.org/file/bot{token}/{file_path_telegram}"
         r = requests.get(url, allow_redirects=True, timeout=10)
         if not downloadfile:
