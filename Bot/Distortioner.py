@@ -133,9 +133,12 @@ def distortioner(input_filename, is_gif=False):
             print(e)
         finally:
             semaphore_videos = False
-            os.remove('preprocessed.mp4')
-            os.remove('tmp.mp4')
-            os.remove('output.mp4')
+            if os.path.exists('preprocessed.mp4'):
+                os.remove('preprocessed.mp4')
+            if os.path.exists('tmp.mp4'):
+                os.remove('tmp.mp4')
+            if os.path.exists('output.mp4'):
+                os.remove('output.mp4')
             shutil.rmtree('frames_distorted')
             shutil.rmtree('frames_original')
     elif input_path.suffix.lower() in ['.jpg', '.png']:
