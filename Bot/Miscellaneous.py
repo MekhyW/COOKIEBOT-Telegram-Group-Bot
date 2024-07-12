@@ -293,16 +293,20 @@ def Sorte(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
 
 def Distort(cookiebot, msg, chat_id, language, isBombot=False):
-    instru = "Responda a um vídeo, foto, audio ou sticker com o comando para distorcer"
-    if not 'reply_to_message' in msg:
+    instru = "Responda a um vídeo, foto, audio, gif ou sticker com o comando para distorcer (ou use /distort pfp)"
+    if msg['text'].endswith('pfp'):
+        pass
+    elif not 'reply_to_message' in msg:
         Send(cookiebot, chat_id, instru, msg, language)
         return
     if 'video' in msg['reply_to_message']:
+        thismighttakeawhile = cookiebot.sendMessage(chat_id, "(hold on, this might take a while...)", reply_to_message_id=msg['message_id'])
         SendChatAction(cookiebot, chat_id, 'upload_video')
         video_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'video', isBombot=isBombot, downloadfile=True)
         Distortioner.distortioner(video_file)
         with open('distorted.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
+        cookiebot.deleteMessage((chat_id, thismighttakeawhile['message_id']))
         os.remove('distorted.mp4')
         os.remove(video_file)
     elif 'photo' in msg['reply_to_message']:
