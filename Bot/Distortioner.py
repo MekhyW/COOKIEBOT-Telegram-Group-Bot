@@ -7,6 +7,10 @@ from pathlib import Path
 from wand.image import Image
 import ffmpeg
 
+semaphore_videos = False
+semaphore_audios = False
+semaphore_images = False
+
 class TicketedDict(dict):
     def __init__(self, *args, **kwargs):
         self._ni = 0
@@ -104,9 +108,13 @@ def distort_audiofile(in_audio, audio_freq, audio_mod, out_filename):
     audio.output(out_filename).run(overwrite_output=True)
 
 def distortioner(input_filename):
+    global semaphore_videos, semaphore_audios, semaphore_images
     input_path = Path(input_filename)
     if input_path.suffix.lower() in ['.mp4', '.mov', '.avi']:
+        while semaphore_videos:
+            pass
         try:
+            semaphore_videos = True
             subprocess.run(['ffmpeg', '-i', input_filename, '-t', '15', '-r', '24', '-vf', 'scale=-2:360', 'preprocessed.mp4', '-y'], check=True)
             capture = cv2.VideoCapture('preprocessed.mp4')
             fps = capture.get(cv2.CAP_PROP_FPS)
@@ -121,16 +129,33 @@ def distortioner(input_filename):
         except Exception as e:
             print(e)
         finally:
+            semaphore_videos = False
             os.remove('preprocessed.mp4')
             os.remove('tmp.mp4')
             os.remove('output.mp4')
             shutil.rmtree('frames_distorted')
             shutil.rmtree('frames_original')
     elif input_path.suffix.lower() in ['.jpg', '.png']:
-        output_path = 'distorted.jpg' if input_path.suffix.lower() == '.jpg' else 'distorted.png'
-        process_image(input_filename, output_path, 25)
+        while semaphore_images:
+            pass
+        try:
+            semaphore_images = True
+            output_path = 'distorted.jpg' if input_path.suffix.lower() == '.jpg' else 'distorted.png'
+            process_image(input_filename, output_path, 25)
+        except Exception as e:
+            print(e)
+        finally:
+            semaphore_images = False
     elif input_path.suffix.lower() in ['.mp3', '.wav', '.ogg', '.oga']:
-        distort_audiofile(input_filename, 10, 1, 'distorted.mp3')
+        while semaphore_audios:
+            pass
+        try:
+            semaphore_audios = True
+            distort_audiofile(input_filename, 10, 1, 'distorted.mp3')
+        except Exception as e:
+            print(e)
+        finally:
+            semaphore_audios = False
     else:
         raise ValueError("Unsupported file type")
 
