@@ -308,7 +308,7 @@ def Distort(cookiebot, msg, chat_id, language, isBombot=False):
     elif 'photo' in msg['reply_to_message']:
         SendChatAction(cookiebot, chat_id, 'upload_photo')
         photo_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'photo', isBombot=isBombot, downloadfile=True)
-        Distortioner.process_image(photo_file, 'distorted.jpg', 25)
+        Distortioner.distortioner(photo_file)
         with open('distorted.jpg', 'rb') as photo:
             cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
         os.remove('distorted.jpg')
