@@ -20,6 +20,7 @@ cualquiercosa - envía una foto de lo que quieres
 buscarfuente - Busca la fuente de una obra de arte
 meme - Generar un meme
 batalla - ¿Quién gana en una pelea?
+distorsionar - Distorsiona lo que quieras
 suerte - Abrir una galleta de la fortuna
 aleatorio - Enviar un medio de algún grupo
 ideadibujo - no mas bloques de arte

@@ -67,13 +67,20 @@ def SendChatAction(cookiebot, chat_id, action):
     except urllib3.exceptions.ProtocolError:
         cookiebot.sendChatAction(chat_id, action)
 
-def GetVoiceMessage(cookiebot, msg, isBombot=False):
+def GetMediaContent(cookiebot, msg, media_type, isBombot=False, downloadfile=False):
     token = bombotTOKEN if isBombot else cookiebotTOKEN
     try:
-        r = requests.get(f"https://api.telegram.org/file/bot{token}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=10)
+        file_path_telegram = cookiebot.getFile(msg[media_type]['file_id'])['file_path']
+        url = f"https://api.telegram.org/file/bot{token}/{file_path_telegram}"
+        r = requests.get(url, allow_redirects=True, timeout=10)
+        if not downloadfile:
+            return r.content
+        filename = file_path_telegram.split('/')[-1]
+        with open(filename, 'wb') as f:
+            f.write(r.content)
+        return filename
     except urllib3.exceptions.ProtocolError:
-        r = requests.get(f"https://api.telegram.org/file/bot{token}/{cookiebot.getFile(msg['voice']['file_id'])['file_path']}", allow_redirects=True, timeout=10)
-    return r.content
+        GetMediaContent(cookiebot, msg, isBombot, downloadfile)
 
 def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None, parse_mode='MarkdownV2'):
     try:

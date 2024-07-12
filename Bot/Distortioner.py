@@ -97,7 +97,7 @@ def distort_audio(distorted_video, in_audio, audio_freq, audio_mod, out_filename
     video = ffmpeg.input(distorted_video).video
     audio = ffmpeg.input(in_audio).audio.filter("vibrato", f=audio_freq, d=audio_mod)
     (ffmpeg.concat(video, audio, v=1, a=1).output(out_filename).run(overwrite_output=True))
-    subprocess.run(['ffmpeg', '-i', out_filename, '-t', '15', '-r', '24', '-vf', 'scale=-2:720', 'distorted.mp4'], check=True)
+    subprocess.run(['ffmpeg', '-i', out_filename, '-t', '15', '-r', '24', '-vf', 'scale=-2:720', 'distorted.mp4', '-y'], check=True)
 
 def distort_audiofile(in_audio, audio_freq, audio_mod, out_filename):
     audio = ffmpeg.input(in_audio).audio.filter("vibrato", f=audio_freq, d=audio_mod)
@@ -107,7 +107,7 @@ def distortioner(input_filename):
     input_path = Path(input_filename)
     if input_path.suffix.lower() in ['.mp4', '.mov', '.avi']:
         try:
-            subprocess.run(['ffmpeg', '-i', input_filename, '-t', '15', '-r', '24', '-vf', 'scale=-2:360', 'preprocessed.mp4'], check=True)
+            subprocess.run(['ffmpeg', '-i', input_filename, '-t', '15', '-r', '24', '-vf', 'scale=-2:360', 'preprocessed.mp4', '-y'], check=True)
             capture = cv2.VideoCapture('preprocessed.mp4')
             fps = capture.get(cv2.CAP_PROP_FPS)
             video_width = int(capture.get(cv2.CAP_PROP_FRAME_WIDTH))
@@ -135,4 +135,4 @@ def distortioner(input_filename):
         raise ValueError("Unsupported file type")
 
 if __name__ == '__main__':
-    distortioner('audio_2024-07-11_01-40-53.ogg')
+    distortioner('IMG_6233.MP4')

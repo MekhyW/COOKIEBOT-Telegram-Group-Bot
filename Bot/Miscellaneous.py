@@ -1,8 +1,9 @@
 from universal_funcs import *
 from Publisher import postmail_chat_link
+import Distortioner
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
-num_chats = 589
+num_chats = 597
 
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -290,3 +291,42 @@ def Sorte(cookiebot, msg, chat_id, language):
     time.sleep(4)
     DeleteMessage(cookiebot, (str(chat_id), str(anim_id)))
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
+
+def Distort(cookiebot, msg, chat_id, language):
+    instru = "Responda a um vídeo, foto, audio ou sticker com o comando para distorcer"
+    if not 'reply_to_message' in msg:
+        Send(cookiebot, chat_id, instru, msg, language)
+        return
+    if 'video' in msg['reply_to_message']:
+        SendChatAction(cookiebot, chat_id, 'upload_video')
+        video_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'video')
+        Distortioner.distortioner(video_file)
+        with open('distorted.mp4', 'rb') as video:
+            cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
+        os.remove('distorted.mp4')
+    elif 'photo' in msg['reply_to_message']:
+        SendChatAction(cookiebot, chat_id, 'upload_photo')
+        photo_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'photo')
+        Distortioner.process_image(photo_file, 'distorted.jpg', 25)
+        with open('distorted.jpg', 'rb') as photo:
+            cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
+        os.remove('distorted.jpg')
+    elif 'audio' in msg['reply_to_message'] or 'voice' in msg['reply_to_message']:
+        SendChatAction(cookiebot, chat_id, 'upload_voice')
+        if 'audio' in msg['reply_to_message']:
+            audio_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'audio')
+        else:
+            audio_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'voice')
+        Distortioner.distort_audiofile(audio_file, 10, 1, 'distorted.mp3')
+        with open('distorted.mp3', 'rb') as audio:
+            cookiebot.sendAudio(chat_id, audio, reply_to_message_id=msg['message_id'])
+        os.remove('distorted.mp3')
+    elif 'sticker' in msg['reply_to_message']:
+        SendChatAction(cookiebot, chat_id, 'upload_photo')
+        sticker_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'sticker')
+        Distortioner.process_image(sticker_file, 'distorted.png', 25)
+        with open('distorted.png', 'rb') as sticker:
+            cookiebot.sendSticker(chat_id, sticker, reply_to_message_id=msg['message_id'])
+        os.remove('distorted.png')
+    else:
+        Send(cookiebot, chat_id, instru, msg, language)

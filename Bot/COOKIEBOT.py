@@ -101,7 +101,7 @@ def thread_function(msg):
                 ReportAsk(cookiebot, msg, chat_id, msg['left_chat_member']['id'], language)
         elif content_type == "voice":
             if utilityfunctions or funfunctions:
-                audio = GetVoiceMessage(cookiebot, msg, isBombot=isBombot)
+                audio = GetMediaContent(cookiebot, msg, 'voice', isBombot=isBombot)
                 if utilityfunctions:
                     Identify_music(cookiebot, msg, chat_id, audio, language)
                 if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id']:
@@ -156,7 +156,8 @@ def thread_function(msg):
                     ReverseSearch(cookiebot, msg, chat_id, language, isBombot=isBombot)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
                                                 "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
-                                                "/batalha", "/battle", "/batalla", "/desenterrar", "/unearth", "/morte", "/death", "/muerte", "/sorte", "/fortunecookie", "/suerte")):
+                                                "/batalha", "/battle", "/batalla", "/desenterrar", "/unearth", "/morte", "/death", "/muerte", "/sorte", "/fortunecookie", "/suerte",
+                                                "/distort", "/distorcer", "/distorsionar")):
                     if not funfunctions:
                         NotifyFunOff(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
@@ -181,6 +182,8 @@ def thread_function(msg):
                         Morte(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/sorte", "/fortunecookie", "/suerte")):
                         Sorte(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/distort", "/distorcer", "/distorsionar")):
+                        Distort(cookiebot, msg, chat_id, language)
                 elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and utilityfunctions:
                     Dado(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/patas", "/bff")):
