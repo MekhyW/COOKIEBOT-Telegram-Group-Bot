@@ -130,7 +130,7 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
             current_configs[6] = bool(int(new_val))
         elif "Use 1 to indicate the chat is SFW, or 0 for NSFW." in msg['reply_to_message']['text']:
             current_configs[1] = bool(int(new_val))
-        elif "Use 1 to allow the bot to post publications from other channels, or 0 to not allow" in msg['reply_to_message']['text']:
+        elif "Use 1 to allow the bot to post publications from other channels" in msg['reply_to_message']['text']:
             current_configs[8] = bool(int(new_val))
         elif "Use 1 if the bot should add posts sent in the group to the publisher queue, or 0 if not" in msg['reply_to_message']['text']:
             current_configs[9] = bool(int(new_val))
