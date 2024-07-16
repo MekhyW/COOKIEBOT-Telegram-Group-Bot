@@ -206,12 +206,13 @@ def CheckBlacklist(cookiebot, msg, chat_id, language):
         return True
     
 def CheckEvildb(cookiebot, msg, chat_id, language):
-    ids, usernames = load_evildb()
-    if str(msg['new_chat_participant']['id']) in ids or ('username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in usernames):
-        BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-        Send(cookiebot, chat_id, "Bani o usuário recém\-chegado por *ser flagrado como conta falsa/spam em outros chats*", language=language)
-        return True
     return False
+    #ids, usernames = load_evildb()
+    #if str(msg['new_chat_participant']['id']) in ids or ('username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in usernames):
+    #    BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
+    #    Send(cookiebot, chat_id, "Bani o usuário recém\-chegado por *ser flagrado como conta falsa/spam em outros chats*", language=language)
+    #    return True
+    #return False
     
 def load_evildb():
     global evildb_ids, evildb_usernames
