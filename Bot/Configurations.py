@@ -74,7 +74,6 @@ def GetConfig(cookiebot, chat_id, ignorecache=False):
         print(e)
     return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
 
-
 def Configurar(cookiebot, msg, chat_id, listaadmins_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) in listaadmins_id or str(msg['from']['id']) == str(mekhyID):
@@ -105,7 +104,6 @@ def Configurar(cookiebot, msg, chat_id, listaadmins_id, language):
         Send(cookiebot, chat_id, "Você não tem permissão para configurar o bot\!\n>\(Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada\!\)", msg, language)
         with open('Static/remove_anonymous_tutorial.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video)
-
 
 def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
@@ -151,7 +149,6 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])
 
-
 def ConfigVariableButton(cookiebot, msg, query_data):
     chat = query_data.split()[2]
     if query_data.startswith('k'):
@@ -191,7 +188,6 @@ def SettarLanguage(cookiebot, msg, chat_id, language_code):
     msg['reply_to_message'] = {}
     msg['reply_to_message']['text'] = f'Chat = {chat_id}\nBot language for the chat. Use pt for portuguese, eng for english or es for spanish'
     ConfigurarSettar(cookiebot, msg, mekhyID)
-    
 
 def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
     if str(msg['from']['id']) not in listaadmins_id:
@@ -208,7 +204,6 @@ def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
 def NovoBemvindo(cookiebot, msg, chat_id):
     SendChatAction(cookiebot, chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name", reply_to_message_id=msg['message_id'])
-
 
 def AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
     if str(msg['from']['id']) not in listaadmins_id:
