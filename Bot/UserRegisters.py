@@ -32,28 +32,31 @@ def Everyone(cookiebot, msg, chat_id, listaadmins, language, isBombot=False):
     SendChatAction(cookiebot, chat_id, 'typing')
     if len(listaadmins) > 0 and 'from' in msg and str(msg['from']['username']) not in listaadmins:
         Send(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo\!\n>\(Se está falando como canal, entre e use o comando como user\)", msg, language)
-    else:
-        members = GetMembersChat(chat_id)
-        if len(members) < 2:
-            Send(cookiebot, chat_id, "Ainda não vi nenhum membro no chat para chamar\!\nCom o tempo, o bot vai reconhecer os membros e permitir chamar todos.", msg, language)
-            return
-        ReactToMessage(msg, '🫡', isBombot=isBombot)
-        usernames_list = []
-        result = [f"Number of known users: {len(members)}\n"]
-        top_message_index = 0
-        for member in members:
-            if 'user' in member:
-                usernames_list.append(member['user'])
-        for admin in listaadmins:
-            if admin not in usernames_list:
-                usernames_list.append(admin)
-        for username in usernames_list:
+        return
+    members = GetMembersChat(chat_id)
+    if len(members) < 2:
+        Send(cookiebot, chat_id, "Ainda não vi nenhum membro no chat para chamar\!\nCom o tempo, o bot vai reconhecer os membros e permitir chamar todos.", msg, language)
+        return
+    ReactToMessage(msg, '🫡', isBombot=isBombot)
+    usernames_list = []
+    result = [f"Number of known users: {len(members)}\n"]
+    top_message_index = 0
+    for member in members:
+        if 'user' in member:
+            usernames_list.append(member['user'])
+    for admin in listaadmins:
+        if admin not in usernames_list:
+            usernames_list.append(admin)
+    for username in usernames_list:
+        try:
             if len(result[top_message_index]) + len(username) + 2 > 4096:
                 result.append("")
                 top_message_index += 1
-            result[top_message_index] += f"@{username} "
-        for resulting_message in result:
-            Send(cookiebot, chat_id, resulting_message, msg_to_reply=msg)
+        except TypeError:
+            pass
+        result[top_message_index] += f"@{username} "
+    for resulting_message in result:
+        Send(cookiebot, chat_id, resulting_message, msg_to_reply=msg)
 
 def ReportAsk(cookiebot, msg, chat_id, targetid, language):
     SendChatAction(cookiebot, chat_id, 'typing')
