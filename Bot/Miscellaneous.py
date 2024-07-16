@@ -3,7 +3,8 @@ from Publisher import postmail_chat_link
 import Distortioner
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
-num_chats = 597
+updateschannel_link = "https://t.me/cookiebotupdates"
+num_chats = 604
 
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -17,6 +18,7 @@ def PvDefaultMessage(cookiebot, msg, chat_id, isBombot):
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url=newchat_link)],
                 [InlineKeyboardButton(text="Mural de Divulgações 📬", url=postmail_chat_link)],
+                [InlineKeyboardButton(text="Canal de Atualizações 📢", url=updateschannel_link)],
                 [InlineKeyboardButton(text="Grupo de teste/assistência 🧪", url=testchat_link)]
             ]))
     else:
@@ -27,6 +29,7 @@ def PvDefaultMessage(cookiebot, msg, chat_id, isBombot):
             reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Add me to a Group 👋", url=newchat_link)],
                 [InlineKeyboardButton(text="Shared Posts 📬", url=postmail_chat_link)],
+                [InlineKeyboardButton(text="Updates Channel 📢", url=updateschannel_link)],
                 [InlineKeyboardButton(text="Test/assistance Group 🧪", url=testchat_link)]
             ]))
 
