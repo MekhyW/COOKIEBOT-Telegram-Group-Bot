@@ -17,6 +17,7 @@ COMANDOS MANUALES:
 everyone - los administradores pueden llamar a todos los miembros del grupo
 adm - Llamar a los administradores del chat
 cualquiercosa - envía una foto de lo que quieres
+youtube - Buscar un video en youtube
 buscarfuente - Busca la fuente de una obra de arte
 meme - Generar un meme
 batalla - ¿Quién gana en una pelea?

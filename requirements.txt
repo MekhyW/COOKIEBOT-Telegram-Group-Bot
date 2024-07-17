@@ -6,6 +6,7 @@ Wand
 ffmpeg-python
 PyJWT
 deep-translator
+google-api-python-client
 Google-Images-Search
 saucenao_api
 ShazamAPI

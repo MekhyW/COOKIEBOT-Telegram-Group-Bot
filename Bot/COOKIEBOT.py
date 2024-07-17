@@ -208,6 +208,8 @@ def thread_function(msg):
                     IdeiaDesenho(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions:
                     PromptQualquerCoisa(cookiebot, msg, chat_id, language)
+                elif msg['text'].startswith("/youtube") and utilityfunctions:
+                    YoutubeSearch(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/configurar", "/configure")):
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     Configurar(cookiebot, msg, chat_id, listaadmins_id, language)

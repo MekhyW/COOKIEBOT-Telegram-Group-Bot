@@ -1,10 +1,11 @@
 from universal_funcs import *
 from UserRegisters import *
-import google_images_search, io
+import google_images_search, googleapiclient.discovery
 from saucenao_api import SauceNao, errors
 import cv2
 import numpy as np
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
+youtubesearcher = googleapiclient.discovery.build("youtube", "v3", developerKey=googleAPIkey)
 reverseimagesearcher = SauceNao(saucenao_key)
 templates_eng = os.listdir("Static/Meme/English")
 templates_pt = os.listdir("Static/Meme/Portuguese")
@@ -94,6 +95,22 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isBombot=False):
             print(e)
     ReactToMessage(msg, '🤷', is_big=False, isBombot=isBombot)
     Send(cookiebot, chat_id, "Não consegui achar uma imagem _\(ou era NSFW e eu filtrei\)_", msg, language)
+
+def YoutubeSearch(cookiebot, msg, chat_id, language):
+    if len(msg['text'].split()) == 1:
+        Send(cookiebot, chat_id, "Você precisa digitar o nome do vídeo\n>EXEMPLO: /youtube batata assada", msg, language)
+        return
+    query = msg['text'].split[1]
+    request = youtubesearcher.search().list(q=query, part="snippet", type="video", maxResults=50)
+    response = request.execute()
+    videos = response.get("items", [])
+    if not videos:
+        Send(cookiebot, chat_id, "Nenhum vídeo encontrado", msg, language)
+        return
+    random_video = random.choice(videos)
+    video_url = f"https://www.youtube.com/watch?v={random_video["id"]["videoId"]}"
+    video_description = random_video["snippet"]["description"]
+    Send(cookiebot, chat_id, f"<i>{video_url}</i>\n\n<b>{video_description}</b>", msg, language, parse_mode='HTML')
 
 def AddtoRandomDatabase(msg, chat_id, photo_id=''):
     if any(x in msg['chat']['title'].lower() for x in ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']):
