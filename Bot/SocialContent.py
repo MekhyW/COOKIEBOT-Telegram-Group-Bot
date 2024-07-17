@@ -108,7 +108,7 @@ def YoutubeSearch(cookiebot, msg, chat_id, language):
         Send(cookiebot, chat_id, "Nenhum vídeo encontrado", msg, language)
         return
     random_video = random.choice(videos)
-    video_url = f"https://www.youtube.com/watch?v={random_video["id"]["videoId"]}"
+    video_url = f"https://www.youtube.com/watch?v={random_video['id']['videoId']}"
     video_description = random_video["snippet"]["description"]
     Send(cookiebot, chat_id, f"<i>{video_url}</i>\n\n<b>{video_description}</b>", msg, language, parse_mode='HTML')
 
