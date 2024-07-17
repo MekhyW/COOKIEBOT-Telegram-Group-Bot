@@ -96,7 +96,7 @@ def Adm(cookiebot, msg, chat_id, listaadmins, language):
         response += f"\n{msg['from']['username']} chamando todos os administradores!"
     else:
         response += f"\n{msg['from']['first_name']} chamando todos os administradores!"
-    Send(cookiebot, chat_id, response, language=language)
+    Send(cookiebot, chat_id, response, language=language, parse_mode='HTML')
 
 def Quem(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
