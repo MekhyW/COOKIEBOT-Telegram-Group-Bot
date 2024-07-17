@@ -56,7 +56,7 @@ def Everyone(cookiebot, msg, chat_id, listaadmins, language, isBombot=False):
             pass
         result[top_message_index] += f"@{username} "
     for resulting_message in result:
-        Send(cookiebot, chat_id, resulting_message, msg_to_reply=msg)
+        Send(cookiebot, chat_id, resulting_message, msg_to_reply=msg, parse_mode='HTML')
 
 def ReportAsk(cookiebot, msg, chat_id, targetid, language):
     SendChatAction(cookiebot, chat_id, 'typing')
