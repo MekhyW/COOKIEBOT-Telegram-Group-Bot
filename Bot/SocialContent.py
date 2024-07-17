@@ -100,7 +100,7 @@ def YoutubeSearch(cookiebot, msg, chat_id, language):
     if len(msg['text'].split()) == 1:
         Send(cookiebot, chat_id, "Você precisa digitar o nome do vídeo\n>EXEMPLO: /youtube batata assada", msg, language)
         return
-    query = msg['text'].split[1]
+    query = msg['text'].split()[1]
     request = youtubesearcher.search().list(q=query, part="snippet", type="video", maxResults=50)
     response = request.execute()
     videos = response.get("items", [])
