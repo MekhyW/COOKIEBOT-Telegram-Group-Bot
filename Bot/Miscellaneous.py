@@ -219,11 +219,12 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                                   'As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais!'])
         day, month = 18, 4
         daysremaining = (datetime.datetime(datetime.datetime.now().year, month, day) - datetime.datetime.now()).days
-        if daysremaining < -5:
-            daysremaining += 365
-        elif daysremaining < 0:
-            daysremaining = 0
-        caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o Patas!</b>\n\n<i>{calltoaction}</i>\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @bananaa2024"
+        if daysremaining >= -5 and daysremaining <= 0:
+            caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
+        else:
+            if daysremaining < -5:
+                daysremaining += 365
+            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o Patas!</b>\n\n<i>{calltoaction}</i>\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @bananaa2024"
     elif msg['text'].lower().startswith('/bff'):
         directory = 'Static/Countdown/BFF'
         pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
@@ -236,11 +237,12 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                                   'Bombom nasceu na Fantástica Fábrica de Doces com intuito de reunir os furries na Brasil FurFest para muita festa e diversão. Aliás, se a festa tiver caipirinhas melhor ainda!'])
         day, month = 19, 7
         daysremaining = (datetime.datetime(datetime.datetime.now().year, month, day) - datetime.datetime.now()).days
-        if daysremaining < -5:
-            daysremaining += 365
-        elif daysremaining < 0:
-            daysremaining = 0
-        caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2024 - Hotel Assombrado!</b>\n\n<i>{calltoaction}\n#fiquenosheraton</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos à venda na porta, upgrades até 23/06/24 através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
+        if daysremaining >= -5 and daysremaining <= 0:
+            caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
+        else:
+            if daysremaining < -5:
+                daysremaining += 365
+            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2024 - Hotel Assombrado!</b>\n\n<i>{calltoaction}\n#fiquenosheraton</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos à venda na porta, upgrades até 23/06/24 através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
     cookiebot.sendPhoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='HTML')
     pic.close()
 
