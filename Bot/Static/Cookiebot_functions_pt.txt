@@ -35,6 +35,7 @@ rojao - Pra pra pra pra poooow
 desenterrar - Desenterra uma mensagem antiga
 patas - Evento furry de hotel em sorocaba
 bff - Evento furry de hotel em santos
+fursmeet - Evento furry de hotel em santa maria
 tavivo - Manda um ping de teste com data do servidor
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo

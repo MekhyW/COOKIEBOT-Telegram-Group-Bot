@@ -211,13 +211,12 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
     ReactToMessage(msg, '🔥', isBombot=isBombot)
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     if msg['text'].lower().startswith('/patas'):
-        directory = 'Static/Countdown/Patas'
-        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
+        day, month, year, directory = 18, 4, 2025, 'Static/Countdown/Patas'
         calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP!',
                                   'Este é um evento beneficiente em formato de convenção, para promover e celebrar a cultura de apreciação animais antropomóficos na região de Sorocaba. Foi criado para ajudar as entidades que prestam apoio aos idosos da região.',
                                   'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!',
                                   'As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais!'])
-        day, month, year = 18, 4, 2025
+        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
         if daysremaining >= -5 and daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
@@ -226,8 +225,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                 daysremaining += 365
             caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o Patas!</b>\n\n<i>{calltoaction}</i>\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @EventoPatas"
     elif msg['text'].lower().startswith('/bff'):
-        directory = 'Static/Countdown/BFF'
-        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
+        day, month, year, directory = 25, 7, 2025, 'Static/Countdown/BFF'
         calltoaction = random.choice(['O Sheraton Santos Hotel é reconhecidamente o melhor hotel de Santos. Localizado em frente ao Shopping Praiamar, o maior centro de compras da cidade, o hotel conta com ampla infraestrutura para atender o evento.',
                                   'A Brasil FurFest tem, entre outros objetivos, levantar fundos para caridade em prol do Projeto Social SOS Vida Pet Litoral, que ajuda protetores a manter abrigos para animais de rua na Baixada Santista',
                                   'Quem são os furries? O que é a Brasil FurFest? Descubra em youtube.com/watch?v=vuFGHSL8X34&ab_channel=BrasilFurFest',
@@ -237,7 +235,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                                   'Heróis e Vilões travarão uma batalha épica! Mal podemos esperar! Venha participar desta grande festa do furry fandom brasileiro com o hotel inteiro fechado para o evento!',
                                   'Mais de mil participantes! Isso mesmo: MIL! Desde 2024, batemos um recorde histórico para o furry fandom brasileiro, e tudo graças a vocês que vieram com toda a energia e alegria que só a nossa comunidade furry sabe trazer!',
                                   'Aurora Bloom virá como convidada de honra para a Brasil FurFest 2025, trazendo todo o seu charme e diversão para o evento!'])
-        day, month, year = 25, 7, 2025
+        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
         if daysremaining >= -5 and daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
@@ -245,6 +243,24 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
             while daysremaining < -5:
                 daysremaining += 365
             caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões!</b>\n\n<i>{calltoaction}\n#fiquenosheraton</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos à venda na porta, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
+    elif msg['text'].lower().startswith('/fursmeet'):
+        day, month, year, directory = 15, 11, 2024, 'Static/Countdown/FurSMeet'
+        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
+        calltoaction = random.choice(['O FurSMeet é uma convenção furry de 3 dias realizada em Santa Maria no Rio grande do Sul.Venha viver novas experiências, fazer amigos e se divertir muito no FurSMeet!',
+                                      'A oportunidade perfeita para se conectar com outros furries, participar de atividades emocionantes e criar memórias que durarão para sempre!',
+                                      'O objetivo do evento é reunir amantes da cultura antropomórfica da região Sul e de todo o Brasil para fazer novos amigos e viver grandes momentos!',
+                                      'Nós não lucramos com o evento e pretendemos ajudar futuramente instituições carentes doando o dinheiro que sobra do evento.',
+                                      'Por ainda ser um evento pequeno e termos opções de infraestrutura limitadas em Santa Maria, todo o valor do ingresso é investido no hotel, decorações e brindes sem sobrar dinheiro para doar por uma causa.',
+                                      'O Capibára pode ter essa fuça de gaúcho rabugento, mas tem um coração grande que nem o Rio Grande do Sul. Assim como qualquer capivara ele faz amizade com qualquer um! Pode ser um gato ou um jacaré, qualquer furry é bem vindo para ser seu amigo.',
+                                      'Um bom gaúcho sempre anda bem pilchado, então Capibára não dispensa sua boina, seu lenço e sua faixa pampa da cintura! Para completar ele não larga seu mate de jeito nenhum!'])
+        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
+        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
+        if daysremaining >= -5 and daysremaining <= 0:
+            caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
+        else:
+            while daysremaining < -5:
+                daysremaining += 365
+            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet 2025!</b>\n\n<i>{calltoaction}</i>\n🦕🦫🦕🦫🦕🦫🦕🦫🦕🦫🦕🦫🦕🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeet"
     cookiebot.sendPhoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='HTML')
     pic.close()
 
