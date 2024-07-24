@@ -252,7 +252,8 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                                       'Nós não lucramos com o evento e pretendemos ajudar futuramente instituições carentes doando o dinheiro que sobra do evento.',
                                       'Por ainda ser um evento pequeno e termos opções de infraestrutura limitadas em Santa Maria, todo o valor do ingresso é investido no hotel, decorações e brindes sem sobrar dinheiro para doar por uma causa.',
                                       'O Capibára pode ter essa fuça de gaúcho rabugento, mas tem um coração grande que nem o Rio Grande do Sul. Assim como qualquer capivara ele faz amizade com qualquer um! Pode ser um gato ou um jacaré, qualquer furry é bem vindo para ser seu amigo.',
-                                      'Um bom gaúcho sempre anda bem pilchado, então Capibára não dispensa sua boina, seu lenço e sua faixa pampa da cintura! Para completar ele não larga seu mate de jeito nenhum!'])
+                                      'Um bom gaúcho sempre anda bem pilchado, então Capibára não dispensa sua boina, seu lenço e sua faixa pampa da cintura! Para completar ele não larga seu mate de jeito nenhum!',
+                                      'A primeira convenção furry no sul do Brasil está voltando com mais uma edição! O vale dos dinossauros aguarda você para uma aventura jurássica!! 🦖🦕'])
         pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
         if daysremaining >= -5 and daysremaining <= 0:
@@ -260,7 +261,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet 2025!</b>\n\n<i>{calltoaction}</i>\n🦕🦫🦕🦫🦕🦫🦕🦫🦕🦫🦕🦫🦕🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeet"
+            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet 2025!</b>\n\n<i>{calltoaction}</i>\n🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n🎫Link para comprar ingresso: fursmeet.carrd.co\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeet"
     cookiebot.sendPhoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='HTML')
     pic.close()
 
