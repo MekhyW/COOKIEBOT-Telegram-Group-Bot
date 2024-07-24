@@ -244,7 +244,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões!</b>\n\n<i>{calltoaction}\n#fiquenosheraton</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos à venda na porta, upgrades até 23/06/24 através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
+            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões!</b>\n\n<i>{calltoaction}\n#fiquenosheraton</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos à venda na porta, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
     cookiebot.sendPhoto(chat_id, pic, caption=caption, reply_to_message_id=msg['message_id'], parse_mode='HTML')
     pic.close()
 
