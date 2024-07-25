@@ -4,7 +4,7 @@ import Distortioner
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
 updateschannel_link = "https://t.me/cookiebotupdates"
-num_chats = 615
+num_chats = 633
 
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -242,7 +242,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões!</b>\n\n<i>{calltoaction}\n#fiquenosheraton</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos à venda na porta, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
+            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões!</b>\n\n<i>{calltoaction}\n#fiquenosheraton</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos a partir de 15 de setembro, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
     elif msg['text'].lower().startswith('/fursmeet'):
         day, month, year, directory = 15, 11, 2024, 'Static/Countdown/FurSMeet'
         pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
