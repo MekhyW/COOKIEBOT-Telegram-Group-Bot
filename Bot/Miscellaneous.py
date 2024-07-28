@@ -245,7 +245,6 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
             caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões!</b>\n\n<i>{calltoaction}\n#fiquenosheraton</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos a partir de 15 de setembro, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
     elif msg['text'].lower().startswith('/fursmeet'):
         day, month, year, directory = 15, 11, 2024, 'Static/Countdown/FurSMeet'
-        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
         calltoaction = random.choice(['O FurSMeet é uma convenção furry de 3 dias realizada em Santa Maria no Rio grande do Sul.Venha viver novas experiências, fazer amigos e se divertir muito no FurSMeet!',
                                       'A oportunidade perfeita para se conectar com outros furries, participar de atividades emocionantes e criar memórias que durarão para sempre!',
                                       'O objetivo do evento é reunir amantes da cultura antropomórfica da região Sul e de todo o Brasil para fazer novos amigos e viver grandes momentos!',
@@ -262,6 +261,24 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
             while daysremaining < -5:
                 daysremaining += 365
             caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet {year}!</b>\n\n<i>{calltoaction}</i>\n🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n🎫Link para comprar ingresso: fursmeet.carrd.co\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeetchat"
+    elif msg['text'].lower().startswith('/trex'):
+        day, month, year, directory = 21, 9, 2024, 'Static/Countdown/Trex'
+        calltoaction = random.choice(['Já pensou em se divertir com sua própria fursuit ou cosplay dentro de um Shopping? Então venha conhecer o T-Rex Furplayer!',
+                                      'Um evento muito acolhedor e divertido, com intuito de reunir furries e cosplayers para criar novas amizades e memórias inesquecíveis enquanto se divertem nas incríveis atrações do T-Rex Park!',
+                                      'O T-Rex Park é um parque de diversões votado a um tema Jurássico, aonde reúne vários brinquedos divertidos com vários dinossauros espalhados pelo parque, e o melhor, é que de noite ele se torna um parque mágico com muitas luzes em neon!',
+                                      'No T-Rex Pool, conhecida por ter mais de 1 MILHÃO de bolinhas, os participantes mergulham em uma experiência única e colorida, onde a diversão é garantida em meio a um mar de bolinhas, proporcionando momentos inesquecíveis de brincadeira e descontração no evento.',
+                                      'No T-Rex Jump, a diversão é elevada a novas alturas, proporcionando aos participantes uma experiência saltitante e cheia de energia em meio à atmosfera jurássica do evento.',
+                                      'O que vocês estão esperando? Não perca esse momento incrível! Venha criar memórias inesquecíveis com os seus amigos!',
+                                      'No T-Rex Furplayer, a criatividade se funde com a diversão em um encontro único! Reunindo as comunidades Cosplayers e Furries, em um ambiente cheio de energia e pura diversão!',
+                                      'A Staff dedicada do T-Rex Furplayer, garante que cada detalhe seja uma experiência incrível e perfeita para todos, proporcionando aos participantes uma experiência impecável e acolhedora, repleta de diversão e memórias inesquecíveis!'])
+        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
+        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
+        if daysremaining >= -5 and daysremaining <= 0:
+            caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
+        else:
+            while daysremaining < -5:
+                daysremaining += 365
+            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o T-Rex Furplayer!</b>\n\n<i>{calltoaction}</i>\n🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖\n\n📆 {day}/{month} - Shopping D, Canindé São Paulo - SP\n💻 Ingressos em: trexfurplayer.wordpress.com\n📲 Grupo do evento: @trexfurplayergroup"
     SendPhoto(cookiebot, chat_id, pic, caption=caption, msg_to_reply=msg, language=language, isBombot=isBombot)
     pic.close()
 

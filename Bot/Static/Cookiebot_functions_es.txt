@@ -36,6 +36,7 @@ desenterrar - Desenterrar un mensaje antiguo
 patas - Evento furry de hotel en brasil
 bff - Evento furry de hotel en brasil
 fursmeet - Evento furry de hotel en brasil
+trex - Evento de parque de diversiones furry en brasil
 estavivo - Envía un ping de prueba con la fecha del servidor
 reglas - Muestra las reglas del grupo
 nuevasreglas - Actualiza las reglas del grupo

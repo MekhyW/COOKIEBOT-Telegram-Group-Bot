@@ -36,6 +36,7 @@ unearth - Unearth a message from the past
 patas - Hotel furry event in brazil
 bff - Hotel furry event in brazil
 fursmeet - Hotel furry event in brazil
+trex - Amusement park furry event in brazil
 isalive - Send a test ping with server date
 rules - Shows the group's rules
 newrules - Updates group rules

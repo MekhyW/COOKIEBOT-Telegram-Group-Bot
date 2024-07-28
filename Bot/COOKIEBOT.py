@@ -186,7 +186,7 @@ def thread_function(msg):
                         Destroy(cookiebot, msg, chat_id, language, isBombot=isBombot)
                 elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and utilityfunctions:
                     Dado(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/patas", "/bff", "/fursmeet")):
+                elif msg['text'].startswith(("/patas", "/bff", "/fursmeet", "/trex")):
                     Countdown(cookiebot, msg, chat_id, language, isBombot=isBombot)
                 elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                     NovoBemvindo(cookiebot, msg, chat_id)
