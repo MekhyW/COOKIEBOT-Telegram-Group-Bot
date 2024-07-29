@@ -193,8 +193,6 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
                     NovasRegras(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
-                    if FurBots and myself['username'] not in msg['text'].split('@'):
-                        return
                     Regras(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
                     TaVivo(cookiebot, msg, chat_id, language, isBombot=isBombot)
