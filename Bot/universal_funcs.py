@@ -1,5 +1,6 @@
 import os, math, numpy, random, time, datetime, re, sys, traceback
 import urllib, urllib3, json, requests
+from dotenv import load_dotenv
 from requests.auth import HTTPBasicAuth
 from bs4 import BeautifulSoup
 import telepot
@@ -8,10 +9,9 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Messa
 from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
 from telepot.exception import *
 from deep_translator import GoogleTranslator
-baseauth = json.loads(open('cookiebot_basecredentials.json', 'r').read())
-backendauth = json.loads(open('cookiebot_backendauth.json', 'r').read())
-login_backend, password_backend, serverIP = backendauth['login'], backendauth['password'], backendauth['serverIP']
-googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN = baseauth['googleAPIkey'], baseauth['searchEngineCX'], baseauth['exchangerate_key'], baseauth['openai_key'], baseauth['saucenao_key'], baseauth['spamwatch_token'], baseauth['cookiebotTOKEN'], baseauth['bombotTOKEN']
+load_dotenv('../.env')
+login_backend, password_backend, serverIP = os.getenv('backend_login'), os.getenv('backend_password'), os.getenv('backend_serverIP')
+googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token'), os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN')
 mekhyID = 780875868
 
 def GetRequestBackend(route, params=None):

@@ -24,9 +24,7 @@ pip3 install . --break-system-packages
 ## Provide credentials
 
 ```bash
-cd Bot
-nano cookiebot_backendauth.json # Add your credentials
-nano cookiebot_basecredentials.json # Add your credentials
+nano .env # Add your credentials
 ```
 
 ## Set timezone

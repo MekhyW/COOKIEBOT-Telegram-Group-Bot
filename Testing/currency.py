@@ -1,11 +1,8 @@
 from price_parser import Price
 import requests, json
 exchangerate_key = ''
-import googletrans
-translator = googletrans.Translator()
 
 raw_text = "Stickers - pack com 5 R$ 25,00"
-translated_text = translator.translate(raw_text, dest='pt').text
 
 def ConvertPricesinText(text, code_target):
     if (code_target == 'BRL') and any([x in text for x in ('R$', 'BRL', 'Reais', 'reais')]):
@@ -54,6 +51,6 @@ def ConvertPricesinText(text, code_target):
             final_text += f"{paragraph}\n"
     return final_text
 
-final_text = ConvertPricesinText(translated_text, 'USD')
+final_text = ConvertPricesinText(raw_text, 'USD')
 
 print(final_text)

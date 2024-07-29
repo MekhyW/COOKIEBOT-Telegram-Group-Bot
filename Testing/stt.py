@@ -1,6 +1,6 @@
 import openai
 import json
-openai_client = openai.OpenAI(api_key=json.loads(open('Bot/cookiebot_basecredentials.json', 'r').read())['openai_key'])
+openai_client = openai.OpenAI(api_key='')
 
 def Speech_to_text(filename):
     with open(filename, 'rb') as audio_file:

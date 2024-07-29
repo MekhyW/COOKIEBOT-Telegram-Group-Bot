@@ -1,6 +1,8 @@
 from saucenao_api import SauceNao, VideoSauce, BookSauce, errors
-import json
-key = json.loads(open('Bot/cookiebot_basecredentials.json', 'r').read())['saucenao_key']
+from dotenv import load_dotenv
+import os
+load_dotenv('../.env')
+key = os.getenv('saucenao_key')
 sauce = SauceNao(key)
 
 def main(url):

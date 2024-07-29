@@ -1,8 +1,7 @@
-import json
 import random
 import googleapiclient.discovery
 
-API_KEY = json.loads(open('Bot/cookiebot_basecredentials.json', 'r').read())['googleAPIkey']
+API_KEY = ''
 
 def youtube_search(query, max_results=50):
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey=API_KEY)

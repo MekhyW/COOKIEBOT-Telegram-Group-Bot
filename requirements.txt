@@ -1,10 +1,10 @@
+python-dotenv
 urllib3
 beautifulsoup4
 Pillow
 opencv-python
 Wand
 ffmpeg-python
-PyJWT
 deep-translator
 google-api-python-client
 Google-Images-Search
