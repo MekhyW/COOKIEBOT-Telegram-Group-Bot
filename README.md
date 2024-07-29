@@ -19,6 +19,7 @@ cd ..
 git clone https://github.com/MekhyW/telepota.git
 cd telepota
 pip3 install . --break-system-packages
+cd ..
 ```
 
 ## Provide credentials
