@@ -13,9 +13,6 @@
 /timeout
 /permababy
 /mix
-/rules
-/rules
-/regras
 /comer
 /eat
 /delete
