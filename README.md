@@ -5,13 +5,14 @@ Telegram chatbot responsible for protecting chats against spammers, conversating
 ## Installation on Ubuntu
 
 ```bash
-sudo apt update
-sudo apt-get install git-all
-sudo apt install python3.11
-sudo apt install python3-pip
-sudo apt install ffmpeg
-sudo apt-get install libmagickwand-dev
-sudo apt-get install screen
+sudo apt update -y
+sudo apt-get install git-all -y
+sudo apt install python3.11 -y
+sudo apt install python3-pip -y
+sudo apt install ffmpeg -y
+sudo apt-get install libmagickwand-dev -y
+sudo apt-get install screen -y
+sudo apt install fail2ban -y
 git clone https://github.com/MekhyW/COOKIEBOT-Telegram-Group-Bot.git
 cd COOKIEBOT-Telegram-Group-Bot
 pip3 install -r requirements.txt --break-system-packages
@@ -25,6 +26,7 @@ cd ..
 ## Provide credentials
 
 ```bash
+cd COOKIEBOT-Telegram-Group-Bot
 nano .env # Add your credentials
 ```
 
@@ -39,6 +41,7 @@ timedatectl
 ## Run the bot
 
 ```bash
+cd Bot
 screen
 python3.11 LAUNCHER.py [isBombot] # Run with process monitoring
 python3.11 COOKIEBOT.py [isBombot] # Run without process monitoring
