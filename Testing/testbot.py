@@ -1,9 +1,11 @@
+from dotenv import load_dotenv
+import os
 import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
-token = ''
+load_dotenv()
+token = os.getenv('testbotTOKEN')
 mekhyID = 780875868
-testgroupID = -1001499400382
 bot = telepot.Bot(token)
 updates = bot.getUpdates()
 if updates:

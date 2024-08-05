@@ -4,7 +4,7 @@ import Distortioner
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
 updateschannel_link = "https://t.me/cookiebotupdates"
-num_chats = 633
+num_chats = 667
 
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -307,7 +307,7 @@ def Morte(cookiebot, msg, chat_id, language):
     with open('Static/death.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
-    caption += '\n\nMotivo: <b>' + line + '</b> 🔥\nF no chat. 🫡'
+    caption += '\nMotivo: <b>' + line + '</b> 🔥\nF no chat. 🫡'
     if path.endswith('.gif'):
         animation = open(path, 'rb')
         SendAnimation(cookiebot, chat_id, animation, caption=caption, msg_to_reply=msg, language=language)
@@ -318,8 +318,7 @@ def Morte(cookiebot, msg, chat_id, language):
         photo.close()
 
 def Sorte(cookiebot, msg, chat_id, language):
-    with open('Static/Sorte/sorte.gif', 'rb') as f:
-        anim_id = SendAnimation(cookiebot, chat_id, f, msg_to_reply=msg, language=language)
+    anim_id = SendAnimation(cookiebot, chat_id, 'https://s12.gifyu.com/images/S5e9b.gif', msg_to_reply=msg, language=language)
     with open('Static/Sorte/sorte.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
