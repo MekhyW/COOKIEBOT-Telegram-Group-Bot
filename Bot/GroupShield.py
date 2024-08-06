@@ -204,28 +204,6 @@ def CheckBlacklist(cookiebot, msg, chat_id, language):
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
         Send(cookiebot, chat_id, "Bani o usuário recém\-chegado por *ser flagrado como conta falsa/spam em outros chats*", language=language)
         return True
-    
-def CheckEvildb(cookiebot, msg, chat_id, language):
-    return False
-    #ids, usernames = load_evildb()
-    #if str(msg['new_chat_participant']['id']) in ids or ('username' in msg['new_chat_participant'] and msg['new_chat_participant']['username'] in usernames):
-    #    BanAndBlacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-    #    Send(cookiebot, chat_id, "Bani o usuário recém\-chegado por *ser flagrado como conta falsa/spam em outros chats*", language=language)
-    #    return True
-    #return False
-    
-def load_evildb():
-    global evildb_ids, evildb_usernames
-    if len(evildb_ids) > 0 or len(evildb_usernames) > 0:
-        return evildb_ids, evildb_usernames
-    try:
-        r = requests.get('https://burrbot.xyz/evil.php')
-        data = json.loads(r.text)
-        for i in data:
-            (evildb_ids if i[0].isdigit() else evildb_usernames).append(i[0])
-        return evildb_ids, evildb_usernames
-    except Exception as e:
-        print(e)
 
 def Captcha(cookiebot, msg, chat_id, captchatimespan, language):
     try:
