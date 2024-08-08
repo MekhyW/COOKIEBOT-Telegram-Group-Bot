@@ -2,6 +2,7 @@ from universal_funcs import *
 from Publisher import postmail_chat_link
 import Distortioner
 bloblist_ideiadesenho = list(storage_bucket.list_blobs(prefix="IdeiaDesenho"))
+bloblist_death = list(storage_bucket.list_blobs(prefix="Death"))
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
 updateschannel_link = "https://t.me/cookiebotupdates"
@@ -293,7 +294,8 @@ def Desenterrar(cookiebot, msg, chat_id, thread_id=None):
 
 def Morte(cookiebot, msg, chat_id, language):
     ReactToMessage(msg, '👻')
-    path = 'Static/Death/' + random.choice(os.listdir('Static/Death'))
+    filename = bloblist_death[random.randint(0, len(bloblist_death)-1)].name
+    fileurl = storage_bucket.blob(filename).generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     if len(msg['text'].split()) > 1:
         caption = '💀💀💀 ' + msg['text'].split()[1]
     elif 'reply_to_message' in msg:
@@ -308,14 +310,10 @@ def Morte(cookiebot, msg, chat_id, language):
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
     caption += '\nMotivo: <b>' + line + '</b> 🔥\nF no chat. 🫡'
-    if path.endswith('.gif'):
-        animation = open(path, 'rb')
-        SendAnimation(cookiebot, chat_id, animation, caption=caption, msg_to_reply=msg, language=language)
-        animation.close()
+    if filename.endswith('.gif'):
+        SendAnimation(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg, language=language)
     else:
-        photo = open(path, 'rb')
-        SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg, language=language)
-        photo.close()
+        SendPhoto(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg, language=language)
 
 def Sorte(cookiebot, msg, chat_id, language):
     anim_id = SendAnimation(cookiebot, chat_id, 'https://s12.gifyu.com/images/S5e9b.gif', msg_to_reply=msg, language=language)
