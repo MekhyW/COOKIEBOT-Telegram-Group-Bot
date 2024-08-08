@@ -294,6 +294,7 @@ def Desenterrar(cookiebot, msg, chat_id, thread_id=None):
 
 def Morte(cookiebot, msg, chat_id, language):
     ReactToMessage(msg, '👻')
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
     filename = bloblist_death[random.randint(0, len(bloblist_death)-1)].name
     fileurl = storage_bucket.blob(filename).generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     if len(msg['text'].split()) > 1:
@@ -316,6 +317,7 @@ def Morte(cookiebot, msg, chat_id, language):
         SendPhoto(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg, language=language)
 
 def Sorte(cookiebot, msg, chat_id, language):
+    SendChatAction(cookiebot, chat_id, 'upload_photo')
     anim_id = SendAnimation(cookiebot, chat_id, 'https://s12.gifyu.com/images/S5e9b.gif', msg_to_reply=msg, language=language)
     with open('Static/Sorte/sorte.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
@@ -332,6 +334,7 @@ def Sorte(cookiebot, msg, chat_id, language):
     answer += f'\nSeus números da sorte: <span class="tg-spoiler">{numbers_str}</span>'
     time.sleep(3)
     DeleteMessage(cookiebot, (str(chat_id), str(anim_id)))
+    SendChatAction(cookiebot, chat_id, 'typing')
     Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
 
 def Destroy(cookiebot, msg, chat_id, language, isBombot=False):
