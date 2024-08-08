@@ -28,6 +28,7 @@ cd ..
 ```bash
 cd COOKIEBOT-Telegram-Group-Bot
 nano .env # Add your credentials
+nano cookiebot-bucket-key.json # Add your credentials
 ```
 
 ## Set timezone

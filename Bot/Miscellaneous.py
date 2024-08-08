@@ -93,9 +93,10 @@ def NotifyFunOff(cookiebot, msg, chat_id, language):
 
 def IdeiaDesenho(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
-    ideiasdesenho = os.listdir('Static/IdeiaDesenho')
+    ideiasdesenho = list(storage_bucket.list_blobs(prefix="IdeiaDesenho"))
     ideiaID = random.randint(0, len(ideiasdesenho)-1)
-    photo = open('Static/IdeiaDesenho'+'/'+ideiasdesenho[ideiaID], 'rb')
+    blob = storage_bucket.blob(ideiasdesenho[ideiaID].name)
+    photo = blob.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     if language == 'pt':
         caption = f"Referência com ID {ideiaID}\n\nNão trace sem dar créditos! (use a busca reversa do google images)"
     elif language == 'es':
@@ -103,7 +104,6 @@ def IdeiaDesenho(cookiebot, msg, chat_id, language):
     else:
         caption = f"Reference ID {ideiaID}\n\nDo not trace without credits! (use the reverse google images search)"
     SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
-    photo.close()
 
 def CustomCommand(cookiebot, msg, chat_id):
     SendChatAction(cookiebot, chat_id, 'upload_photo')

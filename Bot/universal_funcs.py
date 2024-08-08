@@ -9,10 +9,14 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Messa
 from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
 from telepot.exception import *
 from deep_translator import GoogleTranslator
+from google.cloud import storage
 load_dotenv('../.env')
 login_backend, password_backend, serverIP = os.getenv('backend_login'), os.getenv('backend_password'), os.getenv('backend_serverIP')
 googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token'), os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN')
-mekhyID = 780875868
+mekhyID = int(os.getenv('mekhyID'))
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'cookiebot-bucket-key.json'
+storage_client = storage.Client()
+storage_bucket = storage_client.get_bucket(os.getenv('bucket_name'))
 
 def GetRequestBackend(route, params=None):
     response = requests.get(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=60)

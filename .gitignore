@@ -2,3 +2,4 @@
 result-master-ptbr.csv
 .vscode*
 *.env
+*.json
