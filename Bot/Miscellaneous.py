@@ -1,6 +1,7 @@
 from universal_funcs import *
 from Publisher import postmail_chat_link
 import Distortioner
+bloblist_ideiadesenho = list(storage_bucket.list_blobs(prefix="IdeiaDesenho"))
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
 updateschannel_link = "https://t.me/cookiebotupdates"
@@ -93,9 +94,8 @@ def NotifyFunOff(cookiebot, msg, chat_id, language):
 
 def IdeiaDesenho(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
-    ideiasdesenho = list(storage_bucket.list_blobs(prefix="IdeiaDesenho"))
-    ideiaID = random.randint(0, len(ideiasdesenho)-1)
-    blob = storage_bucket.blob(ideiasdesenho[ideiaID].name)
+    ideiaID = random.randint(0, len(bloblist_ideiadesenho)-1)
+    blob = storage_bucket.blob(bloblist_ideiadesenho[ideiaID].name)
     photo = blob.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     if language == 'pt':
         caption = f"Referência com ID {ideiaID}\n\nNão trace sem dar créditos! (use a busca reversa do google images)"

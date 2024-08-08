@@ -1,7 +1,8 @@
 from google.cloud import storage
 import datetime
+import random
 import os
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../cookiebot-bucket-key.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'cookiebot-bucket-key.json'
 storage_client = storage.Client()
 
 def test_blob(bucket_name, folder):
@@ -9,9 +10,8 @@ def test_blob(bucket_name, folder):
     blobs = bucket.list_blobs(prefix=folder)
     bloblist = list(blobs)
     print(len(bloblist))
-    print(bloblist[0].name)
     #get url of the first blob
-    blob = bucket.blob(bloblist[0].name)
+    blob = bucket.blob(bloblist[random.randint(0, len(bloblist)-1)].name)
     print(blob.public_url)
     # signed url
     print(blob.generate_signed_url(datetime.timedelta(minutes=15), method='GET'))
