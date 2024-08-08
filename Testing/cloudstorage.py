@@ -1,7 +1,7 @@
 from google.cloud import storage
 import datetime
 import os
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'cookiebot-bucket-key.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../cookiebot-bucket-key.json'
 storage_client = storage.Client()
 
 def test_blob(bucket_name, folder):

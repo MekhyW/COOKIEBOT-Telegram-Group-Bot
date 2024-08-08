@@ -14,7 +14,7 @@ load_dotenv('../.env')
 login_backend, password_backend, serverIP = os.getenv('backend_login'), os.getenv('backend_password'), os.getenv('backend_serverIP')
 googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token'), os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN')
 mekhyID = int(os.getenv('mekhyID'))
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'cookiebot-bucket-key.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../cookiebot-bucket-key.json'
 storage_client = storage.Client()
 storage_bucket = storage_client.get_bucket(os.getenv('bucket_name'))
 
