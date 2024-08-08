@@ -3,6 +3,10 @@ from Publisher import postmail_chat_link
 import Distortioner
 bloblist_ideiadesenho = list(storage_bucket.list_blobs(prefix="IdeiaDesenho"))
 bloblist_death = list(storage_bucket.list_blobs(prefix="Death"))
+bloblist_bff = list(storage_bucket.list_blobs(prefix="Countdown/BFF"))
+bloblist_patas = list(storage_bucket.list_blobs(prefix="Countdown/Patas"))
+bloblist_fursmeet = list(storage_bucket.list_blobs(prefix="Countdown/FurSMeet"))
+bloblist_trex = list(storage_bucket.list_blobs(prefix="Countdown/Trex"))
 newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
 updateschannel_link = "https://t.me/cookiebotupdates"
@@ -96,7 +100,7 @@ def NotifyFunOff(cookiebot, msg, chat_id, language):
 def IdeiaDesenho(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     ideiaID = random.randint(0, len(bloblist_ideiadesenho)-1)
-    blob = storage_bucket.blob(bloblist_ideiadesenho[ideiaID].name)
+    blob = bloblist_ideiadesenho[ideiaID]
     photo = blob.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     if language == 'pt':
         caption = f"Referência com ID {ideiaID}\n\nNão trace sem dar créditos! (use a busca reversa do google images)"
@@ -212,12 +216,12 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
     ReactToMessage(msg, '🔥', isBombot=isBombot)
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     if msg['text'].lower().startswith('/patas'):
-        day, month, year, directory = 18, 4, 2025, 'Static/Countdown/Patas'
+        day, month, year = 18, 4, 2025
         calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP!',
                                   'Este é um evento beneficiente em formato de convenção, para promover e celebrar a cultura de apreciação animais antropomóficos na região de Sorocaba. Foi criado para ajudar as entidades que prestam apoio aos idosos da região.',
                                   'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!',
                                   'As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais!'])
-        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
+        pic = bloblist_patas[random.randint(0, len(bloblist_patas)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
         if daysremaining >= -5 and daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
@@ -226,7 +230,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                 daysremaining += 365
             caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o Patas!</b>\n\n<i>{calltoaction}</i>\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @EventoPatas"
     elif msg['text'].lower().startswith('/bff'):
-        day, month, year, directory = 25, 7, 2025, 'Static/Countdown/BFF'
+        day, month, year = 25, 7, 2025
         calltoaction = random.choice(['O Sheraton Santos Hotel é reconhecidamente o melhor hotel de Santos. Localizado em frente ao Shopping Praiamar, o maior centro de compras da cidade, o hotel conta com ampla infraestrutura para atender o evento.',
                                   'A Brasil FurFest tem, entre outros objetivos, levantar fundos para caridade em prol do Projeto Social SOS Vida Pet Litoral, que ajuda protetores a manter abrigos para animais de rua na Baixada Santista',
                                   'Quem são os furries? O que é a Brasil FurFest? Descubra em youtube.com/watch?v=vuFGHSL8X34&ab_channel=BrasilFurFest',
@@ -236,7 +240,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                                   'Heróis e Vilões travarão uma batalha épica! Mal podemos esperar! Venha participar desta grande festa do furry fandom brasileiro com o hotel inteiro fechado para o evento!',
                                   'Mais de mil participantes! Isso mesmo: MIL! Desde 2024, batemos um recorde histórico para o furry fandom brasileiro, e tudo graças a vocês que vieram com toda a energia e alegria que só a nossa comunidade furry sabe trazer!',
                                   'Aurora Bloom virá como convidada de honra para a Brasil FurFest 2025, trazendo todo o seu charme e diversão para o evento!'])
-        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
+        pic = bloblist_bff[random.randint(0, len(bloblist_bff)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
         if daysremaining >= -5 and daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
@@ -245,7 +249,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                 daysremaining += 365
             caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões!</b>\n\n<i>{calltoaction}\n#fiquenosheraton</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}, Sheraton Santos Hotel\n💻 Ingressos a partir de 15 de setembro, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
     elif msg['text'].lower().startswith('/fursmeet'):
-        day, month, year, directory = 15, 11, 2024, 'Static/Countdown/FurSMeet'
+        day, month, year = 15, 11, 2024
         calltoaction = random.choice(['O FurSMeet é uma convenção furry de 3 dias realizada em Santa Maria no Rio grande do Sul.Venha viver novas experiências, fazer amigos e se divertir muito no FurSMeet!',
                                       'A oportunidade perfeita para se conectar com outros furries, participar de atividades emocionantes e criar memórias que durarão para sempre!',
                                       'O objetivo do evento é reunir amantes da cultura antropomórfica da região Sul e de todo o Brasil para fazer novos amigos e viver grandes momentos!',
@@ -254,7 +258,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                                       'O Capibára pode ter essa fuça de gaúcho rabugento, mas tem um coração grande que nem o Rio Grande do Sul. Assim como qualquer capivara ele faz amizade com qualquer um! Pode ser um gato ou um jacaré, qualquer furry é bem vindo para ser seu amigo.',
                                       'Um bom gaúcho sempre anda bem pilchado, então Capibára não dispensa sua boina, seu lenço e sua faixa pampa da cintura! Para completar ele não larga seu mate de jeito nenhum!',
                                       'A primeira convenção furry no sul do Brasil está voltando com mais uma edição! O vale dos dinossauros aguarda você para uma aventura jurássica!! 🦖🦕'])
-        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
+        pic = bloblist_fursmeet[random.randint(0, len(bloblist_fursmeet)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
         if daysremaining >= -5 and daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
@@ -263,7 +267,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                 daysremaining += 365
             caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet {year}!</b>\n\n<i>{calltoaction}</i>\n🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n🎫Link para comprar ingresso: fursmeet.carrd.co\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeetchat"
     elif msg['text'].lower().startswith('/trex'):
-        day, month, year, directory = 21, 9, 2024, 'Static/Countdown/Trex'
+        day, month, year = 21, 9, 2024
         calltoaction = random.choice(['Já pensou em se divertir com sua própria fursuit ou cosplay dentro de um Shopping? Então venha conhecer o T-Rex Furplayer!',
                                       'Um evento muito acolhedor e divertido, com intuito de reunir furries e cosplayers para criar novas amizades e memórias inesquecíveis enquanto se divertem nas incríveis atrações do T-Rex Park!',
                                       'O T-Rex Park é um parque de diversões votado a um tema Jurássico, aonde reúne vários brinquedos divertidos com vários dinossauros espalhados pelo parque, e o melhor, é que de noite ele se torna um parque mágico com muitas luzes em neon!',
@@ -272,7 +276,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                                       'O que vocês estão esperando? Não perca esse momento incrível! Venha criar memórias inesquecíveis com os seus amigos!',
                                       'No T-Rex Furplayer, a criatividade se funde com a diversão em um encontro único! Reunindo as comunidades Cosplayers e Furries, em um ambiente cheio de energia e pura diversão!',
                                       'A Staff dedicada do T-Rex Furplayer, garante que cada detalhe seja uma experiência incrível e perfeita para todos, proporcionando aos participantes uma experiência impecável e acolhedora, repleta de diversão e memórias inesquecíveis!'])
-        pic = open(directory + '/' + random.choice(os.listdir(directory)), 'rb')
+        pic = bloblist_trex[random.randint(0, len(bloblist_trex)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
         if daysremaining >= -5 and daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
@@ -281,7 +285,6 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
                 daysremaining += 365
             caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o T-Rex Furplayer!</b>\n\n<i>{calltoaction}</i>\n🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖\n\n📆 {day}/{month} - Shopping D, Canindé São Paulo - SP\n💻 Ingressos em: trexfurplayer.wordpress.com\n📲 Grupo do evento: @trexfurplayergroup"
     SendPhoto(cookiebot, chat_id, pic, caption=caption, msg_to_reply=msg, language=language, isBombot=isBombot)
-    pic.close()
 
 def Desenterrar(cookiebot, msg, chat_id, thread_id=None):
     for attempt in range(10):
@@ -295,8 +298,9 @@ def Desenterrar(cookiebot, msg, chat_id, thread_id=None):
 def Morte(cookiebot, msg, chat_id, language):
     ReactToMessage(msg, '👻')
     SendChatAction(cookiebot, chat_id, 'upload_photo')
-    filename = bloblist_death[random.randint(0, len(bloblist_death)-1)].name
-    fileurl = storage_bucket.blob(filename).generate_signed_url(datetime.timedelta(minutes=15), method='GET')
+    fileblob = bloblist_death[random.randint(0, len(bloblist_death)-1)]
+    filename = fileblob.name
+    fileurl = fileblob.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     if len(msg['text'].split()) > 1:
         caption = '💀💀💀 ' + msg['text'].split()[1]
     elif 'reply_to_message' in msg:
