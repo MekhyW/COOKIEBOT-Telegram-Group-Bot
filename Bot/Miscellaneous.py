@@ -112,12 +112,10 @@ def IdeiaDesenho(cookiebot, msg, chat_id, language):
 
 def CustomCommand(cookiebot, msg, chat_id):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
-    button = InlineKeyboardButton(text="Again", callback_data=f"REPEAT custom {msg['text']} {msg['message_id']}")
-    images = os.listdir("Static/Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", ''))
-    imageID = random.randint(0, len(images)-1)
-    photo = open("Static/Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')+'/'+images[imageID], 'rb')
+    bloblist = list(storage_bucket.list_blobs(prefix="Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')))
+    imageID = random.randint(0, len(bloblist)-1)
+    photo = bloblist[imageID].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     SendPhoto(cookiebot, chat_id, photo, msg_to_reply=msg)
-    photo.close()
 
 def Dado(cookiebot, msg, chat_id, language):
     if msg['text'].startswith("/dado"):

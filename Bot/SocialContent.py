@@ -150,13 +150,9 @@ def Meme(cookiebot, msg, chat_id, language):
             template = "Static/Meme/English/" + random.choice(templates_eng)
         else:
             template_id = random.randint(0, len(templates_pt)+len(templates_eng)-1)
-            if template_id > len(templates_eng)-1:
-                template = "Static/Meme/Portuguese/" + templates_pt[template_id-len(templates_eng)]
-            else:
-                template = "Static/Meme/English/" + templates_eng[template_id]
+            template = "Static/Meme/Portuguese/" + templates_pt[template_id - len(templates_eng)] if template_id > len(templates_eng) - 1 else "Static/Meme/English/" + templates_eng[template_id]
         template_img = cv2.imread(template)
         mask_green = cv2.inRange(template_img, (0, 210, 0), (40, 255, 40))
-        mask_red = cv2.inRange(template_img, (0, 0, 210), (40, 40, 255))
         contours_green, tree = cv2.findContours(mask_green, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(members_tagged) <= len(contours_green):
             break
