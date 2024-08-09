@@ -230,7 +230,8 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
             return
     if language == 'pt':
         fighters = [bloblist_fighters_eng, bloblist_fighters_pt]
-        fighter = random.choice(random.choices(fighters, weights=map(len, fighters))[0])
+        chosen_fighters = random.choices(fighters, weights=map(len, fighters))[0]
+        fighter = random.choice(chosen_fighters)
         poll_title = "QUEM VENCE " + random.choice(["NO TAPA", "NO X1", "NO SOCO", "NA MÃO", "NA PORRADA", "NO ARGUMENTO", "NO DUELO", "NA VIDA"]) + "?"
     else:
         fighter = random.choice(bloblist_fighters_eng)
