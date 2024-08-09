@@ -9,8 +9,8 @@ youtubesearcher = googleapiclient.discovery.build("youtube", "v3", developerKey=
 reverseimagesearcher = SauceNao(saucenao_key)
 templates_eng = os.listdir("Static/Meme/English")
 templates_pt = os.listdir("Static/Meme/Portuguese")
-fighters_eng = os.listdir("Static/Fight/English")
-fighters_pt = os.listdir("Static/Fight/Portuguese")
+bloblist_fighters_eng = list(storage_bucket.list_blobs(prefix="Fight/English"))
+bloblist_fighters_pt = list(storage_bucket.list_blobs(prefix="Fight/Portuguese"))
 
 with open('Static/avoid_search.txt', 'r') as f:
     avoid_search = f.readlines()
@@ -222,36 +222,24 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
         cv2.imwrite("user.jpg", user_image)
         user_image = open("user.jpg", 'rb')
     else:
-        if 'username' in msg['from']:
-            user = msg['from']['username']
-        else:
-            user = msg['from']['first_name']
+        user = msg['from']['username'] if 'username' in msg['from'] else msg['from']['first_name']
         try:
             user_image = cookiebot.getUserProfilePhotos(msg['from']['id'], limit=1)['photos'][0][-1]['file_id']
         except IndexError:
             Send(cookiebot, chat_id, "Você precisa ter uma foto de perfil _\(ou está privado\)_", msg, language)
             return
     if language == 'pt':
-        fighters = [fighters_eng, fighters_pt]
+        fighters = [bloblist_fighters_eng, bloblist_fighters_pt]
         fighter = random.choice(random.choices(fighters, weights=map(len, fighters))[0])
-        if fighter in fighters_eng:
-            fighter_image = cv2.imread("Static/Fight/English/" + fighter)
-        else:
-            fighter_image = cv2.imread("Static/Fight/Portuguese/" + fighter)
         poll_title = "QUEM VENCE " + random.choice(["NO TAPA", "NO X1", "NO SOCO", "NA MÃO", "NA PORRADA", "NO ARGUMENTO", "NO DUELO", "NA VIDA"]) + "?"
     else:
-        fighter = random.choice(fighters_eng)
-        fighter_image = cv2.imread("Static/Fight/English/" + fighter)
-        if language == 'es':
-            poll_title = "¿QUIÉN GANA?"
-        else:
-            poll_title = "WHO WINS?"
-    fighter = fighter.replace(".png", "").replace(".jpg", "").replace(".jpeg", "").replace("_", " ").capitalize()
-    cv2.imwrite("fighter.jpg", fighter_image)
-    with open("fighter.jpg", 'rb') as fighter_image_binary:
-        medias, caption, choices = [{'type': 'photo', 'media': user_image}, {'type': 'photo', 'media': fighter_image_binary}], f"{user} VS {fighter}", [user, fighter]
-        if random.choice([0, 1]):
-            medias, caption, choices = [medias[1], medias[0]], f"{fighter} VS {user}", [fighter, user]
-        medias[0]['caption'] = caption
-        cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'])
-        cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'], open_period=600)
+        fighter = random.choice(bloblist_fighters_eng)
+        poll_title = "¿QUIÉN GANA?" if language == 'es' else "WHO WINS?"
+    fighter_image = fighter.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
+    fighter_name = fighter.name.split('/')[-1].replace(".png", "").replace(".jpg", "").replace(".jpeg", "").replace("_", " ").capitalize()
+    medias, caption, choices = [{'type': 'photo', 'media': user_image}, {'type': 'photo', 'media': fighter_image}], f"{user} VS {fighter_name}", [user, fighter_name]
+    if random.choice([0, 1]):
+        medias, caption, choices = [medias[1], medias[0]], f"{fighter_name} VS {user}", [fighter_name, user]
+    medias[0]['caption'] = caption
+    cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'])
+    cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'], open_period=600)
