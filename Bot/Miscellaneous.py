@@ -16,6 +16,7 @@ def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
 
 def PvDefaultMessage(cookiebot, msg, chat_id, isBombot):
+    SendChatAction(cookiebot, chat_id, 'typing')
     if 'language_code' in msg['from'] and msg['from']['language_code'] in ['pt', 'pt-BR', 'pt-br', 'pt_PT', 'pt-pt']:
         if isBombot:
             Send(cookiebot, chat_id, "*Olá, eu sou o BomBot\!*\nSou um clone do @CookieMWbot criado para os grupos da Brasil FurFest \(BFF\)\n\nSe tiver alguma dúvida ou quiser a lista completa de comandos, mande uma mensagem para @MekhyW")
@@ -40,15 +41,18 @@ def PvDefaultMessage(cookiebot, msg, chat_id, isBombot):
             ]))
 
 def Privacy(cookiebot, msg, chat_id, language):
+    SendChatAction(cookiebot, chat_id, 'typing')
     with open('Static/privacy.html', 'r') as file:
         privacy_text = file.read()
     Send(cookiebot, chat_id, privacy_text, msg_to_reply=msg, language=language, parse_mode='HTML')
 
 def TaVivo(cookiebot, msg, chat_id, language, isBombot=False):
     ReactToMessage(msg, '👍', isBombot=isBombot)
+    SendChatAction(cookiebot, chat_id, 'typing')
     Send(cookiebot, chat_id, "*Estou vivo*\n\nPing enviado em\:\n" + str(datetime.datetime.now()), msg, language)
 
 def Analyze(cookiebot, msg, chat_id, language, isBombot=False):
+    SendChatAction(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
         Send(cookiebot, chat_id, "Responda uma mensagem com o comando para analisar", msg, language)
         return
@@ -118,6 +122,7 @@ def CustomCommand(cookiebot, msg, chat_id):
     SendPhoto(cookiebot, chat_id, photo, msg_to_reply=msg)
 
 def Dado(cookiebot, msg, chat_id, language):
+    SendChatAction(cookiebot, chat_id, 'typing')
     if msg['text'].startswith("/dado"):
         Send(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n>EXEMPLO\: /d20 5\n>\(Roda um d20 5 vezes\)")
     elif msg['text'].startswith("/dice"):
@@ -285,6 +290,7 @@ def Countdown(cookiebot, msg, chat_id, language, isBombot):
     SendPhoto(cookiebot, chat_id, pic, caption=caption, msg_to_reply=msg, language=language, isBombot=isBombot)
 
 def Desenterrar(cookiebot, msg, chat_id, thread_id=None):
+    SendChatAction(cookiebot, chat_id, 'typing')
     for attempt in range(10):
         try:
             chosenid = random.randint(1, msg['message_id'])
