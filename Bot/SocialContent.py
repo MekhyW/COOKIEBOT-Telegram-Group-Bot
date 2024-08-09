@@ -229,9 +229,7 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
             Send(cookiebot, chat_id, "Você precisa ter uma foto de perfil _\(ou está privado\)_", msg, language)
             return
     if language == 'pt':
-        fighters = [bloblist_fighters_eng, bloblist_fighters_pt]
-        chosen_fighters = random.choices(fighters, weights=map(len, fighters))[0]
-        fighter = random.choice(chosen_fighters)
+        fighter = random.choice(random.choice([bloblist_fighters_eng, bloblist_fighters_pt]))
         poll_title = "QUEM VENCE " + random.choice(["NO TAPA", "NO X1", "NO SOCO", "NA MÃO", "NA PORRADA", "NO ARGUMENTO", "NO DUELO", "NA VIDA"]) + "?"
     else:
         fighter = random.choice(bloblist_fighters_eng)
