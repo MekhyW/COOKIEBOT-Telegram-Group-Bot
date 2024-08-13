@@ -119,16 +119,16 @@ def thread_function(msg):
             if sfw and funfunctions:
                 AddtoRandomDatabase(msg, chat_id)
         elif content_type == "document":
-            if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions:
+            if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                 ReplySticker(cookiebot, msg, chat_id)
         elif content_type == "animation":
-            if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions:
+            if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                 ReplySticker(cookiebot, msg, chat_id)
         elif content_type == "sticker":
             Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language)
             if sfw:
                 AddtoStickerDatabase(msg, chat_id)
-            if 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot' and funfunctions:
+            if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                 ReplySticker(cookiebot, msg, chat_id)
         elif 'text' in msg:
             if msg['text'].startswith("/") and len(msg['text']) > 1:
@@ -152,7 +152,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=isBombot)
-                elif msg['text'].startswith(("/buscarfonte", "/searchsource", "/buscarfuente")) and utilityfunctions:
+                elif utilityfunctions and msg['text'].startswith(("/buscarfonte", "/searchsource", "/buscarfuente")):
                     ReverseSearch(cookiebot, msg, chat_id, language, isBombot=isBombot)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
                                                 "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
@@ -184,7 +184,7 @@ def thread_function(msg):
                         Sorte(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
                         Destroy(cookiebot, msg, chat_id, language, isBombot=isBombot)
-                elif (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())) and utilityfunctions:
+                elif utilityfunctions and (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())):
                     Dado(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/patas", "/bff", "/fursmeet", "/trex")):
                     Countdown(cookiebot, msg, chat_id, language, isBombot=isBombot)
@@ -202,18 +202,18 @@ def thread_function(msg):
                     AdmAsk(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     Comandos(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")) and utilityfunctions:
+                elif utilityfunctions and msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")):
                     IdeiaDesenho(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")) and utilityfunctions:
+                elif utilityfunctions and msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")):
                     PromptQualquerCoisa(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith("/youtube") and utilityfunctions:
+                elif utilityfunctions and msg['text'].startswith("/youtube"):
                     YoutubeSearch(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/configurar", "/configure")):
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     Configurar(cookiebot, msg, chat_id, listaadmins_id, language)
-                elif " " not in msg['text'] and msg['text'].replace('/', '').replace("@CookieMWbot", '') in custom_commands and utilityfunctions:
+                elif utilityfunctions and " " not in msg['text'] and msg['text'].replace('/', '').replace("@CookieMWbot", '') in custom_commands:
                     CustomCommand(cookiebot, msg, chat_id)
-                elif "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and utilityfunctions:
+                elif utilityfunctions and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']):
                     if FurBots:
                         furbots_cmds = open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()
                         furbots_cmds = [x.strip() for x in furbots_cmds]
@@ -228,15 +228,15 @@ def thread_function(msg):
                 AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id, isBombot=isBombot)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                 ConfigurarSettar(cookiebot, msg, chat_id, isBombot=isBombot)
-            elif (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'])) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and funfunctions:
+            elif funfunctions and (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'])) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']):
                 Quem(cookiebot, msg, chat_id, language)
             elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and any(x in msg['reply_to_message']['caption'] for x in [f"{round(captchatimespan/60)} minutes", f"{round(captchatimespan/60)} minutos"]):
                 SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isBombot=isBombot)
-            elif 'reply_to_message' in msg and 'caption' in msg['reply_to_message'] and any(x in msg['reply_to_message']['caption'] for x in ['Milton do RH.', 'Milton from HR.']) and funfunctions:
+            elif funfunctions and 'reply_to_message' in msg and 'caption' in msg['reply_to_message'] and any(x in msg['reply_to_message']['caption'] for x in ['Milton do RH.', 'Milton from HR.']):
                 ReclamacaoAnswer(cookiebot, msg, chat_id, language)
             elif 'reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'] and 'reply_markup' in msg['reply_to_message']:
                 CheckNotifyPostReply(cookiebot, msg, chat_id, language)
-            elif (('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'] and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']) and funfunctions:
+            elif funfunctions and (('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'] and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']):
                 if 'from' in msg:
                     decrease_remaining_responses_ai(msg['from']['id'])
                 if 'from' not in msg or remaining_responses_ai[msg['from']['id']] > 0:
