@@ -211,7 +211,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/configurar", "/configure")):
                     listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     Configurar(cookiebot, msg, chat_id, listaadmins_id, language)
-                elif " " not in msg['text'] and os.path.exists("Static/Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')) and utilityfunctions:
+                elif " " not in msg['text'] and msg['text'].replace('/', '').replace("@CookieMWbot", '') in custom_commands and utilityfunctions:
                     CustomCommand(cookiebot, msg, chat_id)
                 elif "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']) and utilityfunctions:
                     if FurBots:

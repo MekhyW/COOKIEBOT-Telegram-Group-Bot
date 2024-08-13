@@ -11,6 +11,9 @@ newchat_link = "https://t.me/CookieMWbot?startgroup=new"
 testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
 updateschannel_link = "https://t.me/cookiebotupdates"
 num_chats = 667
+with open("Static/Custom.txt", "r", encoding='utf8') as custom_commands_file:
+    custom_commands = custom_commands_file.readlines()
+    custom_commands = [x.strip() for x in custom_commands]
 
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
