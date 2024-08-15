@@ -216,7 +216,7 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
         if not len(images[1]):
             Send(cookiebot, chat_id, f"Não consegui extrair a foto de {members_tagged[1]}. Verifique se está público!", msg, language)
             return
-        resp = urllib.request.urlopen(images[0]['src']), urllib.request.urlopen(images[1]['src'])
+        resp = urllib.request.urlopen(images[0][0]['src']), urllib.request.urlopen(images[1][0]['src'])
         user_images = cv2.imdecode(np.asarray(bytearray(resp[0].read()), dtype="uint8"), cv2.IMREAD_COLOR), cv2.imdecode(np.asarray(bytearray(resp[1].read()), dtype="uint8"), cv2.IMREAD_COLOR)
         cv2.imwrite("user1.jpg", user_images[0])
         cv2.imwrite("user2.jpg", user_images[1])
