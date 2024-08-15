@@ -205,13 +205,42 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
     ReactToMessage(msg, '🔥', isBombot=isBombot)
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     members_tagged = getMembersTagged(msg)
-    if len(members_tagged):
+    if len(members_tagged) > 1:
+        users = members_tagged[0], members_tagged[1]
+        soup1 = BeautifulSoup(urllib.request.urlopen(urllib.request.Request(f"https://telegram.me/{users[0]}", headers={'User-Agent' : "Magic Browser"})), "html.parser")
+        soup2 = BeautifulSoup(urllib.request.urlopen(urllib.request.Request(f"https://telegram.me/{users[1]}", headers={'User-Agent' : "Magic Browser"})), "html.parser")
+        images = list(soup1.findAll('img')), list(soup2.findAll('img'))
+        if not len(images[0]):
+            Send(cookiebot, chat_id, f"Não consegui extrair a foto de {members_tagged[0]}. Verifique se está público!", msg, language)
+            return
+        if not len(images[1]):
+            Send(cookiebot, chat_id, f"Não consegui extrair a foto de {members_tagged[1]}. Verifique se está público!", msg, language)
+            return
+        resp = urllib.request.urlopen(images[0]['src']), urllib.request.urlopen(images[1]['src'])
+        user_images = cv2.imdecode(np.asarray(bytearray(resp[0].read()), dtype="uint8"), cv2.IMREAD_COLOR), cv2.imdecode(np.asarray(bytearray(resp[1].read()), dtype="uint8"), cv2.IMREAD_COLOR)
+        cv2.imwrite("user1.jpg", user_images[0])
+        cv2.imwrite("user2.jpg", user_images[1])
+        user_images = open("user1.jpg", 'rb'), open("user2.jpg", 'rb')
+        medias, choices = [{'type': 'photo', 'media': user_images[0]}, {'type': 'photo', 'media': user_images[1]}], [members_tagged[0], members_tagged[1]]
+        poll_title = "QUEM VENCE?"
+        caption = f"{members_tagged[0]} VS {members_tagged[1]}\n\nTipo: {random.choice(['Boxe 🥊🥊', 'Luta Livre 🎭', 'Luta Greco 🤼‍♂️', 'Artes Marciais 🥋', 'Sambo 👊', 'Muay Thai 🥋', 'Luta de rua 👊', 'Luta de piscina💧', 'Judo 🇯🇵', 'Sumo ⛩', 'Gutpunching 💪', 'Ballbusting 🍳🍳'])}\nRegras: {random.choice(['KO por rounds', 'KO sem rounds', 'Vale tudo', 'Até a morte'])}\nEquipamento: {random.choice(['Full Gear', 'Só luvas', 'De calcinha', 'Pelados', 'Uniforme de luta', 'Vale tudo'])}"
+        if language == 'eng':
+            poll_title = "WHO WINS?"
+            caption = GoogleTranslator(source='auto', target='en').translate(caption)
+        elif language == 'es':
+            poll_title = "¿QUIÉN GANA?"
+            caption = GoogleTranslator(source='auto', target='es').translate(caption)
+        medias[0]['caption'] = caption
+        cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'])
+        cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'])
+        return
+    elif len(members_tagged):
         user = members_tagged[0]
         html = urllib.request.urlopen(urllib.request.Request(f"https://telegram.me/{user}", headers={'User-Agent' : "Magic Browser"}))
         soup = BeautifulSoup(html, "html.parser")
         images = list(soup.findAll('img'))
         if not len(images):
-            Send(cookiebot, chat_id, "Não consegui extrair a foto de perfil desse usuário", msg, language)
+            Send(cookiebot, chat_id, "Não consegui extrair a foto de perfil desse usuário. Verifique se está público!", msg, language)
             return
         resp = urllib.request.urlopen(images[0]['src'])
         user_image = cv2.imdecode(np.asarray(bytearray(resp.read()), dtype="uint8"), cv2.IMREAD_COLOR)
@@ -237,4 +266,4 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
         medias, caption, choices = [medias[1], medias[0]], f"{fighter_name} VS {user}", [fighter_name, user]
     medias[0]['caption'] = caption
     cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'])
-    cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'], open_period=600)
+    cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'])
