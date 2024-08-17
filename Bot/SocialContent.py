@@ -205,8 +205,19 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
     ReactToMessage(msg, '🔥', isBombot=isBombot)
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     members_tagged = getMembersTagged(msg)
-    if len(members_tagged) > 1:
-        users = members_tagged[0], members_tagged[1]
+    if len(members_tagged) > 1 or 'random' in msg['text'].lower():
+        if 'random' in msg['text'].lower():
+            members = GetMembersChat(chat_id)
+            if len(members) < 2:
+                Send(cookiebot, chat_id, "Não há membros suficientes para batalhar", msg, language)
+                return
+            for attempt in range(100):
+                random.shuffle(members)
+                users = members[0], members[1]
+                if 'user' in users[0] and 'user' in users[1]:
+                    break
+        else:
+            users = members_tagged[0], members_tagged[1]
         soup1 = BeautifulSoup(urllib.request.urlopen(urllib.request.Request(f"https://telegram.me/{users[0]}", headers={'User-Agent' : "Magic Browser"})), "html.parser")
         soup2 = BeautifulSoup(urllib.request.urlopen(urllib.request.Request(f"https://telegram.me/{users[1]}", headers={'User-Agent' : "Magic Browser"})), "html.parser")
         images = list(soup1.findAll('img')), list(soup2.findAll('img'))
@@ -223,7 +234,7 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
         user_images = open("user1.jpg", 'rb'), open("user2.jpg", 'rb')
         medias, choices = [{'type': 'photo', 'media': user_images[0]}, {'type': 'photo', 'media': user_images[1]}], [members_tagged[0], members_tagged[1]]
         poll_title = "QUEM VENCE?"
-        caption = f"{members_tagged[0]} VS {members_tagged[1]}\n\nTipo: {random.choice(['Boxe 🥊🥊', 'Luta Livre 🎭', 'Luta Greco 🤼‍♂️', 'Artes Marciais 🥋', 'Sambo 👊', 'Muay Thai 🥋', 'Luta de rua 👊', 'Luta de piscina💧', 'Judo 🇯🇵', 'Sumo ⛩', 'Gutpunching 💪', 'Ballbusting 🍳🍳'])}\nRegras: {random.choice(['KO por rounds', 'KO sem rounds', 'Vale tudo', 'Até a morte'])}\nEquipamento: {random.choice(['Full Gear', 'Só luvas', 'De calcinha', 'Pelados', 'Uniforme de luta', 'Vale tudo'])}"
+        caption = f"{members_tagged[0]} VS {members_tagged[1]}\n\nTipo: {random.choice(['Boxe 🥊🥊', 'Luta Livre 🎭', 'Luta Greco 🤼‍♂️', 'Artes Marciais 🥋', 'Sambo 👊', 'Muay Thai 🥋', 'Luta de rua 👊', 'Luta de piscina💧', 'Judo 🇯🇵', 'Sumo ⛩', 'Gutpunching 💪', 'Ballbusting 🍳🍳'])}\nRegras: {random.choice(['KO por rounds', 'KO sem rounds', 'Vale tudo'])}\nEquipamento: {random.choice(['Full Gear', 'Só luvas', 'De calcinha', 'Pelados', 'Uniforme de luta', 'Vale tudo'])}"
         if language == 'eng':
             poll_title = "WHO WINS?"
             caption = GoogleTranslator(source='auto', target='en').translate(caption)
