@@ -237,7 +237,7 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
             caption = f"{members_tagged[0]} VS {members_tagged[1]}"
         else:
             medias, choices = [{'type': 'photo', 'media': user_images[0]}, {'type': 'photo', 'media': user_images[1]}], [users[0], users[1]]
-            caption = f"{users[0]} VS {users[1]}"
+            caption = f"@{users[0]} VS @{users[1]}"
         poll_title = "QUEM VENCE?"
         caption += f"\n\nTipo: {random.choice(['Boxe 🥊🥊', 'Luta Livre 🎭', 'Luta Greco 🤼‍♂️', 'Artes Marciais 🥋', 'Sambo 👊', 'Muay Thai 🥋', 'Luta de rua 👊', 'Luta de piscina💧', 'Judo 🇯🇵', 'Sumo ⛩', 'Gutpunching 💪', 'Ballbusting 🍳🍳'])}\nRegras: {random.choice(['KO por rounds', 'KO sem rounds', 'Vale tudo'])}\nEquipamento: {random.choice(['Full Gear', 'Só luvas', 'De calcinha', 'Pelados', 'Uniforme de luta', 'Vale tudo'])}"
         if language == 'eng':
