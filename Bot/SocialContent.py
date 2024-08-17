@@ -213,7 +213,7 @@ def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
                 return
             for attempt in range(100):
                 random.shuffle(members)
-                if 'user' in users[0] and 'user' in users[1]:
+                if 'user' in members[0] and 'user' in members[1]:
                     users = members[0]['user'], members[1]['user']
                     break
         else:
