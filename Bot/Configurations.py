@@ -41,7 +41,7 @@ def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isAlternate
 def SetComandosPrivate(cookiebot, chat_id, isAlternate=0):
     SetLanguageComandos(cookiebot, chat_id, chat_id, "private", isAlternate)
 
-def GetConfig(cookiebot, chat_id, ignorecache=False):
+def GetConfig(cookiebot, chat_id, ignorecache=False, isAlternate=0):
     if chat_id in cache_configurations and not ignorecache:
         return cache_configurations[chat_id]
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 1, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
@@ -69,7 +69,7 @@ def GetConfig(cookiebot, chat_id, ignorecache=False):
         captchatimespan = abs(captchatimespan)*60
     cache_configurations[chat_id] = [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
     try:
-        SetLanguageComandos(cookiebot, chat_id, chat_id, language, isAlternate=0, silent=True)
+        SetLanguageComandos(cookiebot, chat_id, chat_id, language, isAlternate=isAlternate, silent=True)
     except Exception as e:
         print(e)
     return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
