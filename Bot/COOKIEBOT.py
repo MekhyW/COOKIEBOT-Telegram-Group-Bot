@@ -15,7 +15,7 @@ if len(sys.argv) < 2:
     print("Usage: python COOKIEBOT.py [isAlternate (int)]")
     sys.exit(1)
 isAlternate = int(sys.argv[1])
-cookiebot = telepot.Bot(bombotTOKEN) if isAlternate else telepot.Bot(cookiebotTOKEN)
+cookiebot = telepot.Bot(GetBotToken(isAlternate))
 myself = cookiebot.getMe()
 updates = cookiebot.getUpdates()
 if updates:
