@@ -43,7 +43,7 @@ def getMembersTagged(msg):
             members_tagged.append(target)
     return members_tagged
 
-def ReverseSearch(cookiebot, msg, chat_id, language, isBombot=False):
+def ReverseSearch(cookiebot, msg, chat_id, language, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
         Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n>\(Para busca direta, use o /qualquercoisa\)", msg, language)
@@ -64,16 +64,16 @@ def ReverseSearch(cookiebot, msg, chat_id, language, isBombot=False):
         if best.author:
             answer +=  f" - {best.author}"
         answer += f"\n{best.urls[0]}\n\n"
-        ReactToMessage(msg, '🫡', is_big=False, isBombot=isBombot)
+        ReactToMessage(msg, '🫡', is_big=False, isAlternate=isAlternate)
         Send(cookiebot, chat_id, answer, msg, language)
     else:
-        ReactToMessage(msg, '🤷', is_big=False, isBombot=isBombot)
+        ReactToMessage(msg, '🤷', is_big=False, isAlternate=isAlternate)
         Send(cookiebot, chat_id, "A busca não encontrou correspondência, parece ser uma imagem original!", msg, language)
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n>EXEMPLO: /fennec", msg, language)
 
-def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isBombot=False):
+def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isAlternate=0):
     searchterm = msg['text'].split("@")[0].replace("/", ' ').replace("@CookieMWbot", '')
     if searchterm.split()[0] in avoid_search:
         return
@@ -93,7 +93,7 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isBombot=False):
             return 1
         except Exception as e:
             print(e)
-    ReactToMessage(msg, '🤷', is_big=False, isBombot=isBombot)
+    ReactToMessage(msg, '🤷', is_big=False, isAlternate=isAlternate)
     Send(cookiebot, chat_id, "Não consegui achar uma imagem _\(ou era NSFW e eu filtrei\)_", msg, language)
 
 def YoutubeSearch(cookiebot, msg, chat_id, language):
@@ -118,12 +118,12 @@ def AddtoRandomDatabase(msg, chat_id, photo_id=''):
     if not 'forward_from' in msg and not 'forward_from_chat' in msg:
         PostRequestBackend('randomdatabase', {'id': chat_id, 'idMessage': str(msg['message_id']), 'idMedia': photo_id})
 
-def ReplyAleatorio(cookiebot, msg, chat_id, thread_id=None, isBombot=False):
+def ReplyAleatorio(cookiebot, msg, chat_id, thread_id=None, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     for attempt in range(50):
         try:
             target = GetRequestBackend("randomdatabase")
-            Forward(cookiebot, chat_id, target['id'], target['idMessage'], thread_id=thread_id, isBombot=isBombot)
+            Forward(cookiebot, chat_id, target['id'], target['idMessage'], thread_id=thread_id, isAlternate=isAlternate)
             break
         except Exception as e:
             print(e)
@@ -201,8 +201,8 @@ def Meme(cookiebot, msg, chat_id, language):
     except FileNotFoundError:
         pass
 
-def Batalha(cookiebot, msg, chat_id, language, isBombot=False):
-    ReactToMessage(msg, '🔥', isBombot=isBombot)
+def Batalha(cookiebot, msg, chat_id, language, isAlternate=0):
+    ReactToMessage(msg, '🔥', isAlternate=isAlternate)
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     members_tagged = getMembersTagged(msg)
     if len(members_tagged) > 1 or 'random' in msg['text'].lower():

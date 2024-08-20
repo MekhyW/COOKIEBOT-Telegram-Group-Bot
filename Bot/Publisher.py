@@ -41,13 +41,13 @@ def AskPublisher(cookiebot, msg, chat_id, language):
             caption_entities.append(entity)
     cache_posts[str(msg['forward_from_message_id'])] = {media_type: media_id, 'caption': msg['caption'], 'caption_entities': caption_entities}
 
-def AskApproval(cookiebot, query_data, from_id, isBombot=False):
+def AskApproval(cookiebot, query_data, from_id, isAlternate=0):
     origin_chatid = query_data.split()[1]
     second_chatid = query_data.split()[2]
     origin_messageid = query_data.split()[3]
     second_messageid = query_data.split()[4]
     origin_userid = from_id
-    Forward(cookiebot, approval_chat_id, second_chatid, second_messageid, isBombot=isBombot)
+    Forward(cookiebot, approval_chat_id, second_chatid, second_messageid, isAlternate=isAlternate)
     Send(cookiebot, approval_chat_id, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️ 7 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid}')],
@@ -255,7 +255,7 @@ def SchedulePost(cookiebot, query_data):
         Send(cookiebot, mekhyID, traceback.format_exc())
         Send(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n>Send /start in my DM so I can send you messages\.", msg_to_reply={'message_id': second_messageid})
 
-def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=False):
+def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id:
         Send(cookiebot, chat_id, "You are not a group admin\!", msg_to_reply=msg)
@@ -272,10 +272,10 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isBombot
     hour = random.randint(10,17)
     minute = random.randint(0,59)
     create_job(hour, minute, f"{chat['title']} --> {chat['title']}, at {hour}:{minute} ", int(days), int(chat_id), int(chat_id), int(chat_id), int(original_msg_id), int(original_msg_id), int(msg['from']['id']))
-    ReactToMessage(msg, '👍', isBombot=isBombot)
+    ReactToMessage(msg, '👍', isAlternate=isAlternate)
     Send(cookiebot, chat_id, f"Repostagem programada para o grupo por *{days} dias\!*", msg_to_reply=msg, language=language)
 
-def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=False):
+def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id:
         Send(cookiebot, chat_id, "You are not a group admin\!", msg_to_reply=msg)
@@ -283,10 +283,10 @@ def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isBombot=F
     for job in list_jobs():
         if str(job['postmail_chat_id']) == str(chat_id):
             delete_job(job['name'])
-    ReactToMessage(msg, '👍', isBombot=isBombot)
+    ReactToMessage(msg, '👍', isAlternate=isAlternate)
     Send(cookiebot, chat_id, "Repostagens do grupo canceladas\!", msg_to_reply=msg, language=language)
 
-def SchedulerPull(cookiebot, isBombot=False):
+def SchedulerPull(cookiebot, isAlternate=0):
     current_time = datetime.datetime.now()
     current_time = datetime.datetime(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute, current_time.second)
     for job in list_jobs():
@@ -303,9 +303,9 @@ def SchedulerPull(cookiebot, isBombot=False):
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
                 config = GetConfig(cookiebot, group_id)
-                Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, thread_id=int(config[10]), isBombot=isBombot)
+                Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, thread_id=int(config[10]), isAlternate=isAlternate)
             else:
-                Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, isBombot=isBombot)
+                Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, isAlternate=isAlternate)
         except Exception as e:
             Send(cookiebot, mekhyID, traceback.format_exc())
             delete_job(job['name'])

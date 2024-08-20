@@ -44,7 +44,7 @@ timedatectl
 ```bash
 cd Bot
 screen
-python3.11 LAUNCHER.py [isBombot] # Run with process monitoring
-python3.11 COOKIEBOT.py [isBombot] # Run without process monitoring
+python3.11 LAUNCHER.py [isAlternate (int)] # Run with process monitoring
+python3.11 COOKIEBOT.py [isAlternate (int)] # Run without process monitoring
 # Press CTRL+A+D to detach from the screen
 ```

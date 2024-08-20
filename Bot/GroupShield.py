@@ -64,13 +64,13 @@ def Regras(cookiebot, msg, chat_id, language):
                 regras += "\n\nQuestions about the bot? Send to @MekhyW"
         cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
 
-def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
+def WelcomeCard(cookiebot, msg, chat_id, language, isAlternate=0):
     if 'new_chat_member' in msg:
         user = msg['new_chat_member']
     else:
         user = msg['from']
     # Get base images
-    token = bombotTOKEN if isBombot else cookiebotTOKEN
+    token = GetBotToken(isAlternate)
     try:
         photo_id = cookiebot.getUserProfilePhotos(user['id'])['photos'][0][-1]['file_id']
         user_img = openTelegramImage(cookiebot, token, photo_id)
@@ -123,7 +123,7 @@ def WelcomeCard(cookiebot, msg, chat_id, language, isBombot=False):
     final_img = open("welcome_card.png", 'rb')
     return final_img
 
-def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
+def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isAlternate=0):
     if str(chat_id) in ['-1001063487371', '-1001649779623', '-1001582063371']: # Groups where the bot should not welcome new members
         return
     SendChatAction(cookiebot, chat_id, 'typing')
@@ -151,7 +151,7 @@ def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot=False):
             rulesbuttontext = 'Ver las Reglas!'
         else:
             rulesbuttontext = 'See the Rules!'
-        welcome_card = WelcomeCard(cookiebot, msg, chat_id, language, isBombot)
+        welcome_card = WelcomeCard(cookiebot, msg, chat_id, language, isAlternate)
         SendPhoto(cookiebot, chat_id, welcome_card, caption=welcome, language=language, 
                   reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=rulesbuttontext,callback_data=f'RULES {language}')]]))
     except Exception as e:
@@ -276,7 +276,7 @@ def CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language):
                 else:    
                     text.write(line)
 
-def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt', isBombot=False):
+def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt', isAlternate=0):
     wait_open("Captcha.txt")
     with open("Captcha.txt", 'r', encoding='utf-8') as text:
         lines = text.readlines()
@@ -291,14 +291,14 @@ def SolveCaptcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt'
                     SendChatAction(cookiebot, chat_id, 'typing')
                     DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
                     msg['new_chat_member'] = cookiebot.getChatMember(chat, str(user))['user']
-                    Bemvindo(cookiebot, msg, chat, limbotimespan, language, isBombot)
+                    Bemvindo(cookiebot, msg, chat, limbotimespan, language, isAlternate)
                 elif str(chat_id) == str(chat) and str(msg['from']['id']) == str(user):
                     SendChatAction(cookiebot, chat_id, 'typing')
                     solveattempt = "".join(msg['text'].upper().split())
                     if solveattempt.isnumeric() and len(solveattempt) == 4:
                         DeleteMessage(cookiebot, (str(chat), str(captcha_id)))
                         DeleteMessage(cookiebot, telepot.message_identifier(msg))
-                        Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isBombot)
+                        Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isAlternate)
                     else:
                         DeleteMessage(cookiebot, telepot.message_identifier(msg))
                         attempts -= 1

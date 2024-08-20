@@ -15,7 +15,7 @@ def GetAdmins(cookiebot, msg, chat_id, ignorecache=False):
     cache_admins[chat_id] = [listaadmins, listaadmins_id, listaadmins_status]
     return listaadmins, listaadmins_id, listaadmins_status
 
-def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=False, silent=False):
+def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isAlternate=0, silent=False):
     wait_open(f"Static/Cookiebot_functions_{language}.txt")
     with open(f"Static/Cookiebot_functions_{language}.txt", "r", encoding='utf8') as text_file:
         lines = text_file.readlines()
@@ -27,19 +27,19 @@ def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isBombot=Fa
             if len(command.split()) == 1 and command.islower():
                 comandos.append({'command': command, 'description': description})
     if language == "private":
-        SetMyCommands(cookiebot, comandos, chat_to_alter, isBombot=isBombot)
+        SetMyCommands(cookiebot, comandos, chat_to_alter, isAlternate=isAlternate)
     else:
         for lang in ['pt', 'es', 'eng']:
             if lang != language:
-                SetMyCommands(cookiebot, comandos, chat_to_alter, isBombot=isBombot, language=lang)
-        SetMyCommands(cookiebot, comandos, chat_to_alter, isBombot=isBombot, language=language)
+                SetMyCommands(cookiebot, comandos, chat_to_alter, isAlternate=isAlternate, language=lang)
+        SetMyCommands(cookiebot, comandos, chat_to_alter, isAlternate=isAlternate, language=language)
         if silent:
             print(f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}")
         else:
             Send(cookiebot, chat_id, f"Comandos no chat com ID *{chat_to_alter}* alterados para o idioma *{language}*", language=language)
 
-def SetComandosPrivate(cookiebot, chat_id, isBombot=False):
-    SetLanguageComandos(cookiebot, chat_id, chat_id, "private", isBombot)
+def SetComandosPrivate(cookiebot, chat_id, isAlternate=0):
+    SetLanguageComandos(cookiebot, chat_id, chat_id, "private", isAlternate)
 
 def GetConfig(cookiebot, chat_id, ignorecache=False):
     if chat_id in cache_configurations and not ignorecache:
@@ -69,7 +69,7 @@ def GetConfig(cookiebot, chat_id, ignorecache=False):
         captchatimespan = abs(captchatimespan)*60
     cache_configurations[chat_id] = [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
     try:
-        SetLanguageComandos(cookiebot, chat_id, chat_id, language, isBombot=False, silent=True)
+        SetLanguageComandos(cookiebot, chat_id, chat_id, language, isAlternate=0, silent=True)
     except Exception as e:
         print(e)
     return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
@@ -105,7 +105,7 @@ def Configurar(cookiebot, msg, chat_id, listaadmins_id, language):
         with open('Static/remove_anonymous_tutorial.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video)
 
-def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
+def ConfigurarSettar(cookiebot, msg, chat_id, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')
     chat_to_alter = msg['reply_to_message']['text'].split("\n")[0].split("= ")[1]
     current_configs = GetConfig(cookiebot, chat_to_alter)
@@ -113,7 +113,7 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
     if new_val or new_val in ["pt", "eng", "es"]:
         if "Bot language for the chat. Use pt for portuguese, eng for english or es for spanish" in msg['reply_to_message']['text']:
             current_configs[7] = new_val
-            SetLanguageComandos(cookiebot, chat_id, chat_to_alter, new_val, isBombot=isBombot)
+            SetLanguageComandos(cookiebot, chat_id, chat_to_alter, new_val, isAlternate=isAlternate)
         elif "Use 1 to not interfere with other furbots if they're in the group, or 0 if I'm the only one." in msg['reply_to_message']['text']:
             current_configs[0] = bool(int(new_val))
         elif "This is the maximum number of stickers allowed in a sequence by the bot. The next ones beyond that will be deleted to avoid spam. It's valid for everyone." in msg['reply_to_message']['text']:
@@ -144,7 +144,7 @@ def ConfigurarSettar(cookiebot, msg, chat_id, isBombot=False):
         "publisherPost": current_configs[8], "publisherAsk": current_configs[9], "threadPosts": current_configs[10], "maxPosts": current_configs[11],
         "publisherMembersOnly": current_configs[12]})
         cache_configurations[chat_id] = current_configs
-        ReactToMessage(msg, '👍', isBombot=isBombot)
+        ReactToMessage(msg, '👍', isAlternate=isAlternate)
         cookiebot.sendMessage(chat_id, "Successfully changed the variable!\nSend /reload in the chat if the old config persists")
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])
@@ -189,7 +189,7 @@ def SettarLanguage(cookiebot, msg, chat_id, language_code):
     msg['reply_to_message']['text'] = f'Chat = {chat_id}\nBot language for the chat. Use pt for portuguese, eng for english or es for spanish'
     ConfigurarSettar(cookiebot, msg, mekhyID)
 
-def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
+def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id, isAlternate=0):
     if str(msg['from']['id']) not in listaadmins_id:
         Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
@@ -197,7 +197,7 @@ def AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
     req = PutRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
     if 'error' in req and req['error'] == "Not Found":
         PostRequestBackend(f"welcomes/{chat_id}", {"message": msg['text']})
-    ReactToMessage(msg, '👍', isBombot=isBombot)
+    ReactToMessage(msg, '👍', isAlternate=isAlternate)
     cookiebot.sendMessage(chat_id, "Welcome message updated! ✅", reply_to_message_id=msg['message_id'])
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 
@@ -205,7 +205,7 @@ def NovoBemvindo(cookiebot, msg, chat_id):
     SendChatAction(cookiebot, chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name", reply_to_message_id=msg['message_id'])
 
-def AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
+def AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id, isAlternate=0):
     if str(msg['from']['id']) not in listaadmins_id:
         Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
@@ -213,7 +213,7 @@ def AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id, isBombot=False):
     req = PutRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
     if 'error' in req and req['error'] == "Not Found":
         PostRequestBackend(f"rules/{chat_id}", {"rules": msg['text']})
-    ReactToMessage(msg, '👍', isBombot=isBombot)
+    ReactToMessage(msg, '👍', isAlternate=isAlternate)
     cookiebot.sendMessage(chat_id, "Updated rules message! ✅", reply_to_message_id=msg['message_id'])
     DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
 

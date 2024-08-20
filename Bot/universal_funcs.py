@@ -12,11 +12,19 @@ from deep_translator import GoogleTranslator
 from google.cloud import storage
 load_dotenv('../.env')
 login_backend, password_backend, serverIP = os.getenv('backend_login'), os.getenv('backend_password'), os.getenv('backend_serverIP')
-googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token'), os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN')
+googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN, pawstralbotTOKEN = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token'), os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN'), os.getenv('pawstralbotTOKEN')
 mekhyID = int(os.getenv('mekhyID'))
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../cookiebot-bucket-key.json'
 storage_client = storage.Client()
 storage_bucket = storage_client.get_bucket(os.getenv('bucket_name'))
+
+def GetBotToken(isAlternate):
+    if not isAlternate:
+        return cookiebotTOKEN
+    elif isAlternate == 1:
+        return bombotTOKEN
+    elif isAlternate == 2:
+        return pawstralbotTOKEN
 
 def GetRequestBackend(route, params=None):
     response = requests.get(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=60)
@@ -71,8 +79,8 @@ def SendChatAction(cookiebot, chat_id, action):
     except urllib3.exceptions.ProtocolError:
         cookiebot.sendChatAction(chat_id, action)
 
-def GetMediaContent(cookiebot, msg, media_type, isBombot=False, downloadfile=False):
-    token = bombotTOKEN if isBombot else cookiebotTOKEN
+def GetMediaContent(cookiebot, msg, media_type, isAlternate=0, downloadfile=False):
+    token = GetBotToken(isAlternate)
     try:
         try:
             file_path_telegram = cookiebot.getFile(msg[media_type]['file_id'])['file_path']
@@ -87,9 +95,9 @@ def GetMediaContent(cookiebot, msg, media_type, isBombot=False, downloadfile=Fal
             f.write(r.content)
         return filename
     except urllib3.exceptions.ProtocolError:
-        GetMediaContent(cookiebot, msg, isBombot, downloadfile)
+        GetMediaContent(cookiebot, msg, isAlternate, downloadfile)
 
-def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None, parse_mode='MarkdownV2'):
+def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isAlternate=0, reply_markup=None, parse_mode='MarkdownV2'):
     try:
         SendChatAction(cookiebot, chat_id, 'typing')
         if language == 'eng':
@@ -104,7 +112,7 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
                 text = text.replace('\\', '').replace('>', '')
                 cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
         elif thread_id is not None:
-            token = bombotTOKEN if isBombot else cookiebotTOKEN
+            token = GetBotToken(isAlternate)
             url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode=MarkdownV2"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
@@ -116,20 +124,20 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
                 text = text.replace('\\', '').replace('>', '')
                 cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
-        Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isBombot, reply_markup, parse_mode)
+        Send(cookiebot, chat_id, text, msg_to_reply, language, thread_id, isAlternate, reply_markup, parse_mode)
     except TelegramError:
         try:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
         except Exception as e:
             print(e)
 
-def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
+def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, isAlternate=0, reply_markup=None):
     try:
         SendChatAction(cookiebot, chat_id, 'upload_photo')
         if language in ['eng', 'es']:
             caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
         if thread_id is not None:
-            token = bombotTOKEN if isBombot else cookiebotTOKEN
+            token = GetBotToken(isAlternate)
             url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
@@ -142,7 +150,7 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
             else:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode='HTML')
     except urllib3.exceptions.ProtocolError:
-        return SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
+        return SendPhoto(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, isAlternate, reply_markup)
     except TelegramError:
         try:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
@@ -151,13 +159,13 @@ def SendPhoto(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langua
         return None
     return sentphoto['message_id']
 
-def SendAnimation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None, language="pt", thread_id=None, isBombot=False, reply_markup=None):
+def SendAnimation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None, language="pt", thread_id=None, isAlternate=0, reply_markup=None):
     try:
         SendChatAction(cookiebot, chat_id, 'upload_photo')
         if language in ['eng', 'es']:
             caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
         if thread_id is not None:
-            token = bombotTOKEN if isBombot else cookiebotTOKEN
+            token = GetBotToken(isAlternate)
             url = f"https://api.telegram.org/bot{token}/sendAnimation?chat_id={chat_id}&animation={animation}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
@@ -170,7 +178,7 @@ def SendAnimation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None
             else:
                 sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode='HTML')
     except urllib3.exceptions.ProtocolError:
-        return SendAnimation(cookiebot, chat_id, animation, caption, msg_to_reply, language, thread_id, isBombot, reply_markup)
+        return SendAnimation(cookiebot, chat_id, animation, caption, msg_to_reply, language, thread_id, isAlternate, reply_markup)
     except TelegramError:
         try:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
@@ -179,8 +187,8 @@ def SendAnimation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None
         return None
     return sentanimation['message_id']
 
-def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="pt"):
-    token = bombotTOKEN if isBombot else cookiebotTOKEN
+def SetMyCommands(cookiebot, commands, scope_chat_id, isAlternate=0, language="pt"):
+    token = GetBotToken(isAlternate)
     url = f'https://api.telegram.org/bot{token}/setMyCommands'
     data = {'commands': commands,
             'scope': {'type': 'chat', 'chat_id': scope_chat_id},
@@ -188,17 +196,17 @@ def SetMyCommands(cookiebot, commands, scope_chat_id, isBombot=False, language="
     r = requests.get(url, json=data)
     return r.text
 
-def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isBombot=False):
+def Forward(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')
-    token = bombotTOKEN if isBombot else cookiebotTOKEN
+    token = GetBotToken(isAlternate)
     if thread_id:
         url_req = f"https://api.telegram.org/bot{token}/forwardMessage?chat_id={chat_id}&from_chat_id={from_chat_id}&message_id={message_id}&message_thread_id={thread_id}"
         requests.get(url_req)
     else:
         cookiebot.forwardMessage(chat_id, from_chat_id, message_id)
 
-def ReactToMessage(msg, emoji, is_big=True, isBombot=False):
-    token = bombotTOKEN if isBombot else cookiebotTOKEN
+def ReactToMessage(msg, emoji, is_big=True, isAlternate=0):
+    token = GetBotToken(isAlternate)
     reaction = [{'type': 'emoji', 'emoji': emoji}]
     reaction_json = json.dumps(reaction)
     url = f'https://api.telegram.org/bot{token}/setMessageReaction?chat_id={msg["chat"]["id"]}&message_id={msg["message_id"]}&reaction={reaction_json}&is_big={is_big}'
