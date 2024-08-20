@@ -20,32 +20,57 @@ def decapitalize(s, upper_rest = False):
 
 def PvDefaultMessage(cookiebot, msg, chat_id, isAlternate):
     SendChatAction(cookiebot, chat_id, 'typing')
-    if 'language_code' in msg['from'] and msg['from']['language_code'] in ['pt', 'pt-BR', 'pt-br', 'pt_PT', 'pt-pt']:
-        if isAlternate == 1:
-            Send(cookiebot, chat_id, "*Olá, eu sou o BomBot\!*\nSou um clone do @CookieMWbot criado para os grupos da Brasil FurFest \(BFF\)\n\nSe tiver alguma dúvida ou quiser a lista completa de comandos, mande uma mensagem para @MekhyW")
-        elif isAlternate == 2:
-            Send(cookiebot, chat_id, "*Olá, eu sou o Pawsy\!*\nSou um clone do @CookieMWbot criado para os grupos do Pawstral, evento furry que ocorre no Chile!\n\nSe tiver alguma dúvida ou quiser a lista completa de comandos, mande uma mensagem para @MekhyW")
-        else:
-            Send(cookiebot, chat_id, f"*Olá, eu sou o CookieBot\!*\n\nAtualmente estou presente em {number_to_emojis(num_chats)} grupos ativos\!\nSinta\-se livre para me adicionar ao seu \:\)\n\nSou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática\.\nUse /configurar para alterar minhas configurações \(incluindo idioma\)\nUse /comandos para ver todas as minhas funcionalidades\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW",
-            reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text="Adicionar a um Grupo 👋", url=newchat_link)],
-                [InlineKeyboardButton(text="Mural de Divulgações 📬", url=postmail_chat_link)],
-                [InlineKeyboardButton(text="Canal de Atualizações 📢", url=updateschannel_link)],
-                [InlineKeyboardButton(text="Grupo de teste/assistência 🧪", url=testchat_link)]
-            ]))
+    is_portuguese = 'language_code' in msg['from'] and msg['from']['language_code'] in ['pt', 'pt-BR', 'pt-br', 'pt_PT', 'pt-pt']
+    bot_identities = {
+        1: {
+            'name': 'BomBot',
+            'description_pt': "Sou um clone do @CookieMWbot criado para os grupos da Brasil FurFest (BFF)",
+            'description_en': "I'm a clone of @CookieMWbot created for Brasil FurFest (BFF) chats",
+        },
+        2: {
+            'name': 'Pawsy',
+            'description_pt': "Sou um clone do @CookieMWbot criado para os grupos do Pawstral, evento furry que ocorre no Chile!",
+            'description_en': "I'm a clone of @CookieMWbot created for the groups of Pawstral, a furry event that takes place in Chile!",
+        },
+        'default': {
+            'name': 'CookieBot',
+            'description_pt': f"Atualmente estou presente em {number_to_emojis(num_chats)} grupos ativos! Sinta-se livre para me adicionar ao seu :)",
+            'description_en': f"I'm currently present in {number_to_emojis(num_chats)} active chats! You can add me to your :)",
+            'additional_info': "Sou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática.",
+            'additional_info_en': "I'm an AI Conversation, Group Defense, Search, Custom Content and Automated Publication bot.",
+            'commands': "/configurar para alterar minhas configurações (incluindo idioma)\nUse /comandos para ver todas as minhas funcionalidades",
+            'commands_en': "/configurar to change my settings (including language)\nUse /comandos to see all my features"
+        }
+    }
+    bot = bot_identities.get(isAlternate, bot_identities['default'])
+    name = bot['name']
+    description = bot['description_pt'] if is_portuguese else bot['description_en']
+    additional_info = bot.get('additional_info', '')
+    additional_info_en = bot.get('additional_info_en', '')
+    commands = bot.get('commands', '')
+    commands_en = bot.get('commands_en', '')
+    if bot == bot_identities['default']:
+        message = (f"*Olá, eu sou o {name}!*\n\n{description}\n\n{additional_info}\n"
+                   f"{commands}\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW") \
+            if is_portuguese else \
+            (f"*Hello, I'm {name}!* \n\n{description}\n\n{additional_info_en}\n"
+             f"{commands_en}\n\nIf you have any questions or want something added, send a message to @MekhyW")
+        reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="Adicionar a um Grupo 👋" if is_portuguese else "Add me to a Group 👋", url=newchat_link)],
+            [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=postmail_chat_link)],
+            [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=updateschannel_link)],
+            [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=testchat_link)]
+        ])
     else:
-        if isAlternate == 1:
-            Send(cookiebot, chat_id, "*Hello, I'm BomBot\!*\nI'm a clone of @CookieMWbot created for Brasil FurFest \(BFF\) chats\n\nIf you have any questions or want the complete list of commands, send a message to @MekhyW")
-        elif isAlternate == 2:
-            Send(cookiebot, chat_id, "*Hello, I'm Pawsy\!*\nI'm a clone of @CookieMWbot created for the groups of Pawstral, a furry event that takes place in Chile!\n\nIf you have any questions or want the complete list of commands, send a message to @MekhyW")
-        else:
-            Send(cookiebot, chat_id, f"*Hello, I'm CookieBot\!*\n\nI'm currently present in {number_to_emojis(num_chats)} active chats\!\nYou can add me to your \:\)\n\nI'm an AI Conversation, Group Defense, Search, Custom Content and Automated Publication bot\.\nUse /configurar to change my settings \(including language\)\nUse /comandos to see all my features\n\nIf you have any questions or want something added, send a message to @MekhyW",
-            reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text="Add me to a Group 👋", url=newchat_link)],
-                [InlineKeyboardButton(text="Shared Posts 📬", url=postmail_chat_link)],
-                [InlineKeyboardButton(text="Updates Channel 📢", url=updateschannel_link)],
-                [InlineKeyboardButton(text="Test/assistance Group 🧪", url=testchat_link)]
-            ]))
+        message = f"*Olá, eu sou o {name}!*\n{description}\n\nSe tiver alguma dúvida ou quiser a lista completa de comandos, mande uma mensagem para @MekhyW" \
+            if is_portuguese else \
+            f"*Hello, I'm {name}!*\n{description}\n\nIf you have any questions or want the complete list of commands, send a message to @MekhyW"
+        reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=postmail_chat_link)],
+            [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=updateschannel_link)],
+            [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=testchat_link)]
+        ])
+    Send(cookiebot, chat_id, message, reply_markup=reply_markup)
 
 def Privacy(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
