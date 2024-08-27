@@ -124,7 +124,7 @@ def WelcomeCard(cookiebot, msg, chat_id, language, isAlternate=0):
     return final_img
 
 def Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isAlternate=0):
-    if str(chat_id) in ['-1001063487371', '-1001649779623', '-1001582063371']: # Groups where the bot should not welcome new members
+    if str(chat_id) in ['-1001063487371', '-1001649779623', '-1001582063371', '-1002048063981', '-1002193913344']: # Groups where the bot should not welcome new members
         return
     SendChatAction(cookiebot, chat_id, 'typing')
     if limbotimespan > 0:
