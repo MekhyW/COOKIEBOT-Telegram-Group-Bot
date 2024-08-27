@@ -113,7 +113,7 @@ def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=N
                 cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
         elif thread_id is not None:
             token = GetBotToken(isAlternate)
-            url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode=MarkdownV2"
+            url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode={parse_mode}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
             requests.get(url)

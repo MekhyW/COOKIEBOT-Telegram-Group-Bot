@@ -268,15 +268,17 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isAltern
             Send(cookiebot, chat_id, "Número de dias inválido", msg_to_reply=msg, language=language)
             return
         days = msg['text'].split()[1]
+        text = f"Repostagem programada para o grupo por {days} dias!"
     else:
         days = 9999
+        text = "Repostagem programada para o grupo! (sem limite de dias)"
     original_msg_id = msg['reply_to_message']['message_id']
     chat = cookiebot.getChat(chat_id)
     hour = random.randint(10,17)
     minute = random.randint(0,59)
     create_job(hour, minute, f"{chat['title']} --> {chat['title']}, at {hour}:{minute} ", int(days), int(chat_id), int(chat_id), int(chat_id), int(original_msg_id), int(original_msg_id), int(msg['from']['id']))
     ReactToMessage(msg, '👍', isAlternate=isAlternate)
-    Send(cookiebot, chat_id, f"Repostagem programada para o grupo por *{days} dias\!*", msg_to_reply=msg, language=language)
+    Send(cookiebot, chat_id, text, msg_to_reply=msg, language=language, parse_mode='HTML')
 
 def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')
