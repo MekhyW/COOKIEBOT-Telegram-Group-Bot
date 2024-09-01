@@ -35,6 +35,9 @@ def AskPublisher(cookiebot, msg, chat_id, language):
     elif 'animation' in msg:
         media_type = 'animation'
         media_id = msg['animation']['file_id']
+    elif 'document' in msg:
+        media_type = 'animation'
+        media_id = msg['document']['file_id']
     caption_entities = []
     if 'caption_entities' in msg:
         for entity in msg['caption_entities']:
