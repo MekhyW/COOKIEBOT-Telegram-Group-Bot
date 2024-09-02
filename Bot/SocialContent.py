@@ -19,7 +19,7 @@ templates_pt = os.listdir("Static/Meme/Portuguese")
 bloblist_fighters_eng = list(storage_bucket.list_blobs(prefix="Fight/English"))
 bloblist_fighters_pt = list(storage_bucket.list_blobs(prefix="Fight/Portuguese"))
 
-with open('Static/avoid_search.txt', 'r', 'utf-8') as f:
+with open('Static/avoid_search.txt', 'r', encoding='utf-8') as f:
     avoid_search = f.readlines()
 avoid_search = [x.strip() for x in avoid_search]
 
