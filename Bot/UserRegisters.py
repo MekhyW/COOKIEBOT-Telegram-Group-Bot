@@ -1,4 +1,6 @@
-from universal_funcs import *
+import random
+from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, delete_request_backend, mekhyID
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_members = {}
 
 def get_members_chat(chat_id):
@@ -13,7 +15,7 @@ def get_members_chat(chat_id):
     return members
 
 def check_new_name(msg, chat_id):
-    if 'from' in msg and 'username' in msg['from'] and msg['from']['username'] != None:
+    if 'from' in msg and 'username' in msg['from'] and msg['from']['username'] is not None:
         username = msg['from']['username']
         members = get_members_chat(chat_id)
         if username not in str(members):
@@ -67,7 +69,7 @@ def report_ask(cookiebot, msg, chat_id, targetid, language):
         ]
     ))
 
-def report(cookiebot, msg, chat_id, targetid, language):
+def report(cookiebot, chat_id, targetid, language):
     target = cookiebot.getChatMember(chat_id, targetid)
     chat = cookiebot.getChat(chat_id)
     send_message(cookiebot, mekhyID, f"At chat {chat['title']}")
@@ -105,32 +107,32 @@ def who(cookiebot, msg, chat_id, language):
         chosen = random.choice(members)['user']
     except TypeError:
         chosen = random.choice(members)['user']
-    LocucaoAdverbial = random.choice(["Com certeza o(a) ", "Sem sombra de dúvidas o(a) ", "Suponho que o(a) ", "Aposto que o(a) ", "Talvez o(a) ", "Quem sabe o(a) ", "Aparentemente o(a) "])
-    send_message(cookiebot, chat_id, LocucaoAdverbial+"@"+chosen, msg, language)
+    locucao_adverbial = random.choice(["Com certeza o(a) ", "Sem sombra de dúvidas o(a) ", "Suponho que o(a) ", "Aposto que o(a) ", "Talvez o(a) ", "Quem sabe o(a) ", "Aparentemente o(a) "])
+    send_message(cookiebot, chat_id, locucao_adverbial+"@"+chosen, msg, language)
 
 def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     react_to_message(msg, '❤️', is_alternate_bot=is_alternate_bot)
     send_chat_action(cookiebot, chat_id, 'typing')
     members = get_members_chat(chat_id)
     if len(msg['text'].split()) >= 3:
-        targetA = msg['text'].split()[1]
-        targetB = msg['text'].split()[2]
+        target_a = msg['text'].split()[1]
+        target_b = msg['text'].split()[2]
     else:
         random.shuffle(members)
         try:
-            targetA = members[0]['user']
-            targetB = members[1]['user']
+            target_a = members[0]['user']
+            target_b = members[1]['user']
         except IndexError:
             send_message(cookiebot, chat_id, "Ainda não vi membros suficientes para shippar!", msg, language)
             return
         except TypeError:
             cache_members.pop(chat_id)
             members = get_members_chat(chat_id)
-            targetA = members[0]['user']
-            targetB = members[1]['user']
+            target_a = members[0]['user']
+            target_b = members[1]['user']
     divorce_prob = str(random.randint(0, 100))
     with open('Static/ship_dynamics.txt', 'r', encoding='utf-8') as f:
         lines = f.readlines()
         ship_dynamic = random.choice(lines).replace('\n', '')
     children_quantity = random.choice(['Nenhum!', 'Um', 'Dois', 'Três'])
-    send_message(cookiebot, chat_id, f"Detectei um Casal! @{targetA} + @{targetB} = ❤️\n\nDinâmica: {ship_dynamic}\nFilhos: {children_quantity} 🧸\nChance de divórcio: {divorce_prob}% 📈", msg, language)
+    send_message(cookiebot, chat_id, f"Detectei um Casal! @{target_a} + @{target_b} = ❤️\n\nDinâmica: {ship_dynamic}\nFilhos: {children_quantity} 🧸\nChance de divórcio: {divorce_prob}% 📈", msg, language)

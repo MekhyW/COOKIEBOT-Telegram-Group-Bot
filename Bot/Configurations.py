@@ -1,8 +1,10 @@
-from universal_funcs import *
+from universal_funcs import send_message, send_chat_action, react_to_message, delete_message, get_request_backend, put_request_backend, post_request_backend, wait_open, set_bot_commands, mekhyID
+import telepot
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_configurations = {}
 cache_admins = {}
 
-def get_admins(cookiebot, msg, chat_id, ignorecache=False):
+def get_admins(cookiebot, chat_id, ignorecache=False):
     if chat_id in cache_admins and not ignorecache:
         admins = cache_admins[chat_id]
         return admins[0], admins[1], admins[2]

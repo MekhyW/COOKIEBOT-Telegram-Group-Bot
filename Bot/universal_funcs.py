@@ -1,13 +1,9 @@
-import os, math, numpy, random, time, datetime, re, sys, traceback
-import urllib, urllib3, json, requests
+import os, time, re, traceback
+import urllib3, json, requests
 from dotenv import load_dotenv
 from requests.auth import HTTPBasicAuth
-from bs4 import BeautifulSoup
 import telepot
-from telepot.loop import MessageLoop
-from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
-from telepot.delegate import (per_chat_id, create_open, pave_event_space, include_callback_query_chat_id)
-from telepot.exception import *
+from telepot.exception import TelegramError
 from deep_translator import GoogleTranslator
 from google.cloud import storage
 load_dotenv('../.env')
@@ -21,13 +17,16 @@ storage_bucket = storage_client.get_bucket(os.getenv('bucket_name'))
 def get_bot_token(is_alternate_bot):
     if not is_alternate_bot:
         return cookiebotTOKEN
-    elif is_alternate_bot == 1:
+    if is_alternate_bot == 1:
         return bombotTOKEN
-    elif is_alternate_bot == 2:
+    if is_alternate_bot == 2:
         return pawstralbotTOKEN
+    return None
 
 def get_request_backend(route, params=None):
-    response = requests.get(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=60)
+    response = requests.get(f'{serverIP}/{route}', json=params,
+                            auth = HTTPBasicAuth(login_backend, password_backend),
+                            verify=False, timeout=60)
     try:
         if len(response.text):
             return json.loads(response.text)
@@ -38,7 +37,9 @@ def get_request_backend(route, params=None):
         return ''
 
 def post_request_backend(route, params=None):
-    response = requests.post(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=60)
+    response = requests.post(f'{serverIP}/{route}', json=params,
+                             auth = HTTPBasicAuth(login_backend, password_backend),
+                             verify=False, timeout=60)
     try:
         if len(response.text):
             print("POST: ", response.text)
@@ -50,7 +51,9 @@ def post_request_backend(route, params=None):
         return ''
 
 def put_request_backend(route, params=None):
-    response = requests.put(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=60)
+    response = requests.put(f'{serverIP}/{route}', json=params,
+                            auth = HTTPBasicAuth(login_backend, password_backend),
+                            verify=False, timeout=60)
     try:
         if len(response.text):
             print("PUT: ", response.text)
@@ -62,7 +65,9 @@ def put_request_backend(route, params=None):
         return ''
 
 def delete_request_backend(route, params=None):
-    response = requests.delete(f'{serverIP}/{route}', json=params, auth = HTTPBasicAuth(login_backend, password_backend), verify=False, timeout=60)
+    response = requests.delete(f'{serverIP}/{route}', json=params,
+                               auth = HTTPBasicAuth(login_backend, password_backend),
+                               verify=False, timeout=60)
     try:
         if len(response.text):
             print("DELETE: ", response.text)
@@ -107,24 +112,28 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
             try:
-                cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup, parse_mode=parse_mode)
+                cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, 
+                                      reply_markup=reply_markup, parse_mode=parse_mode)
             except telepot.exception.TelegramError:
                 text = text.replace('\\', '').replace('>', '')
-                cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, reply_markup=reply_markup)
+                cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, 
+                                      reply_markup=reply_markup)
         elif thread_id is not None:
             token = get_bot_token(is_alternate_bot)
             url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode={parse_mode}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
-            requests.get(url)
+            requests.get(url, timeout=10)
         else:
             try:
-                cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, parse_mode=parse_mode)
+                cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, 
+                                      parse_mode=parse_mode)
             except telepot.exception.TelegramError:
                 text = text.replace('\\', '').replace('>', '')
                 cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
-        send_message(cookiebot, chat_id, text, msg_to_reply, language, thread_id, is_alternate_bot, reply_markup, parse_mode)
+        send_message(cookiebot, chat_id, text, msg_to_reply, language, 
+                     thread_id, is_alternate_bot, reply_markup, parse_mode)
     except TelegramError:
         try:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
@@ -141,16 +150,20 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
             url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             sentphoto = {'message_id': json.loads(response.text)['result']['message_id']}
         else:
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
             if reply_markup is None:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, parse_mode='HTML')
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, 
+                            reply_to_message_id=reply_to_message_id, parse_mode='HTML')
             else:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode='HTML')
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, 
+                            reply_to_message_id=reply_to_message_id, 
+                            reply_markup=reply_markup, parse_mode='HTML')
     except urllib3.exceptions.ProtocolError:
-        return send_photo(cookiebot, chat_id, photo, caption, msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
+        return send_photo(cookiebot, chat_id, photo, caption, 
+                          msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
     except TelegramError:
         try:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
@@ -174,11 +187,15 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
         else:
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
             if reply_markup is None:
-                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, parse_mode='HTML')
+                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, 
+                                reply_to_message_id=reply_to_message_id, parse_mode='HTML')
             else:
-                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode='HTML')
+                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, 
+                                reply_to_message_id=reply_to_message_id, 
+                                reply_markup=reply_markup, parse_mode='HTML')
     except urllib3.exceptions.ProtocolError:
-        return send_animation(cookiebot, chat_id, animation, caption, msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
+        return send_animation(cookiebot, chat_id, animation, caption, 
+                              msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
     except TelegramError:
         try:
             cookiebot.sendMessage(mekhyID, traceback.format_exc())
@@ -193,7 +210,7 @@ def set_bot_commands(cookiebot, commands, scope_chat_id, is_alternate_bot=0, lan
     data = {'commands': commands,
             'scope': {'type': 'chat', 'chat_id': scope_chat_id},
             'language_code': language[0:2].lower()}
-    r = requests.get(url, json=data)
+    r = requests.get(url, json=data, timeout=10)
     return r.text
 
 def forward_message(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, is_alternate_bot=0):
@@ -201,7 +218,7 @@ def forward_message(cookiebot, chat_id, from_chat_id, message_id, thread_id=None
     token = get_bot_token(is_alternate_bot)
     if thread_id:
         url_req = f"https://api.telegram.org/bot{token}/forwardMessage?chat_id={chat_id}&from_chat_id={from_chat_id}&message_id={message_id}&message_thread_id={thread_id}"
-        requests.get(url_req)
+        requests.get(url_req, timeout=10)
     else:
         cookiebot.forwardMessage(chat_id, from_chat_id, message_id)
 
@@ -210,7 +227,7 @@ def react_to_message(msg, emoji, is_big=True, is_alternate_bot=0):
     reaction = [{'type': 'emoji', 'emoji': emoji}]
     reaction_json = json.dumps(reaction)
     url = f'https://api.telegram.org/bot{token}/setMessageReaction?chat_id={msg["chat"]["id"]}&message_id={msg["message_id"]}&reaction={reaction_json}&is_big={is_big}'
-    requests.get(url)
+    requests.get(url, timeout=10)
 
 def ban_and_blacklist(cookiebot, chat_id, user_id):
     post_request_backend(f'blacklist/{user_id}')
@@ -225,7 +242,7 @@ def leave_and_blacklist(cookiebot, chat_id):
 def wait_open(filename):
     if os.path.exists(filename):
         try:
-            text = open(filename, 'r')
+            text = open(filename, 'r', encoding='utf-8')
             text.close()
         except IOError:
             time.sleep(1)
@@ -243,13 +260,15 @@ def check_if_string_in_file(file_name, string_to_search):
     return False
 
 def number_to_emojis(number):
-    emojis = {'0': '0️⃣', '1': '1️⃣', '2': '2️⃣', '3': '3️⃣', '4': '4️⃣', '5': '5️⃣', '6': '6️⃣', '7': '7️⃣', '8': '8️⃣', '9': '9️⃣'}
+    emojis = {'0': '0️⃣', '1': '1️⃣', '2': '2️⃣', '3': '3️⃣', '4': '4️⃣',
+              '5': '5️⃣', '6': '6️⃣', '7': '7️⃣', '8': '8️⃣', '9': '9️⃣'}
     emojis_string = ''
     for digit in str(number):
         emojis_string += emojis[digit]
     return emojis_string
 
 def emojis_to_numbers(text):
-    numbers = {'0️⃣': '0', '1️⃣': '1', '2️⃣': '2', '3️⃣': '3', '4️⃣': '4', '5️⃣': '5', '6️⃣': '6', '7️⃣': '7', '8️⃣': '8', '9️⃣': '9'}
+    numbers = {'0️⃣': '0', '1️⃣': '1', '2️⃣': '2', '3️⃣': '3', '4️⃣': '4',
+               '5️⃣': '5', '6️⃣': '6', '7️⃣': '7', '8️⃣': '8', '9️⃣': '9'}
     pattern = re.compile('|'.join(map(re.escape, numbers.keys())))
     return pattern.sub(lambda x: numbers[x.group()], text)

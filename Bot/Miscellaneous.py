@@ -1,4 +1,13 @@
-from universal_funcs import *
+import random
+import json
+import os
+import time
+import math
+import datetime
+import requests
+from universal_funcs import get_request_backend, send_message, delete_message, storage_bucket, send_photo, send_chat_action, react_to_message, forward_message, number_to_emojis, wait_open, get_media_content, get_bot_token, send_animation
+import telepot
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from Publisher import postmail_chat_link
 import Distortioner
 bloblist_ideiadesenho = list(storage_bucket.list_blobs(prefix="IdeiaDesenho"))
@@ -74,7 +83,7 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
 
 def privacy_statement(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
-    with open('Static/privacy.html', 'r') as file:
+    with open('Static/privacy.html', 'r', encoding='utf-8') as file:
         privacy_text = file.read()
     send_message(cookiebot, chat_id, privacy_text, msg_to_reply=msg, language=language, parse_mode='HTML')
 
@@ -94,33 +103,33 @@ def analyze(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         result += str(item) + ': ' + str(msg['reply_to_message'][item]) + '\n'
     send_message(cookiebot, chat_id, result, msg_to_reply=msg)
 
-def list_groups(cookiebot, msg, chat_id, language):
+def list_groups(cookiebot, chat_id):
     send_chat_action(cookiebot, chat_id, 'typing')
     groups = get_request_backend('registers')
     num = 0
     for group in groups:
         try:
-            id = group['id']
-            chat = cookiebot.getChat(int(id))
+            group_id = group['id']
+            chat = cookiebot.getChat(int(group_id))
             time.sleep(0.2)
             if 'title' in chat:
-                cookiebot.sendMessage(chat_id, f"{id} - {chat['title']}")
+                cookiebot.sendMessage(chat_id, f"{group_id} - {chat['title']}")
             else:
-                cookiebot.sendMessage(chat_id, f"{id} - [NO TITLE]")
+                cookiebot.sendMessage(chat_id, f"{group_id} - [NO TITLE]")
             num += 1
         except Exception as e:
             print(e)
-            print("Group not found: " + id)
+            print("Group not found: " + group_id)
     cookiebot.sendMessage(chat_id, f"Total groups found: {num}")
 
 def broadcast_message(cookiebot, msg):
     groups = get_request_backend('registers')
     for group in groups:
         try:
-            id = group['id']
-            send_message(cookiebot, int(id), msg['text'].replace('/broadcast', ''))
+            group_id = group['id']
+            send_message(cookiebot, int(group_id), msg['text'].replace('/broadcast', ''))
             time.sleep(0.5)
-        except:
+        except Exception:
             pass
 
 def list_commands(cookiebot, msg, chat_id, language):
@@ -323,13 +332,13 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
 
 def unearth(cookiebot, msg, chat_id, thread_id=None):
     send_chat_action(cookiebot, chat_id, 'typing')
-    for attempt in range(10):
+    for _ in range(10):
         try:
             chosenid = random.randint(1, msg['message_id'])
             forward_message(cookiebot, chat_id, chat_id, chosenid, thread_id=thread_id)
-            return
-        except:
-            pass
+            return chosenid
+        except Exception as e:
+            return None
 
 def death(cookiebot, msg, chat_id, language):
     react_to_message(msg, '👻')
@@ -384,7 +393,7 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         instru = "Reply to a video, photo, audio, gif or sticker with the command to distort (or use /destroy pfp)"
     if msg['text'].endswith('pfp'):
         send_chat_action(cookiebot, chat_id, 'upload_photo')
-        token = bombotTOKEN if is_alternate_bot else cookiebotTOKEN
+        token = get_bot_token(is_alternate_bot)
         file_path_telegram = cookiebot.getFile(cookiebot.getUserProfilePhotos(msg['from']['id'])['photos'][0][-1]['file_id'])['file_path']
         r = requests.get(f"https://api.telegram.org/file/bot{token}/{file_path_telegram}", allow_redirects=True, timeout=10)
         filename = file_path_telegram.split('/')[-1]

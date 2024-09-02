@@ -1,6 +1,13 @@
-from universal_funcs import *
-from UserRegisters import *
-import google_images_search, googleapiclient.discovery
+import os
+import random
+import urllib.request
+import datetime
+from bs4 import BeautifulSoup
+from universal_funcs import googleAPIkey, searchEngineCX, saucenao_key, storage_bucket, get_request_backend, post_request_backend, send_chat_action, send_message, react_to_message, send_photo, forward_message, cookiebotTOKEN
+from UserRegisters import get_members_chat
+import google_images_search
+import googleapiclient.discovery
+from deep_translator import GoogleTranslator
 from saucenao_api import SauceNao, errors
 import cv2
 import numpy as np
@@ -12,7 +19,7 @@ templates_pt = os.listdir("Static/Meme/Portuguese")
 bloblist_fighters_eng = list(storage_bucket.list_blobs(prefix="Fight/English"))
 bloblist_fighters_pt = list(storage_bucket.list_blobs(prefix="Fight/Portuguese"))
 
-with open('Static/avoid_search.txt', 'r') as f:
+with open('Static/avoid_search.txt', 'r', 'utf-8') as f:
     avoid_search = f.readlines()
 avoid_search = [x.strip() for x in avoid_search]
 
@@ -211,7 +218,7 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
             if len(members) < 2:
                 send_message(cookiebot, chat_id, "Não há membros suficientes para batalhar", msg, language)
                 return
-            for attempt in range(100):
+            for _ in range(100):
                 random.shuffle(members)
                 if 'user' in members[0] and 'user' in members[1]:
                     users = members[0]['user'], members[1]['user']

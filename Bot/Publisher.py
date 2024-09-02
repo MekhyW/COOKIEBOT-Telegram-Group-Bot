@@ -1,9 +1,17 @@
-from universal_funcs import *
-from Configurations import *
-from UserRegisters import *
+import datetime
+import random
 import sqlite3
-from price_parser import Price
 import html
+import re
+import json
+import traceback
+import requests
+from universal_funcs import send_chat_action, send_message, forward_message, get_request_backend, react_to_message, emojis_to_numbers, send_photo, mekhyID, exchangerate_key
+from Configurations import get_config
+from UserRegisters import get_members_chat
+from price_parser import Price
+from deep_translator import GoogleTranslator
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 publisher_db = sqlite3.connect('Publisher.db', check_same_thread=False)
 publisher_cursor = publisher_db.cursor()
 publisher_cursor.execute("CREATE TABLE IF NOT EXISTS publisher (name TEXT, days INT, next_time TEXT, target_chat_id INT, postmail_chat_id INT, second_chatid INT, postmail_message_id INT, second_messageid INT, origin_userid INT)")
@@ -140,7 +148,7 @@ def convert_prices_in_text(text, code_target):
             return text
         try:
             rate_url = f"https://v6.exchangerate-api.com/v6/{exchangerate_key}/latest/{code_from}"
-            rate = json.loads(requests.get(rate_url).text)['conversion_rates'][code_target]
+            rate = json.loads(requests.get(rate_url, timeout=10).text)['conversion_rates'][code_target]
             converted = round(amount * rate, 2)
             final_text += f"{paragraph} ({code_target} ≈{converted})\n"
         except Exception as e:
@@ -200,22 +208,22 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     cache_posts.pop(origin_messageid)
     return sent_pt, sent_en
 
-def deny_post(cookiebot, query_data):
+def deny_post(query_data):
     if len(query_data.split()) < 2:
         return
     origin_messageid = query_data.split()[1]
     cache_posts.pop(origin_messageid)
 
 def schedule_post(cookiebot, query_data):
-    approve, origin_chatid, second_chatid, origin_messageid, origin_userid, days, second_messageid = query_data.split()[:7]
+    _, origin_chatid, second_chatid, origin_messageid, origin_userid, days, second_messageid = query_data.split()[:7]
     origin_chat = cookiebot.getChat(origin_chatid)
     try:
         origin_user = cookiebot.getChatMember(origin_chatid, origin_userid)['user']
-    except:
+    except Exception:
         origin_user = None
     sent_pt, sent_en = prepare_post(cookiebot, origin_messageid, origin_chat, origin_user)
     jobs = list_jobs()
-    for job in jobs:
+    for job in jobs.copy():
         if job['name'].split('-->')[0].strip() == origin_chat['title'].strip():
             delete_job(job['name'])
             jobs.remove(job)
@@ -223,10 +231,10 @@ def schedule_post(cookiebot, query_data):
     answer += "NOW - Cookiebot Mural 📬\n"
     for group in get_request_backend('registers'):
         group_id = group['id']
-        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, group_id)
+        _, _, _, _, _, _, _, language, publisherpost, _, _, max_posts, publisher_members_only = get_config(cookiebot, group_id)
         if not publisherpost:
             continue
-        if publisherMembersOnly:
+        if publisher_members_only:
             members = get_members_chat(group_id)
             if origin_user is None or origin_user['username'] not in str(members):
                 answer += f"ERROR! Cannot post in {cookiebot.getChat(group_id)['title']} (because you are not an active member)\n"
@@ -234,10 +242,10 @@ def schedule_post(cookiebot, query_data):
         try:
             num_posts_for_group = 0
             target_chattitle = cookiebot.getChat(group_id)['title']
-            for job in jobs:
+            for job in jobs.copy():
                 if f"--> {target_chattitle}" in job['name']:
                     num_posts_for_group += 1
-                if maxPosts is not None and num_posts_for_group > maxPosts:
+                if max_posts is not None and num_posts_for_group > max_posts:
                     delete_job(job['name'])
                     jobs.remove(job)
                     num_posts_for_group -= 1
@@ -250,11 +258,11 @@ def schedule_post(cookiebot, query_data):
         except Exception as e:
             print(e)
     try:
-        answer += f"OBS: private chats are not listed!"
+        answer += "OBS: private chats are not listed!"
         send_message(cookiebot, mekhyID, answer)
         send_message(cookiebot, origin_userid, answer)
         send_message(cookiebot, second_chatid, "Post added to the publication queue!", msg_to_reply={'message_id': second_messageid})
-    except Exception as e:
+    except Exception:
         send_message(cookiebot, mekhyID, traceback.format_exc())
         send_message(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n<blockquote>Send /start in my DM so I can send you messages.</blockquote>", msg_to_reply={'message_id': second_messageid})
 
@@ -314,7 +322,7 @@ def scheduler_pull(cookiebot, is_alternate_bot=0):
                 forward_message(cookiebot, group_id, postmail_chat_id, origin_messageid, thread_id=int(config[10]), is_alternate_bot=is_alternate_bot)
             else:
                 forward_message(cookiebot, group_id, postmail_chat_id, origin_messageid, is_alternate_bot=is_alternate_bot)
-        except Exception as e:
+        except Exception:
             send_message(cookiebot, mekhyID, traceback.format_exc())
             delete_job(job['name'])
 

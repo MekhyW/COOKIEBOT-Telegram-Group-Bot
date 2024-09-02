@@ -1,15 +1,15 @@
 import subprocess
 import os
 import shutil
-import cv2
 import asyncio
 from pathlib import Path
+import cv2
 from wand.image import Image
 import ffmpeg
 
-semaphore_videos = False
-semaphore_audios = False
-semaphore_images = False
+SEMAPHORE_VIDEOS = False
+SEMAPHORE_AUDIOS = False
+SEMAPHORE_IMAGES = False
 
 class TicketedDict(dict):
     def __init__(self, *args, **kwargs):
@@ -108,13 +108,13 @@ def distort_audiofile(in_audio, audio_freq, audio_mod, out_filename):
     audio.output(out_filename).run(overwrite_output=True)
 
 def distortioner(input_filename, is_gif=False):
-    global semaphore_videos, semaphore_audios, semaphore_images
+    global SEMAPHORE_VIDEOS, SEMAPHORE_AUDIOS, SEMAPHORE_IMAGES
     input_path = Path(input_filename)
     if input_path.suffix.lower() in ['.mp4', '.mov', '.avi']:
-        while semaphore_videos:
+        while SEMAPHORE_VIDEOS:
             pass
         try:
-            semaphore_videos = True
+            SEMAPHORE_VIDEOS = True
             subprocess.run(['ffmpeg', '-i', input_filename, '-t', '15', '-r', '24', '-vf', 'scale=-2:360', 'preprocessed.mp4', '-y'], check=True)
             capture = cv2.VideoCapture('preprocessed.mp4')
             fps = capture.get(cv2.CAP_PROP_FPS)
@@ -132,7 +132,7 @@ def distortioner(input_filename, is_gif=False):
         except Exception as e:
             print(e)
         finally:
-            semaphore_videos = False
+            SEMAPHORE_VIDEOS = False
             if os.path.exists('preprocessed.mp4'):
                 os.remove('preprocessed.mp4')
             if os.path.exists('tmp.mp4'):
@@ -142,25 +142,25 @@ def distortioner(input_filename, is_gif=False):
             shutil.rmtree('frames_distorted')
             shutil.rmtree('frames_original')
     elif input_path.suffix.lower() in ['.jpg', '.png']:
-        while semaphore_images:
+        while SEMAPHORE_IMAGES:
             pass
         try:
-            semaphore_images = True
+            SEMAPHORE_IMAGES = True
             process_image(input_filename, 'distorted.jpg', 25)
         except Exception as e:
             print(e)
         finally:
-            semaphore_images = False
+            SEMAPHORE_IMAGES = False
     elif input_path.suffix.lower() in ['.mp3', '.wav', '.ogg', '.oga']:
-        while semaphore_audios:
+        while SEMAPHORE_AUDIOS:
             pass
         try:
-            semaphore_audios = True
+            SEMAPHORE_AUDIOS = True
             distort_audiofile(input_filename, 10, 1, 'distorted.mp3')
         except Exception as e:
             print(e)
         finally:
-            semaphore_audios = False
+            SEMAPHORE_AUDIOS = False
     else:
         raise ValueError("Unsupported file type")
 

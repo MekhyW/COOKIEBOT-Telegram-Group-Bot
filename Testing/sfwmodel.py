@@ -16,9 +16,9 @@ message += '\n\nTente reduzir bastante a resposta.'
 messages.append({"role": "user", "content": message})
 
 completion = openai_client.chat.completions.create(model="gpt-4-turbo-preview", messages=messages, temperature=1)
-AnswerFinal = completion.choices[0].message.content
+answer_final = completion.choices[0].message.content
 try:
-    AnswerFinal = AnswerFinal.split("[🔓JAILBREAK]")[1]
+    answer_final = answer_final.split("[🔓JAILBREAK]")[1]
 except IndexError:
     pass
-print(AnswerFinal)
+print(answer_final)

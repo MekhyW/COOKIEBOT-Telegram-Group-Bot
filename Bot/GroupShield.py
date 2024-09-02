@@ -1,9 +1,19 @@
 # coding=utf8
-from universal_funcs import *
+import threading
+import json
+import requests
+import time
+import math
+import re
+import random
+import datetime
+import urllib.request
+import telepot
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
+from universal_funcs import spamwatch_token
+from UserRegisters import get_bot_token, get_request_backend, send_message, send_chat_action, send_photo, delete_message, ban_and_blacklist, wait_open
 from captcha.image import ImageCaptcha
 import spamwatch
-import threading
-import json, requests
 import cv2
 import numpy as np
 from PIL import ImageFont, ImageDraw, Image
@@ -77,7 +87,7 @@ def welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     except (KeyError, IndexError):
         user_img = cv2.imread('Static/No_Image_Available.jpg', cv2.IMREAD_COLOR)
     try:
-        url = 'https://api.telegram.org/bot{}/getChat?chat_id={}'.format(token, chat_id)
+        url = f'https://api.telegram.org/bot{token}/getChat?chat_id={chat_id}'
         data = requests.get(url).json()
         photo_id = data['result']['photo']['big_file_id']
         chat_img = open_telegram_image(cookiebot, token, photo_id)
@@ -140,7 +150,7 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
             welcome = f"Olá! As boas-vindas ao grupo {msg['chat']['title']}!"
         except Exception as e:
             print(e)
-            welcome = f"Olá! As boas-vindas ao grupo!"
+            welcome = "Olá! As boas-vindas ao grupo!"
     elif len(welcome['message']) > 0:
         welcome = welcome['message'].replace('\\n', '\n')
         welcome = substitute_user_tags(welcome, msg)
@@ -151,8 +161,8 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
             rulesbuttontext = 'Ver las Reglas!'
         else:
             rulesbuttontext = 'See the Rules!'
-        welcome_card = welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot)
-        send_photo(cookiebot, chat_id, welcome_card, caption=welcome, language=language, 
+        welcome_card_image = welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot)
+        send_photo(cookiebot, chat_id, welcome_card_image, caption=welcome, language=language, 
                   reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=rulesbuttontext,callback_data=f'RULES {language}')]]))
     except Exception as e:
         print(e)
@@ -197,13 +207,12 @@ def check_spamwatch(cookiebot, msg, chat_id, language):
     return False
 
 def check_banlist(cookiebot, msg, chat_id, language):
-    isBlacklisted = get_request_backend(f"blacklist/{msg['new_chat_participant']['id']}")
-    if 'error' in isBlacklisted:
+    is_blacklisted = get_request_backend(f"blacklist/{msg['new_chat_participant']['id']}")
+    if 'error' in is_blacklisted:
         return False
-    else:
-        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado como conta falsa/spam em outros chats</b>", language=language)
-        return True
+    cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+    send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado como conta falsa/spam em outros chats</b>", language=language)
+    return True
 
 def captcha_message(cookiebot, msg, chat_id, captchatimespan, language):
     try:
@@ -226,7 +235,7 @@ def captcha_message(cookiebot, msg, chat_id, captchatimespan, language):
     with open("Captcha.txt", 'w+', encoding='utf-8') as text:
         for line in lines:
             if len(line.split()) >= 5:
-                hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parse_line_captcha(line)
+                _, _, _, _, chat, user, password, _, _ = parse_line_captcha(line)
                 if chat == chat_id and user == msg['new_chat_participant']['id']:
                     for thread in threading.enumerate():
                         if isinstance(thread, threading.Timer) and thread.kwargs['chat_id'] == chat_id and thread.kwargs['msg']['new_chat_participant']['id'] == msg['new_chat_participant']['id']:
@@ -257,7 +266,7 @@ def check_captcha(cookiebot, msg, chat_id, captchatimespan, language):
     with open("Captcha.txt", 'w+', encoding='utf-8') as text:
         for line in lines:
             if len(line.split()) >= 5:
-                hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parse_line_captcha(line)
+                _, _, _, captchasettime, chat, user, _, captcha_id, attempts = parse_line_captcha(line)
                 if chat == chat_id and (captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) or attempts <= 0):
                     if attempts <= 0:
                         reason = "exceder o limite de tentativas para resolver o captcha"
@@ -286,7 +295,7 @@ def solve_captcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt
     with open("Captcha.txt", 'w+', encoding='utf-8') as text:
         for line in lines:
             if len(line.split()) >= 5:
-                hour, minute, second, captchasettime, chat, user, password, captcha_id, attempts = parse_line_captcha(line)
+                _, _, _, _, chat, user, password, captcha_id, attempts = parse_line_captcha(line)
                 if str(chat_id) == str(chat) and button:
                     send_chat_action(cookiebot, chat_id, 'typing')
                     delete_message(cookiebot, (str(chat), str(captcha_id)))
