@@ -18,8 +18,8 @@ with open("Static/Custom.txt", "r", encoding='utf8') as custom_commands_file:
 def decapitalize(s, upper_rest = False):
   return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
 
-def PvDefaultMessage(cookiebot, msg, chat_id, isAlternate):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
+    send_chat_action(cookiebot, chat_id, 'typing')
     is_portuguese = 'language_code' in msg['from'] and msg['from']['language_code'] in ['pt', 'pt-BR', 'pt-br', 'pt_PT', 'pt-pt']
     bot_identities = {
         1: {
@@ -42,7 +42,7 @@ def PvDefaultMessage(cookiebot, msg, chat_id, isAlternate):
             'commands_en': "/configurar to change my settings (including language)\nUse /comandos to see all my features"
         }
     }
-    bot = bot_identities.get(isAlternate, bot_identities['default'])
+    bot = bot_identities.get(is_alternate_bot, bot_identities['default'])
     name = bot['name']
     description = bot['description_pt'] if is_portuguese else bot['description_en']
     additional_info = bot.get('additional_info', '')
@@ -70,33 +70,33 @@ def PvDefaultMessage(cookiebot, msg, chat_id, isAlternate):
             [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=updateschannel_link)],
             [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=testchat_link)]
         ])
-    Send(cookiebot, chat_id, message, reply_markup=reply_markup)
+    send_message(cookiebot, chat_id, message, reply_markup=reply_markup)
 
-def Privacy(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def privacy_statement(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'typing')
     with open('Static/privacy.html', 'r') as file:
         privacy_text = file.read()
-    Send(cookiebot, chat_id, privacy_text, msg_to_reply=msg, language=language, parse_mode='HTML')
+    send_message(cookiebot, chat_id, privacy_text, msg_to_reply=msg, language=language, parse_mode='HTML')
 
-def TaVivo(cookiebot, msg, chat_id, language, isAlternate=0):
-    ReactToMessage(msg, '👍', isAlternate=isAlternate)
-    SendChatAction(cookiebot, chat_id, 'typing')
-    Send(cookiebot, chat_id, "<b>Estou vivo</b>\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
+def is_alive(cookiebot, msg, chat_id, language, is_alternate_bot=0):
+    react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
+    send_chat_action(cookiebot, chat_id, 'typing')
+    send_message(cookiebot, chat_id, "<b>Estou vivo</b>\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
 
-def Analyze(cookiebot, msg, chat_id, language, isAlternate=0):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def analyze(cookiebot, msg, chat_id, language, is_alternate_bot=0):
+    send_chat_action(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
-        Send(cookiebot, chat_id, "Responda uma mensagem com o comando para analisar", msg, language)
+        send_message(cookiebot, chat_id, "Responda uma mensagem com o comando para analisar", msg, language)
         return
-    ReactToMessage(msg, '🤔', isAlternate=isAlternate)
+    react_to_message(msg, '🤔', is_alternate_bot=is_alternate_bot)
     result = ''
     for item in msg['reply_to_message']:
         result += str(item) + ': ' + str(msg['reply_to_message'][item]) + '\n'
-    Send(cookiebot, chat_id, result, msg_to_reply=msg)
+    send_message(cookiebot, chat_id, result, msg_to_reply=msg)
 
-def Grupos(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'typing')
-    groups = GetRequestBackend('registers')
+def list_groups(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'typing')
+    groups = get_request_backend('registers')
     num = 0
     for group in groups:
         try:
@@ -113,28 +113,28 @@ def Grupos(cookiebot, msg, chat_id, language):
             print("Group not found: " + id)
     cookiebot.sendMessage(chat_id, f"Total groups found: {num}")
 
-def Broadcast(cookiebot, msg):
-    groups = GetRequestBackend('registers')
+def broadcast_message(cookiebot, msg):
+    groups = get_request_backend('registers')
     for group in groups:
         try:
             id = group['id']
-            Send(cookiebot, int(id), msg['text'].replace('/broadcast', ''))
+            send_message(cookiebot, int(id), msg['text'].replace('/broadcast', ''))
             time.sleep(0.5)
         except:
             pass
 
-def Comandos(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def list_commands(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'typing')
     wait_open(f"Static/Cookiebot_functions_{language}.txt")
     with open(f"Static/Cookiebot_functions_{language}.txt", "r+", encoding='utf8') as text_file:
         string = text_file.read()
-    Send(cookiebot, chat_id, string, msg_to_reply=msg)
+    send_message(cookiebot, chat_id, string, msg_to_reply=msg)
 
-def NotifyFunOff(cookiebot, msg, chat_id, language):
-    Send(cookiebot, chat_id, "<i>Funções de diversão estão desativadas nesse chat</i>", msg, language)
+def notify_fun_off(cookiebot, msg, chat_id, language):
+    send_message(cookiebot, chat_id, "<i>Funções de diversão estão desativadas nesse chat</i>", msg, language)
 
-def IdeiaDesenho(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
+def drawing_idea(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'upload_photo')
     ideiaID = random.randint(0, len(bloblist_ideiadesenho)-1)
     blob = bloblist_ideiadesenho[ideiaID]
     photo = blob.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
@@ -144,21 +144,21 @@ def IdeiaDesenho(cookiebot, msg, chat_id, language):
         caption = f"Referencia con ID {ideiaID}\n\n¡No rastrear sin dar créditos! (utilice la búsqueda inversa de imágenes de Google)"
     else:
         caption = f"Reference ID {ideiaID}\n\nDo not trace without credits! (use the reverse google images search)"
-    SendPhoto(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
+    send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
 
-def CustomCommand(cookiebot, msg, chat_id):
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
+def custom_command(cookiebot, msg, chat_id):
+    send_chat_action(cookiebot, chat_id, 'upload_photo')
     bloblist = list(storage_bucket.list_blobs(prefix="Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')))
     imageID = random.randint(0, len(bloblist)-1)
     photo = bloblist[imageID].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
-    SendPhoto(cookiebot, chat_id, photo, msg_to_reply=msg)
+    send_photo(cookiebot, chat_id, photo, msg_to_reply=msg)
 
-def Dado(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def roll_dice(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'typing')
     if msg['text'].startswith("/dado"):
-        Send(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n<blockquote>EXEMPLO: /d20 5\n</blockquote>Roda um d20 5 vezes")
+        send_message(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n<blockquote>EXEMPLO: /d20 5\n</blockquote>Roda um d20 5 vezes")
     elif msg['text'].startswith("/dice"):
-        Send(cookiebot, chat_id, "Roll a dice from 1 to x, n times\n<blockquote>EXAMPLE: /d20 5\n</blockquote>Rolls a d20 5 times")
+        send_message(cookiebot, chat_id, "Roll a dice from 1 to x, n times\n<blockquote>EXAMPLE: /d20 5\n</blockquote>Rolls a d20 5 times")
     else:
         if len(msg['text'].split()) == 1:
             vezes = 1
@@ -175,25 +175,25 @@ def Dado(cookiebot, msg, chat_id, language):
                     resposta += f"\n{vez+1}º Lançamento: 🎲 -> {random.randint(1, limite)}"
                 else:
                     resposta += f"\n{vez+1}th Roll: 🎲 -> {random.randint(1, limite)}"
-        Send(cookiebot, chat_id, resposta, msg_to_reply=msg)
+        send_message(cookiebot, chat_id, resposta, msg_to_reply=msg)
 
-def Idade(cookiebot, msg, chat_id, language):
+def age(cookiebot, msg, chat_id, language):
     if not " " in msg['text']:
-        Send(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n<blockquote>Exemplo: '/idade Mekhy'\n(obs: só o primeiro nome conta)</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n<blockquote>Exemplo: '/idade Mekhy'\n(obs: só o primeiro nome conta)</blockquote>", msg, language)
     else:
         Nome = msg['text'].replace("/idade ", '').replace("/edad ", '').replace("/age ", '').replace("/idade@CookieMWbot", '').replace("/age@CookieMWbot", '').replace("/edad@CookieMWbot", '').split()[0]
         response = json.loads(requests.get(f"https://api.agify.io?name={Nome}", timeout=10).text)
         Idade = response['age']
         Contagem = response['count']
         if Contagem == 0:
-            Send(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
+            send_message(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
         else:
-            Send(cookiebot, chat_id, f'Sua idade é <span class="tg-spoiler">{Idade} anos! 👴</span>\nRegistrado <b>{Contagem}</b> vezes', msg, language)
+            send_message(cookiebot, chat_id, f'Sua idade é <span class="tg-spoiler">{Idade} anos! 👴</span>\nRegistrado <b>{Contagem}</b> vezes', msg, language)
 
-def Genero(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def gender(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'typing')
     if not " " in msg['text']:
-        Send(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n<blockquote>Exemplo: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n<blockquote>Exemplo: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)</blockquote>", msg, language)
     else:
         Nome = msg['text'].replace("/genero ", '').replace("/gênero ", '').replace("/gender ", '').replace("/genero@CookieMWbot", '').replace("/gênero@CookieMWbot", '').replace("/gender@CookieMWbot", '').split()[0]
         response = json.loads(requests.get(f"https://api.genderize.io?name={Nome}", timeout=10).text)
@@ -201,15 +201,15 @@ def Genero(cookiebot, msg, chat_id, language):
         Probabilidade = response['probability']
         Contagem = response['count']
         if Contagem == 0:
-            Send(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
+            send_message(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
         elif Genero == 'male':
-            Send(cookiebot, chat_id, f'É <span class="tg-spoiler">um menino! 👨</span>\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes', msg, language)
+            send_message(cookiebot, chat_id, f'É <span class="tg-spoiler">um menino! 👨</span>\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes', msg, language)
         elif Genero == 'female':
-            Send(cookiebot, chat_id, f'É <span class="tg-spoiler">uma menina! 👩</span>\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes', msg, language)
+            send_message(cookiebot, chat_id, f'É <span class="tg-spoiler">uma menina! 👩</span>\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes', msg, language)
 
-def Rojao(cookiebot, msg, chat_id, thread_id=None, isAlternate=0):
-    ReactToMessage(msg, '🎉', isAlternate=isAlternate)
-    Send(cookiebot, chat_id, "fiiiiiiii.... ", msg_to_reply=msg)
+def firecracker(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
+    react_to_message(msg, '🎉', is_alternate_bot=is_alternate_bot)
+    send_message(cookiebot, chat_id, "fiiiiiiii.... ", msg_to_reply=msg)
     time.sleep(0.1)
     amount = random.randint(5, 20)
     while amount > 0:
@@ -217,39 +217,39 @@ def Rojao(cookiebot, msg, chat_id, thread_id=None, isAlternate=0):
             n = random.randint(1, amount)
         else:
             n = 1
-        Send(cookiebot, chat_id, "pra "*n, thread_id=thread_id, isAlternate=isAlternate)
+        send_message(cookiebot, chat_id, "pra "*n, thread_id=thread_id, is_alternate_bot=is_alternate_bot)
         amount -= n
-    Send(cookiebot, chat_id, "<b>💥POOOOOOOWW💥</b>", thread_id=thread_id, isAlternate=isAlternate)
+    send_message(cookiebot, chat_id, "<b>💥POOOOOOOWW💥</b>", thread_id=thread_id, is_alternate_bot=is_alternate_bot)
 
-def Reclamacao(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
+def complaint(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'upload_photo')
     if language == 'pt':
         with open('Static/reclamacao/milton_pt.jpg', 'rb') as photo:
-            SendPhoto(cookiebot, chat_id, photo,
+            send_photo(cookiebot, chat_id, photo,
                       caption=f"Bom dia/tarde/noite, {msg['from']['first_name']},\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem. Se não, seguimos com nossas atividades.\nAtenciosamente,\nMilton do RH.", 
                       msg_to_reply=msg)
     else:
         with open('Static/reclamacao/milton_eng.jpg', 'rb') as photo:
-            SendPhoto(cookiebot, chat_id, photo,
+            send_photo(cookiebot, chat_id, photo,
                       caption=f"Good morning/afternoon/evening, {msg['from']['first_name']},\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.", 
                       msg_to_reply=msg)
             
-def ReclamacaoAnswer(cookiebot, msg, chat_id, language):
-    DeleteMessage(cookiebot, telepot.message_identifier(msg['reply_to_message']))
-    SendChatAction(cookiebot, chat_id, 'upload_audio')
+def complaint_answer(cookiebot, msg, chat_id, language):
+    delete_message(cookiebot, telepot.message_identifier(msg['reply_to_message']))
+    send_chat_action(cookiebot, chat_id, 'upload_audio')
     protocol = f"{random.randint(10, 99)}-{random.randint(100000, 999999)}/{datetime.datetime.now().year}"
     with open(f"Static/reclamacao/{random.choice([file for file in os.listdir('Static/reclamacao') if file.endswith('.wav')])}", 'rb') as hold_audio:
         hold_msg = cookiebot.sendVoice(chat_id, hold_audio, caption=f"Protocol: {protocol}", reply_to_message_id=msg['message_id'])
     time.sleep(random.randint(10, 20))
-    DeleteMessage(cookiebot, telepot.message_identifier(hold_msg))
+    delete_message(cookiebot, telepot.message_identifier(hold_msg))
     with open('Static/reclamacao/answers.txt', 'r', encoding='utf8') as answers:
         answer = random.choice(answers.readlines()).replace('\n', '')
         answer += '\n\nAtenciosamente,\nMilton do RH.'
-    Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)
+    send_message(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)
 
-def Countdown(cookiebot, msg, chat_id, language, isAlternate):
-    ReactToMessage(msg, '🔥', isAlternate=isAlternate)
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
+def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
+    react_to_message(msg, '🔥', is_alternate_bot=is_alternate_bot)
+    send_chat_action(cookiebot, chat_id, 'upload_photo')
     if msg['text'].lower().startswith('/patas'):
         day, month, year = 18, 4, 2025
         calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP!',
@@ -319,21 +319,21 @@ def Countdown(cookiebot, msg, chat_id, language, isAlternate):
             while daysremaining < -5:
                 daysremaining += 365
             caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o T-Rex Furplayer!</b>\n\n<i>{calltoaction}</i>\n🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖\n\n📆 {day}/{month} - Shopping D, Canindé São Paulo - SP\n💻 Ingressos em: trexfurplayer.wordpress.com\n📲 Grupo do evento: @trexfurplayergroup"
-    SendPhoto(cookiebot, chat_id, pic, caption=caption, msg_to_reply=msg, language=language, isAlternate=isAlternate)
+    send_photo(cookiebot, chat_id, pic, caption=caption, msg_to_reply=msg, language=language, is_alternate_bot=is_alternate_bot)
 
-def Desenterrar(cookiebot, msg, chat_id, thread_id=None):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def unearth(cookiebot, msg, chat_id, thread_id=None):
+    send_chat_action(cookiebot, chat_id, 'typing')
     for attempt in range(10):
         try:
             chosenid = random.randint(1, msg['message_id'])
-            Forward(cookiebot, chat_id, chat_id, chosenid, thread_id=thread_id)
+            forward_message(cookiebot, chat_id, chat_id, chosenid, thread_id=thread_id)
             return
         except:
             pass
 
-def Morte(cookiebot, msg, chat_id, language):
-    ReactToMessage(msg, '👻')
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
+def death(cookiebot, msg, chat_id, language):
+    react_to_message(msg, '👻')
+    send_chat_action(cookiebot, chat_id, 'upload_photo')
     fileblob = bloblist_death[random.randint(0, len(bloblist_death)-1)]
     filename = fileblob.name
     fileurl = fileblob.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
@@ -352,13 +352,13 @@ def Morte(cookiebot, msg, chat_id, language):
         line = line.replace('\n', '')
     caption += '\nMotivo: <b>' + line + '</b> 🔥\nF no chat. 🫡'
     if filename.endswith('.gif'):
-        SendAnimation(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg, language=language)
+        send_animation(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg, language=language)
     else:
-        SendPhoto(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg, language=language)
+        send_photo(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg, language=language)
 
-def Sorte(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
-    anim_id = SendAnimation(cookiebot, chat_id, 'https://s12.gifyu.com/images/S5e9b.gif', msg_to_reply=msg, language=language)
+def fortune_cookie(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'upload_photo')
+    anim_id = send_animation(cookiebot, chat_id, 'https://s12.gifyu.com/images/S5e9b.gif', msg_to_reply=msg, language=language)
     with open('Static/Sorte/sorte.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
@@ -373,18 +373,18 @@ def Sorte(cookiebot, msg, chat_id, language):
     answer = f'Sua sorte:\n 🥠 <span class="tg-spoiler">" {line} "</span> 🥠'
     answer += f'\nSeus números da sorte: <span class="tg-spoiler">{numbers_str}</span>'
     time.sleep(3)
-    DeleteMessage(cookiebot, (str(chat_id), str(anim_id)))
-    SendChatAction(cookiebot, chat_id, 'typing')
-    Send(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
+    delete_message(cookiebot, (str(chat_id), str(anim_id)))
+    send_chat_action(cookiebot, chat_id, 'typing')
+    send_message(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
 
-def Destroy(cookiebot, msg, chat_id, language, isAlternate=0):
+def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     if language == 'pt':
         instru = "Responda a um vídeo, foto, audio, gif ou sticker com o comando para distorcer (ou use /zoar pfp)"
     else:
         instru = "Reply to a video, photo, audio, gif or sticker with the command to distort (or use /destroy pfp)"
     if msg['text'].endswith('pfp'):
-        SendChatAction(cookiebot, chat_id, 'upload_photo')
-        token = bombotTOKEN if isAlternate else cookiebotTOKEN
+        send_chat_action(cookiebot, chat_id, 'upload_photo')
+        token = bombotTOKEN if is_alternate_bot else cookiebotTOKEN
         file_path_telegram = cookiebot.getFile(cookiebot.getUserProfilePhotos(msg['from']['id'])['photos'][0][-1]['file_id'])['file_path']
         r = requests.get(f"https://api.telegram.org/file/bot{token}/{file_path_telegram}", allow_redirects=True, timeout=10)
         filename = file_path_telegram.split('/')[-1]
@@ -396,11 +396,11 @@ def Destroy(cookiebot, msg, chat_id, language, isAlternate=0):
         os.remove('distorted.jpg')
         os.remove(filename)
     elif not 'reply_to_message' in msg:
-        Send(cookiebot, chat_id, instru, msg, language)
+        send_message(cookiebot, chat_id, instru, msg, language)
     elif 'video' in msg['reply_to_message']:
         thismighttakeawhile = cookiebot.sendMessage(chat_id, "(hold on, this might take a while...)", reply_to_message_id=msg['message_id'])
-        SendChatAction(cookiebot, chat_id, 'upload_video')
-        video_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'video', isAlternate=isAlternate, downloadfile=True)
+        send_chat_action(cookiebot, chat_id, 'upload_video')
+        video_file = get_media_content(cookiebot, msg['reply_to_message'], 'video', is_alternate_bot=is_alternate_bot, downloadfile=True)
         Distortioner.distortioner(video_file)
         with open('distorted.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
@@ -408,39 +408,39 @@ def Destroy(cookiebot, msg, chat_id, language, isAlternate=0):
         os.remove('distorted.mp4')
         os.remove(video_file)
     elif 'photo' in msg['reply_to_message']:
-        SendChatAction(cookiebot, chat_id, 'upload_photo')
-        photo_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'photo', isAlternate=isAlternate, downloadfile=True)
+        send_chat_action(cookiebot, chat_id, 'upload_photo')
+        photo_file = get_media_content(cookiebot, msg['reply_to_message'], 'photo', is_alternate_bot=is_alternate_bot, downloadfile=True)
         Distortioner.distortioner(photo_file)
         with open('distorted.jpg', 'rb') as photo:
             cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
         os.remove('distorted.jpg')
         os.remove(photo_file)
     elif 'audio' in msg['reply_to_message'] or 'voice' in msg['reply_to_message']:
-        SendChatAction(cookiebot, chat_id, 'upload_voice')
+        send_chat_action(cookiebot, chat_id, 'upload_voice')
         if 'audio' in msg['reply_to_message']:
-            audio_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'audio', isAlternate=isAlternate, downloadfile=True)
+            audio_file = get_media_content(cookiebot, msg['reply_to_message'], 'audio', is_alternate_bot=is_alternate_bot, downloadfile=True)
         else:
-            audio_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'voice', isAlternate=isAlternate, downloadfile=True)
+            audio_file = get_media_content(cookiebot, msg['reply_to_message'], 'voice', is_alternate_bot=is_alternate_bot, downloadfile=True)
         Distortioner.distort_audiofile(audio_file, 10, 1, 'distorted.mp3')
         with open('distorted.mp3', 'rb') as audio:
             cookiebot.sendAudio(chat_id, audio, reply_to_message_id=msg['message_id'])
         os.remove('distorted.mp3')
         os.remove(audio_file)
     elif 'sticker' in msg['reply_to_message']:
-        SendChatAction(cookiebot, chat_id, 'upload_photo')
-        sticker_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'sticker', isAlternate=isAlternate, downloadfile=True)
+        send_chat_action(cookiebot, chat_id, 'upload_photo')
+        sticker_file = get_media_content(cookiebot, msg['reply_to_message'], 'sticker', is_alternate_bot=is_alternate_bot, downloadfile=True)
         Distortioner.process_image(sticker_file, 'distorted.png', 25)
         with open('distorted.png', 'rb') as sticker:
             cookiebot.sendSticker(chat_id, sticker, reply_to_message_id=msg['message_id'])
         os.remove('distorted.png')
         os.remove(sticker_file)
     elif 'animation' in msg['reply_to_message']:
-        SendChatAction(cookiebot, chat_id, 'upload_video')
-        animation_file = GetMediaContent(cookiebot, msg['reply_to_message'], 'animation', isAlternate=isAlternate, downloadfile=True)
+        send_chat_action(cookiebot, chat_id, 'upload_video')
+        animation_file = get_media_content(cookiebot, msg['reply_to_message'], 'animation', is_alternate_bot=is_alternate_bot, downloadfile=True)
         Distortioner.distortioner(animation_file, is_gif=True)
         with open('distorted.mp4', 'rb') as animation:
             cookiebot.sendAnimation(chat_id, animation, reply_to_message_id=msg['message_id'])
         os.remove('distorted.mp4')
         os.remove(animation_file)
     else:
-        Send(cookiebot, chat_id, instru, msg, language)
+        send_message(cookiebot, chat_id, instru, msg, language)

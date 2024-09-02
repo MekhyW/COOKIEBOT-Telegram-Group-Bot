@@ -12,10 +12,10 @@ import threading
 import gc
 
 if len(sys.argv) < 2:
-    print("Usage: python COOKIEBOT.py [isAlternate (int)]")
+    print("Usage: python COOKIEBOT.py [is_alternate_bot (int)]")
     sys.exit(1)
-isAlternate = int(sys.argv[1])
-cookiebot = telepot.Bot(GetBotToken(isAlternate))
+is_alternate_bot = int(sys.argv[1])
+cookiebot = telepot.Bot(get_bot_token(is_alternate_bot))
 myself = cookiebot.getMe()
 updates = cookiebot.getUpdates()
 if updates:
@@ -25,7 +25,7 @@ unnatended_threads = list()
 num_max_threads = 50
 gc.enable()
 
-Send(cookiebot, mekhyID, 'I am online')
+send_message(cookiebot, mekhyID, 'I am online')
 
 def thread_function(msg):
     try:
@@ -41,95 +41,95 @@ def thread_function(msg):
         if chat_type == 'private' and 'reply_to_message' not in msg:
             if 'text' in msg:
                 if msg['text'].startswith("/start"):
-                    SetComandosPrivate(cookiebot, chat_id, isAlternate=isAlternate)
+                    set_private_commands(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
                 if msg['text'].startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == mekhyID:
-                    Grupos(cookiebot, msg, chat_id, 'eng')
+                    list_groups(cookiebot, msg, chat_id, 'eng')
                 elif msg['text'].startswith(("/comandos", "/commands")):
-                    Comandos(cookiebot, msg, chat_id, 'eng')
+                    list_commands(cookiebot, msg, chat_id, 'eng')
                 elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
-                    Privacy(cookiebot, msg, chat_id, 'eng')
+                    privacy_statement(cookiebot, msg, chat_id, 'eng')
                 elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == mekhyID:
                     os._exit(0)
                 elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == mekhyID:
                     os.execl(sys.executable, sys.executable, *sys.argv)
                 elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
                     targetId = msg['text'].split()[1]
-                    LeaveAndBlacklist(cookiebot, targetId)
+                    leave_and_blacklist(cookiebot, targetId)
                 elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == mekhyID:
-                    Broadcast(cookiebot, msg)
-            PvDefaultMessage(cookiebot, msg, chat_id, isAlternate)
+                    broadcast_message(cookiebot, msg)
+            pv_default_message(cookiebot, msg, chat_id, is_alternate_bot)
             run_unnatendedthreads()
             return
         if chat_type != 'private':
-            listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id)
-            FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(cookiebot, chat_id, isAlternate=isAlternate)
-            CheckNewName(msg, chat_id)
+            listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, msg, chat_id)
+            FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
+            check_new_name(msg, chat_id)
         if 'group_chat_created' in msg and msg['group_chat_created']:
-            isCreatorBlacklisted = GetRequestBackend(f"blacklist/{msg['from']['id']}")
+            isCreatorBlacklisted = get_request_backend(f"blacklist/{msg['from']['id']}")
             chatinfo = cookiebot.getChat(chat_id)
             if (not 'error' in isCreatorBlacklisted) or len(chatinfo['title']) < 3:
-                LeaveAndBlacklist(cookiebot, chat_id)
-                Send(cookiebot, mekhyID, f"Auto-left\n{chat_id}")
+                leave_and_blacklist(cookiebot, chat_id)
+                send_message(cookiebot, mekhyID, f"Auto-left\n{chat_id}")
                 return
         elif content_type == "new_chat_member":
             if msg['new_chat_participant']['id'] == myself['id']:
-                isBlacklisted = GetRequestBackend(f"blacklist/{chat_id}")
+                isBlacklisted = get_request_backend(f"blacklist/{chat_id}")
                 chatinfo = cookiebot.getChat(chat_id)
                 if (not 'error' in isBlacklisted) or len(chatinfo['title']) < 3:
-                    LeaveAndBlacklist(cookiebot, chat_id)
-                    Send(cookiebot, mekhyID, f"Auto-left\n{chat_id}")
+                    leave_and_blacklist(cookiebot, chat_id)
+                    send_message(cookiebot, mekhyID, f"Auto-left\n{chat_id}")
                     return
-                Send(cookiebot, mekhyID, f"Added\n{chatinfo}")
+                send_message(cookiebot, mekhyID, f"Added\n{chatinfo}")
                 cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
                 caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW")
                 if 'language_code' in msg['from']:
-                    SettarLanguage(cookiebot, msg, chat_id, msg['from']['language_code'])
-                    GetConfig(cookiebot, chat_id, ignorecache=True, isAlternate=isAlternate)
+                    set_language(cookiebot, msg, chat_id, msg['from']['language_code'])
+                    get_config(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
             elif msg['from']['id'] != msg['new_chat_participant']['id']:
                 if msg['new_chat_participant']['is_bot']:
-                    Send(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\n<blockquote>Caso algum comando entre em conflito, fale com o Mekhy</blockquote>", msg, language)
+                    send_message(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\n<blockquote>Caso algum comando entre em conflito, fale com o Mekhy</blockquote>", msg, language)
                 else:
-                    Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isAlternate=isAlternate)
-            elif not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckCAS(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language) and not CheckSpamwatch(cookiebot, msg, chat_id, language):
+                    welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
+            elif not check_human(cookiebot, msg, chat_id, language) and not check_cas(cookiebot, msg, chat_id, language) and not check_banlist(cookiebot, msg, chat_id, language) and not check_spamwatch(cookiebot, msg, chat_id, language):
                 if captchatimespan > 0 and myself['username'] in listaadmins:
-                    Captcha(cookiebot, msg, chat_id, captchatimespan, language)
+                    captcha_message(cookiebot, msg, chat_id, captchatimespan, language)
                 else:
-                    Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isAlternate=isAlternate)
+                    welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
         elif content_type == "left_chat_member":
             left_chat_member(msg, chat_id)
             if not msg['left_chat_member']['is_bot'] and msg['left_chat_member']['id'] != msg['from']['id'] and myself['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
-                ReportAsk(cookiebot, msg, chat_id, msg['left_chat_member']['id'], language)
+                report_ask(cookiebot, msg, chat_id, msg['left_chat_member']['id'], language)
         elif content_type == "voice":
             if utilityfunctions or funfunctions:
-                audio = GetMediaContent(cookiebot, msg, 'voice', isAlternate=isAlternate)
+                audio = get_media_content(cookiebot, msg, 'voice', is_alternate_bot=is_alternate_bot)
                 if utilityfunctions:
-                    Identify_music(cookiebot, msg, chat_id, audio, language)
+                    identify_music(cookiebot, msg, chat_id, audio, language)
                 if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id']:
-                    msg['text'] = Speech_to_text(audio)
-                    Send(cookiebot, chat_id, InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
+                    msg['text'] = speech_to_text(audio)
+                    send_message(cookiebot, chat_id, conversational_ai(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
         elif content_type == "audio":
             pass
         elif content_type in ["photo", "video", "document", "animation"] and all(key in msg for key in ['sender_chat', 'forward_from_chat', 'from', 'caption']) and msg['from']['first_name'] == 'Telegram' and publisherask:
-            AskPublisher(cookiebot, msg, chat_id, language)
+            ask_publisher(cookiebot, msg, chat_id, language)
         elif content_type == "photo":
             if sfw and funfunctions:
                 photo_id = msg['photo'][-1]['file_id']
-                AddtoRandomDatabase(msg, chat_id, photo_id)
+                add_to_random_database(msg, chat_id, photo_id)
         elif content_type == "video":
             if sfw and funfunctions:
-                AddtoRandomDatabase(msg, chat_id)
+                add_to_random_database(msg, chat_id)
         elif content_type == "document":
             if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
-                ReplySticker(cookiebot, msg, chat_id)
+                reply_sticker(cookiebot, msg, chat_id)
         elif content_type == "animation":
             if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
-                ReplySticker(cookiebot, msg, chat_id)
+                reply_sticker(cookiebot, msg, chat_id)
         elif content_type == "sticker":
-            Sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language)
+            sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language)
             if sfw:
-                AddtoStickerDatabase(msg, chat_id)
+                add_to_sticker_database(msg, chat_id)
             if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
-                ReplySticker(cookiebot, msg, chat_id)
+                reply_sticker(cookiebot, msg, chat_id)
         elif 'text' in msg:
             if msg['text'].startswith("/") and len(msg['text']) > 1:
                 if msg['text'].startswith("/start@CookieMWbot") or msg['text'].startswith("/start@MekhysBombot"):
@@ -137,82 +137,82 @@ def thread_function(msg):
                     caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW",
                     reply_to_message_id=msg['message_id'])
                 elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
-                    LeaveAndBlacklist(cookiebot, chat_id)
+                    leave_and_blacklist(cookiebot, chat_id)
                 elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
-                    Privacy(cookiebot, msg, chat_id, language)
+                    privacy_statement(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/reload", "/recarregar")):
-                    GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    GetConfig(cookiebot, chat_id, ignorecache=True, isAlternate=isAlternate)
-                    Send(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
+                    get_admins(cookiebot, msg, chat_id, ignorecache=True)
+                    get_config(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
+                    send_message(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
                 elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
-                    Analyze(cookiebot, msg, chat_id, language, isAlternate=isAlternate)
+                    analyze(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
-                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isAlternate=isAlternate)
+                    listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, msg, chat_id, ignorecache=True)
+                    schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
-                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isAlternate=isAlternate)
+                    listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, msg, chat_id, ignorecache=True)
+                    clear_autoposts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=is_alternate_bot)
                 elif utilityfunctions and msg['text'].startswith(("/buscarfonte", "/searchsource", "/buscarfuente")):
-                    ReverseSearch(cookiebot, msg, chat_id, language, isAlternate=isAlternate)
+                    reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
                                                 "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
                                                 "/batalha", "/battle", "/batalla", "/desenterrar", "/unearth", "/morte", "/death", "/muerte", "/sorte", "/fortunecookie", "/suerte",
                                                 "/zoar", "/destroy", "/destruir")):
                     if not funfunctions:
-                        NotifyFunOff(cookiebot, msg, chat_id, language)
+                        notify_fun_off(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
-                        ReplyAleatorio(cookiebot, msg, chat_id, thread_id=thread_id, isAlternate=isAlternate)
+                        random_media(cookiebot, msg, chat_id, thread_id=thread_id, is_alternate_bot=is_alternate_bot)
                     elif msg['text'].startswith("/meme"):
-                        Meme(cookiebot, msg, chat_id, language)
+                        meme(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/batalha", "/battle", "/batalla")):
-                        Batalha(cookiebot, msg, chat_id, language, isAlternate=isAlternate)
+                        battle(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                     elif msg['text'].startswith(("/idade", "/age", "/edad")):
-                        Idade(cookiebot, msg, chat_id, language)
+                        age(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/genero", "/gênero", "/gender")):
-                        Genero(cookiebot, msg, chat_id, language)
+                        gender(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/rojao", "/rojão", "/acende", "/fogos", "/firecracker")):
-                        Rojao(cookiebot, msg, chat_id, thread_id=thread_id, isAlternate=isAlternate)
+                        firecracker(cookiebot, msg, chat_id, thread_id=thread_id, is_alternate_bot=is_alternate_bot)
                     elif msg['text'].startswith(("/shippar", "/ship")):
-                        Shippar(cookiebot, msg, chat_id, language, isAlternate=isAlternate)
+                        shipp(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                     elif msg['text'].startswith(("/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
-                        Reclamacao(cookiebot, msg, chat_id, language)
+                        complaint(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/desenterrar", "unearth")):
-                        Desenterrar(cookiebot, msg, chat_id, thread_id=thread_id)
+                        unearth(cookiebot, msg, chat_id, thread_id=thread_id)
                     elif msg['text'].startswith(("/morte", "/muerte", "/death")):
-                        Morte(cookiebot, msg, chat_id, language)
+                        death(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/sorte", "/fortunecookie", "/suerte")):
-                        Sorte(cookiebot, msg, chat_id, language)
+                        fortune_cookie(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
-                        Destroy(cookiebot, msg, chat_id, language, isAlternate=isAlternate)
+                        destroy(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                 elif utilityfunctions and (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())):
-                    Dado(cookiebot, msg, chat_id, language)
+                    roll_dice(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/patas", "/bff", "/fursmeet", "/trex")):
-                    Countdown(cookiebot, msg, chat_id, language, isAlternate=isAlternate)
+                    event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
-                    NovoBemvindo(cookiebot, msg, chat_id)
+                    new_welcome_message(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
-                    NovasRegras(cookiebot, msg, chat_id)
+                    new_rules_message(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
-                    Regras(cookiebot, msg, chat_id, language)
+                    rules_message(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
-                    TaVivo(cookiebot, msg, chat_id, language, isAlternate=isAlternate)
+                    is_alive(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith("/everyone"):
-                    Everyone(cookiebot, msg, chat_id, listaadmins, language, isAlternate=isAlternate)
+                    everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith("/adm"):
-                    AdmAsk(cookiebot, msg, chat_id, language)
+                    call_admins_ask(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/comandos", "/commands")):
-                    Comandos(cookiebot, msg, chat_id, language)
+                    list_commands(cookiebot, msg, chat_id, language)
                 elif utilityfunctions and msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")):
-                    IdeiaDesenho(cookiebot, msg, chat_id, language)
+                    drawing_idea(cookiebot, msg, chat_id, language)
                 elif utilityfunctions and msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")):
-                    PromptQualquerCoisa(cookiebot, msg, chat_id, language)
+                    prompt_qualquer_coisa(cookiebot, msg, chat_id, language)
                 elif utilityfunctions and msg['text'].startswith("/youtube"):
-                    YoutubeSearch(cookiebot, msg, chat_id, language)
+                    youtube_search(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/configurar", "/configure")):
-                    listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                    Configurar(cookiebot, msg, chat_id, listaadmins_id, language)
+                    listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, msg, chat_id, ignorecache=True)
+                    configurar(cookiebot, msg, chat_id, listaadmins_id, language)
                 elif utilityfunctions and " " not in msg['text'] and msg['text'].replace('/', '').replace("@CookieMWbot", '') in custom_commands:
-                    CustomCommand(cookiebot, msg, chat_id)
+                    custom_command(cookiebot, msg, chat_id)
                 elif utilityfunctions and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']):
                     if FurBots:
                         furbots_cmds = open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()
@@ -221,34 +221,34 @@ def thread_function(msg):
                             return
                     QualquerCoisa(cookiebot, msg, chat_id, sfw, language)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name":
-                listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                AtualizaBemvindo(cookiebot, msg, chat_id, listaadmins_id, isAlternate=isAlternate)
+                listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, msg, chat_id, ignorecache=True)
+                update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=is_alternate_bot)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
-                listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
-                AtualizaRegras(cookiebot, msg, chat_id, listaadmins_id, isAlternate=isAlternate)
+                listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, msg, chat_id, ignorecache=True)
+                update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=is_alternate_bot)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
-                ConfigurarSettar(cookiebot, msg, chat_id, isAlternate=isAlternate)
+                configurar_set(cookiebot, msg, chat_id, is_alternate_bot=is_alternate_bot)
             elif funfunctions and (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'])) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']):
-                Quem(cookiebot, msg, chat_id, language)
+                who(cookiebot, msg, chat_id, language)
             elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and any(x in msg['reply_to_message']['caption'] for x in [f"{round(captchatimespan/60)} minutes", f"{round(captchatimespan/60)} minutos"]):
-                SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isAlternate=isAlternate)
+                solve_captcha(cookiebot, msg, chat_id, False, limbotimespan, language, is_alternate_bot=is_alternate_bot)
             elif funfunctions and 'reply_to_message' in msg and 'caption' in msg['reply_to_message'] and any(x in msg['reply_to_message']['caption'] for x in ['Milton do RH.', 'Milton from HR.']):
-                ReclamacaoAnswer(cookiebot, msg, chat_id, language)
+                complaint_answer(cookiebot, msg, chat_id, language)
             elif 'reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'] and 'reply_markup' in msg['reply_to_message']:
-                CheckNotifyPostReply(cookiebot, msg, chat_id, language)
+                check_notify_post_reply(cookiebot, msg, chat_id, language)
             elif funfunctions and (('reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id'] and 'text' in msg['reply_to_message']) or "cookiebot" in msg['text'].lower() or "@CookieMWbot" in msg['text']):
                 if 'from' in msg:
                     decrease_remaining_responses_ai(msg['from']['id'])
                 if 'from' not in msg or remaining_responses_ai[msg['from']['id']] > 0:
-                    Send(cookiebot, chat_id, InteligenciaArtificial(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
+                    send_message(cookiebot, chat_id, conversational_ai(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
             else:
                 if 'from' in msg:
                     increase_remaining_responses_ai(msg['from']['id'])
                 if captchatimespan > 0 and myself['username'] in listaadmins:
-                    SolveCaptcha(cookiebot, msg, chat_id, False, limbotimespan, language, isAlternate=isAlternate)
-                    CheckCaptcha(cookiebot, msg, chat_id, captchatimespan, language)
+                    solve_captcha(cookiebot, msg, chat_id, False, limbotimespan, language, is_alternate_bot=is_alternate_bot)
+                    check_captcha(cookiebot, msg, chat_id, captchatimespan, language)
         if chat_type != 'private' and content_type != "sticker":
-            StickerCooldownUpdates(msg, chat_id)
+            sticker_cooldown_updates(msg, chat_id)
         run_unnatendedthreads()
     except (TooManyRequestsError, BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError) as e:
         print(e)
@@ -257,9 +257,9 @@ def thread_function(msg):
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle(msg)
         else:
-            Send(cookiebot, mekhyID, traceback.format_exc())
-            Send(cookiebot, mekhyID, str(msg))
-            Send(cookiebot, mekhyID, str(e))
+            send_message(cookiebot, mekhyID, traceback.format_exc())
+            send_message(cookiebot, mekhyID, str(msg))
+            send_message(cookiebot, mekhyID, str(e))
 
 def thread_function_query(msg):
     try:
@@ -267,7 +267,7 @@ def thread_function_query(msg):
         print('Callback Query:', query_id, from_id, query_data)
         try:
             chat_id = msg['message']['reply_to_message']['chat']['id']
-            listaadmins, listaadmins_id, listaadmins_status = GetAdmins(cookiebot, msg, chat_id)
+            listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, msg, chat_id)
         except Exception as e:
             print(e)
             try:
@@ -276,45 +276,45 @@ def thread_function_query(msg):
                 chat_id = from_id
             listaadmins, listaadmins_id, listaadmins_status = [], [], []
         if 'CONFIG' in query_data:
-            ConfigVariableButton(cookiebot, msg, query_data)
+            config_variable_button(cookiebot, msg, query_data)
         elif 'Pub' in query_data:
             if 'creator' in listaadmins_status and str(from_id) not in listaadmins_id:
                 cookiebot.answerCallbackQuery(query_id, text="Only admins can do this")
             else:
                 try:
-                    DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
+                    delete_message(cookiebot, telepot.message_identifier(msg['message']))
                 except:
                     pass
                 if query_data.startswith('SendToApproval'):
-                    AskApproval(cookiebot, query_data, from_id, isAlternate=isAlternate)
+                    ask_approval(cookiebot, query_data, from_id, is_alternate_bot=is_alternate_bot)
                 elif query_data.startswith('Approve'):
-                    SchedulePost(cookiebot, query_data)
+                    schedule_post(cookiebot, query_data)
                 elif query_data.startswith('Deny'):
-                    DenyPost(cookiebot, query_data)
+                    deny_post(cookiebot, query_data)
         elif query_data.startswith('Report'):
             command = query_data.split()[1]
             targetid = query_data.split()[2]
             language = query_data.split()[3]
             if command == 'Yes':
-                Report(cookiebot, msg, chat_id, targetid, language)
+                report(cookiebot, msg, chat_id, targetid, language)
             elif command == 'Blacklist':
                 origin_chat_id = query_data.split()[4]
-                PostRequestBackend(f'blacklist/{targetid}')
-                Send(cookiebot, mekhyID, f"Blacklisted {targetid}")
-                Send(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam\n>Obrigado pela denúncia\!", language=language)
-            DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
+                post_request_backend(f'blacklist/{targetid}')
+                send_message(cookiebot, mekhyID, f"Blacklisted {targetid}")
+                send_message(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam\n>Obrigado pela denúncia\!", language=language)
+            delete_message(cookiebot, telepot.message_identifier(msg['message']))
         elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
-            SolveCaptcha(cookiebot, msg, chat_id, True, isAlternate=isAlternate, language=query_data.split()[1])
+            solve_captcha(cookiebot, msg, chat_id, True, is_alternate_bot=is_alternate_bot, language=query_data.split()[1])
         elif query_data.startswith('ADM'):
             yesno = query_data.split()[1]
             language = query_data.split()[2]
             if yesno == 'Yes':
-                Adm(cookiebot, msg, chat_id, listaadmins, language)
+                call_admins(cookiebot, msg, chat_id, listaadmins, language)
             else:
-                Send(cookiebot, chat_id, "Comando cancelado", language=language)
-            DeleteMessage(cookiebot, telepot.message_identifier(msg['message']))
+                send_message(cookiebot, chat_id, "Comando cancelado", language=language)
+            delete_message(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data.startswith('RULES'):
-            Regras(cookiebot, msg['message'], msg['message']['chat']['id'], query_data.split()[1])
+            rules_message(cookiebot, msg['message'], msg['message']['chat']['id'], query_data.split()[1])
             cookiebot.editMessageReplyMarkup((msg['message']['chat']['id'], msg['message']['message_id']), reply_markup=None)
         run_unnatendedthreads()
     except Exception as e:
@@ -322,9 +322,9 @@ def thread_function_query(msg):
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle_query(msg)
         else:
-            Send(cookiebot, mekhyID, traceback.format_exc())
-            Send(cookiebot, mekhyID, str(msg))
-            Send(cookiebot, mekhyID, str(e))
+            send_message(cookiebot, mekhyID, traceback.format_exc())
+            send_message(cookiebot, mekhyID, str(msg))
+            send_message(cookiebot, mekhyID, str(e))
 
 def run_unnatendedthreads():
     num_running_threads = threading.active_count()
@@ -349,7 +349,7 @@ def handle(msg):
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except:
-        Send(cookiebot, mekhyID, traceback.format_exc())
+        send_message(cookiebot, mekhyID, traceback.format_exc())
 
 def handle_query(msg):
     try:
@@ -357,19 +357,19 @@ def handle_query(msg):
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except:
-        Send(cookiebot, mekhyID, traceback.format_exc())
+        send_message(cookiebot, mekhyID, traceback.format_exc())
 
 def scheduler_check():
     print("SCHEDULER CHECK")
     try:
-        SchedulerPull(cookiebot, isAlternate=isAlternate)
+        scheduler_pull(cookiebot, is_alternate_bot=is_alternate_bot)
     except:
-        Send(cookiebot, mekhyID, traceback.format_exc())
+        send_message(cookiebot, mekhyID, traceback.format_exc())
     finally:
         timer_scheduler_check = threading.Timer(300, scheduler_check)
         timer_scheduler_check.start()
         
 if __name__ == '__main__':
-    if not isAlternate:
+    if not is_alternate_bot:
         scheduler_check()
     MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()

@@ -16,7 +16,7 @@ with open('Static/avoid_search.txt', 'r') as f:
     avoid_search = f.readlines()
 avoid_search = [x.strip() for x in avoid_search]
 
-def fetchTempJpg(cookiebot, msg, only_return_url=False):
+def fetch_temp_jpg(cookiebot, msg, only_return_url=False):
     try:
         path = cookiebot.getFile(msg['photo'][-1]['file_id'])['file_path']
         image_url = f'https://api.telegram.org/file/bot{cookiebotTOKEN}/{path}'
@@ -34,7 +34,7 @@ def fetchTempJpg(cookiebot, msg, only_return_url=False):
         cv2.imwrite('temp.jpg', image)
         os.remove('temp.mp4')
 
-def getMembersTagged(msg):
+def get_members_tagged(msg):
     members_tagged = []
     if '@' in msg['text']:
         for target in msg['text'].split("@")[1:]:
@@ -43,19 +43,19 @@ def getMembersTagged(msg):
             members_tagged.append(target)
     return members_tagged
 
-def ReverseSearch(cookiebot, msg, chat_id, language, isAlternate=0):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=0):
+    send_chat_action(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
-        Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n<blockquote>Para busca direta, use o /qualquercoisa</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n<blockquote>Para busca direta, use o /qualquercoisa</blockquote>", msg, language)
         return
-    url = fetchTempJpg(cookiebot, msg['reply_to_message'], only_return_url=True)
+    url = fetch_temp_jpg(cookiebot, msg['reply_to_message'], only_return_url=True)
     try:
         results = reverseimagesearcher.from_url(url)
     except errors.ShortLimitReachedError:
-        Send(cookiebot, chat_id, "Ainda estou processando outros resultados, aguarde e tente novamente", msg, language)
+        send_message(cookiebot, chat_id, "Ainda estou processando outros resultados, aguarde e tente novamente", msg, language)
         return
     except errors.LongLimitReachedError:
-        Send(cookiebot, chat_id, "Limite diário de busca atingido, aguarde e tente novamente", msg, language)
+        send_message(cookiebot, chat_id, "Limite diário de busca atingido, aguarde e tente novamente", msg, language)
         return
     if results and results[0].urls and results[0].similarity > 80:
         best = results[0]
@@ -64,20 +64,20 @@ def ReverseSearch(cookiebot, msg, chat_id, language, isAlternate=0):
         if best.author:
             answer +=  f" - {best.author}"
         answer += f"\n{best.urls[0]}\n\n"
-        ReactToMessage(msg, '🫡', is_big=False, isAlternate=isAlternate)
-        Send(cookiebot, chat_id, answer, msg, language)
+        react_to_message(msg, '🫡', is_big=False, is_alternate_bot=is_alternate_bot)
+        send_message(cookiebot, chat_id, answer, msg, language)
     else:
-        ReactToMessage(msg, '🤷', is_big=False, isAlternate=isAlternate)
-        Send(cookiebot, chat_id, "A busca não encontrou correspondência, parece ser uma imagem original!", msg, language)
+        react_to_message(msg, '🤷', is_big=False, is_alternate_bot=is_alternate_bot)
+        send_message(cookiebot, chat_id, "A busca não encontrou correspondência, parece ser uma imagem original!", msg, language)
 
-def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
-    Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n<blockquote>EXEMPLO: /fennec</blockquote>", msg, language)
+def prompt_qualquer_coisa(cookiebot, msg, chat_id, language):
+    send_message(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n<blockquote>EXEMPLO: /fennec</blockquote>", msg, language)
 
-def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isAlternate=0):
+def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, is_alternate_bot=0):
     searchterm = msg['text'].split("@")[0].replace("/", ' ').replace("@CookieMWbot", '')
     if searchterm.split()[0] in avoid_search:
         return
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
+    send_chat_action(cookiebot, chat_id, 'upload_photo')
     if sfw == 0:
         googleimagesearcher.search({'q': searchterm, 'num': 10, 'safe':'off', 'filetype':'jpg|gif|png'})
     else:
@@ -93,57 +93,57 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isAlternate=0):
             return 1
         except Exception as e:
             print(e)
-    ReactToMessage(msg, '🤷', is_big=False, isAlternate=isAlternate)
-    Send(cookiebot, chat_id, "Não consegui achar uma imagem <i>(ou era NSFW e eu filtrei)</i>", msg, language)
+    react_to_message(msg, '🤷', is_big=False, is_alternate_bot=is_alternate_bot)
+    send_message(cookiebot, chat_id, "Não consegui achar uma imagem <i>(ou era NSFW e eu filtrei)</i>", msg, language)
 
-def YoutubeSearch(cookiebot, msg, chat_id, language):
+def youtube_search(cookiebot, msg, chat_id, language):
     if len(msg['text'].split()) == 1:
-        Send(cookiebot, chat_id, "Você precisa digitar o nome do vídeo\n<blockquote>EXEMPLO: /youtube batata assada</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Você precisa digitar o nome do vídeo\n<blockquote>EXEMPLO: /youtube batata assada</blockquote>", msg, language)
         return
     query = ' '.join(msg['text'].split()[1:])
     request = youtubesearcher.search().list(q=query, part="snippet", type="video", maxResults=10)
     response = request.execute()
     videos = response.get("items", [])
     if not videos:
-        Send(cookiebot, chat_id, "Nenhum vídeo encontrado", msg, language)
+        send_message(cookiebot, chat_id, "Nenhum vídeo encontrado", msg, language)
         return
     random_video = random.choice(videos)
     video_url = f"https://www.youtube.com/watch?v={random_video['id']['videoId']}"
     video_description = random_video["snippet"]["description"]
-    Send(cookiebot, chat_id, f"<i>{video_url}</i>\n\n<b>{video_description}</b>", msg, language, parse_mode='HTML')
+    send_message(cookiebot, chat_id, f"<i>{video_url}</i>\n\n<b>{video_description}</b>", msg, language, parse_mode='HTML')
 
-def AddtoRandomDatabase(msg, chat_id, photo_id=''):
+def add_to_random_database(msg, chat_id, photo_id=''):
     if any(x in msg['chat']['title'].lower() for x in ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']):
         return
     if not 'forward_from' in msg and not 'forward_from_chat' in msg:
-        PostRequestBackend('randomdatabase', {'id': chat_id, 'idMessage': str(msg['message_id']), 'idMedia': photo_id})
+        post_request_backend('randomdatabase', {'id': chat_id, 'idMessage': str(msg['message_id']), 'idMedia': photo_id})
 
-def ReplyAleatorio(cookiebot, msg, chat_id, thread_id=None, isAlternate=0):
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
+def random_media(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
+    send_chat_action(cookiebot, chat_id, 'upload_photo')
     for attempt in range(50):
         try:
-            target = GetRequestBackend("randomdatabase")
-            Forward(cookiebot, chat_id, target['id'], target['idMessage'], thread_id=thread_id, isAlternate=isAlternate)
+            target = get_request_backend("randomdatabase")
+            forward_message(cookiebot, chat_id, target['id'], target['idMessage'], thread_id=thread_id, is_alternate_bot=is_alternate_bot)
             break
         except Exception as e:
             print(e)
 
-def AddtoStickerDatabase(msg, chat_id):
+def add_to_sticker_database(msg, chat_id):
     if any(x in msg['chat']['title'].lower() for x in ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']):
         return
     if 'emoji' in msg['sticker'] and msg['sticker']['emoji'] in ['🍆', '🍑', '🥵', '💦', '🫦']:
         return
     stickerId = msg['sticker']['file_id']
-    PostRequestBackend('stickerdatabase', {'id': stickerId})
+    post_request_backend('stickerdatabase', {'id': stickerId})
 
-def ReplySticker(cookiebot, msg, chat_id):
-    sticker = GetRequestBackend("stickerdatabase")
+def reply_sticker(cookiebot, msg, chat_id):
+    sticker = get_request_backend("stickerdatabase")
     cookiebot.sendSticker(chat_id, sticker['id'], reply_to_message_id=msg['message_id'])
 
-def Meme(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
-    members = GetMembersChat(chat_id)
-    members_tagged = getMembersTagged(msg)
+def meme(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'upload_photo')
+    members = get_members_chat(chat_id)
+    members_tagged = get_members_tagged(msg)
     caption = ""
     for attempt in range(100):
         if 'pt' not in language.lower():
@@ -167,7 +167,7 @@ def Meme(cookiebot, msg, chat_id, language):
                 try:
                     chosen_member = random.choice(members)
                 except IndexError:
-                    return Meme(cookiebot, msg, chat_id, language)
+                    return meme(cookiebot, msg, chat_id, language)
                 members.remove(chosen_member)
                 if 'user' in chosen_member:
                     chosen_member = chosen_member['user']
@@ -195,21 +195,21 @@ def Meme(cookiebot, msg, chat_id, language):
         caption += f"@{chosen_member} "
     cv2.imwrite("meme.png", template_img)
     with open("meme.png", 'rb') as final_img:
-        SendPhoto(cookiebot, chat_id, photo=final_img, caption=caption, msg_to_reply=msg)
+        send_photo(cookiebot, chat_id, photo=final_img, caption=caption, msg_to_reply=msg)
     try:
         os.remove("meme.png")
     except FileNotFoundError:
         pass
 
-def Batalha(cookiebot, msg, chat_id, language, isAlternate=0):
-    ReactToMessage(msg, '🔥', isAlternate=isAlternate)
-    SendChatAction(cookiebot, chat_id, 'upload_photo')
-    members_tagged = getMembersTagged(msg)
+def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
+    react_to_message(msg, '🔥', is_alternate_bot=is_alternate_bot)
+    send_chat_action(cookiebot, chat_id, 'upload_photo')
+    members_tagged = get_members_tagged(msg)
     if len(members_tagged) > 1 or 'random' in msg['text'].lower():
         if 'random' in msg['text'].lower():
-            members = GetMembersChat(chat_id)
+            members = get_members_chat(chat_id)
             if len(members) < 2:
-                Send(cookiebot, chat_id, "Não há membros suficientes para batalhar", msg, language)
+                send_message(cookiebot, chat_id, "Não há membros suficientes para batalhar", msg, language)
                 return
             for attempt in range(100):
                 random.shuffle(members)
@@ -222,10 +222,10 @@ def Batalha(cookiebot, msg, chat_id, language, isAlternate=0):
         soup2 = BeautifulSoup(urllib.request.urlopen(urllib.request.Request(f"https://telegram.me/{users[1]}", headers={'User-Agent' : "Magic Browser"})), "html.parser")
         images = list(soup1.findAll('img')), list(soup2.findAll('img'))
         if not len(images[0]):
-            Send(cookiebot, chat_id, f"Não consegui extrair a foto de {members_tagged[0]}. Verifique se está público!", msg, language)
+            send_message(cookiebot, chat_id, f"Não consegui extrair a foto de {members_tagged[0]}. Verifique se está público!", msg, language)
             return
         if not len(images[1]):
-            Send(cookiebot, chat_id, f"Não consegui extrair a foto de {members_tagged[1]}. Verifique se está público!", msg, language)
+            send_message(cookiebot, chat_id, f"Não consegui extrair a foto de {members_tagged[1]}. Verifique se está público!", msg, language)
             return
         resp = urllib.request.urlopen(images[0][0]['src']), urllib.request.urlopen(images[1][0]['src'])
         user_images = cv2.imdecode(np.asarray(bytearray(resp[0].read()), dtype="uint8"), cv2.IMREAD_COLOR), cv2.imdecode(np.asarray(bytearray(resp[1].read()), dtype="uint8"), cv2.IMREAD_COLOR)
@@ -256,7 +256,7 @@ def Batalha(cookiebot, msg, chat_id, language, isAlternate=0):
         soup = BeautifulSoup(html, "html.parser")
         images = list(soup.findAll('img'))
         if not len(images):
-            Send(cookiebot, chat_id, "Não consegui extrair a foto de perfil desse usuário. Verifique se está público!", msg, language)
+            send_message(cookiebot, chat_id, "Não consegui extrair a foto de perfil desse usuário. Verifique se está público!", msg, language)
             return
         resp = urllib.request.urlopen(images[0]['src'])
         user_image = cv2.imdecode(np.asarray(bytearray(resp.read()), dtype="uint8"), cv2.IMREAD_COLOR)
@@ -267,7 +267,7 @@ def Batalha(cookiebot, msg, chat_id, language, isAlternate=0):
         try:
             user_image = cookiebot.getUserProfilePhotos(msg['from']['id'], limit=1)['photos'][0][-1]['file_id']
         except IndexError:
-            Send(cookiebot, chat_id, "Você precisa ter uma foto de perfil <i>(ou está privado)</i>", msg, language)
+            send_message(cookiebot, chat_id, "Você precisa ter uma foto de perfil <i>(ou está privado)</i>", msg, language)
             return
     if language == 'pt':
         fighter = random.choice(random.choice([bloblist_fighters_eng, bloblist_fighters_pt]))

@@ -14,13 +14,13 @@ postmail_chat_id = -1001869523792
 approval_chat_id = -1001659344607
 url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
-def AskPublisher(cookiebot, msg, chat_id, language):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def ask_publisher(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'typing')
     if language == "pt":
         answer = "Divulgar postagem?"
     else:
         answer = "Share post?"
-    Send(cookiebot, chat_id, answer, msg_to_reply=msg, 
+    send_message(cookiebot, chat_id, answer, msg_to_reply=msg, 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {msg['forward_from_chat']['id']} {chat_id} {msg['forward_from_message_id']} {msg['message_id']}")],
             [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
@@ -44,14 +44,14 @@ def AskPublisher(cookiebot, msg, chat_id, language):
             caption_entities.append(entity)
     cache_posts[str(msg['forward_from_message_id'])] = {media_type: media_id, 'caption': msg['caption'], 'caption_entities': caption_entities}
 
-def AskApproval(cookiebot, query_data, from_id, isAlternate=0):
+def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
     origin_chatid = query_data.split()[1]
     second_chatid = query_data.split()[2]
     origin_messageid = query_data.split()[3]
     second_messageid = query_data.split()[4]
     origin_userid = from_id
-    Forward(cookiebot, approval_chat_id, second_chatid, second_messageid, isAlternate=isAlternate)
-    Send(cookiebot, approval_chat_id, 'Approve post?', 
+    forward_message(cookiebot, approval_chat_id, second_chatid, second_messageid, is_alternate_bot=is_alternate_bot)
+    send_message(cookiebot, approval_chat_id, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️ 7 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid}')],
             [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 3 {second_messageid}')],
@@ -101,7 +101,7 @@ def edit_job_data(job_name, param, value):
     print(f'Edited job: {job_name}')
     return job_name
 
-def ConvertPricesinText(text, code_target):
+def convert_prices_in_text(text, code_target):
     if (code_target == 'BRL') and any([x in text for x in ('R$', 'BRL', 'Reais', 'reais')]):
         return text
     final_text = ''
@@ -160,7 +160,7 @@ def remove_emojis_from_ends(input_string):
         input_string = input_string[:-1]
     return input_string
 
-def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
+def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     cached_post = cache_posts[origin_messageid]
     inline_keyboard = []
     inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
@@ -186,11 +186,11 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=postmail_chat_link)])
     caption_pt = GoogleTranslator(source='auto', target='pt').translate(caption_new)
     caption_en = GoogleTranslator(source='auto', target='en').translate(caption_new)
-    caption_pt = html.escape(ConvertPricesinText(caption_pt, 'BRL'))
-    caption_en = html.escape(ConvertPricesinText(caption_en, 'USD'))
+    caption_pt = html.escape(convert_prices_in_text(caption_pt, 'BRL'))
+    caption_en = html.escape(convert_prices_in_text(caption_en, 'USD'))
     if 'photo' in cached_post:
-        sent_pt = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
-        sent_en = SendPhoto(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
+        sent_pt = send_photo(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
+        sent_en = send_photo(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
     elif 'video' in cached_post:
         sent_pt = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
         sent_en = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
@@ -200,20 +200,20 @@ def PreparePost(cookiebot, origin_messageid, origin_chat, origin_user):
     cache_posts.pop(origin_messageid)
     return sent_pt, sent_en
 
-def DenyPost(cookiebot, query_data):
+def deny_post(cookiebot, query_data):
     if len(query_data.split()) < 2:
         return
     origin_messageid = query_data.split()[1]
     cache_posts.pop(origin_messageid)
 
-def SchedulePost(cookiebot, query_data):
+def schedule_post(cookiebot, query_data):
     approve, origin_chatid, second_chatid, origin_messageid, origin_userid, days, second_messageid = query_data.split()[:7]
     origin_chat = cookiebot.getChat(origin_chatid)
     try:
         origin_user = cookiebot.getChatMember(origin_chatid, origin_userid)['user']
     except:
         origin_user = None
-    sent_pt, sent_en = PreparePost(cookiebot, origin_messageid, origin_chat, origin_user)
+    sent_pt, sent_en = prepare_post(cookiebot, origin_messageid, origin_chat, origin_user)
     jobs = list_jobs()
     for job in jobs:
         if job['name'].split('-->')[0].strip() == origin_chat['title'].strip():
@@ -221,13 +221,13 @@ def SchedulePost(cookiebot, query_data):
             jobs.remove(job)
     answer = f"Post set for the following times ({days} days):\n"
     answer += "NOW - Cookiebot Mural 📬\n"
-    for group in GetRequestBackend('registers'):
+    for group in get_request_backend('registers'):
         group_id = group['id']
-        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = GetConfig(cookiebot, group_id)
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, group_id)
         if not publisherpost:
             continue
         if publisherMembersOnly:
-            members = GetMembersChat(group_id)
+            members = get_members_chat(group_id)
             if origin_user is None or origin_user['username'] not in str(members):
                 answer += f"ERROR! Cannot post in {cookiebot.getChat(group_id)['title']} (because you are not an active member)\n"
                 continue
@@ -251,24 +251,24 @@ def SchedulePost(cookiebot, query_data):
             print(e)
     try:
         answer += f"OBS: private chats are not listed!"
-        Send(cookiebot, mekhyID, answer)
-        Send(cookiebot, origin_userid, answer)
-        Send(cookiebot, second_chatid, "Post added to the publication queue!", msg_to_reply={'message_id': second_messageid})
+        send_message(cookiebot, mekhyID, answer)
+        send_message(cookiebot, origin_userid, answer)
+        send_message(cookiebot, second_chatid, "Post added to the publication queue!", msg_to_reply={'message_id': second_messageid})
     except Exception as e:
-        Send(cookiebot, mekhyID, traceback.format_exc())
-        Send(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n<blockquote>Send /start in my DM so I can send you messages.</blockquote>", msg_to_reply={'message_id': second_messageid})
+        send_message(cookiebot, mekhyID, traceback.format_exc())
+        send_message(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n<blockquote>Send /start in my DM so I can send you messages.</blockquote>", msg_to_reply={'message_id': second_messageid})
 
-def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isAlternate=0):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
+    send_chat_action(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id and int(msg['from']['id']) != mekhyID:
-        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+        send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     if 'reply_to_message' not in msg:
-        Send(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder repostar ela nesse grupo!", msg_to_reply=msg, language=language)
+        send_message(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder repostar ela nesse grupo!", msg_to_reply=msg, language=language)
         return
     if len(msg['text'].split()) > 1:
         if not msg['text'].split()[1].isnumeric():
-            Send(cookiebot, chat_id, "Número de dias inválido", msg_to_reply=msg, language=language)
+            send_message(cookiebot, chat_id, "Número de dias inválido", msg_to_reply=msg, language=language)
             return
         days = msg['text'].split()[1]
         text = f"Repostagem programada para o grupo por {days} dias!"
@@ -280,21 +280,21 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isAltern
     hour = random.randint(10,17)
     minute = random.randint(0,59)
     create_job(hour, minute, f"{chat['title']} --> {chat['title']}, at {hour}:{minute} ", int(days), int(chat_id), int(chat_id), int(chat_id), int(original_msg_id), int(original_msg_id), int(msg['from']['id']))
-    ReactToMessage(msg, '👍', isAlternate=isAlternate)
-    Send(cookiebot, chat_id, text, msg_to_reply=msg, language=language, parse_mode='HTML')
+    react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
+    send_message(cookiebot, chat_id, text, msg_to_reply=msg, language=language, parse_mode='HTML')
 
-def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isAlternate=0):
-    SendChatAction(cookiebot, chat_id, 'typing')
+def clear_autoposts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
+    send_chat_action(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id:
-        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+        send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     for job in list_jobs():
         if str(job['postmail_chat_id']) == str(chat_id):
             delete_job(job['name'])
-    ReactToMessage(msg, '👍', isAlternate=isAlternate)
-    Send(cookiebot, chat_id, "Repostagens do grupo canceladas!", msg_to_reply=msg, language=language)
+    react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
+    send_message(cookiebot, chat_id, "Repostagens do grupo canceladas!", msg_to_reply=msg, language=language)
 
-def SchedulerPull(cookiebot, isAlternate=0):
+def scheduler_pull(cookiebot, is_alternate_bot=0):
     current_time = datetime.datetime.now()
     current_time = datetime.datetime(current_time.year, current_time.month, current_time.day, current_time.hour, current_time.minute, current_time.second)
     for job in list_jobs():
@@ -310,21 +310,21 @@ def SchedulerPull(cookiebot, isAlternate=0):
             origin_messageid = str(job['postmail_message_id'])
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
-                config = GetConfig(cookiebot, group_id)
-                Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, thread_id=int(config[10]), isAlternate=isAlternate)
+                config = get_config(cookiebot, group_id)
+                forward_message(cookiebot, group_id, postmail_chat_id, origin_messageid, thread_id=int(config[10]), is_alternate_bot=is_alternate_bot)
             else:
-                Forward(cookiebot, group_id, postmail_chat_id, origin_messageid, isAlternate=isAlternate)
+                forward_message(cookiebot, group_id, postmail_chat_id, origin_messageid, is_alternate_bot=is_alternate_bot)
         except Exception as e:
-            Send(cookiebot, mekhyID, traceback.format_exc())
+            send_message(cookiebot, mekhyID, traceback.format_exc())
             delete_job(job['name'])
 
-def CheckNotifyPostReply(cookiebot, msg, chat_id, language):
+def check_notify_post_reply(cookiebot, msg, chat_id, language):
     for job in list_jobs():
         if job['name'].startswith(msg['reply_to_message']['reply_markup']['inline_keyboard'][0][0]['text']):
             second_chatid = str(job['second_chatid'])
             second_messageid = str(job['second_messageid'])
             text = f"@{msg['from']['username']}" if 'username' in msg['from'] else f"{msg['from']['first_name']} {msg['from']['last_name']}"
             text += f" replied:\n'{msg['text']}'\n\nIn chat {msg['chat']['title']}"
-            Send(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid}, language=language)
-            Send(cookiebot, chat_id, "Resposta enviada ao dono do post!", msg_to_reply=msg, language=language)
+            send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid}, language=language)
+            send_message(cookiebot, chat_id, "Resposta enviada ao dono do post!", msg_to_reply=msg, language=language)
             return

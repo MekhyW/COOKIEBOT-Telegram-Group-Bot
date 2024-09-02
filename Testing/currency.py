@@ -4,7 +4,7 @@ exchangerate_key = ''
 
 raw_text = "Stickers - pack com 5 R$ 25,00"
 
-def ConvertPricesinText(text, code_target):
+def convert_prices_in_text(text, code_target):
     if (code_target == 'BRL') and any([x in text for x in ('R$', 'BRL', 'Reais', 'reais')]):
         return text
     final_text = ''
@@ -51,6 +51,6 @@ def ConvertPricesinText(text, code_target):
             final_text += f"{paragraph}\n"
     return final_text
 
-final_text = ConvertPricesinText(raw_text, 'USD')
+final_text = convert_prices_in_text(raw_text, 'USD')
 
 print(final_text)
