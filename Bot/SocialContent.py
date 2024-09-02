@@ -46,7 +46,7 @@ def getMembersTagged(msg):
 def ReverseSearch(cookiebot, msg, chat_id, language, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
-        Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n>\(Para busca direta, use o /qualquercoisa\)", msg, language)
+        Send(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n<blockquote>Para busca direta, use o /qualquercoisa</blockquote>", msg, language)
         return
     url = fetchTempJpg(cookiebot, msg['reply_to_message'], only_return_url=True)
     try:
@@ -71,7 +71,7 @@ def ReverseSearch(cookiebot, msg, chat_id, language, isAlternate=0):
         Send(cookiebot, chat_id, "A busca não encontrou correspondência, parece ser uma imagem original!", msg, language)
 
 def PromptQualquerCoisa(cookiebot, msg, chat_id, language):
-    Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n>EXEMPLO: /fennec", msg, language)
+    Send(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n<blockquote>EXEMPLO: /fennec</blockquote>", msg, language)
 
 def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isAlternate=0):
     searchterm = msg['text'].split("@")[0].replace("/", ' ').replace("@CookieMWbot", '')
@@ -94,11 +94,11 @@ def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, isAlternate=0):
         except Exception as e:
             print(e)
     ReactToMessage(msg, '🤷', is_big=False, isAlternate=isAlternate)
-    Send(cookiebot, chat_id, "Não consegui achar uma imagem _\(ou era NSFW e eu filtrei\)_", msg, language)
+    Send(cookiebot, chat_id, "Não consegui achar uma imagem <i>(ou era NSFW e eu filtrei)</i>", msg, language)
 
 def YoutubeSearch(cookiebot, msg, chat_id, language):
     if len(msg['text'].split()) == 1:
-        Send(cookiebot, chat_id, "Você precisa digitar o nome do vídeo\n>EXEMPLO: /youtube batata assada", msg, language)
+        Send(cookiebot, chat_id, "Você precisa digitar o nome do vídeo\n<blockquote>EXEMPLO: /youtube batata assada</blockquote>", msg, language)
         return
     query = ' '.join(msg['text'].split()[1:])
     request = youtubesearcher.search().list(q=query, part="snippet", type="video", maxResults=10)
@@ -267,7 +267,7 @@ def Batalha(cookiebot, msg, chat_id, language, isAlternate=0):
         try:
             user_image = cookiebot.getUserProfilePhotos(msg['from']['id'], limit=1)['photos'][0][-1]['file_id']
         except IndexError:
-            Send(cookiebot, chat_id, "Você precisa ter uma foto de perfil _\(ou está privado\)_", msg, language)
+            Send(cookiebot, chat_id, "Você precisa ter uma foto de perfil <i>(ou está privado)</i>", msg, language)
             return
     if language == 'pt':
         fighter = random.choice(random.choice([bloblist_fighters_eng, bloblist_fighters_pt]))

@@ -156,9 +156,9 @@ def CustomCommand(cookiebot, msg, chat_id):
 def Dado(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     if msg['text'].startswith("/dado"):
-        Send(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n<blockquote>EXEMPLO: /d20 5\n><blockquote>Roda um d20 5 vezes")
+        Send(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n<blockquote>EXEMPLO: /d20 5\n</blockquote>Roda um d20 5 vezes")
     elif msg['text'].startswith("/dice"):
-        Send(cookiebot, chat_id, "Roll a dice from 1 to x, n times\n<blockquote>EXAMPLE: /d20 5\n<blockquote>Rolls a d20 5 times")
+        Send(cookiebot, chat_id, "Roll a dice from 1 to x, n times\n<blockquote>EXAMPLE: /d20 5\n</blockquote>Rolls a d20 5 times")
     else:
         if len(msg['text'].split()) == 1:
             vezes = 1

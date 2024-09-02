@@ -261,10 +261,10 @@ def SchedulePost(cookiebot, query_data):
 def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id and int(msg['from']['id']) != mekhyID:
-        Send(cookiebot, chat_id, "You are not a group admin\!", msg_to_reply=msg)
+        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     if 'reply_to_message' not in msg:
-        Send(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder repostar ela nesse grupo\!", msg_to_reply=msg, language=language)
+        Send(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder repostar ela nesse grupo!", msg_to_reply=msg, language=language)
         return
     if len(msg['text'].split()) > 1:
         if not msg['text'].split()[1].isnumeric():
@@ -286,13 +286,13 @@ def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isAltern
 def ClearAutoposts(cookiebot, msg, chat_id, language, listaadmins_id, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id:
-        Send(cookiebot, chat_id, "You are not a group admin\!", msg_to_reply=msg)
+        Send(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     for job in list_jobs():
         if str(job['postmail_chat_id']) == str(chat_id):
             delete_job(job['name'])
     ReactToMessage(msg, '👍', isAlternate=isAlternate)
-    Send(cookiebot, chat_id, "Repostagens do grupo canceladas\!", msg_to_reply=msg, language=language)
+    Send(cookiebot, chat_id, "Repostagens do grupo canceladas!", msg_to_reply=msg, language=language)
 
 def SchedulerPull(cookiebot, isAlternate=0):
     current_time = datetime.datetime.now()
@@ -326,5 +326,5 @@ def CheckNotifyPostReply(cookiebot, msg, chat_id, language):
             text = f"@{msg['from']['username']}" if 'username' in msg['from'] else f"{msg['from']['first_name']} {msg['from']['last_name']}"
             text += f" replied:\n'{msg['text']}'\n\nIn chat {msg['chat']['title']}"
             Send(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid}, language=language)
-            Send(cookiebot, chat_id, "Resposta enviada ao dono do post\!", msg_to_reply=msg, language=language)
+            Send(cookiebot, chat_id, "Resposta enviada ao dono do post!", msg_to_reply=msg, language=language)
             return
