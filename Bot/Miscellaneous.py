@@ -16,10 +16,10 @@ bloblist_bff = list(storage_bucket.list_blobs(prefix="Countdown/BFF"))
 bloblist_patas = list(storage_bucket.list_blobs(prefix="Countdown/Patas"))
 bloblist_fursmeet = list(storage_bucket.list_blobs(prefix="Countdown/FurSMeet"))
 bloblist_trex = list(storage_bucket.list_blobs(prefix="Countdown/Trex"))
-newchat_link = "https://t.me/CookieMWbot?startgroup=new"
-testchat_link = "https://t.me/+mX6W3tGXPew2OTIx"
-updateschannel_link = "https://t.me/cookiebotupdates"
-num_chats = 667
+NEW_CHAT_LINK = "https://t.me/CookieMWbot?startgroup=new"
+TEST_CHAT_LINK = "https://t.me/+mX6W3tGXPew2OTIx"
+UPDATES_CHANNEL_LINK = "https://t.me/cookiebotupdates"
+NUMBER_CHATS = 667
 with open("Static/Custom.txt", "r", encoding='utf8') as custom_commands_file:
     custom_commands = custom_commands_file.readlines()
     custom_commands = [x.strip() for x in custom_commands]
@@ -43,8 +43,8 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
         },
         'default': {
             'name': 'CookieBot',
-            'description_pt': f"Atualmente estou presente em {number_to_emojis(num_chats)} grupos ativos! Sinta-se livre para me adicionar ao seu :)",
-            'description_en': f"I'm currently present in {number_to_emojis(num_chats)} active chats! You can add me to your :)",
+            'description_pt': f"Atualmente estou presente em {number_to_emojis(NUMBER_CHATS)} grupos ativos! Sinta-se livre para me adicionar ao seu :)",
+            'description_en': f"I'm currently present in {number_to_emojis(NUMBER_CHATS)} active chats! You can add me to your :)",
             'additional_info': "Sou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática.",
             'additional_info_en': "I'm an AI Conversation, Group Defense, Search, Custom Content and Automated Publication bot.",
             'commands': "/configurar para alterar minhas configurações (incluindo idioma)\nUse /comandos para ver todas as minhas funcionalidades",
@@ -65,10 +65,10 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
             (f"*Hello, I'm {name}!* \n\n{description}\n\n{additional_info_en}\n"
              f"{commands_en}\n\nIf you have any questions or want something added, send a message to @MekhyW")
         reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="Adicionar a um Grupo 👋" if is_portuguese else "Add me to a Group 👋", url=newchat_link)],
+            [InlineKeyboardButton(text="Adicionar a um Grupo 👋" if is_portuguese else "Add me to a Group 👋", url=NEW_CHAT_LINK)],
             [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=postmail_chat_link)],
-            [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=updateschannel_link)],
-            [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=testchat_link)]
+            [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=UPDATES_CHANNEL_LINK)],
+            [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=TEST_CHAT_LINK)]
         ])
     else:
         message = f"*Olá, eu sou o {name}!*\n{description}\n\nSe tiver alguma dúvida ou quiser a lista completa de comandos, mande uma mensagem para @MekhyW" \
@@ -76,8 +76,8 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
             f"*Hello, I'm {name}!*\n{description}\n\nIf you have any questions or want the complete list of commands, send a message to @MekhyW"
         reply_markup = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=postmail_chat_link)],
-            [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=updateschannel_link)],
-            [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=testchat_link)]
+            [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=UPDATES_CHANNEL_LINK)],
+            [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=TEST_CHAT_LINK)]
         ])
     send_message(cookiebot, chat_id, message, reply_markup=reply_markup)
 
@@ -190,31 +190,31 @@ def age(cookiebot, msg, chat_id, language):
     if not " " in msg['text']:
         send_message(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n<blockquote>Exemplo: '/idade Mekhy'\n(obs: só o primeiro nome conta)</blockquote>", msg, language)
     else:
-        Nome = msg['text'].replace("/idade ", '').replace("/edad ", '').replace("/age ", '').replace("/idade@CookieMWbot", '').replace("/age@CookieMWbot", '').replace("/edad@CookieMWbot", '').split()[0]
-        response = json.loads(requests.get(f"https://api.agify.io?name={Nome}", timeout=10).text)
-        Idade = response['age']
-        Contagem = response['count']
-        if Contagem == 0:
+        nome = msg['text'].replace("/idade ", '').replace("/edad ", '').replace("/age ", '').replace("/idade@CookieMWbot", '').replace("/age@CookieMWbot", '').replace("/edad@CookieMWbot", '').split()[0]
+        response = json.loads(requests.get(f"https://api.agify.io?name={nome}", timeout=10).text)
+        idade = response['age']
+        registered_times = response['count']
+        if registered_times == 0:
             send_message(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
         else:
-            send_message(cookiebot, chat_id, f'Sua idade é <span class="tg-spoiler">{Idade} anos! 👴</span>\nRegistrado <b>{Contagem}</b> vezes', msg, language)
+            send_message(cookiebot, chat_id, f'Sua idade é <span class="tg-spoiler">{idade} anos! 👴</span>\nRegistrado <b>{registered_times}</b> vezes', msg, language)
 
 def gender(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     if not " " in msg['text']:
         send_message(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n<blockquote>Exemplo: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)</blockquote>", msg, language)
     else:
-        Nome = msg['text'].replace("/genero ", '').replace("/gênero ", '').replace("/gender ", '').replace("/genero@CookieMWbot", '').replace("/gênero@CookieMWbot", '').replace("/gender@CookieMWbot", '').split()[0]
-        response = json.loads(requests.get(f"https://api.genderize.io?name={Nome}", timeout=10).text)
-        Genero = response['gender']
-        Probabilidade = response['probability']
-        Contagem = response['count']
-        if Contagem == 0:
+        nome = msg['text'].replace("/genero ", '').replace("/gênero ", '').replace("/gender ", '').replace("/genero@CookieMWbot", '').replace("/gênero@CookieMWbot", '').replace("/gender@CookieMWbot", '').split()[0]
+        response = json.loads(requests.get(f"https://api.genderize.io?name={nome}", timeout=10).text)
+        genero = response['gender']
+        probability = response['probability']
+        registered_times = response['count']
+        if registered_times == 0:
             send_message(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
-        elif Genero == 'male':
-            send_message(cookiebot, chat_id, f'É <span class="tg-spoiler">um menino! 👨</span>\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes', msg, language)
-        elif Genero == 'female':
-            send_message(cookiebot, chat_id, f'É <span class="tg-spoiler">uma menina! 👩</span>\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes', msg, language)
+        elif genero == 'male':
+            send_message(cookiebot, chat_id, f'É <span class="tg-spoiler">um menino! 👨</span> \n\nProbabilidade --> {probability*100}%\nRegistrado {registered_times} vezes', msg, language)
+        elif genero == 'female':
+            send_message(cookiebot, chat_id, f'É <span class="tg-spoiler">uma menina! 👩</span> \n\nProbabilidade --> {probability*100}%\nRegistrado {registered_times} vezes', msg, language)
 
 def firecracker(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
     react_to_message(msg, '🎉', is_alternate_bot=is_alternate_bot)
@@ -332,7 +332,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
 
 def unearth(cookiebot, msg, chat_id, thread_id=None):
     send_chat_action(cookiebot, chat_id, 'typing')
-    for _ in range(10):
+    for _ in range(100):
         try:
             chosenid = random.randint(1, msg['message_id'])
             forward_message(cookiebot, chat_id, chat_id, chosenid, thread_id=thread_id)

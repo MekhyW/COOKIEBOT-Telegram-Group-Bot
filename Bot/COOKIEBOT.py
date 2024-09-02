@@ -160,7 +160,7 @@ def thread_function(msg):
                 elif utilityfunctions and msg['text'].startswith(("/buscarfonte", "/searchsource", "/buscarfuente")):
                     reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
-                                                "/rojao", "/rojão", "/acende", "/fogos", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
+                                                "/rojao", "/rojão", "/acende", "/fogos", "/firecracker", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
                                                 "/batalha", "/battle", "/batalla", "/desenterrar", "/unearth", "/morte", "/death", "/muerte", "/sorte", "/fortunecookie", "/suerte",
                                                 "/zoar", "/destroy", "/destruir")):
                     if not funfunctions:
@@ -181,7 +181,7 @@ def thread_function(msg):
                         shipp(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                     elif msg['text'].startswith(("/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
                         complaint(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/desenterrar", "unearth")):
+                    elif msg['text'].startswith(("/desenterrar", "/unearth")):
                         unearth(cookiebot, msg, chat_id, thread_id=thread_id)
                     elif msg['text'].startswith(("/morte", "/muerte", "/death")):
                         death(cookiebot, msg, chat_id, language)
