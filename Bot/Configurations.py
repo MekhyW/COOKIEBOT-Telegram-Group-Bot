@@ -36,7 +36,7 @@ def SetLanguageComandos(cookiebot, chat_id, chat_to_alter, language, isAlternate
         if silent:
             print(f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}")
         else:
-            Send(cookiebot, chat_id, f"Comandos no chat com ID *{chat_to_alter}* alterados para o idioma *{language}*", language=language)
+            Send(cookiebot, chat_id, f"Comandos no chat com ID <b>{chat_to_alter}</b> alterados para o idioma <b>{language}</b>", language=language)
 
 def SetComandosPrivate(cookiebot, chat_id, isAlternate=0):
     SetLanguageComandos(cookiebot, chat_id, chat_id, "private", isAlternate)
@@ -96,12 +96,12 @@ def Configurar(cookiebot, msg, chat_id, listaadmins_id, language):
                                     [InlineKeyboardButton(text="Publisher Members Only",callback_data=f'q CONFIG {chat_id}')]
                                 ]
                             ))
-            Send(cookiebot, chat_id, "Te mandei uma mensagem no chat privado para configurar\!", msg, language)
+            Send(cookiebot, chat_id, "Te mandei uma mensagem no chat privado para configurar!", msg, language)
         except Exception as e:
-            Send(cookiebot, chat_id, "Não consegui te mandar o menu de configuração\n>\(Mande uma mensagem no meu chat privado para que eu consiga fazer isso\)" , msg, language)
+            Send(cookiebot, chat_id, "Não consegui te mandar o menu de configuração\n<blockquote>Mande uma mensagem no meu chat privado para que eu consiga fazer isso)</blockquote>" , msg, language)
             print(e)
     else:
-        Send(cookiebot, chat_id, "Você não tem permissão para configurar o bot\!\n>\(Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada\!\)", msg, language)
+        Send(cookiebot, chat_id, "Você não tem permissão para configurar o bot!\n<blockquote>Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada!<blockquote>", msg, language)
         with open('Static/remove_anonymous_tutorial.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video)
 

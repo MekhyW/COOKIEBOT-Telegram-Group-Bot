@@ -87,7 +87,7 @@ def thread_function(msg):
                     GetConfig(cookiebot, chat_id, ignorecache=True, isAlternate=isAlternate)
             elif msg['from']['id'] != msg['new_chat_participant']['id']:
                 if msg['new_chat_participant']['is_bot']:
-                    Send(cookiebot, chat_id, "Um novo companheiro bot foi adicionado\!\n>Caso algum comando entre em conflito, fale com o Mekhy", msg, language)
+                    Send(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\n<blockquote>Caso algum comando entre em conflito, fale com o Mekhy</blockquote>", msg, language)
                 else:
                     Bemvindo(cookiebot, msg, chat_id, limbotimespan, language, isAlternate=isAlternate)
             elif not CheckHumanFactor(cookiebot, msg, chat_id, language) and not CheckCAS(cookiebot, msg, chat_id, language) and not CheckBlacklist(cookiebot, msg, chat_id, language) and not CheckSpamwatch(cookiebot, msg, chat_id, language):
@@ -143,7 +143,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/reload", "/recarregar")):
                     GetAdmins(cookiebot, msg, chat_id, ignorecache=True)
                     GetConfig(cookiebot, chat_id, ignorecache=True, isAlternate=isAlternate)
-                    Send(cookiebot, chat_id, "Memória recarregada com sucesso\!", msg, language)
+                    Send(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
                 elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                     Analyze(cookiebot, msg, chat_id, language, isAlternate=isAlternate)
                 elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):

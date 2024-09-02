@@ -253,10 +253,10 @@ def SchedulePost(cookiebot, query_data):
         answer += f"OBS: private chats are not listed!"
         Send(cookiebot, mekhyID, answer)
         Send(cookiebot, origin_userid, answer)
-        Send(cookiebot, second_chatid, "Post added to the publication queue\!", msg_to_reply={'message_id': second_messageid})
+        Send(cookiebot, second_chatid, "Post added to the publication queue!", msg_to_reply={'message_id': second_messageid})
     except Exception as e:
         Send(cookiebot, mekhyID, traceback.format_exc())
-        Send(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n>Send /start in my DM so I can send you messages\.", msg_to_reply={'message_id': second_messageid})
+        Send(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n<blockquote>Send /start in my DM so I can send you messages.</blockquote>", msg_to_reply={'message_id': second_messageid})
 
 def ScheduleAutopost(cookiebot, msg, chat_id, language, listaadmins_id, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')

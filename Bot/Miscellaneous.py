@@ -81,7 +81,7 @@ def Privacy(cookiebot, msg, chat_id, language):
 def TaVivo(cookiebot, msg, chat_id, language, isAlternate=0):
     ReactToMessage(msg, '👍', isAlternate=isAlternate)
     SendChatAction(cookiebot, chat_id, 'typing')
-    Send(cookiebot, chat_id, "*Estou vivo*\n\nPing enviado em\:\n" + str(datetime.datetime.now()), msg, language)
+    Send(cookiebot, chat_id, "<b>Estou vivo</b>\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
 
 def Analyze(cookiebot, msg, chat_id, language, isAlternate=0):
     SendChatAction(cookiebot, chat_id, 'typing')
@@ -131,7 +131,7 @@ def Comandos(cookiebot, msg, chat_id, language):
     Send(cookiebot, chat_id, string, msg_to_reply=msg)
 
 def NotifyFunOff(cookiebot, msg, chat_id, language):
-    Send(cookiebot, chat_id, "_Funções de diversão estão desativadas nesse chat_", msg, language)
+    Send(cookiebot, chat_id, "<i>Funções de diversão estão desativadas nesse chat</i>", msg, language)
 
 def IdeiaDesenho(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
@@ -156,9 +156,9 @@ def CustomCommand(cookiebot, msg, chat_id):
 def Dado(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     if msg['text'].startswith("/dado"):
-        Send(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n>EXEMPLO\: /d20 5\n>\(Roda um d20 5 vezes\)")
+        Send(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n<blockquote>EXEMPLO: /d20 5\n><blockquote>Roda um d20 5 vezes")
     elif msg['text'].startswith("/dice"):
-        Send(cookiebot, chat_id, "Roll a dice from 1 to x, n times\n>EXAMPLE\: /d20 5\n>\(Rolls a d20 5 times\)")
+        Send(cookiebot, chat_id, "Roll a dice from 1 to x, n times\n<blockquote>EXAMPLE: /d20 5\n<blockquote>Rolls a d20 5 times")
     else:
         if len(msg['text'].split()) == 1:
             vezes = 1
@@ -179,21 +179,21 @@ def Dado(cookiebot, msg, chat_id, language):
 
 def Idade(cookiebot, msg, chat_id, language):
     if not " " in msg['text']:
-        Send(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n>Exemplo\: '/idade Mekhy'\n>\(obs\: só o primeiro nome conta\)", msg, language)
+        Send(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n<blockquote>Exemplo: '/idade Mekhy'\n(obs: só o primeiro nome conta)</blockquote>", msg, language)
     else:
         Nome = msg['text'].replace("/idade ", '').replace("/edad ", '').replace("/age ", '').replace("/idade@CookieMWbot", '').replace("/age@CookieMWbot", '').replace("/edad@CookieMWbot", '').split()[0]
         response = json.loads(requests.get(f"https://api.agify.io?name={Nome}", timeout=10).text)
         Idade = response['age']
         Contagem = response['count']
         if Contagem == 0:
-            Send(cookiebot, chat_id, "Não conheço esse nome\!", msg, language)
+            Send(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
         else:
-            Send(cookiebot, chat_id, f"Sua idade é ||{Idade} anos\! 👴||\nRegistrado *{Contagem}* vezes", msg, language)
+            Send(cookiebot, chat_id, f'Sua idade é <span class="tg-spoiler">{Idade} anos! 👴</span>\nRegistrado <b>{Contagem}</b> vezes', msg, language)
 
 def Genero(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'typing')
     if not " " in msg['text']:
-        Send(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero\!\n>Exemplo\: '/genero Mekhy'\n>\(obs\: só o primeiro nome conta\)\n>\(obs 2\: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA\)", msg, language)
+        Send(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n<blockquote>Exemplo: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)</blockquote>", msg, language)
     else:
         Nome = msg['text'].replace("/genero ", '').replace("/gênero ", '').replace("/gender ", '').replace("/genero@CookieMWbot", '').replace("/gênero@CookieMWbot", '').replace("/gender@CookieMWbot", '').split()[0]
         response = json.loads(requests.get(f"https://api.genderize.io?name={Nome}", timeout=10).text)
@@ -201,15 +201,15 @@ def Genero(cookiebot, msg, chat_id, language):
         Probabilidade = response['probability']
         Contagem = response['count']
         if Contagem == 0:
-            Send(cookiebot, chat_id, "Não conheço esse nome\!", msg, language)
+            Send(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
         elif Genero == 'male':
-            Send(cookiebot, chat_id, f"É ||um menino\! 👨||\n\nProbabilidade \-\-\> {Probabilidade*100}%\nRegistrado {Contagem} vezes", msg, language)
+            Send(cookiebot, chat_id, f'É <span class="tg-spoiler">um menino! 👨</span>\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes', msg, language)
         elif Genero == 'female':
-            Send(cookiebot, chat_id, f"É ||uma menina\! 👩||\n\nProbabilidade \-\-\> {Probabilidade*100}%\nRegistrado {Contagem} vezes", msg, language)
+            Send(cookiebot, chat_id, f'É <span class="tg-spoiler">uma menina! 👩</span>\n\nProbabilidade --> {Probabilidade*100}%\nRegistrado {Contagem} vezes', msg, language)
 
 def Rojao(cookiebot, msg, chat_id, thread_id=None, isAlternate=0):
     ReactToMessage(msg, '🎉', isAlternate=isAlternate)
-    Send(cookiebot, chat_id, "fiiiiiiii\.\.\.\. ", msg_to_reply=msg)
+    Send(cookiebot, chat_id, "fiiiiiiii.... ", msg_to_reply=msg)
     time.sleep(0.1)
     amount = random.randint(5, 20)
     while amount > 0:
@@ -219,18 +219,18 @@ def Rojao(cookiebot, msg, chat_id, thread_id=None, isAlternate=0):
             n = 1
         Send(cookiebot, chat_id, "pra "*n, thread_id=thread_id, isAlternate=isAlternate)
         amount -= n
-    Send(cookiebot, chat_id, "*💥POOOOOOOWW💥*", thread_id=thread_id, isAlternate=isAlternate)
+    Send(cookiebot, chat_id, "<b>💥POOOOOOOWW💥</b>", thread_id=thread_id, isAlternate=isAlternate)
 
 def Reclamacao(cookiebot, msg, chat_id, language):
     SendChatAction(cookiebot, chat_id, 'upload_photo')
     if language == 'pt':
         with open('Static/reclamacao/milton_pt.jpg', 'rb') as photo:
-            SendPhoto(cookiebot, chat_id, photo, 
+            SendPhoto(cookiebot, chat_id, photo,
                       caption=f"Bom dia/tarde/noite, {msg['from']['first_name']},\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem. Se não, seguimos com nossas atividades.\nAtenciosamente,\nMilton do RH.", 
                       msg_to_reply=msg)
     else:
         with open('Static/reclamacao/milton_eng.jpg', 'rb') as photo:
-            SendPhoto(cookiebot, chat_id, photo, 
+            SendPhoto(cookiebot, chat_id, photo,
                       caption=f"Good morning/afternoon/evening, {msg['from']['first_name']},\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.", 
                       msg_to_reply=msg)
             

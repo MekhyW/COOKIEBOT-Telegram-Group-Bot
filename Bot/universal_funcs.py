@@ -97,7 +97,7 @@ def GetMediaContent(cookiebot, msg, media_type, isAlternate=0, downloadfile=Fals
     except urllib3.exceptions.ProtocolError:
         GetMediaContent(cookiebot, msg, isAlternate, downloadfile)
 
-def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isAlternate=0, reply_markup=None, parse_mode='MarkdownV2'):
+def Send(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, isAlternate=0, reply_markup=None, parse_mode='HTML'):
     try:
         SendChatAction(cookiebot, chat_id, 'typing')
         if language == 'eng':
