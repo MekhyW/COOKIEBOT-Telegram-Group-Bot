@@ -29,12 +29,12 @@ def set_language_commands(cookiebot, chat_id, chat_to_alter, language, is_altern
             if len(command.split()) == 1 and command.islower():
                 comandos.append({'command': command, 'description': description})
     if language == "private":
-        set_bot_commands(comandos, chat_to_alter, is_alternate_bot=is_alternate_bot)
+        set_bot_commands(cookiebot, comandos, chat_to_alter, is_alternate_bot=is_alternate_bot)
     else:
         for lang in ['pt', 'es', 'eng']:
             if lang != language:
-                set_bot_commands(comandos, chat_to_alter, is_alternate_bot=is_alternate_bot, language=lang)
-        set_bot_commands(comandos, chat_to_alter, is_alternate_bot=is_alternate_bot, language=language)
+                set_bot_commands(cookiebot, comandos, chat_to_alter, is_alternate_bot=is_alternate_bot, language=lang)
+        set_bot_commands(cookiebot, comandos, chat_to_alter, is_alternate_bot=is_alternate_bot, language=language)
         if silent:
             print(f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}")
         else:

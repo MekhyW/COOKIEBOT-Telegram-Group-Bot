@@ -7,8 +7,8 @@ import json
 import traceback
 import requests
 from universal_funcs import send_chat_action, send_message, forward_message, get_request_backend, react_to_message, emojis_to_numbers, send_photo, mekhyID, exchangerate_key
-from configurations import get_config
-from user_registers import get_members_chat
+from Configurations import get_config
+from UserRegisters import get_members_chat
 from price_parser import Price
 from deep_translator import GoogleTranslator
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton

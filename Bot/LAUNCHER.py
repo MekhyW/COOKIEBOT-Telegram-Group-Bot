@@ -9,7 +9,7 @@ def run_and_monitor(script_name, *args):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python main.py [is_alternate_bot (int)]")
+        print("Usage: python LAUNCHER.py [is_alternate_bot (int)]")
         sys.exit(1)
     script_args = sys.argv[1:]
     run_and_monitor("COOKIEBOT.py", *script_args)

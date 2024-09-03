@@ -1,29 +1,30 @@
-import os
 from dotenv import load_dotenv
+import os
 import telepot
 from telepot.loop import MessageLoop
+from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
 load_dotenv()
 token = os.getenv('testbotTOKEN')
-MEKHY_ID = 780875868
+mekhyID = 780875868
 bot = telepot.Bot(token)
 updates = bot.getUpdates()
 if updates:
     last_update_id = updates[-1]['update_id']
     bot.getUpdates(offset=last_update_id+1)
-bot.sendMessage(MEKHY_ID, 'testbot started')
+bot.sendMessage(mekhyID, 'testbot started')
 
 def handle(msg):
-    content_type, _, _ = telepot.glance(msg)
+    content_type, chat_type, chat_id = telepot.glance(msg)
     print(content_type, msg)
     if content_type == 'photo':
         path = bot.getFile(msg['photo'][-1]['file_id'])['file_path']
         image_url = 'https://api.telegram.org/file/bot{}/{}'.format(token, path)
         print(msg['caption'])
-        bot.sendPhoto(MEKHY_ID, msg['photo'][-1]['file_id'], caption=image_url)
+        bot.sendPhoto(mekhyID, msg['photo'][-1]['file_id'], caption=image_url)
     elif content_type == 'video':
         path = bot.getFile(msg['video']['file_id'])['file_path']
         video_url = 'https://api.telegram.org/file/bot{}/{}'.format(token, path)
-        bot.sendVideo(MEKHY_ID, msg['video']['file_id'], caption=video_url)
+        bot.sendVideo(mekhyID, msg['video']['file_id'], caption=video_url)
 
 def handle_query(msg):
     query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')

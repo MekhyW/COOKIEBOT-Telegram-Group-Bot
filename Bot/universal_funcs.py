@@ -1,10 +1,5 @@
-import os
-import time
-import re
-import traceback
-import json
-import urllib3
-import requests
+import os, time, re, traceback
+import urllib3, json, requests
 from dotenv import load_dotenv
 from requests.auth import HTTPBasicAuth
 import telepot
@@ -187,7 +182,7 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
             url = f"https://api.telegram.org/bot{token}/sendAnimation?chat_id={chat_id}&animation={animation}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
-            response = requests.get(url, timeout=10)
+            response = requests.get(url)
             sentanimation = {'message_id': json.loads(response.text)['result']['message_id']}
         else:
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
@@ -209,7 +204,7 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
         return None
     return sentanimation['message_id']
 
-def set_bot_commands(commands, scope_chat_id, is_alternate_bot=0, language="pt"):
+def set_bot_commands(cookiebot, commands, scope_chat_id, is_alternate_bot=0, language="pt"):
     token = get_bot_token(is_alternate_bot)
     url = f'https://api.telegram.org/bot{token}/setMyCommands'
     data = {'commands': commands,

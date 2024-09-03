@@ -7,15 +7,15 @@ import telepot
 from telepot.loop import MessageLoop
 from telepot.exception import TooManyRequestsError, BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError
 from universal_funcs import *
-from audio import *
-from configurations import *
-from cooldowns import *
-from group_shield import *
-from miscellaneous import *
-from natural_language import *
-from publisher import *
-from social_content import *
-from user_registers import *
+from Audio import *
+from Configurations import *
+from Cooldowns import *
+from GroupShield import *
+from Miscellaneous import *
+from NaturalLanguage import *
+from Publisher import *
+from SocialContent import *
+from UserRegisters import *
 
 if len(sys.argv) < 2:
     print("Usage: python COOKIEBOT.py [is_alternate_bot (int)]")

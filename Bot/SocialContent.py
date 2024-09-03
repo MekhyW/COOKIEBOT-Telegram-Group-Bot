@@ -4,7 +4,7 @@ import urllib.request
 import datetime
 from bs4 import BeautifulSoup
 from universal_funcs import googleAPIkey, searchEngineCX, saucenao_key, storage_bucket, get_request_backend, post_request_backend, send_chat_action, send_message, react_to_message, send_photo, forward_message, cookiebotTOKEN
-from user_registers import get_members_chat
+from UserRegisters import get_members_chat
 import google_images_search
 import googleapiclient.discovery
 from deep_translator import GoogleTranslator
