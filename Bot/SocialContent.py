@@ -80,7 +80,7 @@ def reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=0):
 def prompt_qualquer_coisa(cookiebot, msg, chat_id, language):
     send_message(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n<blockquote>EXEMPLO: /fennec</blockquote>", msg, language)
 
-def QualquerCoisa(cookiebot, msg, chat_id, sfw, language, is_alternate_bot=0):
+def qualquer_coisa(cookiebot, msg, chat_id, sfw, language, is_alternate_bot=0):
     searchterm = msg['text'].split("@")[0].replace("/", ' ').replace("@CookieMWbot", '')
     if searchterm.split()[0] in avoid_search:
         return
@@ -127,7 +127,7 @@ def add_to_random_database(msg, chat_id, photo_id=''):
 
 def random_media(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
-    for attempt in range(50):
+    for _ in range(50):
         try:
             target = get_request_backend("randomdatabase")
             forward_message(cookiebot, chat_id, target['id'], target['idMessage'], thread_id=thread_id, is_alternate_bot=is_alternate_bot)
@@ -152,7 +152,7 @@ def meme(cookiebot, msg, chat_id, language):
     members = get_members_chat(chat_id)
     members_tagged = get_members_tagged(msg)
     caption = ""
-    for attempt in range(100):
+    for _ in range(100):
         if 'pt' not in language.lower():
             template = "Static/Meme/English/" + random.choice(templates_eng)
         else:
@@ -160,13 +160,13 @@ def meme(cookiebot, msg, chat_id, language):
             template = "Static/Meme/Portuguese/" + templates_pt[template_id - len(templates_eng)] if template_id > len(templates_eng) - 1 else "Static/Meme/English/" + templates_eng[template_id]
         template_img = cv2.imread(template)
         mask_green = cv2.inRange(template_img, (0, 210, 0), (40, 255, 40))
-        contours_green, tree = cv2.findContours(mask_green, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours_green, _ = cv2.findContours(mask_green, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         if len(members_tagged) <= len(contours_green):
             break
     for green in contours_green:
         x, y, w, h = cv2.boundingRect(green)
-        for attempt in range(100):
-            if len(members_tagged):
+        for _ in range(100):
+            if len(members_tagged) > 0:
                 chosen_member = random.choice(members_tagged)
                 members_tagged.remove(chosen_member)
                 members = [member for member in members if 'user' not in member or member['user'] != chosen_member]
@@ -184,11 +184,11 @@ def meme(cookiebot, msg, chat_id, language):
                 url = f"https://telegram.me/{chosen_member}"
             except IndexError:
                 continue
-            req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"}) 
+            req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"})
             html = urllib.request.urlopen(req)
             soup = BeautifulSoup(html, "html.parser")
             images = list(soup.findAll('img'))
-            if len(images):
+            if len(images) > 0:
                 break
         resp = urllib.request.urlopen(images[0]['src'])
         image = np.asarray(bytearray(resp.read()), dtype="uint8")
@@ -228,10 +228,10 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         soup1 = BeautifulSoup(urllib.request.urlopen(urllib.request.Request(f"https://telegram.me/{users[0]}", headers={'User-Agent' : "Magic Browser"})), "html.parser")
         soup2 = BeautifulSoup(urllib.request.urlopen(urllib.request.Request(f"https://telegram.me/{users[1]}", headers={'User-Agent' : "Magic Browser"})), "html.parser")
         images = list(soup1.findAll('img')), list(soup2.findAll('img'))
-        if not len(images[0]):
+        if len(images[0]) == 0:
             send_message(cookiebot, chat_id, f"Não consegui extrair a foto de {members_tagged[0]}. Verifique se está público!", msg, language)
             return
-        if not len(images[1]):
+        if len(images[1]) == 0:
             send_message(cookiebot, chat_id, f"Não consegui extrair a foto de {members_tagged[1]}. Verifique se está público!", msg, language)
             return
         resp = urllib.request.urlopen(images[0][0]['src']), urllib.request.urlopen(images[1][0]['src'])

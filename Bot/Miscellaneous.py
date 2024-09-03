@@ -8,7 +8,7 @@ import requests
 from universal_funcs import get_request_backend, send_message, delete_message, storage_bucket, send_photo, send_chat_action, react_to_message, forward_message, number_to_emojis, wait_open, get_media_content, get_bot_token, send_animation
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
-from Publisher import postmail_chat_link
+from Publisher import POSTMAIL_CHAT_LINK
 import Distortioner
 bloblist_ideiadesenho = list(storage_bucket.list_blobs(prefix="IdeiaDesenho"))
 bloblist_death = list(storage_bucket.list_blobs(prefix="Death"))
@@ -25,7 +25,7 @@ with open("Static/Custom.txt", "r", encoding='utf8') as custom_commands_file:
     custom_commands = [x.strip() for x in custom_commands]
 
 def decapitalize(s, upper_rest = False):
-  return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
+    return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
 
 def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -66,7 +66,7 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
              f"{commands_en}\n\nIf you have any questions or want something added, send a message to @MekhyW")
         reply_markup = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="Adicionar a um Grupo 👋" if is_portuguese else "Add me to a Group 👋", url=NEW_CHAT_LINK)],
-            [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=postmail_chat_link)],
+            [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=POSTMAIL_CHAT_LINK)],
             [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=UPDATES_CHANNEL_LINK)],
             [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=TEST_CHAT_LINK)]
         ])
@@ -75,7 +75,7 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
             if is_portuguese else \
             f"*Hello, I'm {name}!*\n{description}\n\nIf you have any questions or want the complete list of commands, send a message to @MekhyW"
         reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=postmail_chat_link)],
+            [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=POSTMAIL_CHAT_LINK)],
             [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=UPDATES_CHANNEL_LINK)],
             [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=TEST_CHAT_LINK)]
         ])
@@ -144,22 +144,22 @@ def notify_fun_off(cookiebot, msg, chat_id, language):
 
 def drawing_idea(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
-    ideiaID = random.randint(0, len(bloblist_ideiadesenho)-1)
-    blob = bloblist_ideiadesenho[ideiaID]
+    idea_id = random.randint(0, len(bloblist_ideiadesenho)-1)
+    blob = bloblist_ideiadesenho[idea_id]
     photo = blob.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     if language == 'pt':
-        caption = f"Referência com ID {ideiaID}\n\nNão trace sem dar créditos! (use a busca reversa do google images)"
+        caption = f"Referência com ID {idea_id}\n\nNão trace sem dar créditos! (use a busca reversa do google images)"
     elif language == 'es':
-        caption = f"Referencia con ID {ideiaID}\n\n¡No rastrear sin dar créditos! (utilice la búsqueda inversa de imágenes de Google)"
+        caption = f"Referencia con ID {idea_id}\n\n¡No rastrear sin dar créditos! (utilice la búsqueda inversa de imágenes de Google)"
     else:
-        caption = f"Reference ID {ideiaID}\n\nDo not trace without credits! (use the reverse google images search)"
+        caption = f"Reference ID {idea_id}\n\nDo not trace without credits! (use the reverse google images search)"
     send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
 
 def custom_command(cookiebot, msg, chat_id):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
     bloblist = list(storage_bucket.list_blobs(prefix="Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')))
-    imageID = random.randint(0, len(bloblist)-1)
-    photo = bloblist[imageID].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
+    image_id = random.randint(0, len(bloblist)-1)
+    photo = bloblist[image_id].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     send_photo(cookiebot, chat_id, photo, msg_to_reply=msg)
 
 def roll_dice(cookiebot, msg, chat_id, language):
@@ -235,14 +235,14 @@ def complaint(cookiebot, msg, chat_id, language):
     if language == 'pt':
         with open('Static/reclamacao/milton_pt.jpg', 'rb') as photo:
             send_photo(cookiebot, chat_id, photo,
-                      caption=f"Bom dia/tarde/noite, {msg['from']['first_name']},\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem. Se não, seguimos com nossas atividades.\nAtenciosamente,\nMilton do RH.", 
+                      caption=f"Bom dia/tarde/noite, {msg['from']['first_name']},\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem. Se não, seguimos com nossas atividades.\nAtenciosamente,\nMilton do RH.",
                       msg_to_reply=msg)
     else:
         with open('Static/reclamacao/milton_eng.jpg', 'rb') as photo:
             send_photo(cookiebot, chat_id, photo,
-                      caption=f"Good morning/afternoon/evening, {msg['from']['first_name']},\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.", 
+                      caption=f"Good morning/afternoon/evening, {msg['from']['first_name']},\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.",
                       msg_to_reply=msg)
-            
+
 def complaint_answer(cookiebot, msg, chat_id, language):
     delete_message(cookiebot, telepot.message_identifier(msg['reply_to_message']))
     send_chat_action(cookiebot, chat_id, 'upload_audio')
@@ -267,7 +267,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                                   'As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais!'])
         pic = bloblist_patas[random.randint(0, len(bloblist_patas)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
-        if daysremaining >= -5 and daysremaining <= 0:
+        if -5 <= daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
         else:
             while daysremaining < -5:
@@ -286,7 +286,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                                   'Aurora Bloom virá como convidada de honra para a Brasil FurFest 2025, trazendo todo o seu charme e diversão para o evento!'])
         pic = bloblist_bff[random.randint(0, len(bloblist_bff)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
-        if daysremaining >= -5 and daysremaining <= 0:
+        if -5 <= daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
         else:
             while daysremaining < -5:
@@ -304,7 +304,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                                       'A primeira convenção furry no sul do Brasil está voltando com mais uma edição! O vale dos dinossauros aguarda você para uma aventura jurássica!! 🦖🦕'])
         pic = bloblist_fursmeet[random.randint(0, len(bloblist_fursmeet)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
-        if daysremaining >= -5 and daysremaining <= 0:
+        if -5 <= daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
         else:
             while daysremaining < -5:
@@ -322,12 +322,15 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                                       'A Staff dedicada do T-Rex Furplayer, garante que cada detalhe seja uma experiência incrível e perfeita para todos, proporcionando aos participantes uma experiência impecável e acolhedora, repleta de diversão e memórias inesquecíveis!'])
         pic = bloblist_trex[random.randint(0, len(bloblist_trex)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
-        if daysremaining >= -5 and daysremaining <= 0:
+        if -5 <= daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
         else:
             while daysremaining < -5:
                 daysremaining += 365
             caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o T-Rex Furplayer!</b>\n\n<i>{calltoaction}</i>\n🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖\n\n📆 {day}/{month} - Shopping D, Canindé São Paulo - SP\n💻 Ingressos em: trexfurplayer.wordpress.com\n📲 Grupo do evento: @trexfurplayergroup"
+    else:
+        send_message(cookiebot, chat_id, "Evento não encontrado", msg, language)
+        return
     send_photo(cookiebot, chat_id, pic, caption=caption, msg_to_reply=msg, language=language, is_alternate_bot=is_alternate_bot)
 
 def unearth(cookiebot, msg, chat_id, thread_id=None):
@@ -337,7 +340,7 @@ def unearth(cookiebot, msg, chat_id, thread_id=None):
             chosenid = random.randint(1, msg['message_id'])
             forward_message(cookiebot, chat_id, chat_id, chosenid, thread_id=thread_id)
             return chosenid
-        except Exception as e:
+        except Exception:
             return None
 
 def death(cookiebot, msg, chat_id, language):

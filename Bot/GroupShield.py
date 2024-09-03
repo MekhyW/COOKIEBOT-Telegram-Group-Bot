@@ -1,13 +1,13 @@
 # coding=utf8
 import threading
 import json
-import requests
 import time
 import math
 import re
 import random
 import datetime
 import urllib.request
+import requests
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from universal_funcs import spamwatch_token, get_bot_token, send_photo, delete_message, ban_and_blacklist, wait_open
@@ -58,7 +58,7 @@ def substitute_user_tags(text, msg):
 def rules_message(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     rules = get_request_backend(f"rules/{chat_id}")
-    if 'error' in rules and rules['error'] == "Not Found":    
+    if 'error' in rules and rules['error'] == "Not Found":
         send_message(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\n<blockquote>Para colocar regras, use o /novasregras</blockquote>", msg, language)
     else:
         regras = rules['rules'].replace('\\n', '\n')
@@ -119,14 +119,14 @@ def welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         welcome = 'Welcome to'
     font = ImageFont.truetype('Static/Roadgeek2005Engschrift-lgJw.ttf', 32)
     img_pil = Image.fromarray(blurred_chat_img)
-    draw = ImageDraw.Draw(img_pil)    
+    draw = ImageDraw.Draw(img_pil)
     chat_title = emoji_pattern.sub(r'', cookiebot.getChat(chat_id)['title'].strip())
-    user_firstname = emoji_pattern.sub(r'', user['first_name'].strip())             
+    user_firstname = emoji_pattern.sub(r'', user['first_name'].strip())
     text = f'{welcome} {chat_title}, {user_firstname}!'
-    textW, textH = draw.textbbox((0, 0), text, font=font)[2:]
-    textX = int(((size[1]*2.2) - textW) / 2)
-    textY = int(((size[0]*0.69) + textH) / 2)
-    draw.text((textX, textY), text, font = font, fill = (255, 255, 255, 0))
+    text_w, text_h = draw.textbbox((0, 0), text, font=font)[2:]
+    text_x = int(((size[1]*2.2) - text_w) / 2)
+    text_y = int(((size[0]*0.69) + text_h) / 2)
+    draw.text((text_x, text_y), text, font = font, fill = (255, 255, 255, 0))
     final_img = np.array(img_pil)
     # Save image and return
     cv2.imwrite("welcome_card.png", final_img)
@@ -162,7 +162,7 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
         else:
             rulesbuttontext = 'See the Rules!'
         welcome_card_image = welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot)
-        send_photo(cookiebot, chat_id, welcome_card_image, caption=welcome, language=language, 
+        send_photo(cookiebot, chat_id, welcome_card_image, caption=welcome, language=language,
                   reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=rulesbuttontext,callback_data=f'RULES {language}')]]))
     except Exception as e:
         print(e)
@@ -282,7 +282,7 @@ def check_captcha(cookiebot, msg, chat_id, captchatimespan, language):
                 elif chat == chat_id and user == msg['from']['id']:
                     text.write(line)
                     delete_message(cookiebot, telepot.message_identifier(msg))
-                else:    
+                else:
                     text.write(line)
 
 def solve_captcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt', is_alternate_bot=0):

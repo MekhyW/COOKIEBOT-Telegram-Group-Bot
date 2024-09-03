@@ -14,13 +14,13 @@ from deep_translator import GoogleTranslator
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 publisher_db = sqlite3.connect('Publisher.db', check_same_thread=False)
 publisher_cursor = publisher_db.cursor()
-publisher_cursor.execute("CREATE TABLE IF NOT EXISTS publisher (name TEXT, days INT, next_time TEXT, target_chat_id INT, postmail_chat_id INT, second_chatid INT, postmail_message_id INT, second_messageid INT, origin_userid INT)")
+publisher_cursor.execute("CREATE TABLE IF NOT EXISTS publisher (name TEXT, days INT, next_time TEXT, target_chat_id INT, POSTMAIL_CHAT_ID INT, second_chatid INT, postmail_message_id INT, second_messageid INT, origin_userid INT)")
 publisher_db.commit()
 cache_posts = {}
-postmail_chat_link = "https://t.me/CookiebotPostmail"
-postmail_chat_id = -1001869523792
-approval_chat_id = -1001659344607
-url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+POSTMAIL_CHAT_LINK = "https://t.me/CookiebotPostmail"
+POSTMAIL_CHAT_ID = -1001869523792
+APPROVAL_CHAT_ID = -1001659344607
+URL_REGEX = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
 def ask_publisher(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -58,8 +58,8 @@ def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
     origin_messageid = query_data.split()[3]
     second_messageid = query_data.split()[4]
     origin_userid = from_id
-    forward_message(cookiebot, approval_chat_id, second_chatid, second_messageid, is_alternate_bot=is_alternate_bot)
-    send_message(cookiebot, approval_chat_id, 'Approve post?', 
+    forward_message(cookiebot, APPROVAL_CHAT_ID, second_chatid, second_messageid, is_alternate_bot=is_alternate_bot)
+    send_message(cookiebot, APPROVAL_CHAT_ID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️ 7 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid}')],
             [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 3 {second_messageid}')],
@@ -68,13 +68,13 @@ def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
         ]
     ))
 
-def create_job(hour, minute, name, days, target_chat_id, postmail_chat_id, second_chatid, postmail_message_id, second_messageid, origin_userid):
+def create_job(hour, minute, name, days, target_chat_id, POSTMAIL_CHAT_ID, second_chatid, postmail_message_id, second_messageid, origin_userid):
     current_time = datetime.datetime.now()
     if current_time.hour < hour or (current_time.hour == hour and current_time.minute < minute):
         next_time = str(datetime.datetime(current_time.year, current_time.month, current_time.day, hour, minute))
     else:
         next_time = str(datetime.datetime(current_time.year, current_time.month, current_time.day, hour, minute) + datetime.timedelta(days=1))
-    publisher_cursor.execute("INSERT INTO publisher VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (name, days, next_time, target_chat_id, postmail_chat_id, second_chatid, postmail_message_id, second_messageid, origin_userid))
+    publisher_cursor.execute("INSERT INTO publisher VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (name, days, next_time, target_chat_id, POSTMAIL_CHAT_ID, second_chatid, postmail_message_id, second_messageid, origin_userid))
     publisher_db.commit()
     print(f'Created job: {name}')
     return name
@@ -88,7 +88,7 @@ def list_jobs():
             'days': row[1],
             'next_time': row[2],
             'target_chat_id': row[3],
-            'postmail_chat_id': row[4],
+            'POSTMAIL_CHAT_ID': row[4],
             'second_chatid': row[5],
             'postmail_message_id': row[6],
             'second_messageid': row[7],
@@ -172,7 +172,7 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     cached_post = cache_posts[origin_messageid]
     inline_keyboard = []
     inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
-    for url in set(re.findall(url_regex, cached_post['caption'])):
+    for url in set(re.findall(URL_REGEX, cached_post['caption'])):
         name = url[0]
         if name.endswith('/'):
             name = name[:-1]
@@ -191,20 +191,20 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
             inline_keyboard.append([InlineKeyboardButton(text=name, url=entity['url'])])
     if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
-    inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=postmail_chat_link)])
+    inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=POSTMAIL_CHAT_LINK)])
     caption_pt = GoogleTranslator(source='auto', target='pt').translate(caption_new)
     caption_en = GoogleTranslator(source='auto', target='en').translate(caption_new)
     caption_pt = html.escape(convert_prices_in_text(caption_pt, 'BRL'))
     caption_en = html.escape(convert_prices_in_text(caption_en, 'USD'))
     if 'photo' in cached_post:
-        sent_pt = send_photo(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
-        sent_en = send_photo(cookiebot, postmail_chat_id, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
+        sent_pt = send_photo(cookiebot, POSTMAIL_CHAT_ID, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
+        sent_en = send_photo(cookiebot, POSTMAIL_CHAT_ID, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
     elif 'video' in cached_post:
-        sent_pt = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
-        sent_en = cookiebot.sendVideo(chat_id=postmail_chat_id, video=cached_post['video'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+        sent_pt = cookiebot.sendVideo(chat_id=POSTMAIL_CHAT_ID, video=cached_post['video'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+        sent_en = cookiebot.sendVideo(chat_id=POSTMAIL_CHAT_ID, video=cached_post['video'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
     elif 'animation' in cached_post:
-        sent_pt = cookiebot.sendAnimation(chat_id=postmail_chat_id, animation=cached_post['animation'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
-        sent_en = cookiebot.sendAnimation(chat_id=postmail_chat_id, animation=cached_post['animation'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+        sent_pt = cookiebot.sendAnimation(chat_id=POSTMAIL_CHAT_ID, animation=cached_post['animation'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
+        sent_en = cookiebot.sendAnimation(chat_id=POSTMAIL_CHAT_ID, animation=cached_post['animation'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
     cache_posts.pop(origin_messageid)
     return sent_pt, sent_en
 
@@ -253,7 +253,7 @@ def schedule_post(cookiebot, query_data):
             minute = random.randint(0,59)
             postmail_message_id = sent_pt if language == 'pt' else sent_en
             create_job(hour, minute, f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute}", int(days), int(group_id),
-                       int(postmail_chat_id), int(second_chatid), int(postmail_message_id), int(second_messageid), int(origin_userid))
+                       int(POSTMAIL_CHAT_ID), int(second_chatid), int(postmail_message_id), int(second_messageid), int(origin_userid))
             answer += f"{hour}:{minute} - {target_chattitle}\n"
         except Exception as e:
             print(e)
@@ -297,7 +297,7 @@ def clear_autoposts(cookiebot, msg, chat_id, language, listaadmins_id, is_altern
         send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     for job in list_jobs():
-        if str(job['postmail_chat_id']) == str(chat_id):
+        if str(job['POSTMAIL_CHAT_ID']) == str(chat_id):
             delete_job(job['name'])
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
     send_message(cookiebot, chat_id, "Repostagens do grupo canceladas!", msg_to_reply=msg, language=language)
@@ -319,9 +319,9 @@ def scheduler_pull(cookiebot, is_alternate_bot=0):
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
                 config = get_config(cookiebot, group_id)
-                forward_message(cookiebot, group_id, postmail_chat_id, origin_messageid, thread_id=int(config[10]), is_alternate_bot=is_alternate_bot)
+                forward_message(cookiebot, group_id, POSTMAIL_CHAT_ID, origin_messageid, thread_id=int(config[10]), is_alternate_bot=is_alternate_bot)
             else:
-                forward_message(cookiebot, group_id, postmail_chat_id, origin_messageid, is_alternate_bot=is_alternate_bot)
+                forward_message(cookiebot, group_id, POSTMAIL_CHAT_ID, origin_messageid, is_alternate_bot=is_alternate_bot)
         except Exception:
             send_message(cookiebot, mekhyID, traceback.format_exc())
             delete_job(job['name'])

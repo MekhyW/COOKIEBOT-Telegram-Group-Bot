@@ -16,21 +16,21 @@ class TicketedDict(dict):
         self._ni = 0
         self.event = asyncio.Event()
         super().__init__(*args, **kwargs)
-        
+
     def has_next(self):
         return self._ni in self
-    
+
     async def wait(self):
         while not self.has_next():
             await self.event.wait()
             self.event.clear()
-    
+
     async def pop(self):
         await self.wait()
         ret = super().pop(self._ni)
         self._ni += 1
         return ret
-    
+
     def notify(self, *args, **kwargs):
         return self.event.set(*args, **kwargs)
 

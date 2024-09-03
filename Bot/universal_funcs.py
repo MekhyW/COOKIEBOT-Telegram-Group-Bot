@@ -1,5 +1,10 @@
-import os, time, re, traceback
-import urllib3, json, requests
+import os
+import time
+import re
+import traceback
+import json
+import urllib3
+import requests
 from dotenv import load_dotenv
 from requests.auth import HTTPBasicAuth
 import telepot
