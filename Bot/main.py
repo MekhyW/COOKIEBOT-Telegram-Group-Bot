@@ -12,4 +12,4 @@ if __name__ == "__main__":
         print("Usage: python main.py [is_alternate_bot (int)]")
         sys.exit(1)
     script_args = sys.argv[1:]
-    run_and_monitor("cookiebot.py", *script_args)
+    run_and_monitor("COOKIEBOT.py", *script_args)
