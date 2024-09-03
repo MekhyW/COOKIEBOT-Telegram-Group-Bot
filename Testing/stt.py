@@ -1,5 +1,4 @@
 import openai
-import json
 openai_client = openai.OpenAI(api_key='')
 
 def speech_to_text(filename):

@@ -8,8 +8,8 @@ import requests
 from universal_funcs import get_request_backend, send_message, delete_message, storage_bucket, send_photo, send_chat_action, react_to_message, forward_message, number_to_emojis, wait_open, get_media_content, get_bot_token, send_animation
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
-from Publisher import postmail_chat_link
-import Distortioner
+from publisher import postmail_chat_link
+import distortioner
 bloblist_ideiadesenho = list(storage_bucket.list_blobs(prefix="IdeiaDesenho"))
 bloblist_death = list(storage_bucket.list_blobs(prefix="Death"))
 bloblist_bff = list(storage_bucket.list_blobs(prefix="Countdown/BFF"))
@@ -399,7 +399,7 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         filename = file_path_telegram.split('/')[-1]
         with open(filename, 'wb') as f:
             f.write(r.content)
-        Distortioner.distortioner(filename)
+        distortioner.distortioner(filename)
         with open('distorted.jpg', 'rb') as photo:
             cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
         os.remove('distorted.jpg')
@@ -410,7 +410,7 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         thismighttakeawhile = cookiebot.sendMessage(chat_id, "(hold on, this might take a while...)", reply_to_message_id=msg['message_id'])
         send_chat_action(cookiebot, chat_id, 'upload_video')
         video_file = get_media_content(cookiebot, msg['reply_to_message'], 'video', is_alternate_bot=is_alternate_bot, downloadfile=True)
-        Distortioner.distortioner(video_file)
+        distortioner.distortioner(video_file)
         with open('distorted.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
         cookiebot.deleteMessage((chat_id, thismighttakeawhile['message_id']))
@@ -419,7 +419,7 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     elif 'photo' in msg['reply_to_message']:
         send_chat_action(cookiebot, chat_id, 'upload_photo')
         photo_file = get_media_content(cookiebot, msg['reply_to_message'], 'photo', is_alternate_bot=is_alternate_bot, downloadfile=True)
-        Distortioner.distortioner(photo_file)
+        distortioner.distortioner(photo_file)
         with open('distorted.jpg', 'rb') as photo:
             cookiebot.sendPhoto(chat_id, photo, reply_to_message_id=msg['message_id'])
         os.remove('distorted.jpg')
@@ -430,7 +430,7 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
             audio_file = get_media_content(cookiebot, msg['reply_to_message'], 'audio', is_alternate_bot=is_alternate_bot, downloadfile=True)
         else:
             audio_file = get_media_content(cookiebot, msg['reply_to_message'], 'voice', is_alternate_bot=is_alternate_bot, downloadfile=True)
-        Distortioner.distort_audiofile(audio_file, 10, 1, 'distorted.mp3')
+        distortioner.distort_audiofile(audio_file, 10, 1, 'distorted.mp3')
         with open('distorted.mp3', 'rb') as audio:
             cookiebot.sendAudio(chat_id, audio, reply_to_message_id=msg['message_id'])
         os.remove('distorted.mp3')
@@ -438,7 +438,7 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     elif 'sticker' in msg['reply_to_message']:
         send_chat_action(cookiebot, chat_id, 'upload_photo')
         sticker_file = get_media_content(cookiebot, msg['reply_to_message'], 'sticker', is_alternate_bot=is_alternate_bot, downloadfile=True)
-        Distortioner.process_image(sticker_file, 'distorted.png', 25)
+        distortioner.process_image(sticker_file, 'distorted.png', 25)
         with open('distorted.png', 'rb') as sticker:
             cookiebot.sendSticker(chat_id, sticker, reply_to_message_id=msg['message_id'])
         os.remove('distorted.png')
@@ -446,7 +446,7 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     elif 'animation' in msg['reply_to_message']:
         send_chat_action(cookiebot, chat_id, 'upload_video')
         animation_file = get_media_content(cookiebot, msg['reply_to_message'], 'animation', is_alternate_bot=is_alternate_bot, downloadfile=True)
-        Distortioner.distortioner(animation_file, is_gif=True)
+        distortioner.distortioner(animation_file, is_gif=True)
         with open('distorted.mp4', 'rb') as animation:
             cookiebot.sendAnimation(chat_id, animation, reply_to_message_id=msg['message_id'])
         os.remove('distorted.mp4')

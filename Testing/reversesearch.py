@@ -1,6 +1,6 @@
-from saucenao_api import SauceNao, VideoSauce, BookSauce, errors
-from dotenv import load_dotenv
 import os
+from saucenao_api import SauceNao, errors
+from dotenv import load_dotenv
 load_dotenv('../.env')
 key = os.getenv('saucenao_key')
 sauce = SauceNao(key)

@@ -1,8 +1,9 @@
+telepota
 python-dotenv
 urllib3
 beautifulsoup4
 Pillow
-opencv-python
+opencv-python==4.10.0.84
 Wand
 ffmpeg-python
 deep-translator

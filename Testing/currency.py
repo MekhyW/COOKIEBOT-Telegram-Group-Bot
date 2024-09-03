@@ -1,6 +1,7 @@
+import json
+import requests
 from price_parser import Price
-import requests, json
-exchangerate_key = ''
+EXCHANGERATE_KEY = ''
 
 raw_text = "Stickers - pack com 5 R$ 25,00"
 
@@ -42,8 +43,8 @@ def convert_prices_in_text(text, code_target):
         if code_from == code_target:
             return text
         try:
-            rate_url = f"https://v6.exchangerate-api.com/v6/{exchangerate_key}/latest/{code_from}"
-            rate = json.loads(requests.get(rate_url).text)['conversion_rates'][code_target]
+            rate_url = f"https://v6.exchangerate-api.com/v6/{EXCHANGERATE_KEY}/latest/{code_from}"
+            rate = json.loads(requests.get(rate_url, timeout=10).text)['conversion_rates'][code_target]
             converted = round(amount * rate, 2)
             final_text += f"{paragraph} ({code_target} ≈{converted})\n"
         except Exception as e:
@@ -51,6 +52,4 @@ def convert_prices_in_text(text, code_target):
             final_text += f"{paragraph}\n"
     return final_text
 
-final_text = convert_prices_in_text(raw_text, 'USD')
-
-print(final_text)
+print(convert_prices_in_text(raw_text, 'USD'))

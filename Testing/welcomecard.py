@@ -40,10 +40,10 @@ def GenerateWelcomeCard(chat_img, user_img, chat_title, user_firstname, language
     chat_title = emoji_pattern.sub(r'', chat_title.strip())
     user_firstname = emoji_pattern.sub(r'', user_firstname.strip())             
     text = f'{welcome} {chat_title}, {user_firstname}!'
-    textW, textH = draw.textbbox((0, 0), text, font=font)[2:]
-    textX = int(((size[1]*2.2) - textW) / 2)
-    textY = int(((size[0]*0.69) + textH) / 2)
-    draw.text((textX, textY), text, font = font, fill = (255, 255, 255, 0))
+    text_w, text_h = draw.textbbox((0, 0), text, font=font)[2:]
+    text_x = int(((size[1]*2.2) - text_w) / 2)
+    text_y = int(((size[0]*0.69) + text_h) / 2)
+    draw.text((text_x, text_y), text, font = font, fill = (255, 255, 255, 0))
     final_img = np.array(img_pil)
     return final_img
 

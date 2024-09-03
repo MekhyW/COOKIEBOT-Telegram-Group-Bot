@@ -11,7 +11,7 @@ import urllib.request
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from universal_funcs import spamwatch_token, get_bot_token, send_photo, delete_message, ban_and_blacklist, wait_open
-from UserRegisters import get_request_backend, send_message, send_chat_action
+from user_registers import get_request_backend, send_message, send_chat_action
 from captcha.image import ImageCaptcha
 import spamwatch
 import cv2

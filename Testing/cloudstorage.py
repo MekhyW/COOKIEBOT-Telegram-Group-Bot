@@ -1,7 +1,7 @@
-from google.cloud import storage
-import datetime
 import random
 import os
+import datetime
+from google.cloud import storage
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'cookiebot-bucket-key.json'
 storage_client = storage.Client()
 

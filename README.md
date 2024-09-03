@@ -17,10 +17,6 @@ git clone https://github.com/MekhyW/COOKIEBOT-Telegram-Group-Bot.git
 cd COOKIEBOT-Telegram-Group-Bot
 pip3 install -r requirements.txt --break-system-packages
 cd ..
-git clone https://github.com/MekhyW/telepota.git
-cd telepota
-pip3 install . --break-system-packages
-cd ..
 ```
 
 ## Provide credentials
