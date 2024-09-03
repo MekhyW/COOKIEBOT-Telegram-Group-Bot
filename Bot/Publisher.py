@@ -14,7 +14,7 @@ from deep_translator import GoogleTranslator
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 publisher_db = sqlite3.connect('Publisher.db', check_same_thread=False)
 publisher_cursor = publisher_db.cursor()
-publisher_cursor.execute("CREATE TABLE IF NOT EXISTS publisher (name TEXT, days INT, next_time TEXT, target_chat_id INT, POSTMAIL_CHAT_ID INT, second_chatid INT, postmail_message_id INT, second_messageid INT, origin_userid INT)")
+publisher_cursor.execute("CREATE TABLE IF NOT EXISTS publisher (name TEXT, days INT, next_time TEXT, target_chat_id INT, postmail_chat_id INT, second_chatid INT, postmail_message_id INT, second_messageid INT, origin_userid INT)")
 publisher_db.commit()
 cache_posts = {}
 POSTMAIL_CHAT_LINK = "https://t.me/CookiebotPostmail"
@@ -68,13 +68,13 @@ def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
         ]
     ))
 
-def create_job(hour, minute, name, days, target_chat_id, POSTMAIL_CHAT_ID, second_chatid, postmail_message_id, second_messageid, origin_userid):
+def create_job(hour, minute, name, days, target_chat_id, postmail_chat_id, second_chatid, postmail_message_id, second_messageid, origin_userid):
     current_time = datetime.datetime.now()
     if current_time.hour < hour or (current_time.hour == hour and current_time.minute < minute):
         next_time = str(datetime.datetime(current_time.year, current_time.month, current_time.day, hour, minute))
     else:
         next_time = str(datetime.datetime(current_time.year, current_time.month, current_time.day, hour, minute) + datetime.timedelta(days=1))
-    publisher_cursor.execute("INSERT INTO publisher VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (name, days, next_time, target_chat_id, POSTMAIL_CHAT_ID, second_chatid, postmail_message_id, second_messageid, origin_userid))
+    publisher_cursor.execute("INSERT INTO publisher VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (name, days, next_time, target_chat_id, postmail_chat_id, second_chatid, postmail_message_id, second_messageid, origin_userid))
     publisher_db.commit()
     print(f'Created job: {name}')
     return name
@@ -88,7 +88,7 @@ def list_jobs():
             'days': row[1],
             'next_time': row[2],
             'target_chat_id': row[3],
-            'POSTMAIL_CHAT_ID': row[4],
+            'postmail_chat_id': row[4],
             'second_chatid': row[5],
             'postmail_message_id': row[6],
             'second_messageid': row[7],
@@ -297,7 +297,7 @@ def clear_autoposts(cookiebot, msg, chat_id, language, listaadmins_id, is_altern
         send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     for job in list_jobs():
-        if str(job['POSTMAIL_CHAT_ID']) == str(chat_id):
+        if str(job['postmail_chat_id']) == str(chat_id):
             delete_job(job['name'])
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
     send_message(cookiebot, chat_id, "Repostagens do grupo canceladas!", msg_to_reply=msg, language=language)
