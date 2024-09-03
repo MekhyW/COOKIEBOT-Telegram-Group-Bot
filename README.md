@@ -17,10 +17,6 @@ git clone https://github.com/MekhyW/COOKIEBOT-Telegram-Group-Bot.git
 cd COOKIEBOT-Telegram-Group-Bot
 pip3 install -r requirements.txt --break-system-packages
 cd ..
-git clone https://github.com/MekhyW/telepota.git
-cd telepota
-pip3 install . --break-system-packages
-cd ..
 ```
 
 ## Provide credentials
@@ -44,7 +40,7 @@ timedatectl
 ```bash
 cd Bot
 screen
-python3.11 main.py [is_alternate_bot (int)] # Run with process monitoring
+python3.11 LAUNCHER.py [is_alternate_bot (int)] # Run with process monitoring
 python3.11 COOKIEBOT.py [is_alternate_bot (int)] # Run without process monitoring
 # Press CTRL+A+D to detach from the screen
 ```

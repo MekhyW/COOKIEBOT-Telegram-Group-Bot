@@ -1,7 +1,7 @@
 import spamwatch
 
-token = ''
-client = spamwatch.Client(token)
+TOKEN = ''
+client = spamwatch.Client(TOKEN)
 
 my_token = client.get_self()
 stats = client.stats()

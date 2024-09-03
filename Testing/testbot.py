@@ -1,8 +1,7 @@
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
 import telepot
 from telepot.loop import MessageLoop
-from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, Message
 load_dotenv()
 token = os.getenv('testbotTOKEN')
 mekhyID = 780875868
@@ -14,16 +13,16 @@ if updates:
 bot.sendMessage(mekhyID, 'testbot started')
 
 def handle(msg):
-    content_type, chat_type, chat_id = telepot.glance(msg)
+    content_type, _, _ = telepot.glance(msg)
     print(content_type, msg)
     if content_type == 'photo':
         path = bot.getFile(msg['photo'][-1]['file_id'])['file_path']
-        image_url = 'https://api.telegram.org/file/bot{}/{}'.format(token, path)
+        image_url = f'https://api.telegram.org/file/bot{token}/{path}'
         print(msg['caption'])
         bot.sendPhoto(mekhyID, msg['photo'][-1]['file_id'], caption=image_url)
     elif content_type == 'video':
         path = bot.getFile(msg['video']['file_id'])['file_path']
-        video_url = 'https://api.telegram.org/file/bot{}/{}'.format(token, path)
+        video_url = f'https://api.telegram.org/file/bot{token}/{path}'
         bot.sendVideo(mekhyID, msg['video']['file_id'], caption=video_url)
 
 def handle_query(msg):
