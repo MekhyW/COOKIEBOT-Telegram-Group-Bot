@@ -174,7 +174,7 @@ def pesh(cookiebot, msg, chat_id, language, photo, image_id):
 def custom_command(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
     bloblist = list(storage_bucket.list_blobs(prefix="Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')))
-    if msg['text'].split() > 1 and msg['text'].split()[1].isdigit():
+    if len(msg['text'].split()) > 1 and msg['text'].split()[1].isdigit():
         image_id = int(msg['text'].split()[1])
     else:
         image_id = random.randint(0, len(bloblist)-1)
