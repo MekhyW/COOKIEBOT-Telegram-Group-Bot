@@ -182,7 +182,7 @@ def custom_command(cookiebot, msg, chat_id, language):
     if msg['text'].startswith("/pesh"):
         pesh(cookiebot, msg, chat_id, language, photo, image_id)
         return
-    caption = f"Foto custom de {msg['text'].replace('/', '').replace('@CookieMWbot', '').capitalize()} com ID {image_id}"
+    caption = f"Foto custom de {msg['text'].replace('/', '').replace('@CookieMWbot', '').split()[0].capitalize()} com ID {image_id}"
     send_photo(cookiebot, chat_id, photo, msg_to_reply=msg, caption=caption, language=language)
 
 def roll_dice(cookiebot, msg, chat_id, language):
