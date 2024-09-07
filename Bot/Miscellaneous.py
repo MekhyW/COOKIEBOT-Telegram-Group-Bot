@@ -105,22 +105,34 @@ def analyze(cookiebot, msg, chat_id, language, is_alternate_bot=0):
 
 def list_groups(cookiebot, chat_id):
     send_chat_action(cookiebot, chat_id, 'typing')
+    file_path = 'list_groups.json'
+    existing_chats, new_chats, removed_chats = [], [], []
+    if os.path.exists(file_path):
+        with open(file_path, 'r', encoding='utf8') as file:
+            existing_chats = json.load(file)
     groups = get_request_backend('registers')
-    num = 0
     for group in groups:
         try:
-            group_id = group['id']
-            chat = cookiebot.getChat(int(group_id))
-            time.sleep(0.2)
+            chat = cookiebot.getChat(int(group['id']))
+            time.sleep(0.1)
             if 'title' in chat:
-                cookiebot.sendMessage(chat_id, f"{group_id} - {chat['title']}")
-            else:
-                cookiebot.sendMessage(chat_id, f"{group_id} - [NO TITLE]")
-            num += 1
+                chat_info = f"{group['id']} - {chat['title']}"
+                if chat_info not in existing_chats:
+                    new_chats.append(chat_info)
+                cookiebot.sendMessage(chat_id, chat_info)
         except Exception as e:
             print(e)
-            print("Group not found: " + group_id)
-    cookiebot.sendMessage(chat_id, f"Total groups found: {num}")
+            print("Group not found: " + group['id'])
+    for chat_info in existing_chats:
+        if chat_info not in [f"{group['id']} - {group['title']}" for group in groups]:
+            removed_chats.append(chat_info)
+    cookiebot.sendMessage(chat_id, f"Total groups found: {len(groups)}")
+    if new_chats:
+        cookiebot.sendMessage(chat_id, f"New groups found: {', '.join(new_chats)}")
+    if removed_chats:
+        cookiebot.sendMessage(chat_id, f"Removed groups: {', '.join(removed_chats)}")
+    with open(file_path, 'w', encoding='utf8') as file:
+        json.dump([f"{group['id']} - {group['title']}" for group in groups], file)
 
 def broadcast_message(cookiebot, msg):
     groups = get_request_backend('registers')
