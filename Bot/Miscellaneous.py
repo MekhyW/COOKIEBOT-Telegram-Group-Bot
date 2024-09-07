@@ -164,10 +164,7 @@ def drawing_idea(cookiebot, msg, chat_id, language):
         caption = f"Reference ID {idea_id}\n\nDo not trace without credits! (use the reverse google images search)"
     send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
 
-def pesh(cookiebot, msg, chat_id, language):
-    bloblist = list(storage_bucket.list_blobs(prefix="Custom/pesh"))
-    image_id = random.randint(0, len(bloblist)-1)
-    photo = bloblist[image_id].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
+def pesh(cookiebot, msg, chat_id, language, photo, image_id):
     with open('Static/pesh.txt', 'r', encoding='utf8') as file:
         species = random.choice(file.readlines()).replace('\n', '')
     caption = f"Pesh com ID {image_id}\n🐟 Seu glub glub da sorte: <b>{species}</b> 🐟"
@@ -176,12 +173,15 @@ def pesh(cookiebot, msg, chat_id, language):
 
 def custom_command(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
-    if msg['text'].startswith("/pesh"):
-        pesh(cookiebot, msg, chat_id, language)
-        return
     bloblist = list(storage_bucket.list_blobs(prefix="Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')))
-    image_id = random.randint(0, len(bloblist)-1)
+    if msg['text'].split() > 1 and msg['text'].split()[1].isdigit():
+        image_id = int(msg['text'].split()[1])
+    else:
+        image_id = random.randint(0, len(bloblist)-1)
     photo = bloblist[image_id].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
+    if msg['text'].startswith("/pesh"):
+        pesh(cookiebot, msg, chat_id, language, photo, image_id)
+        return
     caption = f"Foto custom de {msg['text'].replace('/', '').replace('@CookieMWbot', '').capitalize()} com ID {image_id}"
     send_photo(cookiebot, chat_id, photo, msg_to_reply=msg, caption=caption, language=language)
 
