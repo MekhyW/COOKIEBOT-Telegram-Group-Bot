@@ -1,4 +1,4 @@
-from universal_funcs import get_request_backend, post_request_backend, put_request_backend, send_message, delete_message
+from universal_funcs import send_message, delete_message
 import telepot
 MAX_CONSECUTIVE_RESPONSES_AI = 7
 remaining_responses_ai = {}
