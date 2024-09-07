@@ -170,7 +170,7 @@ def pesh(cookiebot, msg, chat_id, language):
     photo = bloblist[image_id].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     with open('Static/pesh.txt', 'r', encoding='utf8') as file:
         species = random.choice(file.readlines()).replace('\n', '')
-    caption = f"🐟 Seu glub glub da sorte: <b>{species}</b> 🐟"
+    caption = f"Pesh com ID {image_id}\n🐟 Seu glub glub da sorte: <b>{species}</b> 🐟"
     inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Pesh Gang", url=f"https://t.me/peshspecies")]])
     send_photo(cookiebot, chat_id, photo, caption=caption, reply_markup=inline_keyboard, msg_to_reply=msg, language=language)
 
@@ -182,7 +182,8 @@ def custom_command(cookiebot, msg, chat_id, language):
     bloblist = list(storage_bucket.list_blobs(prefix="Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')))
     image_id = random.randint(0, len(bloblist)-1)
     photo = bloblist[image_id].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
-    send_photo(cookiebot, chat_id, photo, msg_to_reply=msg)
+    caption = f"Foto custom de {msg['text'].replace('/', '').replace('@CookieMWbot', '').capitalize()} com ID {image_id}"
+    send_photo(cookiebot, chat_id, photo, msg_to_reply=msg, caption=caption, language=language)
 
 def roll_dice(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
