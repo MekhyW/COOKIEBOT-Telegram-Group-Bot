@@ -217,7 +217,7 @@ def thread_function(msg):
                     listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
                     configurar(cookiebot, msg, chat_id, listaadmins_id, language)
                 elif utilityfunctions and " " not in msg['text'] and msg['text'].replace('/', '').replace("@CookieMWbot", '') in custom_commands:
-                    custom_command(cookiebot, msg, chat_id)
+                    custom_command(cookiebot, msg, chat_id, language)
                 elif utilityfunctions and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']):
                     if FurBots:
                         furbots_cmds = open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()

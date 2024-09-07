@@ -16,13 +16,11 @@ bloblist_bff = list(storage_bucket.list_blobs(prefix="Countdown/BFF"))
 bloblist_patas = list(storage_bucket.list_blobs(prefix="Countdown/Patas"))
 bloblist_fursmeet = list(storage_bucket.list_blobs(prefix="Countdown/FurSMeet"))
 bloblist_trex = list(storage_bucket.list_blobs(prefix="Countdown/Trex"))
+custom_commands = [folder for folder in storage_bucket.list_blobs(prefix="Custom/") if folder.name.endswith('/')]
 NEW_CHAT_LINK = "https://t.me/CookieMWbot?startgroup=new"
 TEST_CHAT_LINK = "https://t.me/+mX6W3tGXPew2OTIx"
 UPDATES_CHANNEL_LINK = "https://t.me/cookiebotupdates"
 NUMBER_CHATS = 667
-with open("Static/Custom.txt", "r", encoding='utf8') as custom_commands_file:
-    custom_commands = custom_commands_file.readlines()
-    custom_commands = [x.strip() for x in custom_commands]
 
 def decapitalize(s, upper_rest = False):
     return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -165,8 +163,21 @@ def drawing_idea(cookiebot, msg, chat_id, language):
         caption = f"Reference ID {idea_id}\n\nDo not trace without credits! (use the reverse google images search)"
     send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
 
-def custom_command(cookiebot, msg, chat_id):
+def pesh(cookiebot, msg, chat_id, language):
+    bloblist = list(storage_bucket.list_blobs(prefix="Custom/pesh"))
+    image_id = random.randint(0, len(bloblist)-1)
+    photo = bloblist[image_id].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
+    with open('Static/pesh.txt', 'r', encoding='utf8') as file:
+        species = random.choice(file.readlines()).replace('\n', '')
+    caption = f"🐟 Seu glub glub da sorte: <b>{species}</b> 🐟"
+    inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Pesh Gang", url=f"https://t.me/peshspecies")]])
+    send_photo(cookiebot, chat_id, photo, caption=caption, reply_markup=inline_keyboard, msg_to_reply=msg, language=language)
+
+def custom_command(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
+    if msg['text'].startswith("/pesh"):
+        pesh(cookiebot, msg, chat_id, language)
+        return
     bloblist = list(storage_bucket.list_blobs(prefix="Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '')))
     image_id = random.randint(0, len(bloblist)-1)
     photo = bloblist[image_id].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
