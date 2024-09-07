@@ -16,7 +16,7 @@ bloblist_bff = list(storage_bucket.list_blobs(prefix="Countdown/BFF"))
 bloblist_patas = list(storage_bucket.list_blobs(prefix="Countdown/Patas"))
 bloblist_fursmeet = list(storage_bucket.list_blobs(prefix="Countdown/FurSMeet"))
 bloblist_trex = list(storage_bucket.list_blobs(prefix="Countdown/Trex"))
-custom_commands = [folder.name.split('/')[0] for folder in storage_bucket.list_blobs(prefix="Custom/") if folder.name.endswith('/')]
+custom_commands = [folder.name.split('/')[1] for folder in storage_bucket.list_blobs(prefix="Custom/") if folder.name.endswith('/')]
 print("Custom commands: " + str(custom_commands))
 NEW_CHAT_LINK = "https://t.me/CookieMWbot?startgroup=new"
 TEST_CHAT_LINK = "https://t.me/+mX6W3tGXPew2OTIx"
