@@ -305,7 +305,7 @@ def thread_function_query(msg):
                 origin_chat_id = query_data.split()[4]
                 post_request_backend(f'blacklist/{targetid}')
                 send_message(cookiebot, mekhyID, f"Blacklisted {targetid}")
-                send_message(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam\n>Obrigado pela denúncia\!", language=language)
+                send_message(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam\n<blockquote>Obrigado pela denúncia!</blockquote>", language=language)
             delete_message(cookiebot, telepot.message_identifier(msg['message']))
         elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
             solve_captcha(cookiebot, msg, chat_id, True, is_alternate_bot=is_alternate_bot, language=query_data.split()[1])
