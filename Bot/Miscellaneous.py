@@ -117,15 +117,13 @@ def list_groups(cookiebot, chat_id):
             time.sleep(0.1)
             if 'title' in chat:
                 chat_info = f"{group['id']} - {chat['title']}"
-                if chat_info not in existing_chats:
+                if not any(chat.startswith(chat_info.split()[0]) for chat in existing_chats):
                     new_chats.append(chat_info)
                 cookiebot.sendMessage(chat_id, chat_info)
         except Exception as e:
             print(e)
             print("Group not found: " + group['id'])
-    for chat_info in existing_chats:
-        if chat_info not in [f"{group['id']} - {group['title']}" for group in groups]:
-            removed_chats.append(chat_info)
+            removed_chats.append(group['id'])
     cookiebot.sendMessage(chat_id, f"Total groups found: {len(groups)}")
     if new_chats:
         cookiebot.sendMessage(chat_id, f"New groups found: {', '.join(new_chats)}")
