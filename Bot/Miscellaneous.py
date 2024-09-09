@@ -108,7 +108,10 @@ def list_groups(cookiebot, chat_id):
     existing_chats, new_chats, removed_chats = [], [], []
     if os.path.exists(file_path):
         with open(file_path, 'r', encoding='utf8') as file:
-            existing_chats = json.load(file)
+            try:
+                existing_chats = json.load(file)
+            except json.JSONDecodeError:
+                pass
     groups = get_request_backend('registers')
     for group in groups:
         try:
