@@ -103,7 +103,7 @@ def configurar(cookiebot, msg, chat_id, listaadmins_id, language):
             send_message(cookiebot, chat_id, "Não consegui te mandar o menu de configuração\n<blockquote>Mande uma mensagem no meu chat privado para que eu consiga fazer isso)</blockquote>" , msg, language)
             print(e)
     else:
-        send_message(cookiebot, chat_id, "Você não tem permissão para configurar o bot!\n<blockquote>Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada!<blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Você não tem permissão para configurar o bot!\n<blockquote>Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada!</blockquote>", msg, language)
         with open('Static/remove_anonymous_tutorial.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video)
 
