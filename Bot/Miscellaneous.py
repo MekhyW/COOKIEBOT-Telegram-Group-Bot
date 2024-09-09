@@ -130,9 +130,9 @@ def list_groups(cookiebot, chat_id):
         except Exception:
             print("Group not found: " + group['id'])
             removed_chats.append(group['id'])
-    cookiebot.sendMessage(chat_id, f"Total groups found: {len(groups)}")
+    cookiebot.sendMessage(chat_id, f"Total groups found: {len(groups) - len(removed_chats)}")
     with open(file_path, 'w', encoding='utf8') as file:
-        json.dump([f"{group['id']} - {group['title']}" for group in groups], file)
+        json.dump([f"{group['id']} - {group.get('title', '')}" for group in groups], file)
     if new_chats:
         cookiebot.sendMessage(chat_id, f"New groups found: {', '.join(new_chats)}")
     if removed_chats:
