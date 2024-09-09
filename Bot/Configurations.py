@@ -1,4 +1,4 @@
-from universal_funcs import send_message, send_chat_action, react_to_message, delete_message, get_request_backend, put_request_backend, post_request_backend, wait_open, set_bot_commands, mekhyID
+from universal_funcs import send_message, send_chat_action, react_to_message, delete_message, get_request_backend, put_request_backend, post_request_backend, wait_open, set_bot_commands, ownerID
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_configurations = {}
@@ -78,7 +78,7 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
 
 def configurar(cookiebot, msg, chat_id, listaadmins_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
-    if str(msg['from']['id']) in listaadmins_id or str(msg['from']['id']) == str(mekhyID):
+    if str(msg['from']['id']) in listaadmins_id or str(msg['from']['id']) == str(ownerID):
         configs = get_config(cookiebot, chat_id)
         variables = f"FurBots: {configs[0]}\n sfw: {configs[1]}\n Sticker Spam Limit: {configs[2]}\n Time Without Sending Images: {configs[3]}\n Time Captcha: {configs[4]}\n Fun Functions: {configs[5]}\n Utility Functions: {configs[6]}\n Language: {configs[7]}\n Publisher Post: {configs[8]}\n Publisher Ask: {configs[9]}\n Thread Posts: {configs[10]}\n Max Posts: {configs[11]}"
         try:
@@ -189,7 +189,7 @@ def set_language(cookiebot, msg, chat_id, language_code):
         msg['text'] = "eng"
     msg['reply_to_message'] = {}
     msg['reply_to_message']['text'] = f'Chat = {chat_id}\nBot language for the chat. Use pt for portuguese, eng for english or es for spanish'
-    configurar_set(cookiebot, msg, mekhyID)
+    configurar_set(cookiebot, msg, ownerID)
 
 def update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=0):
     if str(msg['from']['id']) not in listaadmins_id:

@@ -28,10 +28,10 @@ if updates:
     last_update_id = updates[-1]['update_id']
     cookiebot.getUpdates(offset=last_update_id+1)
 unnatended_threads = list()
-num_max_threads = 50
+MAX_THREADS = 50
 gc.enable()
 
-send_message(cookiebot, mekhyID, 'I am online')
+send_message(cookiebot, ownerID, 'I am online')
 
 def thread_function(msg):
     try:
@@ -48,19 +48,19 @@ def thread_function(msg):
             if 'text' in msg:
                 if msg['text'].startswith("/start"):
                     set_private_commands(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
-                if msg['text'].startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == mekhyID:
+                if msg['text'].startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == ownerID:
                     list_groups(cookiebot, chat_id)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     list_commands(cookiebot, msg, chat_id, 'eng')
                 elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
                     privacy_statement(cookiebot, msg, chat_id, 'eng')
-                elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == mekhyID:
+                elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == ownerID:
                     os._exit(0)
-                elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == mekhyID:
+                elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == ownerID:
                     os.execl(sys.executable, sys.executable, *sys.argv)
-                elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
+                elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
                     leave_and_blacklist(cookiebot, msg['text'].split()[1])
-                elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == mekhyID:
+                elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == ownerID:
                     broadcast_message(cookiebot, msg)
             pv_default_message(cookiebot, msg, chat_id, is_alternate_bot)
             run_unnatendedthreads()
@@ -74,7 +74,7 @@ def thread_function(msg):
             chatinfo = cookiebot.getChat(chat_id)
             if (not 'error' in isCreatorBlacklisted) or len(chatinfo['title']) < 3:
                 leave_and_blacklist(cookiebot, chat_id)
-                send_message(cookiebot, mekhyID, f"Auto-left\n{chat_id}")
+                send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
                 return
         elif content_type == "new_chat_member":
             if msg['new_chat_participant']['id'] == myself['id']:
@@ -82,9 +82,9 @@ def thread_function(msg):
                 chatinfo = cookiebot.getChat(chat_id)
                 if (not 'error' in isBlacklisted) or len(chatinfo['title']) < 3:
                     leave_and_blacklist(cookiebot, chat_id)
-                    send_message(cookiebot, mekhyID, f"Auto-left\n{chat_id}")
+                    send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
                     return
-                send_message(cookiebot, mekhyID, f"Added\n{chatinfo}")
+                send_message(cookiebot, ownerID, f"Added\n{chatinfo}")
                 cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
                 caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW")
                 if 'language_code' in msg['from']:
@@ -118,8 +118,7 @@ def thread_function(msg):
             ask_publisher(cookiebot, msg, chat_id, language)
         elif content_type == "photo":
             if sfw and funfunctions:
-                photo_id = msg['photo'][-1]['file_id']
-                add_to_random_database(msg, chat_id, photo_id)
+                add_to_random_database(msg, chat_id, msg['photo'][-1]['file_id'])
         elif content_type == "video":
             if sfw and funfunctions:
                 add_to_random_database(msg, chat_id)
@@ -141,7 +140,7 @@ def thread_function(msg):
                     cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
                     caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW",
                     reply_to_message_id=msg['message_id'])
-                elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == mekhyID:
+                elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
                     leave_and_blacklist(cookiebot, chat_id)
                 elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
                     privacy_statement(cookiebot, msg, chat_id, language)
@@ -262,9 +261,9 @@ def thread_function(msg):
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle(msg)
         else:
-            send_message(cookiebot, mekhyID, traceback.format_exc())
-            send_message(cookiebot, mekhyID, str(msg))
-            send_message(cookiebot, mekhyID, str(e))
+            send_message(cookiebot, ownerID, traceback.format_exc())
+            send_message(cookiebot, ownerID, str(msg))
+            send_message(cookiebot, ownerID, str(e))
 
 def thread_function_query(msg):
     try:
@@ -304,10 +303,10 @@ def thread_function_query(msg):
             elif command == 'Blacklist':
                 origin_chat_id = query_data.split()[4]
                 post_request_backend(f'blacklist/{targetid}')
-                send_message(cookiebot, mekhyID, f"Blacklisted {targetid}")
+                send_message(cookiebot, ownerID, f"Blacklisted {targetid}")
                 send_message(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam\n<blockquote>Obrigado pela denúncia!</blockquote>", language=language)
             delete_message(cookiebot, telepot.message_identifier(msg['message']))
-        elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(mekhyID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
+        elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(ownerID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
             solve_captcha(cookiebot, msg, chat_id, True, is_alternate_bot=is_alternate_bot, language=query_data.split()[1])
         elif query_data.startswith('ADM'):
             yesno = query_data.split()[1]
@@ -326,23 +325,23 @@ def thread_function_query(msg):
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle_query(msg)
         else:
-            send_message(cookiebot, mekhyID, traceback.format_exc())
-            send_message(cookiebot, mekhyID, str(msg))
-            send_message(cookiebot, mekhyID, str(e))
+            send_message(cookiebot, ownerID, traceback.format_exc())
+            send_message(cookiebot, ownerID, str(msg))
+            send_message(cookiebot, ownerID, str(e))
 
 def run_unnatendedthreads():
     num_running_threads = threading.active_count()
     for unnatended_thread in list(unnatended_threads):
         if unnatended_thread.is_alive():
             unnatended_threads.remove(unnatended_thread)
-        elif num_running_threads < num_max_threads:
+        elif num_running_threads < MAX_THREADS:
             unnatended_thread.start()
             num_running_threads += 1
             try:
                 unnatended_threads.remove(unnatended_thread)
             except ValueError:
                 pass
-    if len(unnatended_threads) > 20 * num_max_threads:
+    if len(unnatended_threads) > 20 * MAX_THREADS:
         os.execl(sys.executable, sys.executable, *sys.argv)
     elif len(unnatended_threads) > 0:
         print(f"{len(unnatended_threads)} threads are still unnatended")
@@ -353,7 +352,7 @@ def handle(msg):
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except Exception:
-        send_message(cookiebot, mekhyID, traceback.format_exc())
+        send_message(cookiebot, ownerID, traceback.format_exc())
 
 def handle_query(msg):
     try:
@@ -361,18 +360,18 @@ def handle_query(msg):
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except Exception:
-        send_message(cookiebot, mekhyID, traceback.format_exc())
+        send_message(cookiebot, ownerID, traceback.format_exc())
 
 def scheduler_check():
     print("SCHEDULER CHECK")
     try:
         scheduler_pull(cookiebot, is_alternate_bot=is_alternate_bot)
     except Exception:
-        send_message(cookiebot, mekhyID, traceback.format_exc())
+        send_message(cookiebot, ownerID, traceback.format_exc())
     finally:
         timer_scheduler_check = threading.Timer(300, scheduler_check)
         timer_scheduler_check.start()
-        
+
 if __name__ == '__main__':
     if not is_alternate_bot:
         scheduler_check()

@@ -6,7 +6,7 @@ import re
 import json
 import traceback
 import requests
-from universal_funcs import send_chat_action, send_message, forward_message, get_request_backend, react_to_message, emojis_to_numbers, send_photo, mekhyID, exchangerate_key
+from universal_funcs import send_chat_action, send_message, forward_message, get_request_backend, react_to_message, emojis_to_numbers, send_photo, ownerID, exchangerate_key
 from Configurations import get_config
 from UserRegisters import get_members_chat
 from price_parser import Price
@@ -259,16 +259,16 @@ def schedule_post(cookiebot, query_data):
             print(e)
     try:
         answer += "OBS: private chats are not listed!"
-        send_message(cookiebot, mekhyID, answer)
+        send_message(cookiebot, ownerID, answer)
         send_message(cookiebot, origin_userid, answer)
         send_message(cookiebot, second_chatid, "Post added to the publication queue!", msg_to_reply={'message_id': second_messageid})
     except Exception:
-        send_message(cookiebot, mekhyID, traceback.format_exc())
+        send_message(cookiebot, ownerID, traceback.format_exc())
         send_message(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n<blockquote>Send /start in my DM so I can send you messages.</blockquote>", msg_to_reply={'message_id': second_messageid})
 
 def schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
-    if str(msg['from']['id']) not in listaadmins_id and int(msg['from']['id']) != mekhyID:
+    if str(msg['from']['id']) not in listaadmins_id and int(msg['from']['id']) != ownerID:
         send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     if 'reply_to_message' not in msg:
@@ -323,7 +323,7 @@ def scheduler_pull(cookiebot, is_alternate_bot=0):
             else:
                 forward_message(cookiebot, group_id, POSTMAIL_CHAT_ID, origin_messageid, is_alternate_bot=is_alternate_bot)
         except Exception:
-            send_message(cookiebot, mekhyID, traceback.format_exc())
+            send_message(cookiebot, ownerID, traceback.format_exc())
             delete_job(job['name'])
 
 def check_notify_post_reply(cookiebot, msg, chat_id, language):

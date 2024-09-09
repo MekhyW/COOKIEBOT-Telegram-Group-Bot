@@ -1,5 +1,5 @@
 import random
-from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, delete_request_backend, mekhyID
+from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, delete_request_backend, ownerID
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_members = {}
 
@@ -72,8 +72,8 @@ def report_ask(cookiebot, msg, chat_id, targetid, language):
 def report(cookiebot, chat_id, targetid, language):
     target = cookiebot.getChatMember(chat_id, targetid)
     chat = cookiebot.getChat(chat_id)
-    send_message(cookiebot, mekhyID, f"At chat {chat['title']}")
-    send_message(cookiebot, mekhyID, f"Account report: {target}",
+    send_message(cookiebot, ownerID, f"At chat {chat['title']}")
+    send_message(cookiebot, ownerID, f"Account report: {target}",
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="Blacklist", callback_data=f"Report Blacklist {targetid} {language} {chat_id}")],
             [InlineKeyboardButton(text="Discard Report", callback_data=f"Report No {targetid} {language}")]

@@ -13,20 +13,24 @@ from deep_translator import GoogleTranslator
 from google.cloud import storage
 load_dotenv('../.env')
 login_backend, password_backend, serverIP = os.getenv('backend_login'), os.getenv('backend_password'), os.getenv('backend_serverIP')
-googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN, pawstralbotTOKEN = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token'), os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN'), os.getenv('pawstralbotTOKEN')
-mekhyID = int(os.getenv('mekhyID'))
+googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN, pawstralbotTOKEN, tarinbotTOKEN = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token'), os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN'), os.getenv('pawstralbotTOKEN'), os.getenv('tarinbotTOKEN')
+ownerID = int(os.getenv('ownerID'))
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../cookiebot-bucket-key.json'
 storage_client = storage.Client()
 storage_bucket = storage_client.get_bucket(os.getenv('bucket_name'))
 
 def get_bot_token(is_alternate_bot):
-    if not is_alternate_bot:
-        return cookiebotTOKEN
-    if is_alternate_bot == 1:
-        return bombotTOKEN
-    if is_alternate_bot == 2:
-        return pawstralbotTOKEN
-    return None
+    match is_alternate_bot:
+        case 0:
+            return cookiebotTOKEN
+        case 1:
+            return bombotTOKEN
+        case 2:
+            return pawstralbotTOKEN
+        case 3:
+            return tarinbotTOKEN
+        case _:
+            return None
 
 def get_request_backend(route, params=None):
     response = requests.get(f'{serverIP}/{route}', json=params,
@@ -141,7 +145,7 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
                      thread_id, is_alternate_bot, reply_markup, parse_mode)
     except TelegramError:
         try:
-            cookiebot.sendMessage(mekhyID, traceback.format_exc())
+            cookiebot.sendMessage(ownerID, traceback.format_exc())
         except Exception as e:
             print(e)
 
@@ -171,7 +175,7 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
                           msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
     except TelegramError:
         try:
-            cookiebot.sendMessage(mekhyID, traceback.format_exc())
+            cookiebot.sendMessage(ownerID, traceback.format_exc())
         except Exception as e:
             print(e)
         return None
@@ -203,7 +207,7 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
                               msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
     except TelegramError:
         try:
-            cookiebot.sendMessage(mekhyID, traceback.format_exc())
+            cookiebot.sendMessage(ownerID, traceback.format_exc())
         except Exception as e:
             print(e)
         return None
