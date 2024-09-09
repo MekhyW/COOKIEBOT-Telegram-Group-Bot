@@ -40,6 +40,11 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
             'description_pt': "Sou um clone do @CookieMWbot criado para os grupos do Pawstral, evento furry que ocorre no Chile!",
             'description_en': "I'm a clone of @CookieMWbot created for the groups of Pawstral, a furry event that takes place in Chile!",
         },
+        3 : {
+            'name': 'TarinBot',
+            'description_pt': "Sou um clone do @CookieMWbot criado para os grupo estadual de furries de Santa Catarina, o SCFurs (Santa Catarina Furries)",
+            'description_en': "I'm a clone of @CookieMWbot created for the state group of furries from Santa Catarina (Brazil), SCFurs (Santa Catarina Furries)",
+        },
         'default': {
             'name': 'CookieBot',
             'description_pt': f"Atualmente estou presente em {number_to_emojis(NUMBER_CHATS)} grupos ativos! Sinta-se livre para me adicionar ao seu :)",
