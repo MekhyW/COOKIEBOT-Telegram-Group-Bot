@@ -315,10 +315,13 @@ def scheduler_pull(cookiebot, is_alternate_bot=0):
             edit_job_data(job['name'], 'next_time', str(current_time + datetime.timedelta(days=1)))
         try:
             group_id = str(job['target_chat_id'])
+            config = get_config(cookiebot, group_id)
+            if not config[8]:
+                delete_job(job['name'])
+                continue
             origin_messageid = str(job['postmail_message_id'])
             target_chat = cookiebot.getChat(group_id)
             if 'is_forum' in target_chat and target_chat['is_forum']:
-                config = get_config(cookiebot, group_id)
                 forward_message(cookiebot, group_id, POSTMAIL_CHAT_ID, origin_messageid, thread_id=int(config[10]), is_alternate_bot=is_alternate_bot)
             else:
                 forward_message(cookiebot, group_id, POSTMAIL_CHAT_ID, origin_messageid, is_alternate_bot=is_alternate_bot)
