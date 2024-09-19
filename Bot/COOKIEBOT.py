@@ -118,10 +118,10 @@ def thread_function(msg):
         elif content_type in ["photo", "video", "document", "animation"] and all(key in msg for key in ['sender_chat', 'forward_from_chat', 'from', 'caption']) and msg['from']['first_name'] == 'Telegram' and publisherask:
             ask_publisher(cookiebot, msg, chat_id, language)
         elif content_type == "photo":
-            if sfw and funfunctions:
+            if sfw and funfunctions and not publisherpost:
                 add_to_random_database(msg, chat_id, msg['photo'][-1]['file_id'])
         elif content_type == "video":
-            if sfw and funfunctions:
+            if sfw and funfunctions and not publisherpost:
                 add_to_random_database(msg, chat_id)
         elif content_type == "document":
             if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
