@@ -4,6 +4,22 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_configurations = {}
 cache_admins = {}
 
+DEFAULT_CONFIG = {
+    'FurBots': 1,
+    'sfw': 1,
+    'stickerspamlimit': 5,
+    'limbotimespan': 600,
+    'captchatimespan': 300,
+    'funfunctions': 1,
+    'utilityfunctions': 1,
+    'language': "pt",
+    'publisherpost': 0,
+    'publisherask': 1,
+    'threadPosts': "9999",
+    'maxPosts': 9999,
+    'publisherMembersOnly': 0
+}
+
 def get_admins(cookiebot, chat_id, ignorecache=False):
     if chat_id in cache_admins and not ignorecache:
         admins = cache_admins[chat_id]
@@ -46,35 +62,20 @@ def set_private_commands(cookiebot, chat_id, is_alternate_bot=0):
 def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
     if chat_id in cache_configurations and not ignorecache:
         return cache_configurations[chat_id]
-    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 1, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
     configs = get_request_backend(f"configs/{chat_id}")
     if 'error' in configs and configs['error'] == "Not Found":
-        post_request_backend(f"configs/{chat_id}", {'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 
-        'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 
-        'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask, 'threadPosts': threadPosts, 'maxPosts': maxPosts, 
-        'publisherMembersOnly': publisherMembersOnly})
+        post_request_backend(f"configs/{chat_id}", DEFAULT_CONFIG)
+        current_config = DEFAULT_CONFIG.copy()
     else:
-        FurBots = configs['furbots']
-        sfw = configs['sfw']
-        stickerspamlimit = configs['stickerSpamLimit']
-        limbotimespan = configs['timeWithoutSendingImages']
-        captchatimespan = configs['timeCaptcha']
-        funfunctions = configs['functionsFun']
-        utilityfunctions = configs['functionsUtility']
-        language = configs['language']
-        publisherpost = configs['publisherPost']
-        publisherask = configs['publisherAsk']
-        threadPosts = configs['threadPosts']
-        maxPosts = configs['maxPosts']
-        publisherMembersOnly = configs['publisherMembersOnly']
-    if captchatimespan < 30:
-        captchatimespan = abs(captchatimespan)*60
-    cache_configurations[chat_id] = [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
+        current_config = {key: configs.get(key, DEFAULT_CONFIG[key]) for key in DEFAULT_CONFIG}
+    if current_config['captchatimespan'] < 30:
+        current_config['captchatimespan'] = abs(current_config['captchatimespan'])*60
+    cache_configurations[chat_id] = current_config
     try:
-        set_language_commands(cookiebot, chat_id, chat_id, language, is_alternate_bot=is_alternate_bot, silent=True)
+        set_language_commands(cookiebot, chat_id, chat_id, current_config['language'], is_alternate_bot=is_alternate_bot, silent=True)
     except Exception as e:
         print(e)
-    return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
+    return list(current_config.values())
 
 def configurar(cookiebot, msg, chat_id, listaadmins_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -114,37 +115,33 @@ def configurar_set(cookiebot, msg, chat_id, is_alternate_bot=0):
     new_val = msg['text'].lower()
     if new_val or new_val in ["pt", "eng", "es"]:
         if "Bot language for the chat. Use pt for portuguese, eng for english or es for spanish" in msg['reply_to_message']['text']:
-            current_configs[7] = new_val
+            current_configs['language'] = new_val
             set_language_commands(cookiebot, chat_id, chat_to_alter, new_val, is_alternate_bot=is_alternate_bot)
         elif "Use 1 to not interfere with other furbots if they're in the group, or 0 if I'm the only one." in msg['reply_to_message']['text']:
-            current_configs[0] = bool(int(new_val))
+            current_configs['FurBots'] = bool(int(new_val))
         elif "This is the maximum number of stickers allowed in a sequence by the bot. The next ones beyond that will be deleted to avoid spam. It's valid for everyone." in msg['reply_to_message']['text']:
-            current_configs[2] = int(new_val)
+            current_configs['stickerspamlimit'] = int(new_val)
         elif "This is the time for which new users in the group will not be able to send images (the bot automatically deletes)." in msg['reply_to_message']['text']:
-            current_configs[3] = int(new_val)
+            current_configs['limbotimespan'] = int(new_val)
         elif "This is the time new users have to solve Captcha. USE 0 TO TURN CAPTCHA OFF!" in msg['reply_to_message']['text']:
-            current_configs[4] = int(new_val)
+            current_configs['captchatimespan'] = int(new_val)
         elif "Use 1 to enable commands and fun functionality, or 0 for control/management functions only." in msg['reply_to_message']['text']:
-            current_configs[5] = bool(int(new_val))
+            current_configs['funfunctions'] = bool(int(new_val))
         elif "Use 1 to enable commands and utility features, or 0 to disable them." in msg['reply_to_message']['text']:
-            current_configs[6] = bool(int(new_val))
+            current_configs['utilityfunctions'] = bool(int(new_val))
         elif "Use 1 to indicate the chat is SFW, or 0 for NSFW." in msg['reply_to_message']['text']:
-            current_configs[1] = bool(int(new_val))
+            current_configs['sfw'] = bool(int(new_val))
         elif "Use 1 to allow the bot to post publications from other channels" in msg['reply_to_message']['text']:
-            current_configs[8] = bool(int(new_val))
+            current_configs['publisherpost'] = bool(int(new_val))
         elif "Use 1 if the bot should add posts sent in the group to the publisher queue, or 0 if not" in msg['reply_to_message']['text']:
-            current_configs[9] = bool(int(new_val))
+            current_configs['publisherask'] = bool(int(new_val))
         elif "This is the id of the topic I should publish posts to if your chat has topics enabled (you can find it out with /analysis command)" in msg['reply_to_message']['text']:
-            current_configs[10] = int(new_val)
+            current_configs['threadPosts'] = int(new_val)
         elif "This is the maximum number of posts I should publish in the chat per day" in msg['reply_to_message']['text']:
-            current_configs[11] = int(new_val)
+            current_configs['maxPosts'] = int(new_val)
         elif "Use 1 if the bot should only allow members of the channel to use the publisher, or 0 if not" in msg['reply_to_message']['text']:
-            current_configs[12] = bool(int(new_val))
-        put_request_backend(f"configs/{chat_to_alter}", {"furbots": current_configs[0], "sfw": current_configs[1], 
-        "stickerSpamLimit": current_configs[2], "timeWithoutSendingImages": current_configs[3], "timeCaptcha": current_configs[4], 
-        "functionsFun": current_configs[5], "functionsUtility": current_configs[6], "language": current_configs[7], 
-        "publisherPost": current_configs[8], "publisherAsk": current_configs[9], "threadPosts": current_configs[10], "maxPosts": current_configs[11],
-        "publisherMembersOnly": current_configs[12]})
+            current_configs['publisherMembersOnly'] = bool(int(new_val))
+        put_request_backend(f"configs/{chat_to_alter}", current_configs)
         cache_configurations[chat_id] = current_configs
         react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
         cookiebot.sendMessage(chat_id, "Successfully changed the variable!\nSend /reload in the chat if the old config persists")
