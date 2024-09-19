@@ -75,7 +75,7 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
         set_language_commands(cookiebot, chat_id, chat_id, current_config['language'], is_alternate_bot=is_alternate_bot, silent=True)
     except Exception as e:
         print(e)
-    return list(current_config.values())
+    return [current_config['FurBots'], current_config['sfw'], current_config['stickerspamlimit'], current_config['limbotimespan'], current_config['captchatimespan'], current_config['funfunctions'], current_config['utilityfunctions'], current_config['language'], current_config['publisherpost'], current_config['publisherask'], current_config['threadPosts'], current_config['maxPosts'], current_config['publisherMembersOnly']]
 
 def configurar(cookiebot, msg, chat_id, listaadmins_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
