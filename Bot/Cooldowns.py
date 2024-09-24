@@ -1,7 +1,10 @@
+import datetime
 from universal_funcs import send_message, delete_message
 import telepot
 MAX_CONSECUTIVE_RESPONSES_AI = 7
+MAX_IMAGE_SEARCHES_DAILY = 50
 remaining_responses_ai = {}
+remaining_image_searches = {}
 last_used_sticker = {}
 
 def sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language):
@@ -28,6 +31,13 @@ def decrease_remaining_responses_ai(user_id):
             remaining_responses_ai[user_id] -= 1
     else:
         remaining_responses_ai[user_id] = MAX_CONSECUTIVE_RESPONSES_AI - 1
+
+def decrease_remaining_image_searches(chat_id):
+    if chat_id in remaining_image_searches and remaining_image_searches[chat_id]['date'] == datetime.datetime.now().date():
+        if remaining_image_searches[chat_id]['remaining'] > 0:
+            remaining_image_searches[chat_id]['remaining'] -= 1
+    else:
+        remaining_image_searches[chat_id] = {'date': datetime.datetime.now().date(), 'remaining': MAX_IMAGE_SEARCHES_DAILY - 1}
 
 def sticker_cooldown_updates(chat_id):
     last_used_sticker[chat_id] = 0

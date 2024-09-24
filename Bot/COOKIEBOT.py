@@ -226,7 +226,11 @@ def thread_function(msg):
                         furbots_cmds = [x.strip() for x in furbots_cmds]
                         if msg['text'].split()[0].split('@')[0] in furbots_cmds:
                             return
-                    qualquer_coisa(cookiebot, msg, chat_id, sfw, language)
+                    decrease_remaining_image_searches(chat_id)
+                    if remaining_image_searches[chat_id]['remaining'] >= 0:
+                        qualquer_coisa(cookiebot, msg, chat_id, sfw, language)
+                    else:
+                        send_message(cookiebot, chat_id, "Limite de buscas de imagens atingido", msg, language)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name":
                 listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
                 update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=is_alternate_bot)
