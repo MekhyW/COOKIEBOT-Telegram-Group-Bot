@@ -151,6 +151,8 @@ def thread_function(msg):
                     send_message(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
                 elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                     analyze(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
+                elif msg['text'].startswith(("/divulgar", "/publish", "/publicar")):
+                    ask_publisher_command(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
                     listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
                     schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=is_alternate_bot)

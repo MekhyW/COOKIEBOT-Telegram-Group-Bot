@@ -42,6 +42,7 @@ isalive - Send a test ping with server date
 rules - Shows the group's rules
 newrules - Updates group rules
 newwelcome - Updates the welcome message
+publish - Publicize a channel's announcement to other groups
 repost - Repost message on the same group every day
 deletereposts - Delete all reposts
 analysis - Inspect elements of a message

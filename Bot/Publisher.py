@@ -22,18 +22,7 @@ POSTMAIL_CHAT_ID = -1001869523792
 APPROVAL_CHAT_ID = -1001659344607
 URL_REGEX = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
-def ask_publisher(cookiebot, msg, chat_id, language):
-    send_chat_action(cookiebot, chat_id, 'typing')
-    if language == "pt":
-        answer = "Divulgar postagem?"
-    else:
-        answer = "Share post?"
-    send_message(cookiebot, chat_id, answer, msg_to_reply=msg, 
-    reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {msg['forward_from_chat']['id']} {chat_id} {msg['forward_from_message_id']} {msg['message_id']}")],
-            [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
-        ]
-    ))
+def add_post_to_cache(msg):
     if 'photo' in msg:
         media_type = 'photo'
         media_id = msg['photo'][-1]['file_id']
@@ -51,6 +40,30 @@ def ask_publisher(cookiebot, msg, chat_id, language):
         for entity in msg['caption_entities']:
             caption_entities.append(entity)
     cache_posts[str(msg['forward_from_message_id'])] = {media_type: media_id, 'caption': msg['caption'], 'caption_entities': caption_entities}
+
+def ask_publisher(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'typing')
+    answer = "Divulgar postagem?" if language == "pt" else "Share post?"
+    send_message(cookiebot, chat_id, answer, msg_to_reply=msg, 
+    reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {msg['forward_from_chat']['id']} {chat_id} {msg['forward_from_message_id']} {msg['message_id']}")],
+            [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
+        ]
+    ))
+    add_post_to_cache(msg)
+
+def ask_publisher_command(cookiebot, msg, chat_id, language):
+    send_chat_action(cookiebot, chat_id, 'typing')
+    if not 'reply_to_message' in msg:
+        send_message(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder divulgar ela!", msg_to_reply=msg, language=language)
+        return
+    if 'forward_from_chat' not in msg['reply_to_message'] or 'forward_from_message_id' not in msg['reply_to_message']:
+        send_message(cookiebot, chat_id, "Essa mensagem não é de um canal!", msg_to_reply=msg, language=language)
+        return
+    replied_post = msg['reply_to_message']
+    add_post_to_cache(replied_post)
+    ask_approval(cookiebot, f"SendToApprovalPub {replied_post['forward_from_chat']['id']} {chat_id} {replied_post['forward_from_message_id']} {replied_post['message_id']}", msg['from']['id'])
+    send_message(cookiebot, chat_id, "Post enviado para aprovação, aguarde", msg_to_reply=msg, language=language)
 
 def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
     origin_chatid = query_data.split()[1]

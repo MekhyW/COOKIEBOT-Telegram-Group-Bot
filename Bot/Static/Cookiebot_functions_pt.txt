@@ -42,6 +42,7 @@ tavivo - Manda um ping de teste com data do servidor
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo
 novobemvindo - Atualiza a mensagem de boas vindas
+divulgar - Divulgar anuncio de um canal para outros grupos
 repostar - Repostar mensagem no mesmo grupo todos os dias
 apagarreposts - Apaga todas as mensagens de repost do grupo
 analise - Inspecionar elementos de uma mensagem
