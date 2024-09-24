@@ -304,16 +304,16 @@ def schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alte
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
     send_message(cookiebot, chat_id, text, msg_to_reply=msg, language=language, parse_mode='HTML')
 
-def clear_autoposts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
+def cancel_posts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id:
         send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     for job in list_jobs():
-        if str(job['postmail_chat_id']) == str(chat_id):
+        if str(job['second_chatid']) == str(chat_id):
             delete_job(job['name'])
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
-    send_message(cookiebot, chat_id, "Repostagens do grupo canceladas!", msg_to_reply=msg, language=language)
+    send_message(cookiebot, chat_id, "Posts e reposts do grupo cancelados!", msg_to_reply=msg, language=language)
 
 def scheduler_pull(cookiebot, is_alternate_bot=0):
     current_time = datetime.datetime.now()

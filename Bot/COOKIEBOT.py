@@ -156,9 +156,9 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
                     listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
                     schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=is_alternate_bot)
-                elif msg['text'].startswith(("/deletereposts", "/apagarreposts", "/apagarreenvios")):
+                elif msg['text'].startswith(("/deleteposts", "/apagarposts", "/apagarposts")):
                     listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
-                    clear_autoposts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=is_alternate_bot)
+                    cancel_posts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=is_alternate_bot)
                 elif utilityfunctions and msg['text'].startswith(("/buscarfonte", "/searchsource", "/buscarfuente")):
                     reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 

@@ -44,7 +44,7 @@ novasregras - Atualiza as regras do grupo
 novobemvindo - Atualiza a mensagem de boas vindas
 divulgar - Divulgar anuncio de um canal para outros grupos
 repostar - Repostar mensagem no mesmo grupo todos os dias
-apagarreposts - Apaga todas as mensagens de repost do grupo
+apagarposts - Cancela todas as mensagens de repost e anuncios
 analise - Inspecionar elementos de uma mensagem
 comandos - Lista os comandos do bot
 configurar - Configura o bot
