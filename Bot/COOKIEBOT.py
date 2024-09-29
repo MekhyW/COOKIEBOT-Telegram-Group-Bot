@@ -348,9 +348,7 @@ def run_unnatendedthreads():
                 unnatended_threads.remove(unnatended_thread)
             except ValueError:
                 pass
-    if len(unnatended_threads) > 20 * MAX_THREADS:
-        os.execl(sys.executable, sys.executable, *sys.argv)
-    elif len(unnatended_threads) > 0:
+    if len(unnatended_threads):
         print(f"{len(unnatended_threads)} threads are still unnatended")
 
 def handle(msg):
