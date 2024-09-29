@@ -13,7 +13,8 @@ from deep_translator import GoogleTranslator
 from google.cloud import storage
 load_dotenv('../.env')
 login_backend, password_backend, serverIP = os.getenv('backend_login'), os.getenv('backend_password'), os.getenv('backend_serverIP')
-googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token, cookiebotTOKEN, bombotTOKEN, pawstralbotTOKEN, tarinbotTOKEN = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token'), os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN'), os.getenv('pawstralbotTOKEN'), os.getenv('tarinbotTOKEN')
+googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token')
+cookiebotTOKEN, bombotTOKEN, pawstralbotTOKEN, tarinbotTOKEN, connectbotTOKEN = os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN'), os.getenv('pawstralbotTOKEN'), os.getenv('tarinbotTOKEN'), os.getenv('connectbotTOKEN')
 ownerID = int(os.getenv('ownerID'))
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../cookiebot-bucket-key.json'
 storage_client = storage.Client()
@@ -29,6 +30,8 @@ def get_bot_token(is_alternate_bot):
             return pawstralbotTOKEN
         case 3:
             return tarinbotTOKEN
+        case 4:
+            return connectbotTOKEN
         case _:
             return None
 
