@@ -65,10 +65,10 @@ def thread_function(msg):
             pv_default_message(cookiebot, msg, chat_id, is_alternate_bot)
             run_unnatendedthreads()
             return
-        #if chat_type != 'private':
-        #    listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id)
-        #    FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
-        #    check_new_name(msg, chat_id)
+        if chat_type != 'private':
+            listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id)
+            FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
+            check_new_name(msg, chat_id)
         if 'group_chat_created' in msg and msg['group_chat_created']:
             isCreatorBlacklisted = get_request_backend(f"blacklist/{msg['from']['id']}")
             chatinfo = cookiebot.getChat(chat_id)
@@ -371,13 +371,13 @@ def handle_query(msg):
 
 def scheduler_check():
     print("SCHEDULER CHECK")
-    #try:
-    #    scheduler_pull(cookiebot, is_alternate_bot=is_alternate_bot)
-    #except Exception:
-    #    send_message(cookiebot, ownerID, traceback.format_exc())
-    #finally:
-    #    timer_scheduler_check = threading.Timer(300, scheduler_check)
-    #    timer_scheduler_check.start()
+    try:
+        scheduler_pull(cookiebot, is_alternate_bot=is_alternate_bot)
+    except Exception:
+        send_message(cookiebot, ownerID, traceback.format_exc())
+    finally:
+        timer_scheduler_check = threading.Timer(300, scheduler_check)
+        timer_scheduler_check.start()
 
 if __name__ == '__main__':
     if not is_alternate_bot:

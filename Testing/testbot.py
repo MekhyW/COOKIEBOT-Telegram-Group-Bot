@@ -1,10 +1,9 @@
 import os
-import telepot
-import threading
 from dotenv import load_dotenv
+import telepot
 from telepot.loop import MessageLoop
 load_dotenv()
-token = os.getenv('cookiebotTOKEN')
+token = os.getenv('testbotTOKEN')
 ownerID = 780875868
 bot = telepot.Bot(token)
 updates = bot.getUpdates()
@@ -14,16 +13,21 @@ if updates:
 bot.sendMessage(ownerID, 'testbot started')
 
 def handle(msg):
-    def handle_message():
-        content_type, _, _ = telepot.glance(msg)
-        print(content_type, msg)
-    threading.Thread(target=handle_message).start()
+    content_type, _, _ = telepot.glance(msg)
+    print(content_type, msg)
+    if content_type == 'photo':
+        path = bot.getFile(msg['photo'][-1]['file_id'])['file_path']
+        image_url = f'https://api.telegram.org/file/bot{token}/{path}'
+        print(msg['caption'])
+        bot.sendPhoto(ownerID, msg['photo'][-1]['file_id'], caption=image_url)
+    elif content_type == 'video':
+        path = bot.getFile(msg['video']['file_id'])['file_path']
+        video_url = f'https://api.telegram.org/file/bot{token}/{path}'
+        bot.sendVideo(ownerID, msg['video']['file_id'], caption=video_url)
 
 def handle_query(msg):
-    def handle_callback():
-        query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
-        print('Callback Query:', query_id, from_id, query_data)
-        print(msg)
-    threading.Thread(target=handle_callback).start()
+    query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
+    print('Callback Query:', query_id, from_id, query_data)
+    print(msg)
 
 MessageLoop(bot, {'chat': handle, 'callback_query': handle_query}).run_forever()
