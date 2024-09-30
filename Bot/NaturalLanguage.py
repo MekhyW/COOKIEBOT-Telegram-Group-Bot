@@ -53,7 +53,7 @@ def conversational_model_nsfw(message, language):
     if language == "eng":
         language = "en"
     r = requests.post('https://api.simsimi.vn/v2/simtalk', data={'text': message, 'lc': language}, headers={"User-Agent": USER_AGENT}, timeout=10)
-    if 'status' in r.json() and int(r.json()['status']) == 200:
+    if 'status' in r.json():
         answer_final = r.json()['message'].capitalize()
     else:
         print(r.json())
