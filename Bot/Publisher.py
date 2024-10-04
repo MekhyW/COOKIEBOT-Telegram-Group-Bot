@@ -262,7 +262,7 @@ def schedule_post(cookiebot, query_data):
                     delete_job(job['name'])
                     jobs.remove(job)
                     num_posts_for_group -= 1
-            hour = random.randint(0,23)
+            hour = random.randint(0,min(0, datetime.datetime.now().hour - 1))
             minute = random.randint(0,59)
             postmail_message_id = sent_pt if language == 'pt' else sent_en
             create_job(hour, minute, f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute}", int(days), int(group_id),
