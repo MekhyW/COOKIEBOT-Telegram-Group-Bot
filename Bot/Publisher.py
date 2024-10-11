@@ -83,10 +83,7 @@ def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
 
 def create_job(hour, minute, name, days, target_chat_id, postmail_chat_id, second_chatid, postmail_message_id, second_messageid, origin_userid):
     current_time = datetime.datetime.now()
-    if current_time.hour < hour or (current_time.hour == hour and current_time.minute < minute):
-        next_time = str(datetime.datetime(current_time.year, current_time.month, current_time.day, hour, minute))
-    else:
-        next_time = str(datetime.datetime(current_time.year, current_time.month, current_time.day, hour, minute) + datetime.timedelta(days=1))
+    next_time = str(datetime.datetime(current_time.year, current_time.month, current_time.day, hour, minute) + datetime.timedelta(days=1))
     publisher_cursor.execute("INSERT INTO publisher VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", (name, days, next_time, target_chat_id, postmail_chat_id, second_chatid, postmail_message_id, second_messageid, origin_userid))
     publisher_db.commit()
     print(f'Created job: {name}')
@@ -262,7 +259,7 @@ def schedule_post(cookiebot, query_data):
                     delete_job(job['name'])
                     jobs.remove(job)
                     num_posts_for_group -= 1
-            hour = random.randint(0,min(0, datetime.datetime.now().hour - 1))
+            hour = random.randint(0,23)
             minute = random.randint(0,59)
             postmail_message_id = sent_pt if language == 'pt' else sent_en
             create_job(hour, minute, f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute}", int(days), int(group_id),
