@@ -81,36 +81,36 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
         print(e)
     return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
 
-def configurar(cookiebot, msg, chat_id, listaadmins_id, language):
+def configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, language):
     send_chat_action(cookiebot, chat_id, 'typing')
-    if str(msg['from']['id']) in listaadmins_id or str(msg['from']['id']) == str(ownerID):
-        configs = get_config(cookiebot, chat_id)
-        variables = f"FurBots: {configs[0]}\n sfw: {configs[1]}\n Sticker Spam Limit: {configs[2]}\n Time Without Sending Images: {configs[3]}\n Time Captcha: {configs[4]}\n Fun Functions: {configs[5]}\n Utility Functions: {configs[6]}\n Language: {configs[7]}\n Publisher Post: {configs[8]}\n Publisher Ask: {configs[9]}\n Thread Posts: {configs[10]}\n Max Posts: {configs[11]}"
-        try:
-            cookiebot.sendMessage(msg['from']['id'],"Current settings:\n\n" + variables + '\n\nChoose the variable you would like to change\n\n(If you want to change rules or welcome message, use /newrules or /newwelcome on the group)', reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-                                    [InlineKeyboardButton(text="Language",callback_data=f'k CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="FurBots",callback_data=f'a CONFIG {chat_id}')], 
-                                    [InlineKeyboardButton(text="Stickers limit",callback_data=f'b CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="🕒 Limbo",callback_data=f'c CONFIG {chat_id}')], 
-                                    [InlineKeyboardButton(text="🕒 CAPTCHA",callback_data=f'd CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="Fun Functions",callback_data=f'h CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="Utility Functions",callback_data=f'i CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="SFW Chat",callback_data=f'j CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="Publisher Post",callback_data=f'm CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="Publisher Ask",callback_data=f'n CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="Thread Posts",callback_data=f'o CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="Max Posts",callback_data=f'p CONFIG {chat_id}')],
-                                    [InlineKeyboardButton(text="Publisher Members Only",callback_data=f'q CONFIG {chat_id}')]
-                                ]
-                            ))
-            send_message(cookiebot, chat_id, "Te mandei uma mensagem no chat privado para configurar!", msg, language)
-        except Exception as e:
-            send_message(cookiebot, chat_id, "Não consegui te mandar o menu de configuração\n<blockquote>Mande uma mensagem no meu chat privado para que eu consiga fazer isso)</blockquote>" , msg, language)
-            print(e)
-    else:
+    if 'creator' in listaadmins_status and str(msg['from']['id']) not in listaadmins_id and str(msg['from']['id']) != str(ownerID):
         send_message(cookiebot, chat_id, "Você não tem permissão para configurar o bot!\n<blockquote>Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada!</blockquote>", msg, language)
         with open('Static/remove_anonymous_tutorial.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video)
+        return
+    configs = get_config(cookiebot, chat_id)
+    variables = f"FurBots: {configs[0]}\n sfw: {configs[1]}\n Sticker Spam Limit: {configs[2]}\n Time Without Sending Images: {configs[3]}\n Time Captcha: {configs[4]}\n Fun Functions: {configs[5]}\n Utility Functions: {configs[6]}\n Language: {configs[7]}\n Publisher Post: {configs[8]}\n Publisher Ask: {configs[9]}\n Thread Posts: {configs[10]}\n Max Posts: {configs[11]}"
+    try:
+        cookiebot.sendMessage(msg['from']['id'],"Current settings:\n\n" + variables + '\n\nChoose the variable you would like to change\n\n(If you want to change rules or welcome message, use /newrules or /newwelcome on the group)', reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+                                [InlineKeyboardButton(text="Language",callback_data=f'k CONFIG {chat_id}')],
+                                [InlineKeyboardButton(text="FurBots",callback_data=f'a CONFIG {chat_id}')], 
+                                [InlineKeyboardButton(text="Stickers limit",callback_data=f'b CONFIG {chat_id}')],
+                                [InlineKeyboardButton(text="🕒 Limbo",callback_data=f'c CONFIG {chat_id}')], 
+                                [InlineKeyboardButton(text="🕒 CAPTCHA",callback_data=f'd CONFIG {chat_id}')],
+                                [InlineKeyboardButton(text="Fun Functions",callback_data=f'h CONFIG {chat_id}')],
+                                [InlineKeyboardButton(text="Utility Functions",callback_data=f'i CONFIG {chat_id}')],
+                                [InlineKeyboardButton(text="SFW Chat",callback_data=f'j CONFIG {chat_id}')],
+                                [InlineKeyboardButton(text="Publisher Post",callback_data=f'm CONFIG {chat_id}')],
+                                [InlineKeyboardButton(text="Publisher Ask",callback_data=f'n CONFIG {chat_id}')],
+                                [InlineKeyboardButton(text="Thread Posts",callback_data=f'o CONFIG {chat_id}')],
+                                [InlineKeyboardButton(text="Max Posts",callback_data=f'p CONFIG {chat_id}')],
+                                [InlineKeyboardButton(text="Publisher Members Only",callback_data=f'q CONFIG {chat_id}')]
+                            ]
+                        ))
+        send_message(cookiebot, chat_id, "Te mandei uma mensagem no chat privado para configurar!", msg, language)
+    except Exception as e:
+        send_message(cookiebot, chat_id, "Não consegui te mandar o menu de configuração\n<blockquote>Mande uma mensagem no meu chat privado para que eu consiga fazer isso)</blockquote>" , msg, language)
+        print(e)
 
 def configurar_set(cookiebot, msg, chat_id, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
