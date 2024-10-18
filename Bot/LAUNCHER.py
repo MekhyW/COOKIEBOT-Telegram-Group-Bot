@@ -3,8 +3,8 @@ import sys
 import time
 import psutil
 
-CPU_THRESHOLD = 50  # in percent
-MEMORY_THRESHOLD = 50  # in percent
+CPU_THRESHOLD = 75  # in percent
+MEMORY_THRESHOLD = 75  # in percent
 
 def monitor_resources(process):
     try:
