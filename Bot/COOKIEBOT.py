@@ -44,7 +44,7 @@ def thread_function(msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
-        if chat_type == 'private' and 'reply_to_message' not in msg:
+        if chat_type == 'private' and ('reply_to_message' not in msg or 'text' not in msg['reply_to_message'] or 'reply' not in msg['reply_to_message']['text'].lower()):
             if 'text' in msg:
                 if msg['text'].startswith("/start"):
                     set_private_commands(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
