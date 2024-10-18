@@ -64,6 +64,7 @@ def thread_function(msg):
                 os.execl(sys.executable, sys.executable, *sys.argv)
             elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
                 leave_and_blacklist(cookiebot, msg['text'].split()[1])
+                send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
             elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == ownerID:
                 broadcast_message(cookiebot, msg)
             elif msg['text'].startswith("/"):
@@ -72,10 +73,9 @@ def thread_function(msg):
                 pv_default_message(cookiebot, msg, chat_id, is_alternate_bot)       
             run_unnatendedthreads()
             return
-        if chat_type != 'private':
-            listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id)
-            FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
-            check_new_name(msg, chat_id)
+        listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id)
+        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
+        check_new_name(msg, chat_id)
         if 'group_chat_created' in msg and msg['group_chat_created']:
             isCreatorBlacklisted = get_request_backend(f"blacklist/{msg['from']['id']}")
             chatinfo = cookiebot.getChat(chat_id)
