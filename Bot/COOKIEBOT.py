@@ -44,25 +44,32 @@ def thread_function(msg):
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
-        if chat_type == 'private' and ('reply_to_message' not in msg or 'text' not in msg['reply_to_message'] or 'reply' not in msg['reply_to_message']['text'].lower()):
-            if 'text' in msg:
-                if msg['text'].startswith("/start"):
-                    set_private_commands(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
-                if msg['text'].startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == ownerID:
-                    list_groups(cookiebot, chat_id)
-                elif msg['text'].startswith(("/comandos", "/commands")):
-                    list_commands(cookiebot, msg, chat_id, 'eng')
-                elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
-                    privacy_statement(cookiebot, msg, chat_id, 'eng')
-                elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == ownerID:
-                    os._exit(0)
-                elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == ownerID:
-                    os.execl(sys.executable, sys.executable, *sys.argv)
-                elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
-                    leave_and_blacklist(cookiebot, msg['text'].split()[1])
-                elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == ownerID:
-                    broadcast_message(cookiebot, msg)
-            pv_default_message(cookiebot, msg, chat_id, is_alternate_bot)
+        if chat_type == 'private':
+            if 'text' not in msg:
+                send_message(cookiebot, chat_id, "This is a private chat, send a message in a group chat to use me!", msg)
+                return
+            if msg['text'].startswith("/start"):
+                set_private_commands(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
+            elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
+                configurar_set(cookiebot, msg, chat_id, is_alternate_bot=is_alternate_bot)
+            elif msg['text'].startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == ownerID:
+                list_groups(cookiebot, chat_id)
+            elif msg['text'].startswith(("/comandos", "/commands")):
+                list_commands(cookiebot, msg, chat_id, 'eng')
+            elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
+                privacy_statement(cookiebot, msg, chat_id, 'eng')
+            elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == ownerID:
+                os._exit(0)
+            elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == ownerID:
+                os.execl(sys.executable, sys.executable, *sys.argv)
+            elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
+                leave_and_blacklist(cookiebot, msg['text'].split()[1])
+            elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == ownerID:
+                broadcast_message(cookiebot, msg)
+            elif msg['text'].startswith("/"):
+                send_message(cookiebot, chat_id, "Commands must be used in a group chat!", msg)
+            else:
+                pv_default_message(cookiebot, msg, chat_id, is_alternate_bot)       
             run_unnatendedthreads()
             return
         if chat_type != 'private':
@@ -237,8 +244,6 @@ def thread_function(msg):
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
                 listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
                 update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=is_alternate_bot)
-            elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
-                configurar_set(cookiebot, msg, chat_id, is_alternate_bot=is_alternate_bot)
             elif funfunctions and (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and 'from' in msg and msg['reply_to_message']['from']['id'] == myself['id'])) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']):
                 who(cookiebot, msg, chat_id, language)
             elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and any(x in msg['reply_to_message']['caption'] for x in [f"{round(captchatimespan/60)} minutes", f"{round(captchatimespan/60)} minutos"]):
