@@ -74,9 +74,10 @@ def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
     forward_message(cookiebot, APPROVAL_CHAT_ID, second_chatid, second_messageid, is_alternate_bot=is_alternate_bot)
     send_message(cookiebot, APPROVAL_CHAT_ID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️ 7 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid}')],
-            [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 3 {second_messageid}')],
-            [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 1 {second_messageid}')],
+            [InlineKeyboardButton(text="✔️ 7 days (NSFW)",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid} NSFW')]
+            [InlineKeyboardButton(text="✔️ 7 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid} SFW')],
+            [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 3 {second_messageid} SFW')],
+            [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 1 {second_messageid} SFW')],
             [InlineKeyboardButton(text="❌",callback_data=f'DenyPub {origin_messageid}')]
         ]
     ))
@@ -225,7 +226,7 @@ def deny_post(query_data):
     cache_posts.pop(origin_messageid)
 
 def schedule_post(cookiebot, query_data):
-    _, origin_chatid, second_chatid, origin_messageid, origin_userid, days, second_messageid = query_data.split()[:7]
+    _, origin_chatid, second_chatid, origin_messageid, origin_userid, days, second_messageid, has_nsfw = query_data.split()[:8]
     origin_chat = cookiebot.getChat(origin_chatid)
     try:
         origin_user = cookiebot.getChatMember(origin_chatid, origin_userid)['user']
@@ -237,17 +238,15 @@ def schedule_post(cookiebot, query_data):
         if job['name'].split('-->')[0].strip() == origin_chat['title'].strip():
             delete_job(job['name'])
             jobs.remove(job)
-    answer = f"Post set for the following times ({days} days):\n"
-    answer += "NOW - Cookiebot Mural 📬\n"
+    answer = f"Post set for the following times ({days} days):\nNOW - Cookiebot Mural 📬\n"
     for group in get_request_backend('registers'):
         group_id = group['id']
         _, _, _, _, _, _, _, language, publisherpost, _, _, max_posts, publisher_members_only = get_config(cookiebot, group_id)
-        if not publisherpost:
+        if (not publisherpost) or (has_nsfw == 'NSFW' and group_id == '-1001882117738'):
             continue
         if publisher_members_only:
             members = get_members_chat(group_id)
             if origin_user is None or origin_user['username'] not in str(members):
-                answer += f"ERROR! Cannot post in {cookiebot.getChat(group_id)['title']} (because you are not an active member)\n"
                 continue
         try:
             num_posts_for_group = 0
