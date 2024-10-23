@@ -190,7 +190,7 @@ def check_cas(cookiebot, msg, chat_id, language):
         return False
     if in_banlist:
         ban_and_blacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-        send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado pelo [sistema anti-ban CAS](https://cas.chat/)</b>", language=language)
+        send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado pelo sistema anti-spam CAS (https://cas.chat/)</b>", language=language)
         return True
     return False
 
@@ -202,7 +202,7 @@ def check_spamwatch(cookiebot, msg, chat_id, language):
         return False
     if isbanned:
         ban_and_blacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-        send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado pelo sistema anti-ban Spamwatch</b>", language=language)
+        send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado pelo sistema anti-spam Spamwatch</b>", language=language)
         return True
     return False
 
