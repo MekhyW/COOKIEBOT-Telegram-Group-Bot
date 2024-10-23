@@ -48,7 +48,7 @@ def ask_publisher(cookiebot, msg, chat_id, language):
     send_message(cookiebot, chat_id, answer, msg_to_reply=msg, 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✔️",callback_data=f"SendToApprovalPub {msg['forward_from_chat']['id']} {chat_id} {msg['forward_from_message_id']} {msg['message_id']}")],
-            [InlineKeyboardButton(text="❌",callback_data='DenyPub')]
+            [InlineKeyboardButton(text="❌",callback_data='nPub')]
         ]
     ))
     add_post_to_cache(msg)
@@ -75,11 +75,11 @@ def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
     forward_message(cookiebot, APPROVAL_CHAT_ID, second_chatid, second_messageid, is_alternate_bot=is_alternate_bot)
     send_message(cookiebot, APPROVAL_CHAT_ID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️ 7 days (NSFW)",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid} 1')],
-            [InlineKeyboardButton(text="✔️ 7 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid} 0')],
-            [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 3 {second_messageid} 0')],
-            [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 1 {second_messageid} 0')],
-            [InlineKeyboardButton(text="❌",callback_data=f'DenyPub {origin_messageid}')]
+            [InlineKeyboardButton(text="✔️ 7 days (NSFW)",callback_data=f'yPub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid} 1')],
+            [InlineKeyboardButton(text="✔️ 7 days",callback_data=f'yPub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid} 0')],
+            [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'yPub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 3 {second_messageid} 0')],
+            [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'yPub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 1 {second_messageid} 0')],
+            [InlineKeyboardButton(text="❌",callback_data=f'nPub {origin_messageid}')]
         ]
     ))
 

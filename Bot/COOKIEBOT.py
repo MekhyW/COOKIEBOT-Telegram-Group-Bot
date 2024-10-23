@@ -302,9 +302,9 @@ def thread_function_query(msg):
                     pass
                 if query_data.startswith('SendToApproval'):
                     ask_approval(cookiebot, query_data, from_id, is_alternate_bot=is_alternate_bot)
-                elif query_data.startswith('Approve'):
+                elif query_data.startswith('y'):
                     schedule_post(cookiebot, query_data)
-                elif query_data.startswith('Deny'):
+                elif query_data.startswith('n'):
                     deny_post(query_data)
         elif query_data.startswith('Report'):
             command = query_data.split()[1]
