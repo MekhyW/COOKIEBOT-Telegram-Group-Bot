@@ -39,7 +39,8 @@ def add_post_to_cache(msg):
     if 'caption_entities' in msg:
         for entity in msg['caption_entities']:
             caption_entities.append(entity)
-    cache_posts[str(msg['forward_from_message_id'])] = {media_type: media_id, 'caption': msg['caption'], 'caption_entities': caption_entities}
+    caption = msg['caption'] if 'caption' in msg else ''
+    cache_posts[str(msg['forward_from_message_id'])] = {media_type: media_id, 'caption': caption, 'caption_entities': caption_entities}
 
 def ask_publisher(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -348,3 +349,4 @@ def check_notify_post_reply(cookiebot, msg, chat_id, language):
             send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid}, language=language)
             send_message(cookiebot, chat_id, "Resposta enviada ao dono do post!", msg_to_reply=msg, language=language)
             return
+
