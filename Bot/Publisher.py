@@ -74,7 +74,7 @@ def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
     forward_message(cookiebot, APPROVAL_CHAT_ID, second_chatid, second_messageid, is_alternate_bot=is_alternate_bot)
     send_message(cookiebot, APPROVAL_CHAT_ID, 'Approve post?', 
     reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="✔️ 7 days (NSFW)",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid} NSFW')]
+            [InlineKeyboardButton(text="✔️ 7 days (NSFW)",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid} NSFW')],
             [InlineKeyboardButton(text="✔️ 7 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 7 {second_messageid} SFW')],
             [InlineKeyboardButton(text="✔️ 3 days",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 3 {second_messageid} SFW')],
             [InlineKeyboardButton(text="✔️ 1 day",callback_data=f'ApprovePub {origin_chatid} {second_chatid} {origin_messageid} {origin_userid} 1 {second_messageid} SFW')],
