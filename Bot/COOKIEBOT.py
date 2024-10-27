@@ -137,8 +137,8 @@ def thread_function(msg):
             if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                 reply_sticker(cookiebot, msg, chat_id)
         elif content_type == "sticker":
-            sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language)
             if sfw:
+                sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language)
                 add_to_sticker_database(msg, chat_id)
             if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                 reply_sticker(cookiebot, msg, chat_id)
