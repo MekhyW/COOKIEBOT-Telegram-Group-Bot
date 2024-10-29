@@ -59,7 +59,7 @@ def rules_message(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     rules = get_request_backend(f"rules/{chat_id}")
     if 'error' in rules and rules['error'] == "Not Found":
-        send_message(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\n<blockquote>Para colocar regras, use o /novasregras</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\n<blockquote>Se você é um admin e quer colocar regras, use /novasregras</blockquote>", msg, language)
     else:
         regras = rules['rules'].replace('\\n', '\n')
         regras = substitute_user_tags(regras, msg)
