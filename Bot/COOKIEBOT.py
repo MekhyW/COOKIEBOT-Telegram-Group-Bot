@@ -43,7 +43,8 @@ def thread_function(msg):
         thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
-        FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 0, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
+        if chat_type == 'channel':
+            return
         if chat_type == 'private':
             if 'text' not in msg:
                 send_message(cookiebot, chat_id, "This is a private chat, send a message in a group chat to use me!", msg)

@@ -127,7 +127,7 @@ def list_groups(cookiebot, chat_id):
         try:
             chat = cookiebot.getChat(int(group['id']))
             time.sleep(0.2)
-            if 'title' in chat:
+            if 'title' in chat and chat['type'] in ['group', 'supergroup']:
                 chat_info = f"{group['id']} - {chat['title']}"
                 if not any(chat.startswith(chat_info.split()[0]) for chat in existing_chats):
                     new_chats.append(chat_info)
