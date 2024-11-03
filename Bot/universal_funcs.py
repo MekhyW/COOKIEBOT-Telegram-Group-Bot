@@ -145,14 +145,16 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
                 cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
         print(traceback.format_exc())
-        #send_message(cookiebot, chat_id, text, msg_to_reply, language, 
-        #             thread_id, is_alternate_bot, reply_markup, parse_mode)
+        send_message(cookiebot, chat_id, text, msg_to_reply, language, 
+                     thread_id, is_alternate_bot, reply_markup, parse_mode)
     except TelegramError:
         print(traceback.format_exc())
         try:
             cookiebot.sendMessage(ownerID, traceback.format_exc())
         except Exception as e:
             print(e)
+    except Exception as e:
+        print(e)
 
 def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None):
     try:
