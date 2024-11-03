@@ -445,15 +445,7 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     elif not 'reply_to_message' in msg:
         send_message(cookiebot, chat_id, instru, msg, language)
     elif 'video' in msg['reply_to_message']:
-        thismighttakeawhile = cookiebot.sendMessage(chat_id, "(hold on, this might take a while...)", reply_to_message_id=msg['message_id'])
-        send_chat_action(cookiebot, chat_id, 'upload_video')
-        video_file = get_media_content(cookiebot, msg['reply_to_message'], 'video', is_alternate_bot=is_alternate_bot, downloadfile=True)
-        Distortioner.distortioner(video_file)
-        with open('distorted.mp4', 'rb') as video:
-            cookiebot.sendVideo(chat_id, video, reply_to_message_id=msg['message_id'])
-        cookiebot.deleteMessage((chat_id, thismighttakeawhile['message_id']))
-        os.remove('distorted.mp4')
-        os.remove(video_file)
+        send_message(cookiebot, chat_id, "Video distortioning is currently disabled.", msg, language)
     elif 'photo' in msg['reply_to_message']:
         send_chat_action(cookiebot, chat_id, 'upload_photo')
         photo_file = get_media_content(cookiebot, msg['reply_to_message'], 'photo', is_alternate_bot=is_alternate_bot, downloadfile=True)
@@ -482,12 +474,6 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         os.remove('distorted.png')
         os.remove(sticker_file)
     elif 'animation' in msg['reply_to_message']:
-        send_chat_action(cookiebot, chat_id, 'upload_video')
-        animation_file = get_media_content(cookiebot, msg['reply_to_message'], 'animation', is_alternate_bot=is_alternate_bot, downloadfile=True)
-        Distortioner.distortioner(animation_file, is_gif=True)
-        with open('distorted.mp4', 'rb') as animation:
-            cookiebot.sendAnimation(chat_id, animation, reply_to_message_id=msg['message_id'])
-        os.remove('distorted.mp4')
-        os.remove(animation_file)
+        send_message(cookiebot, chat_id, "GIF distortioning is currently disabled.", msg, language)
     else:
         send_message(cookiebot, chat_id, instru, msg, language)
