@@ -274,6 +274,7 @@ def thread_function(msg):
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle(msg)
         else:
+            print(errormsg)
             send_message(cookiebot, ownerID, traceback.format_exc())
             send_message(cookiebot, ownerID, str(msg))
             send_message(cookiebot, ownerID, str(e))
