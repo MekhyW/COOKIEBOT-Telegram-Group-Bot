@@ -20,9 +20,9 @@ def get_user_info(user_id, username, first_name, last_name, language_code, birth
         return cache_users[user_id]
     user = get_request_backend(f"users/{user_id}", {"id": user_id})
     if 'error' in user and user['error'] == "Not Found":
-        post_request_backend(f"users", {"id": user_id, "username": username, "first_name": first_name, "last_name": last_name, "language_code": language_code, "birthdate": birthdate})
-    elif user['username'] != username or user['first_name'] != first_name or user['last_name'] != last_name or user['language_code'] != language_code or (user['birthdate'] != birthdate and birthdate != "0000-00-00"):
-        put_request_backend(f"users/{user_id}", {"id": user_id, "username": username, "first_name": first_name, "last_name": last_name, "language_code": language_code, "birthdate": birthdate if birthdate != "0000-00-00" else user['birthdate']})
+        post_request_backend(f"users", {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate})
+    elif user['username'] != username or user['firstName'] != first_name or user['lastName'] != last_name or user['languageCode'] != language_code or (user['birthdate'] != birthdate and birthdate != "0000-00-00"):
+        put_request_backend(f"users/{user_id}", {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate if birthdate != "0000-00-00" else user['birthdate']})
     cache_users[user_id] = user
     return user
 
