@@ -47,6 +47,7 @@ def check_new_name(cookiebot, msg, chat_id, chat_type):
             month = str(chat['birthdate']['month']).zfill(2)
             day = str(chat['birthdate']['day']).zfill(2)
             birthdate = f"{year}-{month}-{day}"
+            cookiebot.sendMessage(chat_id, f"<b>Birthday registered!</b> <i>{month}/{day}</i>", parse_mode='HTML')
     get_user_info(id, username, first_name, last_name, language_code, birthdate)
     if chat_type in ['group', 'supergroup']:
         members = get_members_chat(chat_id)
