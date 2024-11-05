@@ -23,8 +23,8 @@ def get_user_info(user_id, username, first_name, last_name, language_code, birth
     if 'error' in user and user['error'] == "Not Found":
         post_request_backend(f"users", {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate})
         user = get_request_backend(f"users/{user_id}", {"id": user_id})
-    elif user['username'] != username or user['firstName'] != first_name or user['lastName'] != last_name or user['languageCode'] != language_code or (user['birthdate'] != birthdate and birthdate != "0000-00-00"):
-        put_request_backend(f"users/{user_id}", {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate if birthdate != "0000-00-00" else user['birthdate']})
+    elif user['username'] != username or user['firstName'] != first_name or user['lastName'] != last_name or user['languageCode'] != language_code or (user['birthdate'] != birthdate and birthdate != "0001-01-01"):
+        put_request_backend(f"users/{user_id}", {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate if birthdate != "0001-01-01" else user['birthdate']})
         user = get_request_backend(f"users/{user_id}", {"id": user_id})
     cache_users[user_id] = user
     return user
@@ -37,7 +37,7 @@ def check_new_name(cookiebot, msg, chat_id, chat_type):
     first_name = msg['from']['first_name'] if 'first_name' in msg['from'] else None
     last_name = msg['from']['last_name'] if 'last_name' in msg['from'] else None
     language_code = msg['from']['language_code'] if 'language_code' in msg['from'] else None
-    birthdate = "0000-00-00"
+    birthdate = "0001-01-01"
     if chat_type == 'private' and id not in cache_users:
         chat = cookiebot.getChat(chat_id)
         if 'birthdate' in chat:
