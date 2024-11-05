@@ -10,6 +10,7 @@ def get_members_chat(chat_id):
     members = get_request_backend(f"registers/{chat_id}", {"id": chat_id})
     if 'error' in members and members['error'] == "Not Found":
         post_request_backend(f"registers/{chat_id}", {"id": chat_id, "users": []})
+        cache_members[chat_id] = []
         return []
     members = members['users']
     cache_members[chat_id] = members
@@ -21,8 +22,10 @@ def get_user_info(user_id, username, first_name, last_name, language_code, birth
     user = get_request_backend(f"users/{user_id}", {"id": user_id})
     if 'error' in user and user['error'] == "Not Found":
         post_request_backend(f"users", {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate})
+        user = get_request_backend(f"users/{user_id}", {"id": user_id})
     elif user['username'] != username or user['firstName'] != first_name or user['lastName'] != last_name or user['languageCode'] != language_code or (user['birthdate'] != birthdate and birthdate != "0000-00-00"):
         put_request_backend(f"users/{user_id}", {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate if birthdate != "0000-00-00" else user['birthdate']})
+        user = get_request_backend(f"users/{user_id}", {"id": user_id})
     cache_users[user_id] = user
     return user
 
