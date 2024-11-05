@@ -17,15 +17,17 @@ def get_members_chat(chat_id):
     return members
 
 def get_user_info(user_id, username, first_name, last_name, language_code, birthdate):
-    if user_id in cache_users:
+    info = {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate}
+    if user_id in cache_users and all(cache_users[user_id][key] == info[key] or info[key] is None for key in info):
         return cache_users[user_id]
     user = get_request_backend(f"users/{user_id}", {"id": user_id})
     if 'error' in user and user['error'] == "Not Found":
-        post_request_backend(f"users", {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate})
-        user = get_request_backend(f"users/{user_id}", {"id": user_id})
-    elif user['username'] != username or user['firstName'] != first_name or user['lastName'] != last_name or user['languageCode'] != language_code or (user['birthdate'] != birthdate and birthdate != "0001-01-01"):
-        put_request_backend(f"users/{user_id}", {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate if birthdate != "0001-01-01" else user['birthdate']})
-        user = get_request_backend(f"users/{user_id}", {"id": user_id})
+        user = info
+        post_request_backend(f"users", user)
+    elif any(user[key] != info[key] and info[key] is not None for key in info):
+        for key in info:
+            user[key] = info[key] if user[key] != info[key] and info[key] is not None else user[key]
+        put_request_backend(f"users/{user_id}", user)
     cache_users[user_id] = user
     return user
 
@@ -37,7 +39,7 @@ def check_new_name(cookiebot, msg, chat_id, chat_type):
     first_name = msg['from']['first_name'] if 'first_name' in msg['from'] else None
     last_name = msg['from']['last_name'] if 'last_name' in msg['from'] else None
     language_code = msg['from']['language_code'] if 'language_code' in msg['from'] else None
-    birthdate = "0001-01-01"
+    birthdate = None
     if chat_type == 'private' and id not in cache_users:
         chat = cookiebot.getChat(chat_id)
         if 'birthdate' in chat:
