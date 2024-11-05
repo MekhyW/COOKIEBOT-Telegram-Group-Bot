@@ -1,6 +1,5 @@
 import threading
 import gc
-import os
 import sys
 import traceback
 import telepot
@@ -43,6 +42,7 @@ def thread_function(msg):
         thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
+        check_new_name(cookiebot, msg, chat_id, chat_type)
         if chat_type == 'channel':
             return
         if chat_type == 'private':
@@ -76,7 +76,6 @@ def thread_function(msg):
             return
         listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id)
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
-        check_new_name(msg, chat_id)
         if 'group_chat_created' in msg and msg['group_chat_created']:
             isCreatorBlacklisted = get_request_backend(f"blacklist/{msg['from']['id']}")
             chatinfo = cookiebot.getChat(chat_id)

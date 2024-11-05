@@ -1,7 +1,8 @@
 import random
-from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, delete_request_backend, ownerID
+from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, put_request_backend, delete_request_backend, ownerID
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_members = {}
+cache_users = {}
 
 def get_members_chat(chat_id):
     if chat_id in cache_members:
@@ -14,21 +15,48 @@ def get_members_chat(chat_id):
     cache_members[chat_id] = members
     return members
 
-def check_new_name(msg, chat_id):
-    if 'from' in msg and 'username' in msg['from'] and msg['from']['username'] is not None:
-        username = msg['from']['username']
+def get_user_info(user_id, username, first_name, last_name, language_code, birthdate):
+    if user_id in cache_users:
+        return cache_users[user_id]
+    user = get_request_backend(f"users/{user_id}", {"id": user_id})
+    if 'error' in user and user['error'] == "Not Found":
+        post_request_backend(f"users/{user_id}", {"id": user_id, "username": username, "first_name": first_name, "last_name": last_name, "language_code": language_code, "birthdate": birthdate})
+    elif user['username'] != username or user['first_name'] != first_name or user['last_name'] != last_name or user['language_code'] != language_code or (user['birthdate'] != birthdate and birthdate != "0000-00-00"):
+        put_request_backend(f"users/{user_id}", {"id": user_id, "username": username, "first_name": first_name, "last_name": last_name, "language_code": language_code, "birthdate": birthdate if birthdate != "0000-00-00" else user['birthdate']})
+    cache_users[user_id] = user
+    return user
+
+def check_new_name(cookiebot, msg, chat_id, chat_type):
+    if 'from' not in msg:
+        return
+    id = msg['from']['id']
+    username = msg['from']['username'] if 'username' in msg['from'] else None
+    first_name = msg['from']['first_name'] if 'first_name' in msg['from'] else None
+    last_name = msg['from']['last_name'] if 'last_name' in msg['from'] else None
+    language_code = msg['from']['language_code'] if 'language_code' in msg['from'] else None
+    birthdate = "0000-00-00"
+    if chat_type == 'private' and id not in cache_users:
+        chat = cookiebot.getChat(chat_id)
+        if 'birthdate' in chat:
+            year = str(chat['birthdate']['year']).zfill(4) if 'year' in chat['birthdate'] else "0000"
+            month = str(chat['birthdate']['month']).zfill(2)
+            day = str(chat['birthdate']['day']).zfill(2)
+            birthdate = f"{year}-{month}-{day}"
+    get_user_info(id, username, first_name, last_name, language_code, birthdate)
+    if chat_type in ['group', 'supergroup']:
         members = get_members_chat(chat_id)
-        if username not in str(members):
+        if username and username not in str(members):
             post_request_backend(f"registers/{chat_id}/users", {"user": username, "date": ''})
             if chat_id not in cache_members:
                 cache_members[chat_id] = []
             cache_members[chat_id].append(username)
 
 def left_chat_member(msg, chat_id):
-    if 'username' in msg['left_chat_member']:
-        delete_request_backend(f"registers/{chat_id}/users", {"user": msg['left_chat_member']['username']})
-        if msg['left_chat_member']['username'] in cache_members[chat_id]:
-            cache_members[chat_id].remove(msg['left_chat_member']['username'])
+    if 'username' not in msg['left_chat_member']:
+        return
+    delete_request_backend(f"registers/{chat_id}/users", {"user": msg['left_chat_member']['username']})
+    if msg['left_chat_member']['username'] in cache_members[chat_id]:
+        cache_members[chat_id].remove(msg['left_chat_member']['username'])
 
 def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
