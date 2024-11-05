@@ -40,7 +40,7 @@ def check_new_name(cookiebot, msg, chat_id, chat_type):
     last_name = msg['from']['last_name'] if 'last_name' in msg['from'] else None
     language_code = msg['from']['language_code'] if 'language_code' in msg['from'] else None
     birthdate = None
-    if chat_type == 'private' and id not in cache_users:
+    if chat_type == 'private' and (id not in cache_users or 'birthdate' not in cache_users[id]):
         chat = cookiebot.getChat(chat_id)
         if 'birthdate' in chat:
             year = str(chat['birthdate']['year']).zfill(4) if 'year' in chat['birthdate'] else "0000"
