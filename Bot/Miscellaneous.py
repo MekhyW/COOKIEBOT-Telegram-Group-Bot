@@ -466,6 +466,9 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         os.remove('distorted.mp3')
         os.remove(audio_file)
     elif 'sticker' in msg['reply_to_message']:
+        if msg['reply_to_message']['sticker']['is_animated'] or msg['reply_to_message']['sticker']['is_video']:
+            send_message(cookiebot, chat_id, "GIF distortioning is currently disabled.", msg, language)
+            return
         send_chat_action(cookiebot, chat_id, 'upload_photo')
         sticker_file = get_media_content(cookiebot, msg['reply_to_message'], 'sticker', is_alternate_bot=is_alternate_bot, downloadfile=True)
         Distortioner.process_image(sticker_file, 'distorted.png', 25)
