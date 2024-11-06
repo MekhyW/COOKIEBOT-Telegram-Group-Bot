@@ -137,12 +137,22 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language):
 def who(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     members = get_members_chat(chat_id)
-    try:
-        chosen = random.choice(members)['user']
-    except TypeError:
-        chosen = random.choice(members)['user']
-    locucao_adverbial = random.choice(["Com certeza o(a) ", "Sem sombra de dúvidas o(a) ", "Suponho que o(a) ", "Aposto que o(a) ", "Talvez o(a) ", "Quem sabe o(a) ", "Aparentemente o(a) "])
-    send_message(cookiebot, chat_id, locucao_adverbial+"@"+chosen, msg, language)
+    valid_members = [member['user'] for member in members if isinstance(member, dict) and 'user' in member]
+    if not valid_members:
+        send_message(cookiebot, chat_id, "Não sei", msg, language)
+        return
+    chosen = random.choice(valid_members)
+    adverbial_phrases = [
+        "Com certeza o(a)",
+        "Sem sombra de dúvidas o(a)",
+        "Suponho que o(a)",
+        "Aposto que o(a)",
+        "Talvez o(a)",
+        "Quem sabe o(a)",
+        "Aparentemente o(a)"
+    ]
+    prefix = random.choice(adverbial_phrases)
+    send_message(cookiebot, chat_id, f"{prefix} @{chosen}", msg, language)
 
 def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     react_to_message(msg, '❤️', is_alternate_bot=is_alternate_bot)
