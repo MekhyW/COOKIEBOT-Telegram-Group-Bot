@@ -3,17 +3,42 @@ import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_configurations = {}
 cache_admins = {}
+cache_groups = {}
+
+def get_group_info(chat_id, adminobjects):
+    if chat_id in cache_groups:
+        return cache_groups[chat_id]
+    group = get_request_backend(f"groups/{chat_id}")
+    if 'error' in group and group['error'] == "Not Found":
+        post_request_backend(f"groups/{chat_id}", {"groupId": chat_id, "adminUsers": []})
+        cache_groups[chat_id] = {"groupId": chat_id, "adminUsers": []}
+        return cache_groups[chat_id]
+    if group['adminUsers'] != adminobjects:
+        group['adminUsers'] = adminobjects
+        put_request_backend(f"groups/{chat_id}", group)
+    cache_groups[chat_id] = group
+    return group
 
 def get_admins(cookiebot, chat_id, ignorecache=False):
     if chat_id in cache_admins and not ignorecache:
         admins = cache_admins[chat_id]
         return admins[0], admins[1], admins[2]
+    adminobjects = []
     listaadmins, listaadmins_id, listaadmins_status = [], [], []
     for admin in cookiebot.getChatAdministrators(chat_id):
-        if 'username' in admin['user']:
-            listaadmins.append(str(admin['user']['username']))
-        listaadmins_id.append(str(admin['user']['id']))
-        listaadmins_status.append(admin['status'])
+        user = admin['user']
+        status = admin['status']
+        id = user['id']
+        username = user['username'] if 'username' in user else None
+        first_name = user['first_name'] if 'first_name' in user else None
+        last_name = user['last_name'] if 'last_name' in user else None
+        language_code = user['language_code'] if 'language_code' in user else None
+        adminobjects.append({"id": id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": None})
+        if username:
+            listaadmins.append(username)
+        listaadmins_id.append(id)
+        listaadmins_status.append(status)
+    get_group_info(chat_id, adminobjects)
     cache_admins[chat_id] = [listaadmins, listaadmins_id, listaadmins_status]
     return listaadmins, listaadmins_id, listaadmins_status
 
