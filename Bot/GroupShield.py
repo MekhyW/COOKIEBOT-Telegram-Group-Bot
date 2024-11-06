@@ -141,7 +141,7 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
         try:
             cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': True, 'can_send_other_messages': True, 'can_add_web_page_previews': True})
             cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
-            send_message(cookiebot, chat_id, f"ATENÇÃO! Suas mídias estão restritas por <b>{round(limbotimespan/60)} minutos</b>. Por favor se apresente e se enturme na conversa com os membros.\n<blockquote>Use o /regras para ver as regras do grupo</blockquote>", language=language)
+            send_message(cookiebot, chat_id, f"ATENÇÃO! Suas mídias estão restritas por <b>{round(limbotimespan/60)} minutos</b>. Por favor se apresente e se enturme na conversa com os membros.\n<blockquote>Aperte o botão abaixo ou use o /regras para ver as regras do grupo</blockquote>", language=language)
         except Exception as e:
             print(e)
     welcome = get_request_backend(f'welcomes/{chat_id}')
