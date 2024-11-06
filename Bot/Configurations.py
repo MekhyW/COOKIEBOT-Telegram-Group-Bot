@@ -29,7 +29,7 @@ def get_admins(cookiebot, chat_id, ignorecache=False):
     for admin in cookiebot.getChatAdministrators(chat_id):
         user = admin['user']
         status = admin['status']
-        id = user['id']
+        id = str(user['id'])
         username = user['username'] if 'username' in user else None
         first_name = user['first_name'] if 'first_name' in user else None
         last_name = user['last_name'] if 'last_name' in user else None
