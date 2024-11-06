@@ -9,6 +9,7 @@ def get_group_info(chat_id, adminobjects):
     if chat_id in cache_groups:
         return cache_groups[chat_id]
     group = get_request_backend(f"groups/{chat_id}")
+    print("GROUP", group)
     if 'error' in group and "Not Found" in group['error']:
         post_request_backend(f"groups/{chat_id}", {"groupId": chat_id, "adminUsers": []})
         cache_groups[chat_id] = {"groupId": chat_id, "adminUsers": []}
