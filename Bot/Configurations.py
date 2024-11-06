@@ -13,7 +13,7 @@ def get_group_info(chat_id, adminobjects):
         post_request_backend(f"groups/{chat_id}", {"groupId": chat_id, "adminUsers": []})
         cache_groups[chat_id] = {"groupId": chat_id, "adminUsers": []}
         return cache_groups[chat_id]
-    if group['adminUsers'] != adminobjects:
+    if 'adminUsers' in group and group['adminUsers'] != adminobjects:
         group['adminUsers'] = adminobjects
         put_request_backend(f"groups/{chat_id}", group)
     cache_groups[chat_id] = group
