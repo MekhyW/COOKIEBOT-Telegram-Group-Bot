@@ -66,7 +66,7 @@ def left_chat_member(msg, chat_id):
 
 def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
-    if len(listaadmins) > 0 and 'from' in msg and str(msg['from']['username']) not in listaadmins:
+    if len(listaadmins) > 0 and 'from' in msg and str(msg['from']['username']) not in listaadmins and 'sender_chat' not in msg:
         send_message(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo!\n<blockquote>Se está falando como canal, entre e use o comando como user</blockquote>", msg, language)
         return
     members = get_members_chat(chat_id)

@@ -278,7 +278,7 @@ def schedule_post(cookiebot, query_data):
 
 def schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
-    if str(msg['from']['id']) not in listaadmins_id and int(msg['from']['id']) != ownerID:
+    if str(msg['from']['id']) not in listaadmins_id and int(msg['from']['id']) != ownerID and 'sender_chat' not in msg:
         send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     if 'reply_to_message' not in msg:
@@ -303,7 +303,7 @@ def schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alte
 
 def cancel_posts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
-    if str(msg['from']['id']) not in listaadmins_id:
+    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
         send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     for job in list_jobs():
