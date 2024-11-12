@@ -110,7 +110,7 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
 def configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     if 'creator' in listaadmins_status and str(msg['from']['id']) not in listaadmins_id and str(msg['from']['id']) != str(ownerID):
-        send_message(cookiebot, chat_id, "Você não tem permissão para configurar o bot!\n<blockquote>Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada!</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Você não tem permissão para configurar o bot, ou está anônimo!\n<blockquote>Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada!</blockquote>", msg, language)
         with open('Static/remove_anonymous_tutorial.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video)
         return
@@ -223,7 +223,7 @@ def set_language(cookiebot, msg, chat_id, language_code):
     configurar_set(cookiebot, msg, ownerID)
 
 def update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=0):
-    if str(msg['from']['id']) not in listaadmins_id:
+    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
         send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -239,7 +239,7 @@ def new_welcome_message(cookiebot, msg, chat_id):
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name", reply_to_message_id=msg['message_id'])
 
 def update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=0):
-    if str(msg['from']['id']) not in listaadmins_id:
+    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
         send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     send_chat_action(cookiebot, chat_id, 'typing')
