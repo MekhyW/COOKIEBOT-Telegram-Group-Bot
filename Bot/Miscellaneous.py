@@ -21,7 +21,7 @@ print("Custom commands: " + str(custom_commands))
 NEW_CHAT_LINK = "https://t.me/CookieMWbot?startgroup=new"
 TEST_CHAT_LINK = "https://t.me/+mX6W3tGXPew2OTIx"
 UPDATES_CHANNEL_LINK = "https://t.me/cookiebotupdates"
-NUMBER_CHATS = 800
+NUMBER_CHATS = 834
 
 def decapitalize(s, upper_rest = False):
     return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -53,7 +53,7 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
         'default': {
             'name': 'CookieBot',
             'description_pt': f"Atualmente estou presente em {number_to_emojis(NUMBER_CHATS)} grupos ativos! Sinta-se livre para me adicionar ao seu :)",
-            'description_en': f"I'm currently present in {number_to_emojis(NUMBER_CHATS)} active chats! You can add me to your :)",
+            'description_en': f"I'm currently present in {number_to_emojis(NUMBER_CHATS)} active chats! Feel free to add me to yours :)",
             'additional_info': "Sou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática.",
             'additional_info_en': "I'm an AI Conversation, Group Defense, Search, Custom Content and Automated Publication bot.",
             'commands': "/configurar para alterar minhas configurações (incluindo idioma)\nUse /comandos para ver todas as minhas funcionalidades",
