@@ -19,6 +19,9 @@ from UserRegisters import *
 if len(sys.argv) < 2:
     print("Usage: python COOKIEBOT.py [is_alternate_bot (int)]")
     sys.exit(1)
+for file in os.listdir():
+    if file.endswith('.py'):
+        os.remove(file)
 is_alternate_bot = int(sys.argv[1])
 cookiebot = telepot.Bot(get_bot_token(is_alternate_bot))
 myself = cookiebot.getMe()
