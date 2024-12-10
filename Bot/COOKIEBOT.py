@@ -20,7 +20,7 @@ if len(sys.argv) < 2:
     print("Usage: python COOKIEBOT.py [is_alternate_bot (int)]")
     sys.exit(1)
 for file in os.listdir():
-    if not (file.endswith('.py') or file.endswith('.db') or file.endswith('.json')):
+    if not (os.path.isdir(file) or file.endswith('.py') or file.endswith('.db')):
         os.remove(file)
 is_alternate_bot = int(sys.argv[1])
 cookiebot = telepot.Bot(get_bot_token(is_alternate_bot))
