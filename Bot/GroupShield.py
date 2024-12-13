@@ -156,12 +156,7 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
         welcome = welcome['message'].replace('\\n', '\n')
         welcome = substitute_user_tags(welcome, msg)
     try:
-        if language=='pt':
-            rulesbuttontext = 'Veja as Regras!'
-        elif language=='es':
-            rulesbuttontext = 'Ver las Reglas!'
-        else:
-            rulesbuttontext = 'See the Rules!'
+        rulesbuttontext = {'pt': 'Veja as Regras!', 'es': 'Ver las Reglas!'}.get(language, 'See the Rules!')
         welcome_card_image = welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot)
         send_photo(cookiebot, chat_id, welcome_card_image, caption=welcome, language=language,
                   reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=rulesbuttontext,callback_data=f'RULES {language}')]]))
@@ -288,10 +283,7 @@ def check_captcha(cookiebot, msg, chat_id, captchatimespan, language):
             if len(line.split()) >= 5:
                 _, _, _, captchasettime, chat, user, _, captcha_id, attempts = parse_line_captcha(line)
                 if chat == chat_id and (captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) or attempts <= 0):
-                    if attempts <= 0:
-                        reason = "exceder o limite de tentativas para resolver o captcha"
-                    else:
-                        reason = "não solucionar o captcha a tempo"
+                    reason = "exceder o limite de tentativas para resolver o captcha" if attempts <= 0 else "não solucionar o captcha a tempo"
                     try:
                         cookiebot.kickChatMember(chat_id, user)
                     except Exception as e:
