@@ -120,8 +120,6 @@ def thread_function(msg):
                 audio = get_media_content(cookiebot, msg, 'voice', is_alternate_bot=is_alternate_bot)
                 if utilityfunctions:
                     identify_music(cookiebot, msg, chat_id, audio, language)
-                    if msg['from']['id'] == ownerID:
-                        transcribe_voice_message(cookiebot, msg, chat_id, audio, language)
                 if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id']:
                     msg['text'] = speech_to_text(audio)
                     send_message(cookiebot, chat_id, conversational_ai(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
