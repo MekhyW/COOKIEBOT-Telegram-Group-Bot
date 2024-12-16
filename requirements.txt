@@ -16,5 +16,4 @@ captcha
 price-parser
 spamwatch
 openai
-whisper
 Pylint
