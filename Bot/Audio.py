@@ -1,4 +1,4 @@
-from universal_funcs import send_message, openai_key
+from universal_funcs import send_message
 import ShazamAPI
 import whisper
 
@@ -29,3 +29,12 @@ def speech_to_text(content):
         result = stt_model.transcribe(audio_file)
         transcript = result["text"].capitalize()
     return transcript
+
+def transcribe_voice_message(cookiebot, msg, chat_id, content, language):
+    duration = msg['voice']['duration']
+    if duration < 3 or duration > 120:
+        return
+    transcript = speech_to_text(content)
+    if len(transcript.split()) < 3:
+        return
+    send_message(cookiebot, chat_id, f'Texto:\n<i>"{transcript}"</i>', msg, language)
