@@ -1,7 +1,8 @@
 from universal_funcs import send_message, openai_key
 import ShazamAPI
-import openai
-openai_client = openai.OpenAI(api_key=openai_key)
+import whisper
+
+stt_model = whisper.load_model("base")
 
 def identify_music(cookiebot, msg, chat_id, content, language):
     shazam = ShazamAPI.Shazam(content)
@@ -25,10 +26,6 @@ def speech_to_text(content):
     with open('stt.ogg', 'wb') as audio_file:
         audio_file.write(content)
     with open('stt.ogg', 'rb') as audio_file:
-        transcript = openai_client.audio.transcriptions.create(
-            model="whisper-1",
-            file=audio_file,
-            response_format="text"
-        )
-    transcript = transcript.capitalize()
+        result = stt_model.transcribe(audio_file)
+        transcript = result["text"].capitalize()
     return transcript

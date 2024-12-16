@@ -1,13 +1,11 @@
-import openai
-openai_client = openai.OpenAI(api_key='')
+import whisper
+
+model = whisper.load_model("base")
 
 def speech_to_text(filename):
     with open(filename, 'rb') as audio_file:
-        transcript = openai_client.audio.transcriptions.create(
-            model="whisper-1", 
-            file=audio_file, 
-            response_format="text"
-        )
+        result = model.transcribe(audio_file)
+        transcript = result["text"]
     transcript = transcript.capitalize()
     return transcript
 
