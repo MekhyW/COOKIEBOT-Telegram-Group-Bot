@@ -93,7 +93,7 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
     myself = cookiebot.getMe()
     for username in usernames_list:
         user = get_request_backend(f"users?username={username}")
-        if len(user) != 1 or user[0]['id'] == myself['id']:
+        if len(user) != 1 or int(user[0]['id']) == int(myself['id']):
             continue
         try:
             send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
@@ -142,7 +142,7 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
     myself = cookiebot.getMe()
     for username in listaadmins:
         user = get_request_backend(f"users?username={username}")
-        if len(user) != 1 or user[0]['id'] == myself['id']:
+        if len(user) != 1 or int(user[0]['id']) == int(myself['id']):
             continue
         try:
             send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
