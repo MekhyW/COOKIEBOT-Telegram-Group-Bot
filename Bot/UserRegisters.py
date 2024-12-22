@@ -91,7 +91,7 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         send_message(cookiebot, chat_id, resulting_message, msg_to_reply=msg, parse_mode='HTML')
     chat = cookiebot.getChat(chat_id)
     for username in usernames_list:
-        user = get_request_backend(f"users", {"username": username})
+        user = get_request_backend(f"users?username={username}")
         if len(user) != 1:
             continue
         try:
@@ -139,7 +139,7 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
     send_message(cookiebot, chat_id, response, language=language, parse_mode='HTML')
     chat = cookiebot.getChat(chat_id)
     for username in listaadmins:
-        user = get_request_backend(f"users", {"username": username})
+        user = get_request_backend(f"users?username={username}")
         if len(user) != 1:
             continue
         try:
