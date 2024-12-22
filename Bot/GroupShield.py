@@ -43,10 +43,7 @@ def open_telegram_image(cookiebot, token, photo_id):
     return image
 
 def substitute_user_tags(text, msg):
-    if 'new_chat_member' in msg:
-        user = msg['new_chat_member']
-    else:
-        user = msg['from']
+    user = msg['new_chat_member'] if 'new_chat_member' in msg else msg['from']
     usertags = ['{user}', '{username}', '{mention}', '$user', '$username', '$(user)', '$(username)', '<user>', '<username>', '<name>']
     for usertag in usertags:
         if usertag in text:
@@ -76,10 +73,7 @@ def rules_message(cookiebot, msg, chat_id, language):
         cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
 
 def welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot=0):
-    if 'new_chat_member' in msg:
-        user = msg['new_chat_member']
-    else:
-        user = msg['from']
+    user = msg['new_chat_member'] if 'new_chat_member' in msg else msg['from']
     # Get base images
     token = get_bot_token(is_alternate_bot)
     try:
@@ -138,10 +132,11 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
     if str(chat_id) in ['-1001063487371', '-1001649779623', '-1001582063371', '-1002048063981', '-1002193913344']: # Groups where the bot should not welcome new members
         return
     send_chat_action(cookiebot, chat_id, 'typing')
+    user = msg['new_chat_member'] if 'new_chat_member' in msg else msg['from']
     if limbotimespan > 0:
         try:
-            cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': True, 'can_send_other_messages': True, 'can_add_web_page_previews': True})
-            cookiebot.restrictChatMember(chat_id, msg['from']['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
+            cookiebot.restrictChatMember(chat_id, user['id'], permissions={'can_send_messages': True, 'can_send_media_messages': True, 'can_send_other_messages': True, 'can_add_web_page_previews': True})
+            cookiebot.restrictChatMember(chat_id, user['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
             send_message(cookiebot, chat_id, f"ATENÇÃO! Suas mídias estão restritas por <b>{round(limbotimespan/60)} minutos</b>. Por favor se apresente e se enturme na conversa com os membros.\n<blockquote>Aperte o botão abaixo ou use o /regras para ver as regras do grupo</blockquote>", language=language)
         except Exception as e:
             print(e)
