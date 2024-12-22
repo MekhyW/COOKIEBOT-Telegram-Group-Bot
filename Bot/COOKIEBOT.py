@@ -42,7 +42,6 @@ def thread_function(msg):
                                       'forum_topic_created', 'forum_topic_edited','forum_topic_closed', 'forum_topic_reopened', 'story', 'poll_answer',
                                       'boost_added', 'chat_boost', 'removed_chat_boost', 'message_auto_delete_timer_changed']):
             return
-        thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
         check_new_name(cookiebot, msg, chat_id, chat_type)
@@ -77,6 +76,7 @@ def thread_function(msg):
                 pv_default_message(cookiebot, msg, chat_id, is_alternate_bot)       
             run_unnatendedthreads()
             return
+        thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
         listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id)
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
         if 'group_chat_created' in msg and msg['group_chat_created']:
@@ -241,6 +241,10 @@ def thread_function(msg):
                         qualquer_coisa(cookiebot, msg, chat_id, sfw, language)
                     else:
                         send_message(cookiebot, chat_id, "Limite de buscas de imagens atingido", msg, language)
+            elif msg['text'].startswith("@admin"):
+                call_admins_ask(cookiebot, msg, chat_id, language)
+            elif msg['text'].startswith("@everyone"):
+                everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=is_alternate_bot)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name":
                 listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
                 update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=is_alternate_bot)
