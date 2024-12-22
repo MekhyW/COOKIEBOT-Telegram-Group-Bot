@@ -90,9 +90,10 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
     for resulting_message in result:
         send_message(cookiebot, chat_id, resulting_message, msg_to_reply=msg, parse_mode='HTML')
     chat = cookiebot.getChat(chat_id)
+    myself = cookiebot.getMe()
     for username in usernames_list:
         user = get_request_backend(f"users?username={username}")
-        if len(user) != 1:
+        if len(user) != 1 or user[0]['id'] == myself['id']:
             continue
         try:
             send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
@@ -138,9 +139,10 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
     response += f"\n{caller} chamando todos os administradores!"
     send_message(cookiebot, chat_id, response, language=language, parse_mode='HTML')
     chat = cookiebot.getChat(chat_id)
+    myself = cookiebot.getMe()
     for username in listaadmins:
         user = get_request_backend(f"users?username={username}")
-        if len(user) != 1:
+        if len(user) != 1 or user[0]['id'] == myself['id']:
             continue
         try:
             send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
