@@ -1,4 +1,5 @@
 import random
+import time
 from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, put_request_backend, delete_request_backend, ownerID
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_members = {}
@@ -70,19 +71,14 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         send_message(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo!\n<blockquote>Se está falando como canal, entre e use o comando como user</blockquote>", msg, language)
         return
     members = get_members_chat(chat_id)
-    if len(members) < 2:
+    top_message_index = 0
+    usernames_list = [member['user'] for member in members if 'user' in member]
+    usernames_list.extend(admin for admin in listaadmins if admin not in usernames_list)
+    if len(usernames_list) < 2:
         send_message(cookiebot, chat_id, "Ainda não vi nenhum membro no chat para chamar!\nCom o tempo, o bot vai reconhecer os membros e permitir chamar todos.", msg, language)
         return
     react_to_message(msg, '🫡', is_alternate_bot=is_alternate_bot)
-    usernames_list = []
-    result = [f"Number of known users: {len(members)}\n"]
-    top_message_index = 0
-    for member in members:
-        if 'user' in member:
-            usernames_list.append(member['user'])
-    for admin in listaadmins:
-        if admin not in usernames_list:
-            usernames_list.append(admin)
+    result = [f"Number of known users: {len(usernames_list)}\n"]
     for username in usernames_list:
         try:
             if len(result[top_message_index]) + len(username) + 2 > 4096:
@@ -93,6 +89,16 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         result[top_message_index] += f"@{username} "
     for resulting_message in result:
         send_message(cookiebot, chat_id, resulting_message, msg_to_reply=msg, parse_mode='HTML')
+    chat = cookiebot.getChat(chat_id)
+    for username in usernames_list:
+        try:
+            user = get_request_backend(f"users", {"username": username})
+            send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{msg['message_id']}")],
+            ]), language=language)
+            time.sleep(0.1)
+        except Exception as e:
+            print(e)
 
 def report_ask(cookiebot, msg, chat_id, targetid, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -125,14 +131,20 @@ def call_admins_ask(cookiebot, msg, chat_id, language):
 
 def call_admins(cookiebot, msg, chat_id, listaadmins, language):
     send_chat_action(cookiebot, chat_id, 'typing')
-    response = ""
-    for admin in listaadmins:
-        response += f"@{admin} "
-    if 'username' in msg['from']:
-        response += f"\n{msg['from']['username']} chamando todos os administradores!"
-    else:
-        response += f"\n{msg['from']['first_name']} chamando todos os administradores!"
+    response = " ".join(f"@{admin}" for admin in listaadmins)
+    caller = msg['from'].get('username', msg['from']['first_name'])
+    response += f"\n{caller} chamando todos os administradores!"
     send_message(cookiebot, chat_id, response, language=language, parse_mode='HTML')
+    chat = cookiebot.getChat(chat_id)
+    for username in listaadmins:
+        try:
+            user = get_request_backend(f"users", {"username": username})
+            send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+                [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{msg['message_id']}")],
+            ]), language=language)
+            time.sleep(0.1)
+        except Exception as e:
+            print(e)
 
 def who(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
