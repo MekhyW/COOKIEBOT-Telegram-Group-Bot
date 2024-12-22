@@ -117,10 +117,8 @@ def get_media_content(cookiebot, msg, media_type, is_alternate_bot=0, downloadfi
 def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
     try:
         send_chat_action(cookiebot, chat_id, 'typing')
-        if language == 'eng':
-            text = GoogleTranslator(source='auto', target='en').translate(text)
-        elif language == 'es':
-            text = GoogleTranslator(source='auto', target='es').translate(text)
+        if language in ['eng', 'es']:
+            text = GoogleTranslator(source='auto', target=language[:2]).translate(text)
         if msg_to_reply:
             reply_id = msg_to_reply['message_id']
             try:
