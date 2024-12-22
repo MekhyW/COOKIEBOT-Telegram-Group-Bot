@@ -327,8 +327,9 @@ def thread_function_query(msg):
         elif query_data.startswith('ADM'):
             yesno = query_data.split()[1]
             language = query_data.split()[2]
+            message_id = query_data.split()[3]
             if yesno == 'Yes':
-                call_admins(cookiebot, msg, chat_id, listaadmins, language)
+                call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id)
             else:
                 send_message(cookiebot, chat_id, "Comando cancelado", language=language)
             delete_message(cookiebot, telepot.message_identifier(msg['message']))

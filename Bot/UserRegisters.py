@@ -91,8 +91,10 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         send_message(cookiebot, chat_id, resulting_message, msg_to_reply=msg, parse_mode='HTML')
     chat = cookiebot.getChat(chat_id)
     for username in usernames_list:
+        user = get_request_backend(f"users", {"username": username})
+        if len(user) != 1:
+            continue
         try:
-            user = get_request_backend(f"users", {"username": username})
             send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{msg['message_id']}")],
             ]), language=language)
@@ -124,12 +126,12 @@ def call_admins_ask(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     send_message(cookiebot, chat_id, "Confirma chamar os administradores?", msg_to_reply=msg, language=language, 
     reply_markup = InlineKeyboardMarkup (inline_keyboard = [
-            [InlineKeyboardButton(text="✔️", callback_data=f"ADM Yes {language}")], 
-            [InlineKeyboardButton(text="❌", callback_data=f"ADM No {language}")]
+            [InlineKeyboardButton(text="✔️", callback_data=f"ADM Yes {language} {msg['message_id']}")], 
+            [InlineKeyboardButton(text="❌", callback_data=f"ADM No {language} {msg['message_id']}")]
         ]
     ))
 
-def call_admins(cookiebot, msg, chat_id, listaadmins, language):
+def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
     send_chat_action(cookiebot, chat_id, 'typing')
     response = " ".join(f"@{admin}" for admin in listaadmins)
     caller = msg['from'].get('username', msg['from']['first_name'])
@@ -137,10 +139,12 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language):
     send_message(cookiebot, chat_id, response, language=language, parse_mode='HTML')
     chat = cookiebot.getChat(chat_id)
     for username in listaadmins:
+        user = get_request_backend(f"users", {"username": username})
+        if len(user) != 1:
+            continue
         try:
-            user = get_request_backend(f"users", {"username": username})
             send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{msg['message_id']}")],
+                [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{message_id}")],
             ]), language=language)
             time.sleep(0.1)
         except Exception as e:
