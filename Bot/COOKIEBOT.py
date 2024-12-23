@@ -122,7 +122,7 @@ def thread_function(msg):
                     identify_music(cookiebot, msg, chat_id, audio, language)
                 if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['id'] == myself['id']:
                     msg['text'] = speech_to_text(audio)
-                    send_message(cookiebot, chat_id, conversational_ai(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
+                    send_message(cookiebot, chat_id, conversational_ai(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg, language=language)
         elif content_type == "audio":
             pass
         elif content_type in ["photo", "video", "document", "animation"] and all(key in msg for key in ['sender_chat', 'forward_from_chat', 'from', 'caption']) and msg['from']['first_name'] == 'Telegram' and publisherask:
@@ -263,7 +263,7 @@ def thread_function(msg):
                 if 'from' in msg:
                     decrease_remaining_responses_ai(msg['from']['id'])
                 if 'from' not in msg or remaining_responses_ai[msg['from']['id']] > 0:
-                    send_message(cookiebot, chat_id, conversational_ai(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg)
+                    send_message(cookiebot, chat_id, conversational_ai(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg, language=language)
             else:
                 if 'from' in msg:
                     increase_remaining_responses_ai(msg['from']['id'])

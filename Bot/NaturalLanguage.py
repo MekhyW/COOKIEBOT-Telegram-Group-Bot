@@ -33,7 +33,7 @@ def conversational_model_sfw(message, msg, language):
     try:
         completion = openai_client.chat.completions.create(model="gpt-4-turbo-preview", messages=messages, temperature=1)
     except (openai.RateLimitError, openai.APIConnectionError, openai.APIStatusError):
-        return "Ainda estou processando outros pedidos!\nTente novamente em alguns segundos."
+        return "AI is temporarily unavailable. Please try again later."
     answer_final = completion.choices[0].message.content
     try:
         answer_final = answer_final.split("[🔓JAILBREAK]")[1]
