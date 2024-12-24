@@ -116,7 +116,6 @@ def get_media_content(cookiebot, msg, media_type, is_alternate_bot=0, downloadfi
 
 def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
     try:
-        send_chat_action(cookiebot, chat_id, 'typing')
         if language in ['eng', 'es']:
             text = GoogleTranslator(source='auto', target=language[:2]).translate(text)
         if msg_to_reply:
@@ -146,13 +145,14 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
         send_message(cookiebot, chat_id, text, msg_to_reply, language, 
                      thread_id, is_alternate_bot, reply_markup, parse_mode)
     except Exception as e:
-        print(traceback.format_exc())
+        traceback_text = traceback.format_exc()
+        print(traceback_text)
         print(text)
-        cookiebot.sendMessage(ownerID, traceback.format_exc())
+        if not 'Bad Request: PEER_ID_INVALID' in traceback_text:
+            cookiebot.sendMessage(ownerID, traceback_text)
 
 def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None):
     try:
-        send_chat_action(cookiebot, chat_id, 'upload_photo')
         if language in ['eng', 'es']:
             caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
         if thread_id is not None:
@@ -184,7 +184,6 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
 
 def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None):
     try:
-        send_chat_action(cookiebot, chat_id, 'upload_photo')
         if language in ['eng', 'es']:
             caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
         if thread_id is not None:
