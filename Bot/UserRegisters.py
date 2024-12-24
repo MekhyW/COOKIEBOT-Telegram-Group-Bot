@@ -98,6 +98,7 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
             continue
         if int(user[0]['id']) == int(myself['id']):
             continue
+        cookiebot.forwardMessage(ownerID, chat_id, msg['message_id']) #will error if original message is deleted
         try:
             send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{msg['message_id']}")],
@@ -147,6 +148,7 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
         user = get_request_backend(f"users?username={username}")
         if len(user) != 1 or int(user[0]['id']) == int(myself['id']):
             continue
+        cookiebot.forwardMessage(ownerID, chat_id, message_id) #will error if original message is deleted
         try:
             send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{message_id}")],
