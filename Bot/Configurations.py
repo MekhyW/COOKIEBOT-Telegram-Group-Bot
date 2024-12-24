@@ -61,9 +61,8 @@ def set_language_commands(cookiebot, chat_id, chat_to_alter, language, is_altern
             if lang != language:
                 set_bot_commands(cookiebot, comandos, chat_to_alter, is_alternate_bot=is_alternate_bot, language=lang)
         set_bot_commands(cookiebot, comandos, chat_to_alter, is_alternate_bot=is_alternate_bot, language=language)
-        if silent:
-            print(f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}")
-        else:
+        print(f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}")
+        if not silent:
             send_message(cookiebot, chat_id, f"Comandos no chat com ID <b>{chat_to_alter}</b> alterados para o idioma <b>{language}</b>", language=language)
 
 def set_private_commands(cookiebot, chat_id, is_alternate_bot=0):
@@ -101,10 +100,6 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
     if captchatimespan < 30:
         captchatimespan = abs(captchatimespan)*60
     cache_configurations[chat_id] = [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
-    try:
-        set_language_commands(cookiebot, chat_id, chat_id, language, is_alternate_bot=is_alternate_bot, silent=True)
-    except Exception as e:
-        print(e)
     return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
 
 def configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, language):
