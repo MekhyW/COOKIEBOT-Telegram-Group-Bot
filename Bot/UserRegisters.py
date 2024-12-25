@@ -96,11 +96,9 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         usernames_list.remove(myself['username'])
     for username in usernames_list:
         user = get_request_backend(f"users?username={username}")
-        if len(user) != 1:
-            delete_request_backend(f"registers/{chat_id}/users", {"user": username})
-            continue
         try:
-            cookiebot.getChatMember(chat_id, int(user[0]['id']))
+            if len(user) != 1 or cookiebot.getChatMember(chat_id, int(user[0]['id']))['status'] in ['left', 'kicked']:
+                raise Exception
         except:
             delete_request_backend(f"registers/{chat_id}/users", {"user": username})
             continue
