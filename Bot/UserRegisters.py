@@ -78,7 +78,7 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         send_message(cookiebot, chat_id, "Ainda não vi nenhum membro no chat para chamar!\nCom o tempo, o bot vai reconhecer os membros e permitir chamar todos.", msg, language)
         return
     react_to_message(msg, '🫡', is_alternate_bot=is_alternate_bot)
-    result = [f"Number of known users: {len(usernames_list)}\n"]
+    result = [f"Number of known users: {min(len(usernames_list), cookiebot.getChatMembersCount(chat_id))}\n"]
     for username in usernames_list:
         try:
             if len(result[top_message_index]) + len(username) + 2 > 4096:
@@ -91,14 +91,22 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         send_message(cookiebot, chat_id, resulting_message, msg_to_reply=msg, parse_mode='HTML')
     chat = cookiebot.getChat(chat_id)
     myself = cookiebot.getMe()
+    notification_count = 0
+    if myself['username'] in usernames_list:
+        usernames_list.remove(myself['username'])
     for username in usernames_list:
         user = get_request_backend(f"users?username={username}")
         if len(user) != 1:
             delete_request_backend(f"registers/{chat_id}/users", {"user": username})
             continue
-        if int(user[0]['id']) == int(myself['id']):
+        try:
+            cookiebot.getChatMember(chat_id, int(user[0]['id']))
+        except:
+            delete_request_backend(f"registers/{chat_id}/users", {"user": username})
             continue
-        cookiebot.forwardMessage(ownerID, chat_id, msg['message_id']) #will error if original message is deleted
+        notification_count += 1
+        if notification_count % 10 == 0:
+            cookiebot.forwardMessage(ownerID, chat_id, msg['message_id']) #will error if original message is deleted
         try:
             send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{msg['message_id']}")],
@@ -144,11 +152,14 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
     send_message(cookiebot, chat_id, response, language=language, parse_mode='HTML')
     chat = cookiebot.getChat(chat_id)
     myself = cookiebot.getMe()
+    notification_count = 0
     for username in listaadmins:
         user = get_request_backend(f"users?username={username}")
         if len(user) != 1 or int(user[0]['id']) == int(myself['id']):
             continue
-        cookiebot.forwardMessage(ownerID, chat_id, message_id) #will error if original message is deleted
+        notification_count += 1
+        if notification_count % 10 == 0:
+            cookiebot.forwardMessage(ownerID, chat_id, message_id) #will error if original message is deleted
         try:
             send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{message_id}")],
