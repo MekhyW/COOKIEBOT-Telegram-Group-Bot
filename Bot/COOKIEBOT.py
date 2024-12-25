@@ -332,11 +332,11 @@ def thread_function_query(msg):
             yesno = query_data.split()[1]
             language = query_data.split()[2]
             message_id = query_data.split()[3]
+            delete_message(cookiebot, telepot.message_identifier(msg['message']))
             if yesno == 'Yes':
                 call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id)
             else:
                 send_message(cookiebot, chat_id, "Comando cancelado", language=language)
-            delete_message(cookiebot, telepot.message_identifier(msg['message']))
         elif query_data.startswith('RULES'):
             rules_message(cookiebot, msg['message'], msg['message']['chat']['id'], query_data.split()[1])
             cookiebot.editMessageReplyMarkup((msg['message']['chat']['id'], msg['message']['message_id']), reply_markup=None)
