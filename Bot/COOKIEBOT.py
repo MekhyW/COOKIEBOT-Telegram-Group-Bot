@@ -393,7 +393,9 @@ def scheduler_check():
         timer_scheduler_check.start()
 
 if __name__ == '__main__':
-    if not is_alternate_bot:
+    if is_alternate_bot:
+        MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
+    else:
         scheduler_check()
-    MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_as_thread()
-    run_api_server()
+        MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_as_thread()
+        run_api_server()
