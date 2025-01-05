@@ -15,6 +15,7 @@ from NaturalLanguage import *
 from Publisher import *
 from SocialContent import *
 from UserRegisters import *
+from Server import *
 
 if len(sys.argv) < 2:
     print("Usage: python COOKIEBOT.py [is_alternate_bot (int)]")
@@ -394,4 +395,5 @@ def scheduler_check():
 if __name__ == '__main__':
     if not is_alternate_bot:
         scheduler_check()
-    MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_forever()
+    MessageLoop(cookiebot, {'chat': handle, 'callback_query': handle_query}).run_as_thread()
+    run_api_server()

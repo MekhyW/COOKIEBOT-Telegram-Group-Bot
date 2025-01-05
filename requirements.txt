@@ -16,4 +16,6 @@ captcha
 price-parser
 spamwatch
 openai
+jwcrypto
+flask
 Pylint
