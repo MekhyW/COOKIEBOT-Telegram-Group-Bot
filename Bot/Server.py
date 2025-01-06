@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 from jwcrypto import jwk
 import psutil
+import gunicorn.app.base
 
 app = Flask("Cookiebot")
 
@@ -28,8 +29,28 @@ def openid_configuration():
         'id_token_signing_alg_values_supported': ['RS256']
     })
 
+class GunicornApplication(gunicorn.app.base.BaseApplication):
+    def __init__(self, app, options=None):
+        self.options = options or {}
+        self.application = app
+        super().__init__()
+
+    def load_config(self):
+        for key, value in self.options.items():
+            self.cfg.set(key.lower(), value)
+
+    def load(self):
+        return self.application
+
 def run_api_server(debug=False):
-    app.run(debug=debug, host="0.0.0.0", port=5000)
+    options = {
+        'bind': '0.0.0.0:5000',
+        'workers': 2,
+        'worker_class': 'sync',
+        'timeout': 30,
+        'reload': debug
+    }
+    GunicornApplication(app, options).run()
 
 def kill_api_server():
     for proc in psutil.process_iter():

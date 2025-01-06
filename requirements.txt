@@ -18,4 +18,5 @@ spamwatch
 openai
 jwcrypto
 flask
+gunicorn
 Pylint
