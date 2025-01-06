@@ -63,8 +63,10 @@ def thread_function(msg):
             elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
                 privacy_statement(cookiebot, msg, chat_id, 'eng')
             elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == ownerID:
+                kill_api_server()
                 os._exit(0)
             elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == ownerID:
+                kill_api_server()
                 os.execl(sys.executable, sys.executable, *sys.argv)
             elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
                 leave_and_blacklist(cookiebot, msg['text'].split()[1])

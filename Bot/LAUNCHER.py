@@ -2,6 +2,7 @@ import subprocess
 import sys
 import time
 import psutil
+from Server import kill_api_server
 
 CPU_THRESHOLD = 75  # in percent
 MEMORY_THRESHOLD = 75  # in percent
@@ -26,6 +27,7 @@ def run_and_monitor(script_name, *args):
         print(f"Started {script_name} with PID {process.pid}")
         while process.poll() is None:  # Process is still running
             if monitor_resources(process):
+                kill_api_server()
                 process.terminate()
                 process.wait()
                 print(f"{script_name} was restarted due to high resource usage.")
