@@ -2,8 +2,6 @@ from flask import Flask, jsonify, request
 from jwcrypto import jwk
 import psutil
 
-PORT = 5000
-HOST = "0.0.0.0"
 app = Flask("Cookiebot")
 
 key = jwk.JWK.generate(kty='RSA', size=2048, alg='RS256', use='sig', kid='cookiebot-2025')
@@ -31,13 +29,13 @@ def openid_configuration():
     })
 
 def run_api_server(debug=False):
-    app.run(debug=debug, host=HOST, port=PORT)
+    app.run(debug=debug, host="0.0.0.0", port=5000)
 
 def kill_api_server():
     for proc in psutil.process_iter():
         try:
             for conn in proc.net_connections():
-                if conn.laddr.port == PORT:
+                if conn.laddr.port == 5000:
                     proc.kill()
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             pass
