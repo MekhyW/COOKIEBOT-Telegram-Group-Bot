@@ -3,7 +3,7 @@ from jwcrypto import jwk
 import psutil
 
 PORT = 5000
-HOST = "127.0.0.1"
+HOST = "0.0.0.0"
 app = Flask("Cookiebot")
 
 key = jwk.JWK.generate(kty='RSA', size=2048, alg='RS256', use='sig', kid='cookiebot-2025')
