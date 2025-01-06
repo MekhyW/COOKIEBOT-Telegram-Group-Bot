@@ -281,10 +281,11 @@ def check_captcha(cookiebot, msg, chat_id, captchatimespan, language):
                     reason = "exceder o limite de tentativas para resolver o captcha" if attempts <= 0 else "não solucionar o captcha a tempo"
                     try:
                         cookiebot.kickChatMember(chat_id, user)
+                        send_message(cookiebot, chat_id, f"Kickei o usuário com id <b>{user}</b> por <b>{reason}</b>.\n<blockquote>Se isso foi um erro, peça para um staff adicioná-lo de volta</blockquote>", language=language)
+                        cookiebot.unbanChatMember(chat_id, user)
                     except Exception as e:
                         print(e)
-                    send_message(cookiebot, chat, f"Kickei o usuário com id <b>{user}</b> por <b>{reason}</b>.\n<blockquote>Se isso foi um erro, peça para um staff adicioná-lo de volta</blockquote>", language=language)
-                    cookiebot.unbanChatMember(chat_id, user)
+                        send_message(cookiebot, chat_id, f"Erro ao kickar o usuário com id <b>{user}</b> por <b>{reason}</b>.\n<blockquote>Usuário não está mais no chat, ou não tenho permissão para kickar</blockquote>", language=language)
                     delete_message(cookiebot, (str(chat), str(captcha_id)))
                     recently_kicked_users[(chat_id, user)] = time.time()
                 elif chat == chat_id and user == msg['from']['id']:
