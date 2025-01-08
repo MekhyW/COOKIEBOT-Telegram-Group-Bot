@@ -23,12 +23,12 @@ def conversational_model_sfw(message, msg, language):
         messages.append({"role": "system", "content": answers_list[i], "name": "CookieBot"})
     if 'reply_to_message' in msg and msg['reply_to_message']['text'] not in answers_list:
         messages.append({"role": "system", "content": msg['reply_to_message']['text']})
-    if language == 'eng':
-        message += '\n\nTry to reduce the answer a lot.'
-    elif language == 'pt':
-        message += '\n\nTente reduzir bastante a resposta.'
-    elif language == 'es':
-        message += '\n\nIntenta reducir mucho la respuesta.'
+    reduction_msgs = {
+        'eng': 'Try to reduce the answer a lot.',
+        'pt': 'Tente reduzir bastante a resposta.',
+        'es': 'Intenta reducir mucho la respuesta.'
+    }
+    message += f'\n\n{reduction_msgs.get(language, "")}'
     messages.append({"role": "user", "content": message})
     try:
         completion = openai_client.chat.completions.create(model="gpt-4o-mini", messages=messages, temperature=1)
@@ -40,9 +40,12 @@ def conversational_model_sfw(message, msg, language):
     except IndexError:
         pass
     answer_final = re.sub(r'\b(' + '|'.join(re.escape(key) for key in replacements.keys()) + r')\b', replace, answer_final)
-    answer_final = answer_final.strip().capitalize()
+    answer_final = answer_final.strip()
+    if (answer_final.startswith('"') or answer_final.startswith("'")) and (answer_final.endswith('"') or answer_final.endswith("'")):
+        answer_final = answer_final[1:-1]
     if answer_final[-1] == ".":
         answer_final = answer_final[:-1]
+    answer_final = answer_final.capitalize()
     questions_list.pop(0)
     answers_list.pop(0)
     questions_list.append(message)
