@@ -12,7 +12,7 @@ from telepot.exception import TelegramError
 from deep_translator import GoogleTranslator
 from google.cloud import storage
 load_dotenv('../.env')
-login_backend, password_backend, serverIP = os.getenv('backend_login'), os.getenv('backend_password'), os.getenv('backend_serverIP')
+login_backend, password_backend = os.getenv('backend_login'), os.getenv('backend_password')
 googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token')
 cookiebotTOKEN, bombotTOKEN, pawstralbotTOKEN, tarinbotTOKEN, connectbotTOKEN = os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN'), os.getenv('pawstralbotTOKEN'), os.getenv('tarinbotTOKEN'), os.getenv('connectbotTOKEN')
 ownerID = int(os.getenv('ownerID'))
@@ -36,7 +36,7 @@ def get_bot_token(is_alternate_bot):
             return None
 
 def get_request_backend(route, params=None):
-    response = requests.get(f'{serverIP}/{route}', json=params,
+    response = requests.get(f'https://backend.cookiebotfur.net/{route}', json=params,
                             auth = HTTPBasicAuth(login_backend, password_backend),
                             verify=False, timeout=60)
     try:
@@ -49,7 +49,7 @@ def get_request_backend(route, params=None):
         return ''
 
 def post_request_backend(route, params=None):
-    response = requests.post(f'{serverIP}/{route}', json=params,
+    response = requests.post(f'https://backend.cookiebotfur.net/{route}', json=params,
                              auth = HTTPBasicAuth(login_backend, password_backend),
                              verify=False, timeout=60)
     try:
@@ -63,7 +63,7 @@ def post_request_backend(route, params=None):
         return ''
 
 def put_request_backend(route, params=None):
-    response = requests.put(f'{serverIP}/{route}', json=params,
+    response = requests.put(f'https://backend.cookiebotfur.net/{route}', json=params,
                             auth = HTTPBasicAuth(login_backend, password_backend),
                             verify=False, timeout=60)
     try:
@@ -77,7 +77,7 @@ def put_request_backend(route, params=None):
         return ''
 
 def delete_request_backend(route, params=None):
-    response = requests.delete(f'{serverIP}/{route}', json=params,
+    response = requests.delete(f'https://backend.cookiebotfur.net/{route}', json=params,
                                auth = HTTPBasicAuth(login_backend, password_backend),
                                verify=False, timeout=60)
     try:

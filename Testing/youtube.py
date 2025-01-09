@@ -1,7 +1,10 @@
 import random
 import googleapiclient.discovery
+from dotenv import load_dotenv
+import os
 
-API_KEY = ''
+load_dotenv()
+API_KEY = os.getenv('googleAPIkey')
 
 def youtube_search(query, max_results=50):
     youtube = googleapiclient.discovery.build("youtube", "v3", developerKey=API_KEY)
