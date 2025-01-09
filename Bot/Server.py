@@ -44,7 +44,7 @@ class GunicornApplication(gunicorn.app.base.BaseApplication):
 
 def run_api_server(debug=False):
     options = {
-        'bind': '0.0.0.0:443',
+        'bind': '0.0.0.0:8080',
         'workers': 2,
         'worker_class': 'sync',
         'timeout': 30,
@@ -56,7 +56,7 @@ def kill_api_server():
     for proc in psutil.process_iter():
         try:
             for conn in proc.net_connections():
-                if conn.laddr.port == 443:
+                if conn.laddr.port == 8080:
                     proc.kill()
         except (psutil.NoSuchProcess, psutil.AccessDenied):
             pass
