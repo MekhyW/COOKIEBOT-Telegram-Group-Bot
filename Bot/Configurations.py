@@ -20,7 +20,6 @@ def get_group_info(cookiebot, chat_id, adminobjects, title, photo_big_id, is_alt
                 file.write(requests.get(photo_url).content)
             blob = storage_bucket_public.blob(f"chatpfp/{photo_big_id}")
             blob.upload_from_filename("chatpfp.jpg")
-            os.remove("chatpfp.jpg")
         photo_signed_url = blob.generate_signed_url(datetime.timedelta(days=10), method='GET')
     else:
         photo_signed_url = None
