@@ -132,6 +132,7 @@ def list_groups(cookiebot, chat_id):
                 if not any(chat.startswith(chat_info.split()[0]) for chat in existing_chats):
                     new_chats.append(chat_info)
                 cookiebot.sendMessage(chat_id, chat_info)
+                time.sleep(0.1)
         except Exception:
             print("Group not found: " + group['id'])
             removed_chats.append(group['id'])

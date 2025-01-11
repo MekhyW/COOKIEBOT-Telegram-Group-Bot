@@ -1,31 +1,47 @@
-from universal_funcs import send_message, send_chat_action, react_to_message, delete_message, get_request_backend, put_request_backend, post_request_backend, wait_open, set_bot_commands, leave_and_blacklist, ownerID
+from universal_funcs import get_bot_token, send_message, send_chat_action, react_to_message, delete_message, get_request_backend, put_request_backend, post_request_backend, wait_open, set_bot_commands, leave_and_blacklist, ownerID, storage_bucket_public
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
+import time, datetime
+bloblist_chatpfp = list(storage_bucket_public.list_blobs(prefix="chatpfp"))
 cache_configurations = {}
 cache_admins = {}
 cache_groups = {}
 
-def get_group_info(chat_id, adminobjects):
+def get_group_info(cookiebot, chat_id, adminobjects, title, photo_big_id, is_alternate_bot=0):
     if chat_id in cache_groups:
         return cache_groups[chat_id]
+    if photo_big_id:
+        token = get_bot_token(is_alternate_bot)
+        blob = next((b for b in bloblist_chatpfp if b.name.startswith(photo_big_id)), None)
+        if not blob:
+            photo_info = cookiebot.getFile(photo_big_id)
+            photo_url = f"https://api.telegram.org/file/bot{token}/{photo_info['file_path']}"
+            blob = storage_bucket_public.blob(f"chatpfp/{photo_big_id}")
+            blob.upload_from_filename(photo_url)
+        photo_signed_url = blob.generate_signed_url(datetime.timedelta(days=10), method='GET')
+    else:
+        photo_signed_url = None
     group = get_request_backend(f"groups/{chat_id}")
-    print("GROUP", group)
     if 'error' in group and "Not Found" in group['error']:
-        post_request_backend(f"groups/{chat_id}", {"groupId": chat_id, "adminUsers": []})
-        cache_groups[chat_id] = {"groupId": chat_id, "adminUsers": []}
+        cache_groups[chat_id] = {"groupId": chat_id, "adminUsers": [], "name": title, "imageUrl": photo_signed_url}
+        post_request_backend(f"groups/{chat_id}", cache_groups[chat_id])
         return cache_groups[chat_id]
-    if 'adminUsers' in group and group['adminUsers'] != adminobjects:
+    if ('adminUsers' in group and group['adminUsers'] != adminobjects) or ('name' in group and group['name'] != title) or ('imageUrl' in group and group['imageUrl'] != photo_signed_url):
         group['adminUsers'] = adminobjects
+        group['name'] = title
+        group['imageUrl'] = photo_signed_url
         put_request_backend(f"groups/{chat_id}", group)
     cache_groups[chat_id] = group
     return group
 
-def get_admins(cookiebot, chat_id, ignorecache=False):
+def get_admins(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
     if chat_id in cache_admins and not ignorecache:
         admins = cache_admins[chat_id]
         return admins[0], admins[1], admins[2]
     adminobjects = []
     listaadmins, listaadmins_id, listaadmins_status = [], [], []
+    chatinfo = cookiebot.getChat(chat_id)
+    time.sleep(0.1)
     for admin in cookiebot.getChatAdministrators(chat_id):
         user = admin['user']
         status = admin['status']
@@ -39,7 +55,9 @@ def get_admins(cookiebot, chat_id, ignorecache=False):
             listaadmins.append(username)
         listaadmins_id.append(id)
         listaadmins_status.append(status)
-    get_group_info(chat_id, adminobjects)
+    photo_big_id = chatinfo['photo']['big_file_id'] if 'photo' in chatinfo else None
+    title = chatinfo['title'] if 'title' in chatinfo else None
+    get_group_info(cookiebot, chat_id, adminobjects, title, photo_big_id, is_alternate_bot=is_alternate_bot)
     cache_admins[chat_id] = [listaadmins, listaadmins_id, listaadmins_status]
     return listaadmins, listaadmins_id, listaadmins_status
 

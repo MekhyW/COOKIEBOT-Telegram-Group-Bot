@@ -19,6 +19,7 @@ ownerID = int(os.getenv('ownerID'))
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../cookiebot-bucket-key.json'
 storage_client = storage.Client()
 storage_bucket = storage_client.get_bucket(os.getenv('bucket_name'))
+storage_bucket_public = storage_client.get_bucket(os.getenv('bucket_name_public'))
 
 def get_bot_token(is_alternate_bot):
     match is_alternate_bot:

@@ -80,7 +80,7 @@ def thread_function(msg):
             run_unnatendedthreads()
             return
         thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
-        listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id)
+        listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
         if 'group_chat_created' in msg and msg['group_chat_created']:
             isCreatorBlacklisted = get_request_backend(f"blacklist/{msg['from']['id']}")
@@ -159,7 +159,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
                     privacy_statement(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/reload", "/recarregar")):
-                    get_admins(cookiebot, chat_id, ignorecache=True)
+                    get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     get_config(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     send_message(cookiebot, chat_id, "Memória recarregada com sucesso!", msg, language)
                 elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
@@ -167,10 +167,10 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/divulgar", "/publish", "/publicar")):
                     ask_publisher_command(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
-                    listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
+                    listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith(("/deleteposts", "/apagarposts", "/apagarposts")):
-                    listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
+                    listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     cancel_posts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=is_alternate_bot)
                 elif utilityfunctions and msg['text'].startswith(("/buscarfonte", "/searchsource", "/buscarfuente")):
                     reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
@@ -229,7 +229,7 @@ def thread_function(msg):
                 elif utilityfunctions and msg['text'].startswith("/youtube"):
                     youtube_search(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/configurar", "/configure")):
-                    listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, chat_id, ignorecache=True)
+                    listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, language)
                 elif funfunctions and msg['text'].replace('/', '').replace("@CookieMWbot", '').split()[0] in custom_commands:
                     custom_command(cookiebot, msg, chat_id, language)
@@ -249,10 +249,10 @@ def thread_function(msg):
             elif msg['text'].startswith("@everyone"):
                 everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=is_alternate_bot)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name":
-                listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
+                listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                 update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=is_alternate_bot)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
-                listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True)
+                listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                 update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=is_alternate_bot)
             elif funfunctions and (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and 'from' in msg and msg['reply_to_message']['from']['id'] == myself['id'])) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']):
                 who(cookiebot, msg, chat_id, language)
@@ -294,7 +294,7 @@ def thread_function_query(msg):
         print('Callback Query:', query_id, from_id, query_data)
         try:
             chat_id = msg['message']['reply_to_message']['chat']['id']
-            listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, chat_id)
+            listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
         except Exception:
             try:
                 chat_id = msg['chat']['id']
