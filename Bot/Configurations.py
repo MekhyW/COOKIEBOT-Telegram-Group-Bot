@@ -1,7 +1,7 @@
 from universal_funcs import get_bot_token, send_message, send_chat_action, react_to_message, delete_message, get_request_backend, put_request_backend, post_request_backend, wait_open, set_bot_commands, leave_and_blacklist, ownerID, storage_bucket_public
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
-import time, datetime
+import time, datetime, requests, os
 bloblist_chatpfp = list(storage_bucket_public.list_blobs(prefix="chatpfp"))
 cache_configurations = {}
 cache_admins = {}
@@ -16,8 +16,11 @@ def get_group_info(cookiebot, chat_id, adminobjects, title, photo_big_id, is_alt
         if not blob:
             photo_info = cookiebot.getFile(photo_big_id)
             photo_url = f"https://api.telegram.org/file/bot{token}/{photo_info['file_path']}"
+            with open("chatpfp.jpg", "wb") as file:
+                file.write(requests.get(photo_url).content)
             blob = storage_bucket_public.blob(f"chatpfp/{photo_big_id}")
-            blob.upload_from_filename(photo_url)
+            blob.upload_from_filename("chatpfp.jpg")
+            os.remove("chatpfp.jpg")
         photo_signed_url = blob.generate_signed_url(datetime.timedelta(days=10), method='GET')
     else:
         photo_signed_url = None
