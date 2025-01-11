@@ -6,7 +6,7 @@ Cookiebot is a Telegram bot designed to manage and enhance group interactions. T
 <b>Information Collection and Use</b>
 
   1. <b>Group and User Identification</b>
-    • Cookiebot stores the IDs of groups it is a member of to facilitate its functionalities within these groups.
+    • Cookiebot stores the IDs, titles and profile photos of groups it is a member of to facilitate its functionalities within these groups.
     • The bot stores IDs and usernames of users within groups as they send messages, enabling it to tag users within these chats.
   
   2. <b>Media and Stickers</b>
@@ -20,17 +20,18 @@ Cookiebot is a Telegram bot designed to manage and enhance group interactions. T
 
 <b>Data Storage and Security</b>
 
-  • All stored data is kept in a secure database accessible only via encrypted SSH connections.
-  • Message contexts are temporarily stored in RAM and are not saved to the database. This data is volatile and quickly exchanged, ensuring it is not retained for long-term use.
-  • Cookiebot does not store any message content, personal information, profile photos, or perform any form of authentication.
-  • Error messages are sent directly to the bot creator for debugging purposes but are not stored.
+  • All stored data (except for group profile photos) is kept in a secure database accessible only via encrypted SSH connections.
+  • Group profile photos are stored in a public Google Cloud Storage bucket and are accessible via signed URLs. These URLs however are NOT linked to any information of the group or its admins.
+  • Message contexts are temporarily stored in RAM but are NOT saved to the database. This data is volatile and quickly exchanged, ensuring it is not retained for long-term use.
+  • Cookiebot does NOT store any message content, personal information or personal profile photos.
+  • Error messages are sent directly to the bot creator for debugging purposes but are NOT stored.
 
 <b>User Interactions</b>
 
   • Messages sent privately to the bot are never stored.
   • In group chats, only the username and group ID are stored from group messages. For sticker messages, the sticker ID is stored; otherwise, no other data is stored.
-  • When interacting directly with the bot to change rules, welcome messages, or configurations, the context of these messages is volatile and not stored in the database.
-  • Messages that do not involve the bot will not result in any data storage other than what is specified above.
+  • When interacting directly with the bot to change rules, welcome messages, or configurations, the context of these messages is volatile and NOT stored in the database.
+  • Messages that do not involve the bot will NOT result in any data storage other than what is specified above.
 
 <b>Open Source Code</b>
 Cookiebot's code is open source and available in the following repositories:
