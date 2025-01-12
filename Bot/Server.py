@@ -2,23 +2,70 @@ from flask import Flask, jsonify, request
 from jwcrypto import jwk
 import psutil
 import gunicorn.app.base
+import hashlib
+import hmac
+from typing import Dict
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
 app = Flask("Cookiebot")
 
-key = jwk.JWK.generate(kty='RSA', size=2048, alg='RS256', use='sig', kid='cookiebot-2025')
+keys = []
+
+def validate_telegram_auth(auth_data: Dict[str, str], bot_token: str) -> bool:
+    """
+    Validates the hash of Telegram auth data to ensure its authenticity.
+    :param auth_data: A dictionary containing Telegram authorization data including 'hash'.
+    :param bot_token: The bot token provided by BotFather.
+    :return: True if the provided hash matches the computed hash, False otherwise.
+    """
+    provided_hash = auth_data.pop('hash', None)
+    if not provided_hash:
+        return False
+    data_check_string = "\n".join(f"{key}={auth_data[key]}" for key in sorted(auth_data.keys()))
+    secret_key = hashlib.sha256(bot_token.encode()).digest()
+    calculated_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
+    return provided_hash == calculated_hash
 
 @app.route('/')
 def home():
     return jsonify({'status': 'Bot is online'})
 
-@app.route('/.well-known/jwks.json')
+@app.route('/login', methods=['POST'])
+def generate_key():
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'Missing data'}), 400
+    valid_tokens = [
+        str(os.getenv('cookiebotTOKEN')),
+        str(os.getenv('bombotTOKEN')), 
+        str(os.getenv('pawstralbotTOKEN')),
+        str(os.getenv('tarinbotTOKEN')),
+        str(os.getenv('connectbotTOKEN'))
+    ]
+    for token in valid_tokens:
+        if validate_telegram_auth(data, token):
+            key = jwk.JWK.generate(
+                kty='RSA',
+                size=2048,
+                alg='RS256',
+                use='sig',
+                kid=f'cookiebot-2025',
+                sub=str(data['id'])
+            )
+            keys.append(key)
+            return jsonify({'status': 'Key generated'})
+    return jsonify({'error': 'Invalid bot token'}), 401
+
+@app.route('/.well-known/jwks.json', methods=['GET'])
 def jwks():
     jwks_dict = {
-        'keys': [key.export_public()]
+        'keys': [key.export_public() for key in keys]
     }
     return jsonify(jwks_dict)
 
-@app.route('/.well-known/openid-configuration')
+@app.route('/.well-known/openid-configuration', methods=['GET'])
 def openid_configuration():
     base_url = request.url_root.rstrip('/')
     return jsonify({
