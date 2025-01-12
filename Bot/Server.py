@@ -11,8 +11,6 @@ load_dotenv()
 
 app = Flask("Cookiebot")
 
-keys = []
-
 def validate_telegram_auth(auth_data: Dict[str, str], bot_token: str) -> bool:
     """
     Validates the hash of Telegram auth data to ensure its authenticity.
@@ -54,14 +52,17 @@ def generate_key():
                 kid=f'cookiebot-2025',
                 sub=str(data['id'])
             )
-            keys.append(key)
-            return jsonify({'status': 'Key generated'})
+            token = key.export_private()
+            return jsonify({
+                'status': 'Key generated',
+                'accessToken': token
+            })
     return jsonify({'error': 'Invalid bot token'}), 401
 
 @app.route('/.well-known/jwks.json', methods=['GET'])
 def jwks():
     jwks_dict = {
-        'keys': [key.export_public() for key in keys]
+        'keys': []
     }
     return jsonify(jwks_dict)
 
