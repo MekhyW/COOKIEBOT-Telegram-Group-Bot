@@ -115,6 +115,14 @@ def get_media_content(cookiebot, msg, media_type, is_alternate_bot=0, downloadfi
     except urllib3.exceptions.ProtocolError:
         get_media_content(cookiebot, msg, is_alternate_bot, downloadfile)
 
+def send_error_traceback(cookiebot, msg, traceback_text):
+    if msg:
+        print(msg)
+        cookiebot.sendMessage(ownerID, str(msg))
+    if traceback_text:
+        print(traceback_text)
+        cookiebot.sendMessage(ownerID, traceback_text)
+
 def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
     try:
         if language in ['eng', 'es']:
@@ -142,15 +150,12 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
                 text = text.replace('\\', '').replace('>', '')
                 cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
-        print(traceback.format_exc())
         send_message(cookiebot, chat_id, text, msg_to_reply, language, 
                      thread_id, is_alternate_bot, reply_markup, parse_mode)
-    except Exception as e:
+    except Exception:
         traceback_text = traceback.format_exc()
-        print(traceback_text)
-        print(text)
         if not 'Bad Request: PEER_ID_INVALID' in traceback_text:
-            cookiebot.sendMessage(ownerID, traceback_text)
+            send_error_traceback(cookiebot, None, traceback_text)
 
 def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None):
     try:
@@ -176,10 +181,7 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
         return send_photo(cookiebot, chat_id, photo, caption, 
                           msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
     except TelegramError:
-        try:
-            cookiebot.sendMessage(ownerID, traceback.format_exc())
-        except Exception as e:
-            print(e)
+        send_error_traceback(cookiebot, None, traceback.format_exc())
         return None
     return sentphoto['message_id']
 
@@ -207,10 +209,7 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
         return send_animation(cookiebot, chat_id, animation, caption, 
                               msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
     except TelegramError:
-        try:
-            cookiebot.sendMessage(ownerID, traceback.format_exc())
-        except Exception as e:
-            print(e)
+        send_error_traceback(cookiebot, None, traceback.format_exc())
         return None
     return sentanimation['message_id']
 

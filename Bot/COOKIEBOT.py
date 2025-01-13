@@ -278,15 +278,12 @@ def thread_function(msg):
         run_unnatendedthreads()
     except (TooManyRequestsError, BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError):
         print("Telegram Error")
-    except Exception as e:
-        errormsg = f"{traceback.format_exc()} {e}"
+    except Exception:
+        errormsg = f"{traceback.format_exc()}"
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle(msg)
         else:
-            print(errormsg)
-            send_message(cookiebot, ownerID, traceback.format_exc())
-            send_message(cookiebot, ownerID, str(msg))
-            send_message(cookiebot, ownerID, str(e))
+            send_error_traceback(cookiebot, msg, errormsg)
 
 def thread_function_query(msg):
     try:
@@ -344,14 +341,12 @@ def thread_function_query(msg):
             rules_message(cookiebot, msg['message'], msg['message']['chat']['id'], query_data.split()[1])
             cookiebot.editMessageReplyMarkup((msg['message']['chat']['id'], msg['message']['message_id']), reply_markup=None)
         run_unnatendedthreads()
-    except Exception as e:
-        errormsg = f"{traceback.format_exc()} {e}"
+    except Exception:
+        errormsg = f"{traceback.format_exc()}"
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle_query(msg)
         else:
-            send_message(cookiebot, ownerID, traceback.format_exc())
-            send_message(cookiebot, ownerID, str(msg))
-            send_message(cookiebot, ownerID, str(e))
+            send_error_traceback(cookiebot, msg, errormsg)
 
 def run_unnatendedthreads():
     num_running_threads = threading.active_count()
@@ -374,7 +369,7 @@ def handle(msg):
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except Exception:
-        send_message(cookiebot, ownerID, traceback.format_exc())
+        send_error_traceback(cookiebot, msg, traceback.format_exc())
 
 def handle_query(msg):
     try:
@@ -382,14 +377,14 @@ def handle_query(msg):
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except Exception:
-        send_message(cookiebot, ownerID, traceback.format_exc())
+        send_error_traceback(cookiebot, msg, traceback.format_exc())
 
 def scheduler_check():
     print("SCHEDULER CHECK")
     try:
         scheduler_pull(cookiebot, is_alternate_bot=is_alternate_bot)
     except Exception:
-        send_message(cookiebot, ownerID, traceback.format_exc())
+        send_error_traceback(cookiebot, None, traceback.format_exc())
     finally:
         timer_scheduler_check = threading.Timer(300, scheduler_check)
         timer_scheduler_check.start()
