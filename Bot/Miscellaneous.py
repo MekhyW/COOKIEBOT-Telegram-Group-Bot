@@ -19,6 +19,7 @@ bloblist_trex = list(storage_bucket.list_blobs(prefix="Countdown/Trex"))
 custom_commands = list(dict.fromkeys([folder.name.split('/')[1] for folder in storage_bucket.list_blobs(prefix="Custom/")]))
 print("Custom commands: " + str(custom_commands))
 NEW_CHAT_LINK = "https://t.me/CookieMWbot?startgroup=new"
+WEBSITE_LINK = "https://cookiebotfur.net"
 TEST_CHAT_LINK = "https://t.me/+mX6W3tGXPew2OTIx"
 UPDATES_CHANNEL_LINK = "https://t.me/cookiebotupdates"
 NUMBER_CHATS = 876
@@ -67,27 +68,18 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
     additional_info_en = bot.get('additional_info_en', '')
     commands = bot.get('commands', '')
     commands_en = bot.get('commands_en', '')
-    if bot == bot_identities['default']:
-        message = (f"*Olá, eu sou o {name}!*\n\n{description}\n\n{additional_info}\n"
-                   f"{commands}\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW") \
-            if is_portuguese else \
-            (f"*Hello, I'm {name}!* \n\n{description}\n\n{additional_info_en}\n"
-             f"{commands_en}\n\nIf you have any questions or want something added, send a message to @MekhyW")
-        reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="Adicionar a um Grupo 👋" if is_portuguese else "Add me to a Group 👋", url=NEW_CHAT_LINK)],
-            [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=POSTMAIL_CHAT_LINK)],
-            [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=UPDATES_CHANNEL_LINK)],
-            [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=TEST_CHAT_LINK)]
-        ])
-    else:
-        message = f"*Olá, eu sou o {name}!*\n{description}\n\nSe tiver alguma dúvida ou quiser a lista completa de comandos, mande uma mensagem para @MekhyW" \
-            if is_portuguese else \
-            f"*Hello, I'm {name}!*\n{description}\n\nIf you have any questions or want the complete list of commands, send a message to @MekhyW"
-        reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=POSTMAIL_CHAT_LINK)],
-            [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=UPDATES_CHANNEL_LINK)],
-            [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=TEST_CHAT_LINK)]
-        ])
+    message = (f"*Olá, eu sou o {name}!*\n\n{description}\n\n{additional_info}\n"
+                f"{commands}\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW") \
+        if is_portuguese else \
+        (f"*Hello, I'm {name}!* \n\n{description}\n\n{additional_info_en}\n"
+            f"{commands_en}\n\nIf you have any questions or want something added, send a message to @MekhyW")
+    reply_markup = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Adicionar a um Grupo 👋" if is_portuguese else "Add me to a Group 👋", url=NEW_CHAT_LINK)],
+        [InlineKeyboardButton(text="Website / Painel de Controle 🌐" if is_portuguese else "Website / Control Panel 🌐", url=WEBSITE_LINK)],
+        [InlineKeyboardButton(text="Mural de Divulgações 📬" if is_portuguese else "Shared Posts 📬", url=POSTMAIL_CHAT_LINK)],
+        [InlineKeyboardButton(text="Canal de Atualizações 📢" if is_portuguese else "Updates Channel 📢", url=UPDATES_CHANNEL_LINK)],
+        [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=TEST_CHAT_LINK)]
+    ])
     send_message(cookiebot, chat_id, message, reply_markup=reply_markup)
 
 def privacy_statement(cookiebot, msg, chat_id, language):
