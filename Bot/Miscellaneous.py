@@ -21,7 +21,7 @@ print("Custom commands: " + str(custom_commands))
 NEW_CHAT_LINK = "https://t.me/CookieMWbot?startgroup=new"
 TEST_CHAT_LINK = "https://t.me/+mX6W3tGXPew2OTIx"
 UPDATES_CHANNEL_LINK = "https://t.me/cookiebotupdates"
-NUMBER_CHATS = 873
+NUMBER_CHATS = 876
 
 def decapitalize(s, upper_rest = False):
     return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])

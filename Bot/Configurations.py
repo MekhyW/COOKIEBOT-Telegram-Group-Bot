@@ -2,27 +2,40 @@ from universal_funcs import get_bot_token, send_message, send_chat_action, react
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import time, datetime, requests, os
+from threading import Semaphore
+
 bloblist_chatpfp = list(storage_bucket_public.list_blobs(prefix="chatpfp"))
 cache_configurations = {}
 cache_admins = {}
 cache_groups = {}
+storage_semaphore = Semaphore(1)
 
 def get_group_info(cookiebot, chat_id, adminobjects, title, photo_big_id, is_alternate_bot=0):
     if chat_id in cache_groups:
         return cache_groups[chat_id]
+    photo_signed_url = None
     if photo_big_id:
         token = get_bot_token(is_alternate_bot)
         blob = next((b for b in bloblist_chatpfp if b.name.startswith(photo_big_id)), None)
         if not blob:
-            photo_info = cookiebot.getFile(photo_big_id)
-            photo_url = f"https://api.telegram.org/file/bot{token}/{photo_info['file_path']}"
-            with open("chatpfp.jpg", "wb") as file:
-                file.write(requests.get(photo_url).content)
-            blob = storage_bucket_public.blob(f"chatpfp/{photo_big_id}")
-            blob.upload_from_filename("chatpfp.jpg")
-        photo_signed_url = blob.generate_signed_url(datetime.timedelta(days=10), method='GET')
-    else:
-        photo_signed_url = None
+            with storage_semaphore:
+                try:
+                    photo_info = cookiebot.getFile(photo_big_id)
+                    photo_url = f"https://api.telegram.org/file/bot{token}/{photo_info['file_path']}"
+                    temp_file = f"chatpfp_{chat_id}.jpg"  # Use unique filename per chat
+                    try:
+                        with open(temp_file, "wb") as file:
+                            file.write(requests.get(photo_url).content)
+                        blob = storage_bucket_public.blob(f"chatpfp/{photo_big_id}")
+                        blob.upload_from_filename(temp_file)
+                    finally:
+                        if os.path.exists(temp_file):
+                            os.remove(temp_file)
+                except Exception as e:
+                    print(f"Error uploading photo for chat {chat_id}: {e}")
+                    pass
+        if blob:
+            photo_signed_url = blob.generate_signed_url(datetime.timedelta(days=10), method='GET')
     group = get_request_backend(f"groups/{chat_id}")
     if 'error' in group and "Not Found" in group['error']:
         cache_groups[chat_id] = {"groupId": chat_id, "adminUsers": [], "name": title, "imageUrl": photo_signed_url}
