@@ -92,9 +92,7 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
 
 def privacy_statement(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
-    with open('Static/privacy.html', 'r', encoding='utf-8') as file:
-        privacy_text = file.read()
-    send_message(cookiebot, chat_id, privacy_text, msg_to_reply=msg, language=language, parse_mode='HTML')
+    send_message(cookiebot, chat_id, "Privacy terms of Cookiebot (and its clones) are available at https://cookiebotfur.net/privacy", msg_to_reply=msg, language=language, parse_mode='HTML')
 
 def is_alive(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
