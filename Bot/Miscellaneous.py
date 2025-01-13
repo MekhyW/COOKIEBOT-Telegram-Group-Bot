@@ -55,10 +55,10 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
             'name': 'CookieBot',
             'description_pt': f"Atualmente estou presente em {number_to_emojis(NUMBER_CHATS)} grupos ativos! Sinta-se livre para me adicionar ao seu :)",
             'description_en': f"I'm currently present in {number_to_emojis(NUMBER_CHATS)} active chats! Feel free to add me to yours :)",
-            'additional_info': "Sou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática.",
-            'additional_info_en': "I'm an AI Conversation, Group Defense, Search, Custom Content and Automated Publication bot.",
-            'commands': "/configurar para alterar minhas configurações (incluindo idioma)\nUse /comandos para ver todas as minhas funcionalidades",
-            'commands_en': "/configurar to change my settings (including language)\nUse /comandos to see all my features"
+            'additional_info': "\n\nSou um bot com IA de Conversação, Defesa de Grupo, Pesquisa, Conteúdo Personalizado e Publicação Automática.",
+            'additional_info_en': "\n\nI'm an AI Conversation, Group Defense, Search, Custom Content and Automated Publication bot.",
+            'commands': "/configurar para alterar minhas configurações (incluindo idioma)\nUse /comandos para ver todas as minhas funcionalidades\n\n",
+            'commands_en': "/configurar to change my settings (including language)\nUse /comandos to see all my features\n\n"
         }
     }
     bot = bot_identities.get(is_alternate_bot, bot_identities['default'])
@@ -68,11 +68,11 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
     additional_info_en = bot.get('additional_info_en', '')
     commands = bot.get('commands', '')
     commands_en = bot.get('commands_en', '')
-    message = (f"*Olá, eu sou o {name}!*\n\n{description}\n\n{additional_info}\n"
-                f"{commands}\n\nSe tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW") \
+    message = (f"*Olá, eu sou o {name}!*\n\n{description}{additional_info}\n"
+                f"{commands}Se tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW") \
         if is_portuguese else \
-        (f"*Hello, I'm {name}!* \n\n{description}\n\n{additional_info_en}\n"
-            f"{commands_en}\n\nIf you have any questions or want something added, send a message to @MekhyW")
+        (f"*Hello, I'm {name}!* \n\n{description}{additional_info_en}\n"
+            f"{commands_en}If you have any questions or want something added, send a message to @MekhyW")
     reply_markup = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Adicionar a um Grupo 👋" if is_portuguese else "Add me to a Group 👋", url=NEW_CHAT_LINK)],
         [InlineKeyboardButton(text="Website / Painel de Controle 🌐" if is_portuguese else "Website / Control Panel 🌐", url=WEBSITE_LINK)],
