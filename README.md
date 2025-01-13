@@ -25,6 +25,16 @@ cd ..
 cd COOKIEBOT-Telegram-Group-Bot
 nano .env # Add your credentials
 nano cookiebot-bucket-key.json # Add your credentials
+cd ..
+```
+
+## Setup nginx for JWT API
+
+```bash
+sudo apt-get install nginx -y
+sudo apt-get install certbot python3-certbot-nginx
+sudo certbot --nginx -d botserver.cookiebotfur.net
+nginx -c COOKIEBOT-Telegram-Group-Bot/nginx.conf
 ```
 
 ## Set timezone

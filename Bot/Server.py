@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from werkzeug.middleware.proxy_fix import ProxyFix
 from jwcrypto import jwk
 import psutil
 import gunicorn.app.base
@@ -10,6 +11,7 @@ import os
 load_dotenv()
 
 app = Flask("Cookiebot")
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 def validate_telegram_auth(auth_data: Dict[str, str], bot_token: str) -> bool:
     """
