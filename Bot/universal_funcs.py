@@ -121,7 +121,10 @@ def send_error_traceback(cookiebot, msg, traceback_text):
         cookiebot.sendMessage(ownerID, str(msg))
     if traceback_text:
         print(traceback_text)
-        cookiebot.sendMessage(ownerID, traceback_text)
+        chunk_size = 4000
+        for i in range(0, len(traceback_text), chunk_size):
+            chunk = traceback_text[i:i + chunk_size]
+            cookiebot.sendMessage(ownerID, chunk)
 
 def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
     try:
