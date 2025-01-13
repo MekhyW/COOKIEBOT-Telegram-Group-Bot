@@ -52,7 +52,8 @@ def generate_key():
                 alg='RS256',
                 use='sig',
                 kid=f'cookiebot-2025',
-                sub=str(data['id'])
+                sub=str(data['id']),
+                iss=request.url_root.rstrip('/')
             )
             token = key.export_private()
             return jsonify({
