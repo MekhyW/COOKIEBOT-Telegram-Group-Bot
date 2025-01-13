@@ -316,7 +316,12 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                                   'Bombom nasceu na Fantástica Fábrica de Doces com intuito de reunir os furries na Brasil FurFest para muita festa e diversão. Aliás, se a festa tiver caipirinhas melhor ainda!',
                                   'Heróis e Vilões travarão uma batalha épica! Mal podemos esperar! Venha participar desta grande festa do furry fandom brasileiro com o hotel inteiro fechado para o evento!',
                                   'Mais de mil participantes! Isso mesmo: MIL! Desde 2024, batemos um recorde histórico para o furry fandom brasileiro, e tudo graças a vocês que vieram com toda a energia e alegria que só a nossa comunidade furry sabe trazer!',
-                                  'Aurora Bloom virá como convidada de honra para a Brasil FurFest 2025, trazendo todo o seu charme e diversão para o evento!'])
+                                  'Aurora Bloom virá como convidada de honra para a Brasil FurFest 2025, trazendo todo o seu charme e diversão para o evento!',
+                                  'O evento utiliza o ConCat, um sistema de gerenciamento de eventos usado em algumas das maiores convenções furry do mundo!',
+                                  'O Hotel Nacional Inn Jaraguá São Paulo é a escolha ideal para quem busca uma experiência no centro histórico de São Paulo ou quer ficar perto dos principais pontos de interesse da capital paulista.',
+                                  'Em 1998, o prédio do Hotel Jaraguá foi parcialmente tombado pelo DHP e Condephaat, protegendo sua fachada, murais e pinturas.',
+                                  'Com mais de 70 anos de existência, o hotel foi inaugurado para o IV Centenário da cidade de São Paulo e se tornou sinônimo de glamour e sofisticação nas décadas de 50 a 70.',
+                                  'O hotel oferece dez categorias diferentes de acomodações, todas equipadas com as comodidades necessárias para garantir uma estadia confortável e sofisticada.'])
         pic = bloblist_bff[random.randint(0, len(bloblist_bff)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
         if -5 <= daysremaining <= 0:
@@ -324,7 +329,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões!</b>\n\n<i>{calltoaction}</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}\n📍 ???\n💻 Ingressos disponíveis no site: reg.brasilfurfest.com.br, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
+            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões!</b>\n\n<i>{calltoaction}</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}\n📍 Hotel Nacional Inn Jaraguá - São Paulo\n💻 Ingressos disponíveis no site: reg.brasilfurfest.com.br, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
     elif msg['text'].lower().startswith('/fursmeet'):
         day, month, year = 15, 11, 2024
         calltoaction = random.choice(['O FurSMeet é uma convenção furry de 3 dias realizada em Santa Maria no Rio grande do Sul.Venha viver novas experiências, fazer amigos e se divertir muito no FurSMeet!',
