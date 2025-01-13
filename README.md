@@ -19,6 +19,16 @@ pip3 install -r requirements.txt --break-system-packages
 cd ..
 ```
 
+## Setup nginx for JWT API
+
+```bash
+sudo apt-get install nginx -y
+sudo apt-get install certbot python3-certbot-nginx -y
+sudo certbot --nginx -d botserver.cookiebotfur.net
+sudo ln -sf /home/YOUR_GMAIL/COOKIEBOT-Telegram-Group-Bot/nginx.conf /etc/nginx/nginx.conf
+sudo systemctl restart nginx
+```
+
 ## Provide credentials
 
 ```bash
@@ -26,15 +36,6 @@ cd COOKIEBOT-Telegram-Group-Bot
 nano .env # Add your credentials
 nano cookiebot-bucket-key.json # Add your credentials
 cd ..
-```
-
-## Setup nginx for JWT API
-
-```bash
-sudo apt-get install nginx -y
-sudo apt-get install certbot python3-certbot-nginx
-sudo certbot --nginx -d botserver.cookiebotfur.net
-nginx -c COOKIEBOT-Telegram-Group-Bot/nginx.conf
 ```
 
 ## Set timezone

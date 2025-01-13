@@ -19,4 +19,5 @@ openai
 jwcrypto
 flask
 gunicorn
+pyopenssl
 Pylint
