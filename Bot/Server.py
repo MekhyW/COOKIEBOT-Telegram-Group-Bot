@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 from jwcrypto import jwk
 import psutil
@@ -12,6 +13,7 @@ load_dotenv()
 
 app = Flask("Cookiebot")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
+cors = CORS(app, resources={r"/login": {"origins": "*"}})
 
 def validate_telegram_auth(auth_data: Dict[str, str], bot_token: str) -> bool:
     """
