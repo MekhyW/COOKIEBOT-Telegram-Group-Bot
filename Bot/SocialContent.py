@@ -151,6 +151,9 @@ def meme(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
     members = get_members_chat(chat_id)
     members_tagged = get_members_tagged(msg)
+    if len(members_tagged) > 5:
+        cookiebot.sendMessage(chat_id, "Não é possível criar memes com mais de 5 membros", msg)
+        return
     caption = ""
     for _ in range(100):
         if 'pt' not in language.lower():
@@ -165,48 +168,45 @@ def meme(cookiebot, msg, chat_id, language):
             break
     for green in contours_green:
         x, y, w, h = cv2.boundingRect(green)
-        for _ in range(100):
-            if len(members_tagged) > 0:
-                chosen_member = random.choice(members_tagged)
-                members_tagged.remove(chosen_member)
-                members = [member for member in members if 'user' not in member or member['user'] != chosen_member]
-            else:
-                try:
-                    chosen_member = random.choice(members)
-                except IndexError:
-                    return meme(cookiebot, msg, chat_id, language)
-                members.remove(chosen_member)
-                if 'user' in chosen_member:
-                    chosen_member = chosen_member['user']
-                else:
-                    continue
-            try:
-                url = f"https://telegram.me/{chosen_member}"
-            except IndexError:
+        chosen_member = None
+        profile_image = None
+        while members_tagged and not profile_image:
+            chosen_member = random.choice(members_tagged)
+            members_tagged.remove(chosen_member)
+            members = [m for m in members if 'user' not in m or m['user'] != chosen_member]
+            profile_image = get_profile_image(chosen_member)
+        while members and not profile_image:
+            member = random.choice(members)
+            members.remove(member)
+            if 'user' not in member:
                 continue
-            req = urllib.request.Request(url, headers={'User-Agent' : "Magic Browser"})
-            html = urllib.request.urlopen(req)
-            soup = BeautifulSoup(html, "html.parser")
-            images = list(soup.findAll('img'))
-            if len(images) > 0:
-                break
-        resp = urllib.request.urlopen(images[0]['src'])
-        image = np.asarray(bytearray(resp.read()), dtype="uint8")
-        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+            chosen_member = member['user']
+            profile_image = get_profile_image(chosen_member)
+        if not profile_image:
+            cookiebot.sendMessage(chat_id, "Não consegui montar o meme, tente novamente mais tarde", msg)
+            return
+        image = cv2.imdecode(np.asarray(bytearray(profile_image.read()), dtype="uint8"), cv2.IMREAD_COLOR)
         image = cv2.resize(image, (w, h), interpolation=cv2.INTER_NEAREST)
         mask_green_copy = mask_green[y:y+h, x:x+w]
-        for i in range(y, y+h):
-            for j in range(x, x+w):
-                if mask_green_copy[i-y, j-x] == 255:
-                    template_img[i, j] = image[i-y, j-x]
+        mask_region = mask_green_copy == 255
+        template_img[y:y+h, x:x+w][mask_region] = image[mask_region]
         caption += f"@{chosen_member} "
     cv2.imwrite("meme.png", template_img)
     with open("meme.png", 'rb') as final_img:
         send_photo(cookiebot, chat_id, photo=final_img, caption=caption, msg_to_reply=msg)
+
+def get_profile_image(username):
+    """Helper function to get a user's profile image"""
     try:
-        os.remove("meme.png")
-    except FileNotFoundError:
-        pass
+        url = f"https://telegram.me/{username}"
+        req = urllib.request.Request(url, headers={'User-Agent': "Magic Browser"})
+        html = urllib.request.urlopen(req)
+        soup = BeautifulSoup(html, "html.parser")
+        images = soup.findAll('img')
+        if images:
+            return urllib.request.urlopen(images[0]['src'])
+    except (IndexError, urllib.error.URLError):
+        return None
 
 def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     react_to_message(msg, '🔥', is_alternate_bot=is_alternate_bot)
