@@ -2,6 +2,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from werkzeug.middleware.proxy_fix import ProxyFix
 from jwcrypto import jwk
+import jwt
+from jwt.algorithms import RSAAlgorithm
 import psutil
 import gunicorn.app.base
 import hashlib
@@ -9,11 +11,15 @@ import hmac
 from typing import Dict
 from dotenv import load_dotenv
 import os
+import time
+import json
 load_dotenv()
 
 app = Flask("Cookiebot")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 cors = CORS(app, resources={r"/login": {"origins": "*"}})
+public_key = jwk.JWK.generate(kty='RSA', size=2048, alg='RS256', use='sig', kid='cookiebot-2025')
+private_key = jwk.JWK.from_json(public_key.export_private())
 
 def validate_telegram_auth(auth_data: Dict[str, str], bot_token: str) -> bool:
     """
@@ -29,6 +35,20 @@ def validate_telegram_auth(auth_data: Dict[str, str], bot_token: str) -> bool:
     secret_key = hashlib.sha256(bot_token.encode()).digest()
     calculated_hash = hmac.new(secret_key, data_check_string.encode(), hashlib.sha256).hexdigest()
     return provided_hash == calculated_hash
+
+def generate_jwt_token(key, sub, iss):
+    current_time_in_seconds = round(time.time())
+    expiry_time_in_seconds = current_time_in_seconds + 1800 # 30 minutes
+    claims = {
+        "exp": expiry_time_in_seconds,
+        "iat": current_time_in_seconds,
+        "kid": key.kid,
+        "sub": sub,
+        "iss": iss
+    }
+    private_key = RSAAlgorithm.from_jwk(json.dumps(key))
+    signed_jwt = jwt.encode(claims, private_key, algorithm="RS256")
+    return signed_jwt
 
 @app.route('/')
 def home():
@@ -48,26 +68,17 @@ def generate_key():
     ]
     for token in valid_tokens:
         if validate_telegram_auth(data, token):
-            key = jwk.JWK.generate(
-                kty='RSA',
-                size=2048,
-                alg='RS256',
-                use='sig',
-                kid=f'cookiebot-2025',
-                sub=str(data['id']),
-                iss=request.url_root.rstrip('/')
-            )
-            token = key.export_private()
+            jwt_token = generate_jwt_token(public_key, data['id'], request.url_root.rstrip('/'))
             return jsonify({
-                'status': 'Key generated',
-                'accessToken': token
+                'status': 'Token generated',
+                'accessToken': jwt_token
             })
     return jsonify({'error': 'Invalid bot token'}), 401
 
 @app.route('/.well-known/jwks.json', methods=['GET'])
 def jwks():
     jwks_dict = {
-        'keys': []
+        'keys': [public_key.export_public()]
     }
     return jsonify(jwks_dict)
 
