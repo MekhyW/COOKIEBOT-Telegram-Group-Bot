@@ -205,6 +205,8 @@ def get_profile_image(username):
         images = soup.findAll('img')
         if images:
             return urllib.request.urlopen(images[0]['src'])
+        else:
+            return None
     except (IndexError, urllib.error.URLError):
         return None
 
