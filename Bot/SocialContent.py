@@ -152,7 +152,7 @@ def meme(cookiebot, msg, chat_id, language):
     members = get_members_chat(chat_id)
     members_tagged = get_members_tagged(msg)
     if len(members_tagged) > 5:
-        cookiebot.sendMessage(chat_id, "Não é possível criar memes com mais de 5 membros", msg)
+        send_message(cookiebot, chat_id, "Não é possível criar memes com mais de 5 membros", msg, language)
         return
     caption = ""
     for _ in range(100):
@@ -183,7 +183,7 @@ def meme(cookiebot, msg, chat_id, language):
             chosen_member = member['user']
             profile_image = get_profile_image(chosen_member)
         if not profile_image:
-            cookiebot.sendMessage(chat_id, "Não consegui montar o meme, tente novamente mais tarde", msg)
+            send_message(cookiebot, chat_id, "Não consegui montar o meme, tente novamente mais tarde", msg, language)
             return
         image = cv2.imdecode(np.asarray(bytearray(profile_image.read()), dtype="uint8"), cv2.IMREAD_COLOR)
         image = cv2.resize(image, (w, h), interpolation=cv2.INTER_NEAREST)
