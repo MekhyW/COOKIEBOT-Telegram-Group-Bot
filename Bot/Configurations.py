@@ -10,7 +10,7 @@ cache_admins = {}
 cache_groups = {}
 storage_semaphore = Semaphore(1)
 
-def get_group_info(cookiebot, chat_id, adminobjects, title, photo_big_id, is_alternate_bot=0):
+def get_group_info(cookiebot, chat_id, listaadmins_id, title, photo_big_id, is_alternate_bot=0):
     if chat_id in cache_groups:
         return cache_groups[chat_id]
     photo_signed_url = None
@@ -41,8 +41,8 @@ def get_group_info(cookiebot, chat_id, adminobjects, title, photo_big_id, is_alt
         cache_groups[chat_id] = {"groupId": chat_id, "adminUsers": [], "name": title, "imageUrl": photo_signed_url}
         post_request_backend(f"groups/{chat_id}", cache_groups[chat_id])
         return cache_groups[chat_id]
-    if ('adminUsers' in group and group['adminUsers'] != adminobjects) or ('name' in group and group['name'] != title) or ('imageUrl' in group and group['imageUrl'] != photo_signed_url):
-        group['adminUsers'] = adminobjects
+    if ('adminUsers' in group and group['adminUsers'] != listaadmins_id) or ('name' in group and group['name'] != title) or ('imageUrl' in group and group['imageUrl'] != photo_signed_url):
+        group['adminUsers'] = listaadmins_id
         group['name'] = title
         group['imageUrl'] = photo_signed_url
         put_request_backend(f"groups/{chat_id}", group)
@@ -62,17 +62,13 @@ def get_admins(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
         status = admin['status']
         id = str(user['id'])
         username = user['username'] if 'username' in user else None
-        first_name = user['first_name'] if 'first_name' in user else None
-        last_name = user['last_name'] if 'last_name' in user else None
-        language_code = user['language_code'] if 'language_code' in user else None
-        adminobjects.append({"id": id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": None})
-        if username:
-            listaadmins.append(username)
         listaadmins_id.append(id)
         listaadmins_status.append(status)
+        if username:
+            listaadmins.append(username)
     photo_big_id = chatinfo['photo']['big_file_id'] if 'photo' in chatinfo else None
     title = chatinfo['title'] if 'title' in chatinfo else None
-    get_group_info(cookiebot, chat_id, adminobjects, title, photo_big_id, is_alternate_bot=is_alternate_bot)
+    get_group_info(cookiebot, chat_id, listaadmins_id, title, photo_big_id, is_alternate_bot=is_alternate_bot)
     cache_admins[chat_id] = [listaadmins, listaadmins_id, listaadmins_status]
     return listaadmins, listaadmins_id, listaadmins_status
 
