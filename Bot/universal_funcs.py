@@ -249,6 +249,7 @@ def leave_and_blacklist(cookiebot, chat_id):
     post_request_backend(f'blacklist/{chat_id}')
     delete_request_backend(f'registers/{chat_id}')
     delete_request_backend(f'configs/{chat_id}')
+    delete_request_backend(f'groups/{chat_id}')
     cookiebot.leaveChat(chat_id)
 
 def wait_open(filename):
