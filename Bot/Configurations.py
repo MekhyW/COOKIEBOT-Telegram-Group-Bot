@@ -41,7 +41,9 @@ def get_group_info(cookiebot, chat_id, listaadmins_id, title, photo_big_id, is_a
         cache_groups[chat_id] = {"groupId": chat_id, "adminUsers": [], "name": title, "imageUrl": photo_signed_url}
         post_request_backend(f"groups/{chat_id}", cache_groups[chat_id])
         return cache_groups[chat_id]
-    if ('adminUsers' in group and group['adminUsers'] != listaadmins_id) or ('name' in group and group['name'] != title) or ('imageUrl' in group and group['imageUrl'] != photo_signed_url):
+    if 'adminUsers' in group and group['adminUsers'] != listaadmins_id:
+        put_request_backend(f"groups/{chat_id}/admins", listaadmins_id)
+    if ('name' in group and group['name'] != title) or ('imageUrl' in group and group['imageUrl'] != photo_signed_url):
         group['adminUsers'] = listaadmins_id
         group['name'] = title
         group['imageUrl'] = photo_signed_url
