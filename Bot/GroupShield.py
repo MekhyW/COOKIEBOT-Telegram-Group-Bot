@@ -100,18 +100,16 @@ def welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     cv2.circle(blurred_chat_img, circle_center, int(circle_radius*1.1), (255, 255, 255), -1)
     # Insert user profile picture
     user_img = cv2.resize(user_img, (circle_radius*2, circle_radius*2))
-    for i in range(0, user_img.shape[0]):
-        for j in range(0, user_img.shape[1]):
-            if math.sqrt((i - circle_radius)**2 + (j - circle_radius)**2) < circle_radius:
-                blurred_chat_img[circle_center[1] - circle_radius + i, circle_center[0] - circle_radius + j] = user_img[i, j]
+    y, x = np.ogrid[:user_img.shape[0], :user_img.shape[1]]
+    mask = ((x - circle_radius)**2 + (y - circle_radius)**2) <= circle_radius**2
+    target_slice = blurred_chat_img[
+        circle_center[1] - circle_radius:circle_center[1] + circle_radius,
+        circle_center[0] - circle_radius:circle_center[0] + circle_radius
+    ]
+    target_slice[mask] = user_img[mask]
     # Insert text
     cv2.rectangle(blurred_chat_img, (0, int(size[0]*0.36)), (size[1]*10, int(size[0]*0.40)), (0, 0, 0), -1)
-    if language == 'pt':
-        welcome = 'Bem-vinde ao'
-    elif language == 'es':
-        welcome = 'Bienvenido a'
-    else:
-        welcome = 'Welcome to'
+    welcome = {'pt': 'Bem-vinde ao', 'es': 'Bienvenido a'}.get(language, 'Welcome to')
     font = ImageFont.truetype('Static/Roadgeek2005Engschrift-lgJw.ttf', 32)
     img_pil = Image.fromarray(blurred_chat_img)
     draw = ImageDraw.Draw(img_pil)
@@ -119,8 +117,7 @@ def welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     user_firstname = emoji_pattern.sub(r'', user['first_name'].strip())
     text = f'{welcome} {chat_title}, {user_firstname}!'
     text_w, text_h = draw.textbbox((0, 0), text, font=font)[2:]
-    text_x = int(((size[1]*2.2) - text_w) / 2)
-    text_y = int(((size[0]*0.69) + text_h) / 2)
+    text_x, text_y = int(((size[1]*2.2) - text_w) / 2), int(((size[0]*0.69) + text_h) / 2)
     draw.text((text_x, text_y), text, font = font, fill = (255, 255, 255, 0))
     final_img = np.array(img_pil)
     # Save image and return
