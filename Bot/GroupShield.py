@@ -10,7 +10,7 @@ import urllib.request
 import requests
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
-from universal_funcs import spamwatch_token, get_bot_token, send_photo, delete_message, ban_and_blacklist, wait_open, put_request_backend, post_request_backend, react_to_message
+from universal_funcs import spamwatch_token, get_bot_token, send_photo, delete_message, ban_and_blacklist, wait_open
 from UserRegisters import get_request_backend, send_message, send_chat_action
 from captcha.image import ImageCaptcha
 import spamwatch
@@ -18,8 +18,6 @@ import cv2
 import numpy as np
 from PIL import ImageFont, ImageDraw, Image
 
-cache_welcomes = {}
-cache_rules = {}
 captcha = ImageCaptcha()
 recently_kicked_users = {}  # Format: {(chat_id, user_id): timestamp}
 KICK_CACHE_DURATION = 300
@@ -55,51 +53,24 @@ def substitute_user_tags(text, msg):
                 text = text.replace(usertag, f"{user['first_name']}")
     return text
 
-def get_welcome(chat_id, msg, ignorecache=False):
-    if chat_id in cache_welcomes and not ignorecache:
-        return cache_welcomes[chat_id]
-    welcome = get_request_backend(f'welcomes/{chat_id}')
-    if 'error' in welcome and welcome['error'] == "Not Found":
-        try:
-            welcome = f"Olá! As boas-vindas ao grupo {msg['chat']['title']}!"
-        except Exception as e:
-            print(e)
-            welcome = "Olá! As boas-vindas ao grupo!"
-    elif len(welcome['message']):
-        welcome = welcome['message'].replace('\\n', '\n')
-        welcome = substitute_user_tags(welcome, msg)
-    cache_welcomes[chat_id] = welcome
-    return welcome
-
-def get_rules(chat_id, msg, ignorecache=False):
-    if chat_id in cache_rules and not ignorecache:
-        return cache_rules[chat_id]
-    rules = get_request_backend(f"rules/{chat_id}")
-    if 'error' in rules and rules['error'] == "Not Found":
-        return ""
-    rules = rules['rules'].replace('\\n', '\n')
-    rules = substitute_user_tags(rules, msg)
-    if not len(rules):
-        return "[SKIPPED]"
-    cache_rules[chat_id] = rules
-    return rules
-
 def rules_message(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
-    rules = get_rules(chat_id, msg)
-    if len(rules) > 0:
-        if rules == "[SKIPPED]":
-            return
-        if not rules.endswith("@MekhyW"):
-            if language == 'pt':
-                rules += "\n\nDúvidas em relação ao bot? Mande para @MekhyW"
-            elif language == 'es':
-                rules += "\n\n¿Preguntas sobre el bot? Envíalo a @MekhyW"
-            else:
-                rules += "\n\nQuestions about the bot? Send to @MekhyW"
-        cookiebot.sendMessage(chat_id, rules, reply_to_message_id=msg['message_id'])
+    rules = get_request_backend(f"rules/{chat_id}")
+    if 'error' in rules and rules['error'] == "Not Found":
+        send_message(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\n<blockquote>Se você é um admin e quer colocar regras, use /novasregras</blockquote>", msg, language)
     else:
-        send_message(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\n<blockquote>Se você é um admin e quer colocar regras, use /novasregras</blockquote>", language=language)
+        regras = rules['rules'].replace('\\n', '\n')
+        regras = substitute_user_tags(regras, msg)
+        if not len(regras):
+            return
+        if not regras.endswith("@MekhyW"):
+            if language == 'pt':
+                regras += "\n\nDúvidas em relação ao bot? Mande para @MekhyW"
+            elif language == 'es':
+                regras += "\n\n¿Preguntas sobre el bot? Envíalo a @MekhyW"
+            else:
+                regras += "\n\nQuestions about the bot? Send to @MekhyW"
+        cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
 
 def welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     user = msg['new_chat_member'] if 'new_chat_member' in msg else msg['from']
@@ -169,7 +140,16 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
             send_message(cookiebot, chat_id, f"ATENÇÃO! Suas mídias estão restritas por <b>{round(limbotimespan/60)} minutos</b>. Por favor se apresente e se enturme na conversa com os membros.\n<blockquote>Aperte o botão abaixo ou use o /regras para ver as regras do grupo</blockquote>", language=language)
         except Exception as e:
             print(e)
-    welcome = get_welcome(chat_id, msg)
+    welcome = get_request_backend(f'welcomes/{chat_id}')
+    if 'error' in welcome and welcome['error'] == "Not Found":
+        try:
+            welcome = f"Olá! As boas-vindas ao grupo {msg['chat']['title']}!"
+        except Exception as e:
+            print(e)
+            welcome = "Olá! As boas-vindas ao grupo!"
+    elif len(welcome['message']) > 0:
+        welcome = welcome['message'].replace('\\n', '\n')
+        welcome = substitute_user_tags(welcome, msg)
     try:
         rulesbuttontext = {'pt': 'Veja as Regras!', 'es': 'Ver las Reglas!'}.get(language, 'See the Rules!')
         welcome_card_image = welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot)
@@ -346,37 +326,3 @@ def solve_captcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt
                         text.write(line)
                 else:
                     text.write(line)
-
-def update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=0):
-    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
-        send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
-        return
-    send_chat_action(cookiebot, chat_id, 'typing')
-    req = put_request_backend(f"welcomes/{chat_id}", {"message": msg['text']})
-    if 'error' in req and req['error'] == "Not Found":
-        post_request_backend(f"welcomes/{chat_id}", {"message": msg['text']})
-    cache_welcomes[chat_id] = msg['text']
-    react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
-    cookiebot.sendMessage(chat_id, "Welcome message updated! ✅", reply_to_message_id=msg['message_id'])
-    delete_message(cookiebot, telepot.message_identifier(msg['reply_to_message']))
-
-def new_welcome_message(cookiebot, msg, chat_id):
-    send_chat_action(cookiebot, chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name", reply_to_message_id=msg['message_id'])
-
-def update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=0):
-    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
-        send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
-        return
-    send_chat_action(cookiebot, chat_id, 'typing')
-    req = put_request_backend(f"rules/{chat_id}", {"rules": msg['text']})
-    if 'error' in req and req['error'] == "Not Found":
-        post_request_backend(f"rules/{chat_id}", {"rules": msg['text']})
-    cache_rules[chat_id] = msg['text']
-    react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
-    cookiebot.sendMessage(chat_id, "Updated rules message! ✅", reply_to_message_id=msg['message_id'])
-    delete_message(cookiebot, telepot.message_identifier(msg['reply_to_message']))
-
-def new_rules_message(cookiebot, msg, chat_id):
-    send_chat_action(cookiebot, chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules", reply_to_message_id=msg['message_id'])
