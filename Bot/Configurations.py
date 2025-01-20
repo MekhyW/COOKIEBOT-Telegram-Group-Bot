@@ -247,35 +247,3 @@ def set_language(cookiebot, msg, chat_id, language_code):
     msg['reply_to_message'] = {}
     msg['reply_to_message']['text'] = f'Chat = {chat_id}\nBot language for the chat. Use pt for portuguese, eng for english or es for spanish'
     configurar_set(cookiebot, msg, ownerID)
-
-def update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=0):
-    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
-        send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
-        return
-    send_chat_action(cookiebot, chat_id, 'typing')
-    req = put_request_backend(f"welcomes/{chat_id}", {"message": msg['text']})
-    if 'error' in req and req['error'] == "Not Found":
-        post_request_backend(f"welcomes/{chat_id}", {"message": msg['text']})
-    react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
-    cookiebot.sendMessage(chat_id, "Welcome message updated! ✅", reply_to_message_id=msg['message_id'])
-    delete_message(cookiebot, telepot.message_identifier(msg['reply_to_message']))
-
-def new_welcome_message(cookiebot, msg, chat_id):
-    send_chat_action(cookiebot, chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name", reply_to_message_id=msg['message_id'])
-
-def update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=0):
-    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
-        send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
-        return
-    send_chat_action(cookiebot, chat_id, 'typing')
-    req = put_request_backend(f"rules/{chat_id}", {"rules": msg['text']})
-    if 'error' in req and req['error'] == "Not Found":
-        post_request_backend(f"rules/{chat_id}", {"rules": msg['text']})
-    react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
-    cookiebot.sendMessage(chat_id, "Updated rules message! ✅", reply_to_message_id=msg['message_id'])
-    delete_message(cookiebot, telepot.message_identifier(msg['reply_to_message']))
-
-def new_rules_message(cookiebot, msg, chat_id):
-    send_chat_action(cookiebot, chat_id, 'typing')
-    cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules", reply_to_message_id=msg['message_id'])
