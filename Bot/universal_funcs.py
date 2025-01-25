@@ -164,6 +164,8 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
     try:
         if language in ['eng', 'es']:
             caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
+        if len(caption) > 1024:
+            caption = caption[:1018] + '(...)'
         if thread_id is not None:
             token = get_bot_token(is_alternate_bot)
             url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"
