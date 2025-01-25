@@ -20,7 +20,7 @@ cache_posts = {}
 POSTMAIL_CHAT_LINK = "https://t.me/CookiebotPostmail"
 POSTMAIL_CHAT_ID = -1001869523792
 APPROVAL_CHAT_ID = -1001659344607
-URL_REGEX = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
+URL_REGEX = r'\b((?:https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#\/%=~_|])'
 
 def add_post_to_cache(msg):
     if 'photo' in msg:
@@ -185,10 +185,7 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     inline_keyboard = []
     inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
     for url in set(re.findall(URL_REGEX, cached_post['caption'])):
-        name = url[0]
-        if name.endswith('/'):
-            name = name[:-1]
-        name = name.replace('www.', '').replace('http://', '').replace('https://', '')
+        name = url.rstrip('/').split('/')[-1].replace('www.', '')
         if len(name) and len(url) and url != f"https://t.me/{origin_chat['username']}":
             url_no_emojis_on_ends = remove_emojis_from_ends(url[0])
             inline_keyboard.append([InlineKeyboardButton(text=name, url=url_no_emojis_on_ends, parse_mode='HTML')])
