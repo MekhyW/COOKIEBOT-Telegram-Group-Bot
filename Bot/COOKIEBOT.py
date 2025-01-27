@@ -20,9 +20,6 @@ from Server import *
 if len(sys.argv) < 2:
     print("Usage: python COOKIEBOT.py [is_alternate_bot (int)]")
     sys.exit(1)
-for file in os.listdir():
-    if not (os.path.isdir(file) or file.endswith('.py') or file.endswith('.db') or file.endswith('.txt')):
-        os.remove(file)
 is_alternate_bot = int(sys.argv[1])
 cookiebot = telepot.Bot(get_bot_token(is_alternate_bot))
 myself = cookiebot.getMe()
@@ -30,18 +27,27 @@ updates = cookiebot.getUpdates()
 if updates:
     last_update_id = updates[-1]['update_id']
     cookiebot.getUpdates(offset=last_update_id+1)
+send_message(cookiebot, ownerID, 'I am online')
+logger.log_text(f"Bot [{myself['username']}] started", severity="NOTICE")
+
+gc.enable()
+for file in os.listdir():
+    if not (os.path.isdir(file) or file.endswith('.py') or file.endswith('.db') or file.endswith('.txt')):
+        os.remove(file)
 unnatended_threads = list()
 MAX_THREADS = 50
-gc.enable()
-
-send_message(cookiebot, ownerID, 'I am online')
+IGNORED_MSG_TYPES = {
+    'dice', 'poll', 'voice_chat_started', 'voice_chat_ended', 
+    'video_chat_scheduled', 'video_chat_started', 'video_chat_ended',
+    'voice_chat_participants_invited', 'video_chat_participants_invited',
+    'forum_topic_created', 'forum_topic_edited', 'forum_topic_closed', 
+    'forum_topic_reopened', 'story', 'poll_answer', 'boost_added',
+    'chat_boost', 'removed_chat_boost', 'message_auto_delete_timer_changed'
+}
 
 def thread_function(msg):
     try:
-        if any(key in msg for key in ['dice', 'poll', 'voice_chat_started', 'voice_chat_ended', 'video_chat_scheduled', 'video_chat_started', 'video_chat_ended', 
-                                      'voice_chat_participants_invited', 'video_chat_participants_invited',
-                                      'forum_topic_created', 'forum_topic_edited','forum_topic_closed', 'forum_topic_reopened', 'story', 'poll_answer',
-                                      'boost_added', 'chat_boost', 'removed_chat_boost', 'message_auto_delete_timer_changed']):
+        if any(key in msg for key in IGNORED_MSG_TYPES):
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
@@ -276,14 +282,21 @@ def thread_function(msg):
         if chat_type != 'private' and content_type != "sticker":
             sticker_cooldown_updates(chat_id)
         run_unnatendedthreads()
-    except (TooManyRequestsError, BotWasBlockedError, MigratedToSupergroupChatError, NotEnoughRightsError):
-        print("Telegram Error")
+    except TooManyRequestsError:
+        logger.log_text(f"Too many requests in chat with ID {chat_id}", severity="WARNING")
+    except BotWasBlockedError:
+        logger.log_text(f"Bot was blocked in chat with ID {chat_id}", severity="INFO")
+    except MigratedToSupergroupChatError:
+        logger.log_text(f"Chat with ID {chat_id} was migrated to a supergroup", severity="INFO")
+    except NotEnoughRightsError:
+        logger.log_text(f"Not enough rights to send message in chat with ID {chat_id}", severity="INFO")
     except Exception:
-        errormsg = f"{traceback.format_exc()}"
+        errormsg = traceback.format_exc()
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle(msg)
         else:
             send_error_traceback(cookiebot, msg, errormsg)
+            logger.log_text(f"Error in chat with ID {chat_id}: {errormsg}", severity="WARNING")
 
 def thread_function_query(msg):
     try:
@@ -293,10 +306,7 @@ def thread_function_query(msg):
             chat_id = msg['message']['reply_to_message']['chat']['id']
             listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
         except Exception:
-            try:
-                chat_id = msg['chat']['id']
-            except Exception:
-                chat_id = from_id
+            chat_id = msg['chat']['id'] if 'chat' in msg else from_id
             listaadmins, listaadmins_id, listaadmins_status = [], [], []
         if 'CONFIG' in query_data:
             config_variable_button(cookiebot, msg, query_data)
@@ -347,6 +357,7 @@ def thread_function_query(msg):
             handle_query(msg)
         else:
             send_error_traceback(cookiebot, msg, errormsg)
+            logger.log_text(f"Error in callback query: {errormsg}", severity="WARNING")
 
 def run_unnatendedthreads():
     num_running_threads = threading.active_count()
@@ -370,6 +381,7 @@ def handle(msg):
         run_unnatendedthreads()
     except Exception:
         send_error_traceback(cookiebot, msg, traceback.format_exc())
+        logger.log_text(f"Error handling message: {traceback.format_exc()}", severity="WARNING")
 
 def handle_query(msg):
     try:
@@ -378,6 +390,7 @@ def handle_query(msg):
         run_unnatendedthreads()
     except Exception:
         send_error_traceback(cookiebot, msg, traceback.format_exc())
+        logger.log_text(f"Error in callback query: {traceback.format_exc()}", severity="WARNING")
 
 def scheduler_check():
     print("SCHEDULER CHECK")
@@ -385,6 +398,7 @@ def scheduler_check():
         scheduler_pull(cookiebot, is_alternate_bot=is_alternate_bot)
     except Exception:
         send_error_traceback(cookiebot, None, traceback.format_exc())
+        logger.log_text(f"Error in scheduler check: {traceback.format_exc()}", severity="WARNING")
     finally:
         timer_scheduler_check = threading.Timer(300, scheduler_check)
         timer_scheduler_check.start()

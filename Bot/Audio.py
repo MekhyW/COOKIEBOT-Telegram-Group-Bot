@@ -1,4 +1,4 @@
-from universal_funcs import send_message, openai_key
+from universal_funcs import send_message, openai_key, logger
 import ShazamAPI
 import openai
 openai_client = openai.OpenAI(api_key=openai_key)
@@ -20,6 +20,7 @@ def identify_music(cookiebot, msg, chat_id, content, language):
     else:
         send_message(cookiebot, chat_id,
                      f"SONG: 🎵 <b>{title}</b> - <i>{subtitle}</i> 🎵", msg, language)
+    logger.log_text(f"Music identified: {title} - {subtitle}", severity="INFO")
 
 def speech_to_text(content):
     with open('stt.ogg', 'wb') as audio_file:
@@ -31,4 +32,5 @@ def speech_to_text(content):
             response_format="text"
         )
     transcript = transcript.capitalize()
+    logger.log_text(f"Speech to text: {transcript}", severity="INFO")
     return transcript

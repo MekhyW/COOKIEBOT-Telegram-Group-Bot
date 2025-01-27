@@ -6,6 +6,7 @@ from pathlib import Path
 import cv2
 from wand.image import Image
 import ffmpeg
+from universal_funcs import logger
 
 SEMAPHORE_VIDEOS = False
 SEMAPHORE_AUDIOS = False
@@ -129,8 +130,9 @@ def distortioner(input_filename, is_gif=False):
                 subprocess.run(['ffmpeg', '-i', 'tmp.mp4', '-vf', 'fps=10,scale=-2:360:flags=lanczos', 'distorted.mp4', '-y'], check=True)
             else:
                 distort_audio('tmp.mp4', 'preprocessed.mp4', 10, 1, 'output.mp4')
+            logger.log_text(f"Video distorted: {input_filename}", severity="INFO")
         except Exception as e:
-            print(e)
+            logger.log_text(f"Error distorting video: {e}", severity="WARNING")
         finally:
             SEMAPHORE_VIDEOS = False
             if os.path.exists('preprocessed.mp4'):
@@ -147,8 +149,9 @@ def distortioner(input_filename, is_gif=False):
         try:
             SEMAPHORE_IMAGES = True
             process_image(input_filename, 'distorted.jpg', 25)
+            logger.log_text(f"Image distorted: {input_filename}", severity="INFO")
         except Exception as e:
-            print(e)
+            logger.log_text(f"Error distorting image: {e}", severity="WARNING")
         finally:
             SEMAPHORE_IMAGES = False
     elif input_path.suffix.lower() in ['.mp3', '.wav', '.ogg', '.oga']:
@@ -157,12 +160,11 @@ def distortioner(input_filename, is_gif=False):
         try:
             SEMAPHORE_AUDIOS = True
             distort_audiofile(input_filename, 10, 1, 'distorted.mp3')
+            logger.log_text(f"Audio distorted: {input_filename}", severity="INFO")
         except Exception as e:
-            print(e)
+            logger.log_text(f"Error distorting audio: {e}", severity="WARNING")
         finally:
             SEMAPHORE_AUDIOS = False
     else:
+        logger.log_text(f"Tried to distort unsupported file type: {input_filename}", severity="INFO")
         raise ValueError("Unsupported file type")
-
-if __name__ == '__main__':
-    distortioner('IMG_6233.MP4')

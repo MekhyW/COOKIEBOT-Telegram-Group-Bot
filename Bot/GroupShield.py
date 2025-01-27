@@ -10,7 +10,7 @@ import urllib.request
 import requests
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
-from universal_funcs import spamwatch_token, get_bot_token, send_photo, delete_message, ban_and_blacklist, wait_open
+from universal_funcs import spamwatch_token, get_bot_token, send_photo, delete_message, ban_and_blacklist, wait_open, logger
 from UserRegisters import get_request_backend, send_message, send_chat_action
 from captcha.image import ImageCaptcha
 import spamwatch
@@ -24,7 +24,7 @@ KICK_CACHE_DURATION = 300
 try:
     spamwatch_client = spamwatch.Client(spamwatch_token)
 except Exception as e:
-    print(e)
+    logger.log_text(f"Error initializing Spamwatch client: {e}", severity="WARNING")
     spamwatch_client = None
 
 emoji_pattern = re.compile("["
@@ -71,6 +71,7 @@ def rules_message(cookiebot, msg, chat_id, language):
             else:
                 regras += "\n\nQuestions about the bot? Send to @MekhyW"
         cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
+    logger.log_text(f"Rules message sent to chat with ID {chat_id}", severity="INFO")
 
 def welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     user = msg['new_chat_member'] if 'new_chat_member' in msg else msg['from']
@@ -136,14 +137,10 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
             cookiebot.restrictChatMember(chat_id, user['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
             send_message(cookiebot, chat_id, f"ATENÇÃO! Suas mídias estão restritas por <b>{round(limbotimespan/60)} minutos</b>. Por favor se apresente e se enturme na conversa com os membros.\n<blockquote>Aperte o botão abaixo ou use o /regras para ver as regras do grupo</blockquote>", language=language)
         except Exception as e:
-            print(e)
+            logger.log_text(f"Could not restrict chat member media: {e}", severity="INFO")
     welcome = get_request_backend(f'welcomes/{chat_id}')
     if 'error' in welcome and welcome['error'] == "Not Found":
-        try:
-            welcome = f"Olá! As boas-vindas ao grupo {msg['chat']['title']}!"
-        except Exception as e:
-            print(e)
-            welcome = "Olá! As boas-vindas ao grupo!"
+        welcome = f"Olá! As boas-vindas ao grupo {msg['chat']['title']}!" if 'chat' in msg and 'title' in msg['chat'] else "Olá! As boas-vindas ao grupo!"
     elif len(welcome['message']) > 0:
         welcome = welcome['message'].replace('\\n', '\n')
         welcome = substitute_user_tags(welcome, msg)
@@ -152,9 +149,10 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
         welcome_card_image = welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot)
         send_photo(cookiebot, chat_id, welcome_card_image, caption=welcome, language=language,
                   reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=rulesbuttontext,callback_data=f'RULES {language}')]]))
+        logger.log_text(f"Welcome card message sent to chat with ID {chat_id}", severity="INFO")
     except Exception as e:
-        print(e)
         send_message(cookiebot, chat_id, welcome, language=language)
+        logger.log_text(f"Error sending welcome card, sent text only to chat with ID {chat_id}", severity="INFO")
     for thread in threading.enumerate():
         if isinstance(thread, threading.Timer) and 'chat_id' in thread.kwargs and thread.kwargs['chat_id'] == chat_id and 'msg' in thread.kwargs and thread.kwargs['msg']['new_chat_participant']['id'] == msg['from']['id']:
             thread.cancel()
@@ -175,6 +173,7 @@ def check_human(cookiebot, msg, chat_id, language):
             send_message(cookiebot, chat_id, "Kickei o novo usuário por <b>suspeita de ser um robô</b>\n<blockquote>Se isso foi um erro, peça para ele adicionar um username (@) ou foto de perfil e um ADM adicioná-lo de volta</blockquote>", language=language)
             cookiebot.unbanChatMember(chat_id, user_id)
             recently_kicked_users[cache_key] = current_time
+            logger.log_text(f"Kicked user with ID {user_id} in chat with ID {chat_id} for suspicion of being a bot", severity="INFO")
             return True
     return False
 
@@ -183,11 +182,12 @@ def check_cas(cookiebot, msg, chat_id, language):
         r = requests.get(f"https://api.cas.chat/check?user_id={msg['new_chat_participant']['id']}", timeout=2)
         in_banlist = json.loads(r.text)['ok']
     except Exception as e:
-        print(e)
+        logger.log_text(f"Error checking CAS: {e}", severity="WARNING")
         return False
     if in_banlist:
         ban_and_blacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
         send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado pelo sistema anti-spam CAS (https://cas.chat/)</b>", language=language)
+        logger.log_text(f"Banned user with ID {msg['new_chat_participant']['id']} in chat with ID {chat_id} by CAS", severity="INFO")
         return True
     return False
 
@@ -195,11 +195,12 @@ def check_spamwatch(cookiebot, msg, chat_id, language):
     try:
         isbanned = spamwatch_client.get_ban(int(msg['new_chat_participant']['id']))
     except Exception as e:
-        print(e)
+        logger.log_text(f"Error checking Spamwatch: {e}", severity="WARNING")
         return False
     if isbanned:
         ban_and_blacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
         send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado pelo sistema anti-spam Spamwatch</b>", language=language)
+        logger.log_text(f"Banned user with ID {msg['new_chat_participant']['id']} in chat with ID {chat_id} by Spamwatch", severity="INFO")
         return True
     return False
 
@@ -209,6 +210,7 @@ def check_banlist(cookiebot, msg, chat_id, language):
         return False
     cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
     send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado como conta falsa/spam em outros chats</b>", language=language)
+    logger.log_text(f"Banned user with ID {msg['new_chat_participant']['id']} in chat with ID {chat_id} by blacklist", severity="INFO")
     return True
 
 def captcha_message(cookiebot, msg, chat_id, captchatimespan, limbotimespan, language, is_alternate_bot=0):
@@ -225,7 +227,7 @@ def captcha_message(cookiebot, msg, chat_id, captchatimespan, limbotimespan, lan
     try:
         cookiebot.restrictChatMember(chat_id, user_id, permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + captchatimespan))
     except Exception as e:
-        print(e)
+        logger.log_text(f"Could not restrict chat member for captcha: {e}", severity="INFO")
     send_chat_action(cookiebot, chat_id, 'upload_photo')
     caracters = ['0', '2', '3', '4', '5', '6', '8', '9']
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
@@ -252,6 +254,7 @@ def captcha_message(cookiebot, msg, chat_id, captchatimespan, limbotimespan, lan
         text.write(f"{chat_id} {user_id} {datetime.datetime.now()} {password} {captchaspawnID} 5\n")
     timer = threading.Timer(captchatimespan+1, check_captcha, kwargs={'cookiebot': cookiebot, 'msg': msg, 'chat_id': chat_id, 'captchatimespan': captchatimespan, 'language': language})
     timer.start()
+    logger.log_text(f"Captcha message sent to chat with ID {chat_id}", severity="INFO")
 
 def parse_line_captcha(line):
     #CHATID userID yy-mm-dd hr:min:sec password captcha_id attempts
@@ -280,9 +283,10 @@ def check_captcha(cookiebot, msg, chat_id, captchatimespan, language):
                         cookiebot.kickChatMember(chat_id, user)
                         send_message(cookiebot, chat_id, f"Kickei o usuário com id <b>{user}</b> por <b>{reason}</b>.\n<blockquote>Se isso foi um erro, peça para um staff adicioná-lo de volta</blockquote>", language=language)
                         cookiebot.unbanChatMember(chat_id, user)
+                        logger.log_text(f"Kicked user with ID {user} in chat with ID {chat_id} by captcha", severity="INFO")
                     except Exception as e:
-                        print(e)
                         send_message(cookiebot, chat_id, f"Erro ao kickar o usuário com id <b>{user}</b> por <b>{reason}</b>.\n<blockquote>Usuário não está mais no chat, ou não tenho permissão para kickar</blockquote>", language=language)
+                        logger.log_text(f"Could not kick user with ID {user} in chat with ID {chat_id}: {e}", severity="INFO")
                     delete_message(cookiebot, (str(chat), str(captcha_id)))
                     recently_kicked_users[(chat_id, user)] = time.time()
                 elif chat == chat_id and user == msg['from']['id']:
@@ -314,6 +318,7 @@ def solve_captcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt
                         delete_message(cookiebot, (str(chat), str(captcha_id)))
                         delete_message(cookiebot, telepot.message_identifier(msg))
                         welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot)
+                        logger.log_text(f"Captcha attempt for user with ID {user} in chat with ID {chat_id} solved", severity="INFO")
                     else:
                         delete_message(cookiebot, telepot.message_identifier(msg))
                         attempts -= 1
@@ -321,5 +326,6 @@ def solve_captcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt
                             send_message(cookiebot, chat_id, "Senha incorreta, por favor tente novamente.", language=language)
                         line = f"{chat} {user} {datetime.datetime.now()} {password} {captcha_id} {attempts}\n"
                         text.write(line)
+                        logger.log_text(f"Captcha attempt for user with ID {user} in chat with ID {chat_id} failed", severity="INFO")
                 else:
                     text.write(line)

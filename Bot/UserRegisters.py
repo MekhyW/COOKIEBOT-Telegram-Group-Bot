@@ -1,6 +1,6 @@
 import random
 import time
-from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, put_request_backend, delete_request_backend, ownerID
+from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, put_request_backend, delete_request_backend, ownerID, logger
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_members = {}
 cache_users = {}
@@ -89,6 +89,7 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         result[top_message_index] += f"@{username} "
     for resulting_message in result:
         send_message(cookiebot, chat_id, resulting_message, msg_to_reply=msg, parse_mode='HTML')
+    logger.log_text(f"Everyone sent to chat with ID {chat_id}", severity="INFO")
     chat = cookiebot.getChat(chat_id)
     myself = cookiebot.getMe()
     notification_count = 0
@@ -111,7 +112,8 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
             ]), language=language)
             time.sleep(0.1)
         except Exception as e:
-            print(e)
+            pass
+    logger.log_text(f"DM messages sent to users for chat with ID {chat_id}", severity="INFO")
 
 def report_ask(cookiebot, msg, chat_id, targetid, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -132,6 +134,7 @@ def report(cookiebot, chat_id, targetid, language):
             [InlineKeyboardButton(text="Discard Report", callback_data=f"Report No {targetid} {language}")]
         ]
     ))
+    logger.log_text(f"Report sent to owner for chat with ID {chat_id}", severity="INFO")
 
 def call_admins_ask(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -141,6 +144,7 @@ def call_admins_ask(cookiebot, msg, chat_id, language):
             [InlineKeyboardButton(text="❌", callback_data=f"ADM No {language} {msg['message_id']}")]
         ]
     ))
+    logger.log_text(f"Call admins request sent to chat with ID {chat_id}", severity="INFO")
 
 def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -148,6 +152,7 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
     caller = msg['from'].get('username', msg['from']['first_name'])
     response += f"\n{caller} chamando todos os administradores!"
     send_message(cookiebot, chat_id, response, language=language, parse_mode='HTML')
+    logger.log_text(f"Admins called for chat with ID {chat_id}", severity="INFO")
     chat = cookiebot.getChat(chat_id)
     myself = cookiebot.getMe()
     notification_count = 0
@@ -164,7 +169,8 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
             ]), language=language)
             time.sleep(0.1)
         except Exception as e:
-            print(e)
+            pass
+    logger.log_text(f"DM messages sent to admins for chat with ID {chat_id}", severity="INFO")
 
 def who(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -185,6 +191,7 @@ def who(cookiebot, msg, chat_id, language):
     ]
     prefix = random.choice(adverbial_phrases)
     send_message(cookiebot, chat_id, f"{prefix} @{chosen}", msg, language)
+    logger.log_text(f"Who triggered for chat with ID {chat_id}", severity="INFO")
 
 def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     react_to_message(msg, '❤️', is_alternate_bot=is_alternate_bot)
@@ -200,6 +207,7 @@ def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
             target_b = members[1]['user']
         except IndexError:
             send_message(cookiebot, chat_id, "Ainda não vi membros suficientes para shippar!", msg, language)
+            logger.log_text(f"Shipp failed for chat with ID {chat_id}", severity="INFO")
             return
         except TypeError:
             cache_members.pop(chat_id)
@@ -212,3 +220,4 @@ def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         ship_dynamic = random.choice(lines).replace('\n', '')
     children_quantity = random.choice(['Nenhum!', 'Um', 'Dois', 'Três'])
     send_message(cookiebot, chat_id, f"Detectei um Casal! @{target_a} + @{target_b} = ❤️\n\nDinâmica: {ship_dynamic}\nFilhos: {children_quantity} 🧸\nChance de divórcio: {divorce_prob}% 📈", msg, language)
+    logger.log_text(f"Shipp sent to chat with ID {chat_id}", severity="INFO")
