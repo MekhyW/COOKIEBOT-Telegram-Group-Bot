@@ -186,17 +186,14 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
     for url in set(re.findall(URL_REGEX, cached_post['caption'])):
         name = url.rstrip('/').split('/')[-1].replace('www.', '')
-        if len(name) and len(url) > 3 and url != f"https://t.me/{origin_chat['username']}":
-            url_no_emojis_on_ends = remove_emojis_from_ends(url[0])
+        url_no_emojis_on_ends = remove_emojis_from_ends(url)
+        if len(name) and len(url_no_emojis_on_ends) > 3 and url_no_emojis_on_ends != f"https://t.me/{origin_chat['username']}":
             inline_keyboard.append([InlineKeyboardButton(text=name, url=url_no_emojis_on_ends, parse_mode='HTML')])
-            cached_post['caption'] = cached_post['caption'].replace(url[0], url_no_emojis_on_ends)
+            cached_post['caption'] = cached_post['caption'].replace(url, url_no_emojis_on_ends)
     caption_new = emojis_to_numbers(cached_post['caption'])
     for entity in cached_post['caption_entities']:
-        if 'url' in entity and len(entity['url']) and len(inline_keyboard) < 5:
-            name = entity['url']
-            if name.endswith('/'):
-                name = name[:-1]
-            name = name.replace('www.', '').replace('http://', '').replace('https://', '')
+        if 'url' in entity and len(entity['url']) > 3 and len(inline_keyboard) < 5:
+            name = entity['url'].rstrip('/').replace('www.', '').replace('http://', '').replace('https://', '')
             inline_keyboard.append([InlineKeyboardButton(text=name, url=entity['url'])])
     if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
