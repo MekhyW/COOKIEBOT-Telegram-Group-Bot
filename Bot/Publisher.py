@@ -217,7 +217,8 @@ def deny_post(query_data):
     if len(query_data.split()) < 2:
         return
     origin_messageid = query_data.split()[1]
-    cache_posts.pop(origin_messageid)
+    if origin_messageid in cache_posts:
+        cache_posts.pop(origin_messageid)
     logger.log_text("Post denied", severity="INFO")
 
 def schedule_post(cookiebot, query_data):
