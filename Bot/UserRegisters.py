@@ -210,7 +210,8 @@ def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
             logger.log_text(f"Shipp failed for chat with ID {chat_id}", severity="INFO")
             return
         except TypeError:
-            cache_members.pop(chat_id)
+            if chat_id in cache_members:
+                cache_members.pop(chat_id)
             members = get_members_chat(chat_id)
             target_a = members[0]['user']
             target_b = members[1]['user']

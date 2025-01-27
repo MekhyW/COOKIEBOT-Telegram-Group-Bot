@@ -209,7 +209,8 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     elif 'animation' in cached_post:
         sent_pt = cookiebot.sendAnimation(chat_id=POSTMAIL_CHAT_ID, animation=cached_post['animation'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
         sent_en = cookiebot.sendAnimation(chat_id=POSTMAIL_CHAT_ID, animation=cached_post['animation'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
-    cache_posts.pop(origin_messageid)
+    if origin_messageid in cache_posts:
+        cache_posts.pop(origin_messageid)
     logger.log_text("Post sent to postmail chat", severity="INFO")
     return sent_pt, sent_en
 
