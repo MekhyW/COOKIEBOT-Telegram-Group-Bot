@@ -186,7 +186,7 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     inline_keyboard.append([InlineKeyboardButton(text=origin_chat['title'], url=f"https://t.me/{origin_chat['username']}")])
     for url in set(re.findall(URL_REGEX, cached_post['caption'])):
         name = url.rstrip('/').split('/')[-1].replace('www.', '')
-        if len(name) and len(url) and url != f"https://t.me/{origin_chat['username']}":
+        if len(name) and len(url) > 3 and url != f"https://t.me/{origin_chat['username']}":
             url_no_emojis_on_ends = remove_emojis_from_ends(url[0])
             inline_keyboard.append([InlineKeyboardButton(text=name, url=url_no_emojis_on_ends, parse_mode='HTML')])
             cached_post['caption'] = cached_post['caption'].replace(url[0], url_no_emojis_on_ends)
