@@ -365,6 +365,8 @@ def run_unnatendedthreads():
         if unnatended_thread.is_alive():
             unnatended_threads.remove(unnatended_thread)
         elif num_running_threads < MAX_THREADS:
+            if unnatended_thread.is_alive():
+                continue
             unnatended_thread.start()
             num_running_threads += 1
             try:
