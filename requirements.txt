@@ -9,6 +9,7 @@ ffmpeg-python
 deep-translator
 google-api-python-client==2.48.0
 google-cloud-storage
+google-cloud-logging
 Google-Images-Search
 saucenao_api
 ShazamAPI

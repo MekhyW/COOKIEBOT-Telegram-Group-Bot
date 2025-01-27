@@ -2,6 +2,9 @@
 
 Telegram chatbot responsible for protecting chats against spammers, conversating using natural language, perform speech-to-text, search media, schedule posts and provides fun features for events.
 
+Backend: https://github.com/MekhyW/COOKIEBOT-backend
+Web: https://github.com/MekhyW/COOKIEBOT-WebHub
+
 ## Installation on Ubuntu
 
 ```bash
