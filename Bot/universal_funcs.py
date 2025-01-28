@@ -40,40 +40,40 @@ def get_bot_token(is_alternate_bot):
             return None
 
 def get_request_backend(route, params=None):
-    response = requests.get(f'https://backend.cookiebotfur.net/{route}', json=params,
+    try:
+        response = requests.get(f'https://backend.cookiebotfur.net/{route}', json=params,
                             auth = HTTPBasicAuth(login_backend, password_backend),
                             verify=False, timeout=60)
-    try:
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error getting request from backend: {e}", severity="INFO")
         return ''
 
 def post_request_backend(route, params=None):
-    response = requests.post(f'https://backend.cookiebotfur.net/{route}', json=params,
+    try:
+        response = requests.post(f'https://backend.cookiebotfur.net/{route}', json=params,
                              auth = HTTPBasicAuth(login_backend, password_backend),
                              verify=False, timeout=60)
-    try:
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error posting request to backend: {e}", severity="INFO")
         return ''
 
 def put_request_backend(route, params=None):
-    response = requests.put(f'https://backend.cookiebotfur.net/{route}', json=params,
+    try:
+        response = requests.put(f'https://backend.cookiebotfur.net/{route}', json=params,
                             auth = HTTPBasicAuth(login_backend, password_backend),
                             verify=False, timeout=60)
-    try:
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error putting request to backend: {e}", severity="INFO")
         return ''
 
 def delete_request_backend(route, params=None):
-    response = requests.delete(f'https://backend.cookiebotfur.net/{route}', json=params,
+    try:
+        response = requests.delete(f'https://backend.cookiebotfur.net/{route}', json=params,
                                auth = HTTPBasicAuth(login_backend, password_backend),
                                verify=False, timeout=60)
-    try:
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error deleting request from backend: {e}", severity="INFO")
