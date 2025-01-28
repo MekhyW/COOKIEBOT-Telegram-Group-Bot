@@ -238,12 +238,13 @@ def ban_and_blacklist(cookiebot, chat_id, user_id):
     logger.log_text(f"Banned user with ID {user_id} in chat with ID {chat_id}", severity="INFO")
 
 def leave_and_blacklist(cookiebot, chat_id):
-    post_request_backend(f'blacklist/{chat_id}')
-    delete_request_backend(f'registers/{chat_id}')
-    delete_request_backend(f'configs/{chat_id}')
-    delete_request_backend(f'groups/{chat_id}')
-    cookiebot.leaveChat(chat_id)
-    logger.log_text(f"Left chat with ID {chat_id} and blacklisted", severity="INFO")
+    print("temporarily disabled for inspection")
+    #post_request_backend(f'blacklist/{chat_id}')
+    #delete_request_backend(f'registers/{chat_id}')
+    #delete_request_backend(f'configs/{chat_id}')
+    #delete_request_backend(f'groups/{chat_id}')
+    #cookiebot.leaveChat(chat_id)
+    #logger.log_text(f"Left chat with ID {chat_id} and blacklisted", severity="INFO")
 
 def wait_open(filename):
     if os.path.exists(filename):
