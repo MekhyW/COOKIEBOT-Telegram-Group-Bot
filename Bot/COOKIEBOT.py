@@ -362,17 +362,15 @@ def thread_function_query(msg):
 def run_unnatendedthreads():
     num_running_threads = threading.active_count()
     for unnatended_thread in list(unnatended_threads):
-        if unnatended_thread.is_alive():
+        if unnatended_thread.is_alive() and unnatended_thread in unnatended_threads:
             unnatended_threads.remove(unnatended_thread)
         elif num_running_threads < MAX_THREADS:
             if unnatended_thread.is_alive():
                 continue
             unnatended_thread.start()
             num_running_threads += 1
-            try:
+            if unnatended_thread in unnatended_threads:
                 unnatended_threads.remove(unnatended_thread)
-            except ValueError:
-                pass
     if len(unnatended_threads):
         print(f"{len(unnatended_threads)} threads are still unnatended")
 
