@@ -290,13 +290,15 @@ def thread_function(msg):
         logger.log_text(f"Chat with ID {chat_id} was migrated to a supergroup", severity="INFO")
     except NotEnoughRightsError:
         logger.log_text(f"Not enough rights to send message in chat with ID {chat_id}", severity="INFO")
+    except requests.exceptions.ReadTimeout:
+        logger.log_text(f"Read timeout in chat with ID {chat_id}", severity="INFO")
     except Exception:
         errormsg = traceback.format_exc()
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle(msg)
-        else:
-            send_error_traceback(cookiebot, msg, errormsg)
-            logger.log_text(f"Error in chat with ID {chat_id}: {errormsg}", severity="WARNING")
+            return
+        send_error_traceback(cookiebot, msg, errormsg)
+        logger.log_text(f"Error in chat with ID {chat_id}: {errormsg}", severity="WARNING")
 
 def thread_function_query(msg):
     try:
