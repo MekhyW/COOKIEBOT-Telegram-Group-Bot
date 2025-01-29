@@ -369,6 +369,7 @@ def run_unnatendedthreads():
         elif num_running_threads < MAX_THREADS:
             if unnatended_thread.is_alive():
                 continue
+            unnatended_thread.daemon = True
             unnatended_thread.start()
             num_running_threads += 1
             if unnatended_thread in unnatended_threads:
