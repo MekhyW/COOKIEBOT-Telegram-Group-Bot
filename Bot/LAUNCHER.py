@@ -5,8 +5,8 @@ import psutil
 from Server import kill_api_server
 from universal_funcs import logger
 
-CPU_THRESHOLD = 75  # in percent
-MEMORY_THRESHOLD = 75  # in percent
+CPU_THRESHOLD = 60  # in percent
+MEMORY_THRESHOLD = 60  # in percent
 
 def monitor_resources(process):
     try:
@@ -36,7 +36,7 @@ def run_and_monitor(script_name, *args):
                 print(f"{script_name} was restarted due to high resource usage.")
                 logger.log_text(f"{script_name} was restarted due to high resource usage.", severity="ERROR")
                 break
-            time.sleep(2)  # Check resource usage every 2 seconds
+            time.sleep(1)  # Check resource usage every second
         print(f"{script_name} exited with code {process.returncode}. Restarting...")
 
 if __name__ == "__main__":
