@@ -363,7 +363,7 @@ def thread_function_query(msg):
             send_error_traceback(cookiebot, msg, errormsg)
             logger.log_text(f"Error in callback query: {errormsg}", severity="WARNING")
 
-def run_thread_with_timeout(func, timeout, *args, **kwargs):
+def run_thread_with_timeout(func, *args, **kwargs):
     result = [None]
     completed = [False]
     def worker():
@@ -376,7 +376,7 @@ def run_thread_with_timeout(func, timeout, *args, **kwargs):
     thread = threading.Thread(target=worker)
     thread.daemon = True
     thread.start()
-    thread.join(timeout=timeout)
+    thread.join(timeout=THREAD_TIMEOUT)
     return result[0], completed[0]
 
 def run_unnatendedthreads():
@@ -385,7 +385,7 @@ def run_unnatendedthreads():
         if num_running_threads < MAX_THREADS:
             if isinstance(unnatended_thread, tuple):
                 func, args = unnatended_thread
-                result, completed = run_thread_with_timeout(func, timeout=THREAD_TIMEOUT, *args)
+                result, completed = run_thread_with_timeout(func, *args)
                 if not completed:
                     logger.log_text(f"Thread timed out: {func.__name__}", severity="WARNING")
                 elif isinstance(result, Exception):
