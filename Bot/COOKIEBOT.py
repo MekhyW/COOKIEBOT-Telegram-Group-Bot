@@ -36,8 +36,6 @@ for file in os.listdir():
         os.remove(file)
 unnatended_threads = list()
 MAX_THREADS = 50
-THREAD_TIMEOUT = 10
-SCHEDULER_CHECK_INTERVAL = 300
 IGNORED_MSG_TYPES = {
     'dice', 'poll', 'voice_chat_started', 'voice_chat_ended', 
     'video_chat_scheduled', 'video_chat_started', 'video_chat_ended',
@@ -363,42 +361,25 @@ def thread_function_query(msg):
             send_error_traceback(cookiebot, msg, errormsg)
             logger.log_text(f"Error in callback query: {errormsg}", severity="WARNING")
 
-def run_thread_with_timeout(func, timeout, *args, **kwargs):
-    result = [None]
-    completed = [False]
-    def worker():
-        try:
-            result[0] = func(*args, **kwargs)
-            completed[0] = True
-        except Exception as e:
-            result[0] = e
-            completed[0] = True
-    thread = threading.Thread(target=worker)
-    thread.daemon = True
-    thread.start()
-    thread.join(timeout=timeout)
-    return result[0], completed[0]
-
 def run_unnatendedthreads():
     num_running_threads = threading.active_count()
     for unnatended_thread in list(unnatended_threads):
-        if num_running_threads < MAX_THREADS:
-            if isinstance(unnatended_thread, tuple):
-                func, args = unnatended_thread
-                result, completed = run_thread_with_timeout(func, timeout=THREAD_TIMEOUT, *args)
-                if not completed:
-                    logger.log_text(f"Thread timed out: {func.__name__}", severity="WARNING")
-                elif isinstance(result, Exception):
-                    logger.log_text(f"Thread failed with error: {str(result)}", severity="WARNING")
+        if unnatended_thread.is_alive() and unnatended_thread in unnatended_threads:
+            unnatended_threads.remove(unnatended_thread)
+        elif num_running_threads < MAX_THREADS:
+            if unnatended_thread.is_alive():
+                continue
+            unnatended_thread.start()
+            num_running_threads += 1
             if unnatended_thread in unnatended_threads:
                 unnatended_threads.remove(unnatended_thread)
-            num_running_threads += 1
     if len(unnatended_threads):
         print(f"{len(unnatended_threads)} threads are still unnatended")
 
 def handle(msg):
     try:
-        unnatended_threads.append((thread_function, (msg,)))
+        new_thread = threading.Thread(target=thread_function, args=(msg,))
+        unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except Exception:
         send_error_traceback(cookiebot, msg, traceback.format_exc())
@@ -406,7 +387,8 @@ def handle(msg):
 
 def handle_query(msg):
     try:
-        unnatended_threads.append((thread_function_query, (msg,)))
+        new_thread = threading.Thread(target=thread_function_query, args=(msg,))
+        unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except Exception:
         send_error_traceback(cookiebot, msg, traceback.format_exc())
@@ -420,7 +402,7 @@ def scheduler_check():
         send_error_traceback(cookiebot, None, traceback.format_exc())
         logger.log_text(f"Error in scheduler check: {traceback.format_exc()}", severity="WARNING")
     finally:
-        timer_scheduler_check = threading.Timer(SCHEDULER_CHECK_INTERVAL, scheduler_check)
+        timer_scheduler_check = threading.Timer(300, scheduler_check)
         timer_scheduler_check.start()
 
 if __name__ == '__main__':
