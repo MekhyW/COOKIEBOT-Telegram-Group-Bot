@@ -67,10 +67,10 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
     additional_info_en = bot.get('additional_info_en', '')
     commands = bot.get('commands', '')
     commands_en = bot.get('commands_en', '')
-    message = (f"*Olá, eu sou o {name}!*\n\n{description}{additional_info}\n"
+    message = (f"*Olá {msg['from']['first_name']}, eu sou o {name}!*\n\n{description}{additional_info}\n"
                 f"{commands}Se tiver alguma dúvida ou quiser algo adicionado, mande uma mensagem para @MekhyW") \
         if is_portuguese else \
-        (f"*Hello, I'm {name}!* \n\n{description}{additional_info_en}\n"
+        (f"*Hello {msg['from']['first_name']}, I'm {name}!* \n\n{description}{additional_info_en}\n"
             f"{commands_en}If you have any questions or want something added, send a message to @MekhyW")
     reply_markup = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="Adicionar a um Grupo 👋" if is_portuguese else "Add me to a Group 👋", url=NEW_CHAT_LINK)],
