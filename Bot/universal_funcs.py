@@ -117,6 +117,9 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
         text = GoogleTranslator(source='auto', target=language[:2]).translate(text) if language in ['eng', 'es'] else text
         if msg_to_reply and link_preview_options:
             url = f"https://api.telegram.org/bot{get_bot_token(is_alternate_bot)}/sendMessage?chat_id={chat_id}&text={text}&reply_markup={reply_markup}&link_preview_options={link_preview_options}&disable_notification={disable_notification}&parse_mode={parse_mode}"
+            if reply_markup is None:
+                url = url.replace('&reply_markup=None', '')
+            requests.get(url, timeout=5)
         elif msg_to_reply:
             try:
                 cookiebot.sendMessage(chat_id, text, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup, disable_notification=disable_notification, parse_mode=parse_mode)
@@ -126,7 +129,7 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
             url = f"https://api.telegram.org/bot{get_bot_token(is_alternate_bot)}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&disable_notification={disable_notification}&parse_mode={parse_mode}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
-            requests.get(url, timeout=10)
+            requests.get(url, timeout=5)
         else:
             try:
                 cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, disable_notification=disable_notification, parse_mode=parse_mode)
