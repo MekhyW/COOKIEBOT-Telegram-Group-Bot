@@ -20,7 +20,7 @@ cache_posts = {}
 POSTMAIL_CHAT_LINK = "https://t.me/CookiebotPostmail"
 POSTMAIL_CHAT_ID = -1001869523792
 APPROVAL_CHAT_ID = -1001659344607
-URL_REGEX = r'\b((?:https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#\/%=~_|])'
+URL_REGEX = r'\b((?:https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]{1,2048})'
 
 def add_post_to_cache(msg):
     if 'photo' in msg:

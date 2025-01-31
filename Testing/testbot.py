@@ -11,7 +11,7 @@ updates = bot.getUpdates()
 if updates:
     last_update_id = updates[-1]['update_id']
     bot.getUpdates(offset=last_update_id+1)
-bot.sendMessage(ownerID, 'testbot started')
+bot.sendMessage(ownerID, 'testbot started', disable_notification=False)
 
 def handle(msg):
     content_type, _, chat_id = telepot.glance(msg)

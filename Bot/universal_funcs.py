@@ -112,35 +112,28 @@ def send_error_traceback(cookiebot, msg, traceback_text):
             chunk = traceback_text[i:i + chunk_size]
             cookiebot.sendMessage(ownerID, chunk)
 
-def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
+def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, link_preview_options=None, disable_notification=False, parse_mode='HTML'):
     try:
-        if language in ['eng', 'es']:
-            text = GoogleTranslator(source='auto', target=language[:2]).translate(text)
-        if msg_to_reply:
-            reply_id = msg_to_reply['message_id']
+        text = GoogleTranslator(source='auto', target=language[:2]).translate(text) if language in ['eng', 'es'] else text
+        if msg_to_reply and link_preview_options:
+            url = f"https://api.telegram.org/bot{get_bot_token(is_alternate_bot)}/sendMessage?chat_id={chat_id}&text={text}&reply_markup={reply_markup}&link_preview_options={link_preview_options}&disable_notification={disable_notification}&parse_mode={parse_mode}"
+        elif msg_to_reply:
             try:
-                cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, 
-                                      reply_markup=reply_markup, parse_mode=parse_mode)
+                cookiebot.sendMessage(chat_id, text, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup, disable_notification=disable_notification, parse_mode=parse_mode)
             except telepot.exception.TelegramError:
-                text = text.replace('\\', '').replace('>', '')
-                cookiebot.sendMessage(chat_id, text, reply_to_message_id=reply_id, 
-                                      reply_markup=reply_markup)
+                cookiebot.sendMessage(chat_id, text.replace('\\', '').replace('>', ''), reply_to_message_id=msg_to_reply['message_id'], disable_notification=disable_notification, reply_markup=reply_markup)
         elif thread_id is not None:
-            token = get_bot_token(is_alternate_bot)
-            url = f"https://api.telegram.org/bot{token}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&parse_mode={parse_mode}"
+            url = f"https://api.telegram.org/bot{get_bot_token(is_alternate_bot)}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&disable_notification={disable_notification}&parse_mode={parse_mode}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
             requests.get(url, timeout=10)
         else:
             try:
-                cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, 
-                                      parse_mode=parse_mode)
+                cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, disable_notification=disable_notification, parse_mode=parse_mode)
             except telepot.exception.TelegramError:
-                text = text.replace('\\', '').replace('>', '')
-                cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup)
+                cookiebot.sendMessage(chat_id, text.replace('\\', '').replace('>', ''), disable_notification=disable_notification, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
-        send_message(cookiebot, chat_id, text, msg_to_reply, language, 
-                     thread_id, is_alternate_bot, reply_markup, parse_mode)
+        send_message(cookiebot, chat_id, text, msg_to_reply, language, thread_id, is_alternate_bot, reply_markup, link_preview_options, disable_notification, parse_mode)
     except Exception:
         traceback_text = traceback.format_exc()
         if not 'Bad Request: PEER_ID_INVALID' in traceback_text:

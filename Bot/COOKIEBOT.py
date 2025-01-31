@@ -210,10 +210,20 @@ def thread_function(msg):
                         fortune_cookie(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
                         destroy(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
-                elif utilityfunctions and (msg['text'].startswith(("/dado", "/dice")) or (msg['text'].lower().startswith("/d") and msg['text'].replace("@CookieMWbot", '').split()[0][2:].isnumeric())):
-                    roll_dice(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/patas", "/bff", "/fursmeet", "/trex")):
-                    event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
+                elif msg['text'].startswith(("/dado", "/dice", "/patas", "/bff", "/fursmeet", "/trex", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
+                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube")):
+                    if not utilityfunctions:
+                        notify_utility_off(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/dado", "/dice")):
+                        roll_dice(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/patas", "/bff", "/fursmeet", "/trex")):
+                        event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
+                    elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")):
+                        drawing_idea(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")):
+                        prompt_qualquer_coisa(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/youtube")):
+                        youtube_search(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                     new_welcome_message(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
@@ -222,18 +232,12 @@ def thread_function(msg):
                     rules_message(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
                     is_alive(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
-                elif msg['text'].startswith("/everyone"):
+                elif msg['text'].startswith(("/everyone", "@everyone")):
                     everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=is_alternate_bot)
-                elif msg['text'].startswith("/adm"):
+                elif msg['text'].startswith(("/adm", "@admin")):
                     call_admins_ask(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     list_commands(cookiebot, msg, chat_id, language)
-                elif utilityfunctions and msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")):
-                    drawing_idea(cookiebot, msg, chat_id, language)
-                elif utilityfunctions and msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")):
-                    prompt_qualquer_coisa(cookiebot, msg, chat_id, language)
-                elif utilityfunctions and msg['text'].startswith("/youtube"):
-                    youtube_search(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/configurar", "/configure")):
                     listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, language)
@@ -250,10 +254,6 @@ def thread_function(msg):
                         qualquer_coisa(cookiebot, msg, chat_id, sfw, language)
                     else:
                         send_message(cookiebot, chat_id, "Limite de buscas de imagens atingido", msg, language)
-            elif msg['text'].startswith("@admin"):
-                call_admins_ask(cookiebot, msg, chat_id, language)
-            elif msg['text'].startswith("@everyone"):
-                everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=is_alternate_bot)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name":
                 listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                 update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=is_alternate_bot)
@@ -275,6 +275,8 @@ def thread_function(msg):
                     send_message(cookiebot, chat_id, conversational_ai(cookiebot, msg, chat_id, language, sfw), msg_to_reply=msg, language=language)
             else:
                 if 'from' in msg:
+                    if utilityfunctions:
+                        check_reply_embed(cookiebot, msg, chat_id, is_alternate_bot)
                     increase_remaining_responses_ai(msg['from']['id'])
                 if captchatimespan > 0 and myself['username'] in listaadmins:
                     solve_captcha(cookiebot, msg, chat_id, False, limbotimespan, language, is_alternate_bot=is_alternate_bot)

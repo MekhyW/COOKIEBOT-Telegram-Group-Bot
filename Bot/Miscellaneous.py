@@ -160,6 +160,10 @@ def notify_fun_off(cookiebot, msg, chat_id, language):
     send_message(cookiebot, chat_id, "<i>Funções de diversão estão desativadas nesse chat</i>", msg, language)
     logger.log_text(f"Notify fun off message sent to chat with ID {chat_id}", severity="INFO")
 
+def notify_utility_off(cookiebot, msg, chat_id, language):
+    send_message(cookiebot, chat_id, "<i>Funções de utilidade estão desativadas nesse chat</i>", msg, language)
+    logger.log_text(f"Notify utility off message sent to chat with ID {chat_id}", severity="INFO")
+
 def drawing_idea(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
     idea_id = random.randint(0, len(bloblist_ideiadesenho)-1)
