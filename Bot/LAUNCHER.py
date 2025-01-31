@@ -5,8 +5,8 @@ import psutil
 from Server import kill_api_server
 from universal_funcs import logger
 
-CPU_THRESHOLD = 60  # in percent
-MEMORY_THRESHOLD = 60  # in percent
+CPU_THRESHOLD = 75  # in percent
+MEMORY_THRESHOLD = 75  # in percent
 
 def monitor_resources(process):
     try:
@@ -24,11 +24,6 @@ def run_and_monitor(script_name, *args):
     while True:
         process = subprocess.Popen([sys.executable, script_name] + list(args))
         print(f"Started {script_name} with PID {process.pid}")
-        try:
-            proc = psutil.Process(process.pid)
-            proc.nice(10)
-        except psutil.NoSuchProcess:
-            print(f"Failed to set resource limits for {script_name}")
         while process.poll() is None:  # Process is still running
             if monitor_resources(process):
                 kill_api_server()
@@ -36,7 +31,7 @@ def run_and_monitor(script_name, *args):
                 print(f"{script_name} was restarted due to high resource usage.")
                 logger.log_text(f"{script_name} was restarted due to high resource usage.", severity="ERROR")
                 break
-            time.sleep(1)  # Check resource usage every second
+            time.sleep(2)  # Check resource usage every 2 seconds
         print(f"{script_name} exited with code {process.returncode}. Restarting...")
 
 if __name__ == "__main__":
