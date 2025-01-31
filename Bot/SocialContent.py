@@ -63,7 +63,7 @@ def fix_embed_if_social_link(message: str) -> str | bool:
     return False
 
 def check_reply_embed(cookiebot, msg, chat_id, is_alternate_bot):
-    if 'link_preview_options' not in msg or ('is_disabled' in msg['link_preview_options'] and msg['link_preview_options']['is_disabled']):
+    if 'link_preview_options' not in msg or 'is_disabled' not in msg['link_preview_options'] or not msg['link_preview_options']['is_disabled']:
         return
     url_embed = fix_embed_if_social_link(msg['text'])
     if url_embed:
