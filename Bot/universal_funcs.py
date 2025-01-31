@@ -4,6 +4,7 @@ import re
 import traceback
 import json
 import urllib3
+from urllib.parse import quote
 import requests
 from dotenv import load_dotenv
 from requests.auth import HTTPBasicAuth
@@ -116,10 +117,12 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
     try:
         text = GoogleTranslator(source='auto', target=language[:2]).translate(text) if language in ['eng', 'es'] else text
         if msg_to_reply and link_preview_options:
-            url = f"https://api.telegram.org/bot{get_bot_token(is_alternate_bot)}/sendMessage?chat_id={chat_id}&text={text}&reply_markup={reply_markup}&link_preview_options={link_preview_options}&disable_notification={disable_notification}&parse_mode={parse_mode}"
+            url = f"https://api.telegram.org/bot{get_bot_token(is_alternate_bot)}/sendMessage"
+            params = {'chat_id': chat_id, 'text': text, 'reply_markup': reply_markup, 'link_preview_options': link_preview_options, 'disable_notification': disable_notification, 'parse_mode': parse_mode}
+            full_url = f"{url}?" + "&".join(f"{k}={quote(str(v))}" for k, v in params.items())
             if reply_markup is None:
-                url = url.replace('&reply_markup=None', '')
-            requests.get(url, timeout=5)
+                full_url = full_url.replace('&reply_markup=None', '')
+            requests.get(full_url, timeout=5)
         elif msg_to_reply:
             try:
                 cookiebot.sendMessage(chat_id, text, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup, disable_notification=disable_notification, parse_mode=parse_mode)
