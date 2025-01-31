@@ -21,7 +21,6 @@ templates_eng = os.listdir("Static/Meme/English")
 templates_pt = os.listdir("Static/Meme/Portuguese")
 bloblist_fighters_eng = list(storage_bucket.list_blobs(prefix="Fight/English"))
 bloblist_fighters_pt = list(storage_bucket.list_blobs(prefix="Fight/Portuguese"))
-URL_REGEX = r'\b((?:https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]{1,2048})'
 TRACKER_REGEX = r'si=[^&]{0,100}&?|igsh=[^&]{0,100}&?'
 TWITTER_REGEX = r'(?:twitter|x)\.com/[a-zA-Z0-9_]{1,15}/status/[0-9]{1,20}'
 TIKTOK_REGEX = r'tiktok\.com/@[a-zA-Z0-9_.]{1,24}/video/[0-9]{1,20}'
@@ -34,8 +33,6 @@ avoid_search = [x.strip() for x in avoid_search]
 
 def fix_embed_if_social_link(message: str) -> str | bool:
     message = message.strip()
-    if not re.search(URL_REGEX, message):
-        return False
     try:
         if requests.get(message, timeout=2).status_code != 200:
             return False
@@ -66,6 +63,8 @@ def fix_embed_if_social_link(message: str) -> str | bool:
     return False
 
 def check_reply_embed(cookiebot, msg, chat_id, is_alternate_bot):
+    if 'link_preview_options' not in msg or ('is_disabled' in msg['link_preview_options'] and msg['link_preview_options']['is_disabled']):
+        return
     url_embed = fix_embed_if_social_link(msg['text'])
     if url_embed:
         send_message(cookiebot, chat_id, url_embed, msg_to_reply=msg, is_alternate_bot=is_alternate_bot, link_preview_options=json.dumps({'show_above_text': True, 'prefer_large_media': True, 'disable_web_page_preview': False}), disable_notification=True)
