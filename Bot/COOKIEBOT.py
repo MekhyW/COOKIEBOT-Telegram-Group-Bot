@@ -92,16 +92,16 @@ def thread_function(msg):
             isCreatorBlacklisted = get_request_backend(f"blacklist/{msg['from']['id']}")
             chatinfo = cookiebot.getChat(chat_id)
             if (not 'error' in isCreatorBlacklisted) or len(chatinfo['title']) < 3:
-                leave_and_blacklist(cookiebot, chat_id)
-                send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
+                #leave_and_blacklist(cookiebot, chat_id)
+                #send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
                 return
         elif content_type == "new_chat_member":
             if msg['new_chat_participant']['id'] == myself['id']:
                 isBlacklisted = get_request_backend(f"blacklist/{chat_id}")
                 chatinfo = cookiebot.getChat(chat_id)
                 if (not 'error' in isBlacklisted) or len(chatinfo['title']) < 3:
-                    leave_and_blacklist(cookiebot, chat_id)
-                    send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
+                    #leave_and_blacklist(cookiebot, chat_id)
+                    #send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
                     return
                 send_message(cookiebot, ownerID, f"Added\n{chatinfo}")
                 if not is_alternate_bot:

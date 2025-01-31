@@ -104,8 +104,8 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
         return cache_configurations[chat_id]
     isBlacklisted = get_request_backend(f"blacklist/{chat_id}")
     if not 'error' in isBlacklisted:
-        leave_and_blacklist(cookiebot, chat_id)
-        send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
+        #leave_and_blacklist(cookiebot, chat_id)
+        #send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
         return
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 1, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
     configs = get_request_backend(f"configs/{chat_id}")
