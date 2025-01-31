@@ -7,7 +7,8 @@ Chat AI - Reply to any text message
 Stickers - Reply a sticker with another sticker
 Captcha - Stop bots from texting and kick them if they don't prove they're human
 Media Restriction - Prevents new members from sending media, for a specified interval
-Sticker antispam - Prevent raids or long chains of stickers in sequence
+Sticker Antispam - Prevent raids or long chains of stickers in sequence
+Preview Fixer - Preview media from Twitter/X links, TikTok, Instagram Reels and Bluesky
 Music Detector - Speak the name of a song playing in voice message
 Welcome - Customized welcome message
 Welcome Cards - Customized welcome image with chat photo and user photo
