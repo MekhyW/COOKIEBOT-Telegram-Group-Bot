@@ -1,7 +1,6 @@
 import datetime
 import random
 import sqlite3
-import html
 import re
 import json
 import traceback
@@ -198,11 +197,11 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=POSTMAIL_CHAT_LINK)])
     caption_pt = GoogleTranslator(source='auto', target='pt').translate(caption_new)
     caption_en = GoogleTranslator(source='auto', target='en').translate(caption_new)
-    caption_pt = html.unescape(convert_prices_in_text(caption_pt, 'BRL'))
-    caption_en = html.unescape(convert_prices_in_text(caption_en, 'USD'))
+    caption_pt = convert_prices_in_text(caption_pt, 'BRL')
+    caption_en = convert_prices_in_text(caption_en, 'USD')
     if 'photo' in cached_post:
-        sent_pt = send_photo(cookiebot, POSTMAIL_CHAT_ID, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
-        sent_en = send_photo(cookiebot, POSTMAIL_CHAT_ID, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
+        sent_pt = send_photo(cookiebot, POSTMAIL_CHAT_ID, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), parse_mode='MarkdownV2')
+        sent_en = send_photo(cookiebot, POSTMAIL_CHAT_ID, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), parse_mode='MarkdownV2')
     elif 'video' in cached_post:
         sent_pt = cookiebot.sendVideo(chat_id=POSTMAIL_CHAT_ID, video=cached_post['video'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
         sent_en = cookiebot.sendVideo(chat_id=POSTMAIL_CHAT_ID, video=cached_post['video'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']

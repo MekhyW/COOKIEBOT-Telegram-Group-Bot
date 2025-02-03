@@ -146,7 +146,7 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
             logger.log_text(f"Error sending message: {traceback_text}", severity="INFO")
             send_error_traceback(cookiebot, None, traceback_text)
 
-def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None):
+def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
     try:
         if language in ['eng', 'es']:
             caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
@@ -163,11 +163,11 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
             if reply_markup is None:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, 
-                            reply_to_message_id=reply_to_message_id, parse_mode='HTML')
+                            reply_to_message_id=reply_to_message_id, parse_mode=parse_mode)
             else:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, 
                             reply_to_message_id=reply_to_message_id, 
-                            reply_markup=reply_markup, parse_mode='HTML')
+                            reply_markup=reply_markup, parse_mode=parse_mode)
     except urllib3.exceptions.ProtocolError:
         return send_photo(cookiebot, chat_id, photo, caption, 
                           msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
@@ -177,7 +177,7 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
         return None
     return sentphoto['message_id']
 
-def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None):
+def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
     try:
         if language in ['eng', 'es']:
             caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
@@ -192,11 +192,11 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
             if reply_markup is None:
                 sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, 
-                                reply_to_message_id=reply_to_message_id, parse_mode='HTML')
+                                reply_to_message_id=reply_to_message_id, parse_mode=parse_mode)
             else:
                 sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, 
                                 reply_to_message_id=reply_to_message_id, 
-                                reply_markup=reply_markup, parse_mode='HTML')
+                                reply_markup=reply_markup, parse_mode=parse_mode)
     except urllib3.exceptions.ProtocolError:
         return send_animation(cookiebot, chat_id, animation, caption, 
                               msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
