@@ -200,8 +200,8 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     caption_pt = convert_prices_in_text(caption_pt, 'BRL')
     caption_en = convert_prices_in_text(caption_en, 'USD')
     if 'photo' in cached_post:
-        sent_pt = send_photo(cookiebot, POSTMAIL_CHAT_ID, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), parse_mode='MarkdownV2')
-        sent_en = send_photo(cookiebot, POSTMAIL_CHAT_ID, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), parse_mode='MarkdownV2')
+        sent_pt = cookiebot.sendPhoto(chat_id=POSTMAIL_CHAT_ID, photo=cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), parse_mode='HTML')['message_id']
+        sent_en = cookiebot.sendPhoto(chat_id=POSTMAIL_CHAT_ID, photo=cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), parse_mode='HTML')['message_id']
     elif 'video' in cached_post:
         sent_pt = cookiebot.sendVideo(chat_id=POSTMAIL_CHAT_ID, video=cached_post['video'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
         sent_en = cookiebot.sendVideo(chat_id=POSTMAIL_CHAT_ID, video=cached_post['video'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
