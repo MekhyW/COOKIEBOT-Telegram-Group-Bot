@@ -82,7 +82,7 @@ def generate_key():
 @app.route('/.well-known/jwks.json', methods=['GET'])
 def jwks():
     jwks_dict = {
-        'keys': [public_key.export_public()]
+        'keys': [json.loads(public_key.export_public())]
     }
     logger.log_text("Request to JWKS", severity="INFO")
     return jsonify(jwks_dict)
