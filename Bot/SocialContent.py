@@ -24,7 +24,7 @@ bloblist_fighters_pt = list(storage_bucket.list_blobs(prefix="Fight/Portuguese")
 TRACKER_REGEX = r'si=[^&]{0,100}&?|igsh=[^&]{0,100}&?'
 TWITTER_REGEX = r'(?:twitter|x)\.com/[a-zA-Z0-9_]{1,15}/status/[0-9]{1,20}'
 TIKTOK_REGEX = r'tiktok\.com/@[a-zA-Z0-9_.]{1,24}/video/[0-9]{1,20}'
-INSTAGRAM_REGEX = r'instagram\.com/reel/[a-zA-Z0-9_-]{1,11}'
+INSTAGRAM_REGEX = r'instagram\.com/(reel|p)/[a-zA-Z0-9_-]{1,11}'
 BSKY_REGEX = r'bsky\.app/profile/[a-zA-Z0-9.-]{1,253}'
 
 with open('Static/avoid_search.txt', 'r', encoding='utf-8') as f:
@@ -41,7 +41,7 @@ def fix_embed_if_social_link(message: str) -> str | bool:
     transformations = [
         (TWITTER_REGEX, "https://fixupx.com/{}", r'[^/]+/status/[0-9]+'),
         (TIKTOK_REGEX, "https://d.tnktok.com/{}", r'@[^/]+/video/[0-9]+'),
-        (INSTAGRAM_REGEX, "https://ddinstagram.com/reel/{}", r'\.com/reel/([^?/]+)(.*)'),
+        (INSTAGRAM_REGEX, "https://ddinstagram.com/{}", r'\.com/(reel|p)/([^?/]+)(.*)'),
         (BSKY_REGEX, "https://fxbsky.app/profile/{}", r'\.app/profile/(.+)')
     ]
     if re.search(TIKTOK_REGEX, message) and re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+', message):
