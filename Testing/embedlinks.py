@@ -9,6 +9,8 @@ BSKY_REGEX = r'bsky\.app/profile/[a-zA-Z0-9.-]{1,253}'
 
 def fix_embed_if_social_link(message: str) -> str | bool:
     message = message.strip()
+    if any(domain in message for domain in ['fixupx.com', 'd.tnktok.com', 'ddinstagram.com', 'fxbsky.app']):
+        return False
     try:
         if requests.get(message, timeout=2).status_code != 200:
             return False
