@@ -198,8 +198,8 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=POSTMAIL_CHAT_LINK)])
     caption_pt = GoogleTranslator(source='auto', target='pt').translate(caption_new)
     caption_en = GoogleTranslator(source='auto', target='en').translate(caption_new)
-    caption_pt = html.escape(convert_prices_in_text(caption_pt, 'BRL'))
-    caption_en = html.escape(convert_prices_in_text(caption_en, 'USD'))
+    caption_pt = html.unescape(convert_prices_in_text(caption_pt, 'BRL'))
+    caption_en = html.unescape(convert_prices_in_text(caption_en, 'USD'))
     if 'photo' in cached_post:
         sent_pt = send_photo(cookiebot, POSTMAIL_CHAT_ID, cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
         sent_en = send_photo(cookiebot, POSTMAIL_CHAT_ID, cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))
