@@ -21,7 +21,6 @@ templates_eng = os.listdir("Static/Meme/English")
 templates_pt = os.listdir("Static/Meme/Portuguese")
 bloblist_fighters_eng = list(storage_bucket.list_blobs(prefix="Fight/English"))
 bloblist_fighters_pt = list(storage_bucket.list_blobs(prefix="Fight/Portuguese"))
-TRACKER_REGEX = r'si=[^&]{0,100}&?|igsh=[^&]{0,100}&?'
 TWITTER_REGEX = r'(?:twitter|x)\.com/[a-zA-Z0-9_]{1,15}/status/[0-9]{1,20}'
 TIKTOK_REGEX = r'tiktok\.com/@[a-zA-Z0-9_.]{1,24}/video/[0-9]{1,20}'
 INSTAGRAM_REGEX = r'instagram\.com/(reel|p)/[a-zA-Z0-9_-]{1,11}'
@@ -58,13 +57,10 @@ def fix_embed_if_social_link(message: str) -> str | bool:
                     return template.format(path) + query
                 return template.format(match.group(1) if '(' in extract_pattern else match.group())
             return False
-    if re.search(TRACKER_REGEX, message):
-        clean = re.sub(TRACKER_REGEX, "", message)
-        return re.sub(r'\?$', '', clean) if clean != message else False
     return False
 
 def check_reply_embed(cookiebot, msg, chat_id, is_alternate_bot):
-    if 'link_preview_options' not in msg or 'is_disabled' not in msg['link_preview_options'] or not msg['link_preview_options']['is_disabled']:
+    if 'link_preview_options' not in msg:
         return
     url_embed = fix_embed_if_social_link(msg['text'])
     if url_embed:
