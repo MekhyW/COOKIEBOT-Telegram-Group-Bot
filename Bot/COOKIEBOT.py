@@ -211,10 +211,10 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
                         destroy(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith(("/dado", "/dice", "/patas", "/bff", "/fursmeet", "/trex", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
-                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube")):
+                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube") or (msg['text'].startswith("/d") and len(msg['text'].split()) == 1 and msg['text'].split('/d')[1].isdigit())):
                     if not utilityfunctions:
                         notify_utility_off(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/dado", "/dice")):
+                    elif msg['text'].startswith(("/dado", "/dice", "/d")):
                         roll_dice(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/patas", "/bff", "/fursmeet", "/trex")):
                         event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
