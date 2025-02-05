@@ -36,8 +36,7 @@ def decrease_remaining_responses_ai(user_id):
 def decrease_remaining_image_searches(user_id):
     today = datetime.datetime.now().date()
     if user_id in remaining_image_searches and remaining_image_searches[user_id]['date'] == today:
-        if remaining_image_searches[user_id]['remaining'] > 0:
-            remaining_image_searches[user_id]['remaining'] -= 1
+        remaining_image_searches[user_id]['remaining'] -= 1
     else:
         remaining_image_searches[user_id] = {'date': today, 'remaining': MAX_IMAGE_SEARCHES_DAILY_PER_USER - 1}
     if 'total_remaining' in remaining_image_searches and remaining_image_searches['total_remaining']['date'] == today:
