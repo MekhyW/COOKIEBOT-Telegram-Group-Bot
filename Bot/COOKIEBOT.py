@@ -211,7 +211,7 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
                         destroy(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith(("/dado", "/dice", "/patas", "/bff", "/fursmeet", "/trex", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
-                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube")) or (msg['text'].startswith("/d") and msg['text'].split('/d')[1].isdigit()):
+                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube")) or (msg['text'].startswith("/d") and msg['text'].split()[0].split('/d')[1].isdigit()):
                     if not utilityfunctions:
                         notify_utility_off(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/dado", "/dice", "/d")):
