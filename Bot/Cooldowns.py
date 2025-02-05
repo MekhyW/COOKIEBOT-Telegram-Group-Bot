@@ -2,7 +2,7 @@ import datetime
 from universal_funcs import send_message, delete_message
 import telepot
 MAX_CONSECUTIVE_RESPONSES_AI = 7
-MAX_IMAGE_SEARCHES_DAILY = 50
+MAX_IMAGE_SEARCHES_DAILY = 15
 remaining_responses_ai = {}
 remaining_image_searches = {}
 last_used_sticker = {}
@@ -32,12 +32,13 @@ def decrease_remaining_responses_ai(user_id):
     else:
         remaining_responses_ai[user_id] = MAX_CONSECUTIVE_RESPONSES_AI - 1
 
-def decrease_remaining_image_searches(chat_id):
-    if chat_id in remaining_image_searches and remaining_image_searches[chat_id]['date'] == datetime.datetime.now().date():
-        if remaining_image_searches[chat_id]['remaining'] > 0:
-            remaining_image_searches[chat_id]['remaining'] -= 1
+def decrease_remaining_image_searches(user_id):
+    today = datetime.datetime.now().date()
+    if user_id in remaining_image_searches and remaining_image_searches[user_id]['date'] == today:
+        if remaining_image_searches[user_id]['remaining'] > 0:
+            remaining_image_searches[user_id]['remaining'] -= 1
     else:
-        remaining_image_searches[chat_id] = {'date': datetime.datetime.now().date(), 'remaining': MAX_IMAGE_SEARCHES_DAILY - 1}
+        remaining_image_searches[user_id] = {'date': today, 'remaining': MAX_IMAGE_SEARCHES_DAILY - 1}
 
 def sticker_cooldown_updates(chat_id):
     last_used_sticker[chat_id] = 0

@@ -243,14 +243,14 @@ def thread_function(msg):
                     configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, language)
                 elif funfunctions and msg['text'].replace('/', '').replace("@CookieMWbot", '').split()[0] in custom_commands:
                     custom_command(cookiebot, msg, chat_id, language)
-                elif utilityfunctions and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot']):
+                elif utilityfunctions and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot', 'pawstralbot', 'SCTarinBot', 'MekhysConnectBot']):
                     if FurBots:
                         furbots_cmds = open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()
                         furbots_cmds = [x.strip() for x in furbots_cmds]
                         if msg['text'].split()[0].split('@')[0] in furbots_cmds:
                             return
-                    decrease_remaining_image_searches(chat_id)
-                    if remaining_image_searches[chat_id]['remaining'] >= 0:
+                    decrease_remaining_image_searches(msg['from']['id'])
+                    if remaining_image_searches[msg['from']['id']]['remaining'] >= 0:
                         qualquer_coisa(cookiebot, msg, chat_id, sfw, language)
                     else:
                         send_message(cookiebot, chat_id, "Limite de buscas de imagens atingido", msg, language)
