@@ -40,7 +40,7 @@ def decrease_remaining_image_searches(user_id):
             remaining_image_searches[user_id]['remaining'] -= 1
     else:
         remaining_image_searches[user_id] = {'date': today, 'remaining': MAX_IMAGE_SEARCHES_DAILY_PER_USER - 1}
-    if 'total_remaining' in remaining_image_searches and remaining_image_searches['total_remaining']['date'] == today and remaining_image_searches['total_remaining']['remaining'] > 0:
+    if 'total_remaining' in remaining_image_searches and remaining_image_searches['total_remaining']['date'] == today:
         remaining_image_searches['total_remaining']['remaining'] -= 1
     else:
         remaining_image_searches['total_remaining'] = {'date': today, 'remaining': MAX_IMAGE_SEARCHES_DAILY - 1}
