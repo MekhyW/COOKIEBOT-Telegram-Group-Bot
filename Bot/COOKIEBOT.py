@@ -250,7 +250,7 @@ def thread_function(msg):
                         if msg['text'].split()[0].split('@')[0] in furbots_cmds:
                             return
                     decrease_remaining_image_searches(msg['from']['id'])
-                    if remaining_image_searches[msg['from']['id']]['remaining'] >= 0:
+                    if remaining_image_searches[msg['from']['id']]['remaining'] >= 0 and remaining_image_searches['total_remaining']['remaining'] >= 0:
                         qualquer_coisa(cookiebot, msg, chat_id, sfw, language)
                     else:
                         send_message(cookiebot, chat_id, "Limite de buscas de imagens atingido", msg, language)
