@@ -3,7 +3,7 @@ import re
 
 URL_REGEX = r'\b((?:https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]{1,2048})'
 TWITTER_REGEX = r'(?:twitter|x)\.com/[a-zA-Z0-9_]{1,15}/status/[0-9]{1,20}'
-TIKTOK_REGEX = r'tiktok\.com/@[a-zA-Z0-9_.]{1,24}/video/[0-9]{1,20}'
+TIKTOK_REGEX = r'(?:tiktok\.com/@[a-zA-Z0-9_.]{1,24}/video/[0-9]{1,20}|vm\.tiktok\.com/[A-Za-z0-9]+/?)'
 INSTAGRAM_REGEX = r'instagram\.com/(reel|p)/[a-zA-Z0-9_-]{1,11}'
 BSKY_REGEX = r'bsky\.app/profile/[a-zA-Z0-9.-]{1,253}'
 

@@ -22,7 +22,7 @@ templates_pt = os.listdir("Static/Meme/Portuguese")
 bloblist_fighters_eng = list(storage_bucket.list_blobs(prefix="Fight/English"))
 bloblist_fighters_pt = list(storage_bucket.list_blobs(prefix="Fight/Portuguese"))
 TWITTER_REGEX = r'(?:twitter|x)\.com/[a-zA-Z0-9_]{1,15}/status/[0-9]{1,20}'
-TIKTOK_REGEX = r'tiktok\.com/@[a-zA-Z0-9_.]{1,24}/video/[0-9]{1,20}'
+TIKTOK_REGEX = r'(?:tiktok\.com/@[a-zA-Z0-9_.]{1,24}/video/[0-9]{1,20}|vm\.tiktok\.com/[A-Za-z0-9]+/?)'
 INSTAGRAM_REGEX = r'instagram\.com/(reel|p)/[a-zA-Z0-9_-]{1,11}'
 BSKY_REGEX = r'bsky\.app/profile/[a-zA-Z0-9.-]{1,253}'
 
