@@ -241,8 +241,11 @@ def leave_and_blacklist(cookiebot, chat_id):
     delete_request_backend(f'registers/{chat_id}')
     delete_request_backend(f'configs/{chat_id}')
     delete_request_backend(f'groups/{chat_id}')
-    cookiebot.leaveChat(chat_id)
-    logger.log_text(f"Left chat with ID {chat_id} and blacklisted", severity="INFO")
+    try:
+        cookiebot.leaveChat(chat_id)
+        logger.log_text(f"Left chat with ID {chat_id} and blacklisted", severity="INFO")
+    except Exception as e:
+        logger.log_text(f"Error leaving chat with ID {chat_id}: {e}", severity="INFO")
 
 def wait_open(filename):
     if os.path.exists(filename):
