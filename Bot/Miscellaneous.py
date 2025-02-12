@@ -444,9 +444,9 @@ def fortune_cookie(cookiebot, msg, chat_id, language):
 
 def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     if language == 'pt':
-        instru = "Responda a um vídeo, foto, audio, gif ou sticker com o comando para distorcer (ou use /zoar pfp)"
+        instru = "Responda a uma foto, audio ou sticker com o comando para distorcer (ou use /zoar pfp)"
     else:
-        instru = "Reply to a video, photo, audio, gif or sticker with the command to distort (or use /destroy pfp)"
+        instru = "Reply to a photo, audio or sticker with the command to distort (or use /destroy pfp)"
     if msg['text'].endswith('pfp'):
         send_chat_action(cookiebot, chat_id, 'upload_photo')
         token = get_bot_token(is_alternate_bot)

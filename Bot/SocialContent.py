@@ -32,7 +32,7 @@ avoid_search = [x.strip() for x in avoid_search]
 
 def fix_embed_if_social_link(message: str) -> str | bool:
     message = message.strip()
-    if any(domain in message for domain in ['fixupx.com', 'd.tnktok.com', 'ddinstagram.com', 'fxbsky.app']):
+    if any(domain in message for domain in ['fxtwitter.com', 'fixupx.com', 'd.tnktok.com', 'vm.vxtiktok.com', 'ddinstagram.com', 'fxbsky.app']):
         return False
     try:
         if requests.get(message, timeout=2).status_code != 200:
@@ -41,7 +41,7 @@ def fix_embed_if_social_link(message: str) -> str | bool:
         return False
     transformations = [
         (TWITTER_REGEX, "https://fixupx.com/{}", r'[^/]+/status/[0-9]+'),
-        (TIKTOK_REGEX, "https://d.tnktok.com/{}", r'@[^/]+/video/[0-9]+'),
+        (TIKTOK_REGEX, "https://vm.vxtiktok.com/{}", r'@[^/]+/video/[0-9]+'),
         (INSTAGRAM_REGEX, "https://ddinstagram.com/{}", r'(reel|p)/([^?/]+)'),
         (BSKY_REGEX, "https://fxbsky.app/profile/{}", r'\.app/profile/(.+)')
     ]
