@@ -262,6 +262,7 @@ def schedule_post(cookiebot, query_data):
             postmail_message_id = sent_pt if language == 'pt' else sent_en
             create_job(hour, minute, f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute}", int(days), int(group_id),
                        int(POSTMAIL_CHAT_ID), int(second_chatid), int(postmail_message_id), int(second_messageid), int(origin_userid))
+            print(f"CREATED JOB {hour}:{minute} - {target_chattitle}")
             answer += f"{hour}:{minute} - {target_chattitle}\n"
         except Exception as e:
             pass
