@@ -192,7 +192,7 @@ def add_to_sticker_database(msg):
     BANNED_TITLESUBSTRINGS = ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']
     if any(x in msg['chat']['title'].lower() for x in BANNED_TITLESUBSTRINGS):
         return
-    if (not 'emoji' in msg['sticker']) or (msg['sticker']['emoji'] in BANNED_EMOJIS):
+    if (not 'emoji' in msg['sticker']) or any(x in msg['sticker']['emoji'] for x in BANNED_EMOJIS):
         return
     if (not 'set_name' in msg['sticker']) or (not re.match(r'^[a-zA-Z0-9]+$', msg['sticker']['set_name'])):
         return
