@@ -231,6 +231,10 @@ def react_to_message(msg, emoji, is_big=True, is_alternate_bot=0):
     url = f'https://api.telegram.org/bot{token}/setMessageReaction?chat_id={msg["chat"]["id"]}&message_id={msg["message_id"]}&reaction={reaction_json}&is_big={is_big}'
     requests.get(url, timeout=10)
 
+def blacklist_user(user_id):
+    post_request_backend(f'blacklist/{user_id}')
+    logger.log_text(f"Blacklisted user with ID {user_id}", severity="INFO")
+
 def ban_and_blacklist(cookiebot, chat_id, user_id):
     post_request_backend(f'blacklist/{user_id}')
     cookiebot.kickChatMember(chat_id, user_id)
