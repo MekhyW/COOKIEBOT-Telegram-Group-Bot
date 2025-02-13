@@ -152,9 +152,9 @@ def thread_function(msg):
             if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                 reply_sticker(cookiebot, msg, chat_id)
         elif content_type == "sticker":
-            if sfw:
-                sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language)
-                add_to_sticker_database(msg, chat_id)
+            sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language)
+            if sfw and 'username' in msg['from']:
+                add_to_sticker_database(msg)
             if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                 reply_sticker(cookiebot, msg, chat_id)
         elif 'text' in msg:

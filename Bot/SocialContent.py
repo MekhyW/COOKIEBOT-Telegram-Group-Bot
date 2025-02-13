@@ -169,6 +169,7 @@ def youtube_search(cookiebot, msg, chat_id, language):
     video_description = random_video["snippet"]["description"]
     send_message(cookiebot, chat_id, f"<i>{video_url}</i>\n\n<b>{video_description}</b>", msg, language, parse_mode='HTML')
     logger.log_text(f"Youtube search successful for chat with ID {chat_id}", severity="INFO")
+
 def add_to_random_database(msg, chat_id, photo_id=''):
     if any(x in msg['chat']['title'].lower() for x in ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']):
         return
@@ -186,10 +187,14 @@ def random_media(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
             pass
     logger.log_text(f"Random media sent to chat with ID {chat_id}", severity="INFO")
 
-def add_to_sticker_database(msg, chat_id):
-    if any(x in msg['chat']['title'].lower() for x in ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']):
+def add_to_sticker_database(msg):
+    BANNED_EMOJIS = ['🍆', '🍑', '🍌', '🍭', '🥵', '💦', '🫦', '👄', '🔞', '😏', '🇩🇪', '🇮🇷', '🇷🇺', '🇸🇦', '🇰🇵', '💩', '👌', '👌🏻', '👌🏼', '👌🏽', '👌🏾', '👌🏿', '🖕', '🖕🏻', '🖕🏼', '🖕🏽', '🖕🏾', '🖕🏿']
+    BANNED_TITLESUBSTRINGS = ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']
+    if any(x in msg['chat']['title'].lower() for x in BANNED_TITLESUBSTRINGS):
         return
-    if 'emoji' in msg['sticker'] and msg['sticker']['emoji'] in ['🍆', '🍑', '🥵', '💦', '🫦']:
+    if (not 'emoji' in msg['sticker']) or (msg['sticker']['emoji'] in BANNED_EMOJIS):
+        return
+    if (not 'set_name' in msg['sticker']) or (not re.match(r'^[a-zA-Z0-9]+$', msg['sticker']['set_name'])):
         return
     stickerId = msg['sticker']['file_id']
     post_request_backend('stickerdatabase', {'id': stickerId})
