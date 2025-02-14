@@ -199,6 +199,10 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     caption_en = GoogleTranslator(source='auto', target='en').translate(caption_new)
     caption_pt = convert_prices_in_text(caption_pt, 'BRL').replace('<', '⩽').replace('>', '⩾').replace('&', '＆')
     caption_en = convert_prices_in_text(caption_en, 'USD').replace('<', '⩽').replace('>', '⩾').replace('&', '＆')
+    if 'Error 500 (Server Error)' in caption_pt:
+        caption_pt = caption_new
+    if 'Error 500 (Server Error)' in caption_en:
+        caption_en = caption_new
     if 'photo' in cached_post:
         sent_pt = cookiebot.sendPhoto(chat_id=POSTMAIL_CHAT_ID, photo=cached_post['photo'], caption=caption_pt, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), parse_mode='HTML')['message_id']
         sent_en = cookiebot.sendPhoto(chat_id=POSTMAIL_CHAT_ID, photo=cached_post['photo'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard), parse_mode='HTML')['message_id']
