@@ -232,16 +232,19 @@ def react_to_message(msg, emoji, is_big=True, is_alternate_bot=0):
     requests.get(url, timeout=10)
 
 def blacklist_user(user_id):
-    post_request_backend(f'blacklist/{user_id.replace('@', '')}')
-    logger.log_text(f"Blacklisted user with ID {user_id}", severity="INFO")
+    id = user_id.replace('@', '')
+    post_request_backend(f'blacklist/{id}')
+    logger.log_text(f"Blacklisted user with ID {id}", severity="INFO")
 
 def ban_and_blacklist(cookiebot, chat_id, user_id):
-    post_request_backend(f'blacklist/{user_id.replace('@', '')}')
+    id = user_id.replace('@', '')
+    post_request_backend(f'blacklist/{id}')
     cookiebot.kickChatMember(chat_id, user_id)
-    logger.log_text(f"Banned user with ID {user_id} in chat with ID {chat_id}", severity="INFO")
+    logger.log_text(f"Banned user with ID {id} in chat with ID {chat_id}", severity="INFO")
 
 def leave_and_blacklist(cookiebot, chat_id):
-    post_request_backend(f'blacklist/{chat_id.replace('@', '')}')
+    id = chat_id.replace('@', '')
+    post_request_backend(f'blacklist/{id}')
     delete_request_backend(f'registers/{chat_id}')
     delete_request_backend(f'configs/{chat_id}')
     delete_request_backend(f'groups/{chat_id}')
