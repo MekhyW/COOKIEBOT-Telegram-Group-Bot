@@ -20,17 +20,6 @@ from Server import *
 if len(sys.argv) < 2:
     print("Usage: python COOKIEBOT.py [is_alternate_bot (int)]")
     sys.exit(1)
-is_alternate_bot = int(sys.argv[1])
-cookiebot = telepot.Bot(get_bot_token(is_alternate_bot))
-myself = cookiebot.getMe()
-updates = cookiebot.getUpdates()
-if updates:
-    last_update_id = updates[-1]['update_id']
-    cookiebot.getUpdates(offset=last_update_id+1)
-send_message(cookiebot, ownerID, 'I am online')
-logger.log_text(f"Bot [{myself['username']}] started", severity="NOTICE")
-
-gc.enable()
 for file in os.listdir():
     if not (os.path.isdir(file) or file.endswith('.py') or file.endswith('.db') or file.endswith('.txt')):
         os.remove(file)
@@ -44,8 +33,20 @@ IGNORED_MSG_TYPES = {
     'forum_topic_reopened', 'story', 'poll_answer', 'boost_added',
     'chat_boost', 'removed_chat_boost', 'message_auto_delete_timer_changed'
 }
+current_date = None
+is_alternate_bot = int(sys.argv[1])
+cookiebot = telepot.Bot(get_bot_token(is_alternate_bot))
+myself = cookiebot.getMe()
+updates = cookiebot.getUpdates()
+if updates:
+    last_update_id = updates[-1]['update_id']
+    cookiebot.getUpdates(offset=last_update_id+1)
+send_message(cookiebot, ownerID, 'I am online')
+logger.log_text(f"Bot [{myself['username']}] started", severity="NOTICE")
+gc.enable()
 
 def thread_function(msg):
+    global current_date
     try:
         if any(key in msg for key in IGNORED_MSG_TYPES):
             return
@@ -304,6 +305,9 @@ def thread_function(msg):
             return
         send_error_traceback(cookiebot, msg, errormsg)
         logger.log_text(f"Error in chat with ID {chat_id}: {errormsg}", severity="WARNING")
+    finally:
+        if 'date' in msg and msg['date'] != current_date:
+            current_date = msg['date']
 
 def thread_function_query(msg):
     try:
