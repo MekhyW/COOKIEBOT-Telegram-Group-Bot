@@ -240,20 +240,19 @@ def schedule_post(cookiebot, query_data):
             jobs.remove(job)
     answer = f"Post set for the following times ({days} days):\nNOW - Cookiebot Mural 📬\n"
     for group in get_request_backend('registers'):
-        group_id = group['id']
         try:
-            _, _, _, _, _, _, _, language, publisherpost, _, _, max_posts, publisher_members_only = get_config(cookiebot, group_id)
+            _, _, _, _, _, _, _, language, publisherpost, _, _, max_posts, publisher_members_only = get_config(cookiebot, group['id'])
         except TypeError:
             continue
-        if (not publisherpost) or (has_nsfw == '1' and group_id == '-1001882117738'):
+        if (not publisherpost) or (has_nsfw == '1' and group['id'] == '-1001882117738'):
             continue
         if publisher_members_only:
-            members = get_members_chat(group_id)
+            members = get_members_chat(group['id'])
             if origin_user is None or origin_user['username'] not in str(members):
                 continue
         try:
             num_posts_for_group = 0
-            target_chattitle = cookiebot.getChat(group_id)['title']
+            target_chattitle = cookiebot.getChat(group['id'])['title']
             for job in jobs.copy():
                 if f"--> {target_chattitle}" in job['name']:
                     num_posts_for_group += 1
@@ -264,7 +263,7 @@ def schedule_post(cookiebot, query_data):
             hour = random.randint(0,23)
             minute = random.randint(0,59)
             postmail_message_id = sent_pt if language == 'pt' else sent_en
-            create_job(hour, minute, f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute}", int(days), int(group_id),
+            create_job(hour, minute, f"{origin_chat['title']} --> {target_chattitle}, at {hour}:{minute}", int(days), int(group['id']),
                        int(POSTMAIL_CHAT_ID), int(second_chatid), int(postmail_message_id), int(second_messageid), int(origin_userid))
             print(f"CREATED JOB {hour}:{minute} - {target_chattitle}")
             answer += f"{hour}:{minute} - {target_chattitle}\n"

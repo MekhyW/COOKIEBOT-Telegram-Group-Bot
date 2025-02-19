@@ -20,6 +20,8 @@ adm - Call chat admins
 anything - send a picture of what you want
 youtube - Search for a video on youtube
 searchsource - Searches for the source of an artwork
+birthday - Send a birthday collage
+nextbirthdays - Show the next birthdays
 meme - Generate a meme
 battle - Who wins in a fight
 destroy - Distorts a video image gif sticker audio or pfp

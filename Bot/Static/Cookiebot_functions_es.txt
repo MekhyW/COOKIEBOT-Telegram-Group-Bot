@@ -20,6 +20,8 @@ adm - Llamar a los administradores del chat
 cualquiercosa - envía una foto de lo que quieres
 youtube - Buscar un video en youtube
 buscarfuente - Busca la fuente de una obra de arte
+cumpleanos - Enviar un collage de cumpleaños
+proximoscumpleanos - Mostrar los próximos cumpleaños
 meme - Generar un meme
 batalla - ¿Quién gana en una pelea?
 destruir - Distorsiona un video imagen gif audio sticker o pfp
