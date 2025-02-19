@@ -103,7 +103,7 @@ def thread_function(msg):
             if msg['new_chat_participant']['id'] == myself['id']:
                 isBlacklisted = get_request_backend(f"blacklist/{chat_id}")
                 chatinfo = cookiebot.getChat(chat_id)
-                if (not 'error' in isBlacklisted and 'id' in isBlacklisted and isBlacklisted['id'] == str(chat_id)) or len(chatinfo['title']) < 3:
+                if (not 'error' in isBlacklisted and 'id' in isBlacklisted and isBlacklisted['id'] == str(chat_id)) or len(chatinfo['title']) < 3 or myself['first_name'] in chatinfo['title']:
                     leave_and_blacklist(cookiebot, chat_id)
                     send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
                     return
