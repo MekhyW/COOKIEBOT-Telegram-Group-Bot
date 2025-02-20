@@ -215,9 +215,9 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
                         destroy(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                     elif msg['text'].startswith(("/aniversario", "/birthday", "/cumpleaños")):
-                        birthday(cookiebot, datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'), msg=msg, language=language, manual_chat_id=chat_id)
+                        birthday(cookiebot, datetime.datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'), msg=msg, language=language, manual_chat_id=chat_id)
                     elif msg['text'].startswith(("/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
-                        next_birthdays(cookiebot, msg, chat_id, language, datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'))
+                        next_birthdays(cookiebot, msg, chat_id, language, datetime.datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'))
                 elif msg['text'].startswith(("/dado", "/dice", "/patas", "/bff", "/fursmeet", "/trex", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
                                              "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube")) or (msg['text'].startswith("/d") and msg['text'].split()[0].split('/d')[1].isdigit()):
                     if msg['text'].startswith(("/patas", "/bff", "/fursmeet", "/trex")):
@@ -312,7 +312,7 @@ def thread_function(msg):
     finally:
         if 'date' in msg and msg['date'] != current_date:
             current_date = msg['date']
-            birthday(cookiebot, datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'), msg=msg, language=language)
+            birthday(cookiebot, datetime.datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'), msg=msg, language=language)
 
 def thread_function_query(msg):
     try:
