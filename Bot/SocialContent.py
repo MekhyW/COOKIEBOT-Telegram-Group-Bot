@@ -361,7 +361,7 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'])
     logger.log_text(f"Battle sent to chat with ID {chat_id}", severity="INFO")
 
-def birthday(cookiebot, current_date_formatted, msg=None, language='pt', manual_chat_id=None):
+def birthday(cookiebot, current_date_formatted, msg=None, manual_chat_id=None):
     bd_users = get_request_backend(f"users?birthdate={current_date_formatted}")
     for group in get_request_backend('registers'):
         if group['id'] != '-1001891420773':
@@ -369,7 +369,7 @@ def birthday(cookiebot, current_date_formatted, msg=None, language='pt', manual_
         if manual_chat_id and group['id'] != manual_chat_id:
             continue
         try:
-            _, _, _, _, _, funfunctions, _, _, _, _, _, _, _ = get_config(cookiebot, group['id'])
+            _, _, _, _, _, funfunctions, _, language, _, _, _, _, _ = get_config(cookiebot, group['id'])
             if not funfunctions:
                 continue
         except TypeError:
