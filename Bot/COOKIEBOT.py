@@ -219,7 +219,8 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
                         destroy(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                     elif msg['text'].startswith(("/aniversario", "/birthday", "/cumpleaños")):
-                        birthday(cookiebot, datetime.datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'), msg=msg, manual_chat_id=chat_id)
+                        #birthday(cookiebot, datetime.datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'), msg=msg, manual_chat_id=chat_id)
+                        pass
                     elif msg['text'].startswith(("/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
                         #next_birthdays(cookiebot, msg, chat_id, language, datetime.datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'))
                         pass
