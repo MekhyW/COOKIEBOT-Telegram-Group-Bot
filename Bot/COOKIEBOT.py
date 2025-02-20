@@ -116,7 +116,11 @@ def thread_function(msg):
                     get_config(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
             elif msg['from']['id'] != msg['new_chat_participant']['id']:
                 if msg['new_chat_participant']['is_bot']:
-                    send_message(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\n<blockquote>Caso algum comando entre em conflito, fale com o Mekhy</blockquote>", msg, language)
+                    if 'creator' in listaadmins_status and str(msg['from']['id']) not in listaadmins_id and str(msg['from']['id']) != str(ownerID):
+                        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+                        send_message(cookiebot, chat_id, "Apenas admins podem adicionar bots!", msg, language)
+                    else:
+                        send_message(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\n<blockquote>Caso algum comando entre em conflito, fale com o Mekhy</blockquote>", msg, language)
                 else:
                     welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
             elif not check_human(cookiebot, msg, chat_id, language) and not check_cas(cookiebot, msg, chat_id, language) and not check_banlist(cookiebot, msg, chat_id, language) and not check_spamwatch(cookiebot, msg, chat_id, language):
