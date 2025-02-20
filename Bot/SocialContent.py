@@ -362,6 +362,9 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     logger.log_text(f"Battle sent to chat with ID {chat_id}", severity="INFO")
 
 def birthday(cookiebot, current_date_formatted, msg=None, manual_chat_id=None):
+    if manual_chat_id and len(msg['text'].split()) == 1:
+        send_message(cookiebot, manual_chat_id, "Você precisa digitar os usernames dos aniversariantes de hoje!", msg)
+        return
     bd_users = get_request_backend(f"users?birthdate={current_date_formatted}")
     for group in get_request_backend('registers'):
         if group['id'] != '-1001891420773':
