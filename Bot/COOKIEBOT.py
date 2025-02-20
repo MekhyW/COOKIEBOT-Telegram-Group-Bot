@@ -90,7 +90,7 @@ def thread_function(msg):
             run_unnatendedthreads()
             return
         thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
-        listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
+        listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
         FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = get_config(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
         if 'group_chat_created' in msg and msg['group_chat_created']:
             isCreatorBlacklisted = get_request_backend(f"blacklist/{msg['from']['id']}")
