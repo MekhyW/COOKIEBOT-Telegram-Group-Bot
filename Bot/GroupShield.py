@@ -206,7 +206,8 @@ def check_spamwatch(cookiebot, msg, chat_id, language):
 def check_banlist(cookiebot, msg, chat_id, language):
     is_blacklisted = get_request_backend(f"blacklist/{msg['new_chat_participant']['id']}")
     is_blacklisted_username = get_request_backend(f"blacklist/username/{msg['new_chat_participant']['username']}") if 'username' in msg['new_chat_participant'] else {'error': 'no username'}
-    if 'error' in is_blacklisted and 'error' in is_blacklisted_username:
+    fullname = f"{msg['new_chat_participant']['first_name']} {msg['new_chat_participant']['last_name']}" if 'last_name' in msg['new_chat_participant'] else msg['new_chat_participant']['first_name']
+    if 'error' in is_blacklisted and 'error' in is_blacklisted_username and '卐' not in fullname:
         return False
     cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
     send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado como conta falsa/spam em outros chats</b>", language=language)
