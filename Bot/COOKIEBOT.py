@@ -23,6 +23,7 @@ if len(sys.argv) < 2:
 for file in os.listdir():
     if not (os.path.isdir(file) or file.endswith('.py') or file.endswith('.db') or file.endswith('.txt')):
         os.remove(file)
+furbots_cmds = [x.strip() for x in open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()]
 unnatended_threads = list()
 MAX_THREADS = 50
 IGNORED_MSG_TYPES = {
@@ -164,6 +165,8 @@ def thread_function(msg):
                 reply_sticker(cookiebot, msg, chat_id)
         elif 'text' in msg:
             if msg['text'].startswith("/") and len(msg['text']) > 1:
+                if FurBots and msg['text'].split()[0].split('@')[0] in furbots_cmds:
+                    return
                 if msg['text'].startswith("/start@CookieMWbot") or msg['text'].startswith("/start@MekhysBombot"):
                     cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
                     caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW",
@@ -258,11 +261,6 @@ def thread_function(msg):
                 elif funfunctions and msg['text'].replace('/', '').replace("@CookieMWbot", '').split()[0] in custom_commands:
                     custom_command(cookiebot, msg, chat_id, language)
                 elif utilityfunctions and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot', 'pawstralbot', 'SCTarinBot', 'MekhysConnectBot']):
-                    if FurBots:
-                        furbots_cmds = open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()
-                        furbots_cmds = [x.strip() for x in furbots_cmds]
-                        if msg['text'].split()[0].split('@')[0] in furbots_cmds:
-                            return
                     decrease_remaining_image_searches(msg['from']['id'])
                     if remaining_image_searches[msg['from']['id']]['remaining'] >= 0 and remaining_image_searches['total_remaining']['remaining'] >= 0:
                         qualquer_coisa(cookiebot, msg, chat_id, sfw, language)
