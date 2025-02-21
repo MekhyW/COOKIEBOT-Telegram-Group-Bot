@@ -333,7 +333,7 @@ def thread_function_query(msg):
         if 'CONFIG' in query_data:
             config_variable_button(cookiebot, msg, query_data)
         elif 'Pub' in query_data:
-            if 'creator' in listaadmins_status and str(from_id) not in listaadmins_id:
+            if 'creator' in listaadmins_status and str(from_id) not in listaadmins_id and str(from_id) != str(ownerID):
                 cookiebot.answerCallbackQuery(query_id, text="Only admins can do this")
             else:
                 try:
