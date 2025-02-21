@@ -227,3 +227,4 @@
 /charts
 /tbalb
 /tbart
+/ls
