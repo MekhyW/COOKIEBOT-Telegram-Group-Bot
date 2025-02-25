@@ -82,6 +82,9 @@ def thread_function(msg):
             elif msg['text'].startswith("/blacklist") and 'from' in msg and msg['from']['id'] == ownerID:
                 blacklist_user(msg['text'].split()[1])
                 send_message(cookiebot, ownerID, f"Blacklisted user with ID {msg['text'].split()[1]}")
+            elif msg['text'].startswith("/unblacklist") and 'from' in msg and msg['from']['id'] == ownerID:
+                unblacklist_user(msg['text'].split()[1])
+                send_message(cookiebot, ownerID, f"Unblacklisted user with ID {msg['text'].split()[1]}")
             elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == ownerID:
                 broadcast_message(cookiebot, msg)
             elif msg['text'].startswith("/"):

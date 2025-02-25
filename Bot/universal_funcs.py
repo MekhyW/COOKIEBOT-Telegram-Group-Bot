@@ -236,6 +236,11 @@ def blacklist_user(user_id):
     post_request_backend(f'blacklist/{id}')
     logger.log_text(f"Blacklisted user with ID {id}", severity="INFO")
 
+def unblacklist_user(user_id):
+    id = str(user_id).replace('@', '')
+    delete_request_backend(f'blacklist/{id}')
+    logger.log_text(f"Unblacklisted user with ID {id}", severity="INFO")
+
 def ban_and_blacklist(cookiebot, chat_id, user_id):
     id = str(user_id).replace('@', '')
     post_request_backend(f'blacklist/{id}')
