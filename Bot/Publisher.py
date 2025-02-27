@@ -11,6 +11,7 @@ from UserRegisters import get_members_chat
 from price_parser import Price
 from deep_translator import GoogleTranslator
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
+import telepot.exception
 publisher_db = sqlite3.connect('Publisher.db', check_same_thread=False)
 publisher_cursor = publisher_db.cursor()
 publisher_cursor.execute("CREATE TABLE IF NOT EXISTS publisher (name TEXT, days INT, next_time TEXT, target_chat_id INT, postmail_chat_id INT, second_chatid INT, postmail_message_id INT, second_messageid INT, origin_userid INT)")
@@ -341,6 +342,9 @@ def scheduler_pull(cookiebot, is_alternate_bot=0):
                 forward_message(cookiebot, group_id, POSTMAIL_CHAT_ID, origin_messageid, thread_id=int(config[10]), is_alternate_bot=is_alternate_bot)
             else:
                 forward_message(cookiebot, group_id, POSTMAIL_CHAT_ID, origin_messageid, is_alternate_bot=is_alternate_bot)
+        except telepot.exception.BotWasKickedError:
+            delete_job(job['name'])
+            continue
         except Exception:
             send_message(cookiebot, ownerID, traceback.format_exc())
             delete_job(job['name'])
