@@ -93,7 +93,7 @@ def set_language_commands(cookiebot, chat_id, chat_to_alter, language, is_altern
         set_bot_commands(cookiebot, comandos, chat_to_alter, is_alternate_bot=is_alternate_bot, language=language)
         print(f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}")
         if not silent:
-            send_message(cookiebot, chat_id, f"Comandos no chat com ID <b>{chat_to_alter}</b> alterados para o idioma <b>{language}</b>", language=language)
+            send_message(cookiebot, chat_id, f"Comandos no chat com ID <b> {chat_to_alter} </b> alterados para o idioma <b> {language} </b>", language=language)
             logger.log_text(f"Commands in chat with ID {chat_to_alter} changed to language {language} (silent=False)", severity="INFO")
 
 def set_private_commands(cookiebot, chat_id, is_alternate_bot=0):
@@ -136,7 +136,7 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
 def configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     if 'creator' in listaadmins_status and str(msg['from']['id']) not in listaadmins_id and str(msg['from']['id']) != str(ownerID):
-        send_message(cookiebot, chat_id, "Você não tem permissão para configurar o bot, ou está anônimo!\n<blockquote>Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada!</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Você não tem permissão para configurar o bot, ou está anônimo!\n<blockquote> Você está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada! </blockquote>", msg, language)
         with open('Static/remove_anonymous_tutorial.mp4', 'rb') as video:
             cookiebot.sendVideo(chat_id, video)
         return
@@ -162,7 +162,7 @@ def configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, lang
         send_message(cookiebot, chat_id, "Te mandei uma mensagem no chat privado para configurar!", msg, language)
         logger.log_text(f"Configuration menu sent to chat with ID {chat_id}", severity="INFO")
     except Exception as e:
-        send_message(cookiebot, chat_id, "Não consegui te mandar o menu de configuração\n<blockquote>Mande uma mensagem no meu chat privado para que eu consiga fazer isso)</blockquote>" , msg, language)
+        send_message(cookiebot, chat_id, "Não consegui te mandar o menu de configuração\n<blockquote> Mande uma mensagem no meu chat privado para que eu consiga fazer isso) </blockquote>" , msg, language)
         logger.log_text(f"Error sending configuration menu: {e}", severity="INFO")
 
 def configurar_set(cookiebot, msg, chat_id, is_alternate_bot=0):

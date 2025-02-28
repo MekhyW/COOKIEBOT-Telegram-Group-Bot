@@ -48,7 +48,7 @@ def check_new_name(cookiebot, msg, chat_id, chat_type):
             month = str(chat['birthdate']['month']).zfill(2)
             day = str(chat['birthdate']['day']).zfill(2)
             birthdate = f"{year}-{month}-{day}"
-            cookiebot.sendMessage(chat_id, f"<b>Birthday registered!</b> <i>{month}/{day}</i>", parse_mode='HTML')
+            cookiebot.sendMessage(chat_id, f"<b> Birthday registered! </b> <i> {month}/{day} </i>", parse_mode='HTML')
     get_user_info(id, username, first_name, last_name, language_code, birthdate)
     if chat_type in ['group', 'supergroup']:
         members = get_members_chat(chat_id)
@@ -68,7 +68,7 @@ def left_chat_member(msg, chat_id):
 def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
     if len(listaadmins) > 0 and 'from' in msg and str(msg['from']['username']) not in listaadmins and 'sender_chat' not in msg:
-        send_message(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo!\n<blockquote>Se está falando como canal, entre e use o comando como user</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Você não tem permissão para chamar todos os membros do grupo!\n<blockquote> Se está falando como canal, entre e use o comando como user </blockquote>", msg, language)
         return
     members = get_members_chat(chat_id)
     top_message_index = 0
@@ -107,7 +107,7 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         if notification_count % 10 == 0:
             cookiebot.forwardMessage(ownerID, chat_id, msg['message_id']) #will error if original message is deleted
         try:
-            send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b> {chat['title']} </b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{msg['message_id']}")],
             ]), language=language)
             time.sleep(0.1)
@@ -164,7 +164,7 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
         if notification_count % 10 == 0:
             cookiebot.forwardMessage(ownerID, chat_id, message_id) #will error if original message is deleted
         try:
-            send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b>{chat['title']}</b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            send_message(cookiebot, user[0]['id'], f"Você foi chamado no chat <b> {chat['title']} </b>", parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{message_id}")],
             ]), language=language)
             time.sleep(0.1)

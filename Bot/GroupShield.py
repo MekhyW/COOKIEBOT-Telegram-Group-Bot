@@ -56,7 +56,7 @@ def rules_message(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     rules = get_request_backend(f"rules/{chat_id}")
     if 'error' in rules and rules['error'] == "Not Found":
-        send_message(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\n<blockquote>Se você é um admin e quer colocar regras, use /novasregras</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Ainda não há regras colocadas para esse grupo\n<blockquote> Se você é um admin e quer colocar regras, use /novasregras </blockquote>", msg, language)
     else:
         regras = rules['rules'].replace('\\n', '\n')
         regras = substitute_user_tags(regras, msg)
@@ -134,7 +134,7 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
         try:
             cookiebot.restrictChatMember(chat_id, user['id'], permissions={'can_send_messages': True, 'can_send_media_messages': True, 'can_send_other_messages': True, 'can_add_web_page_previews': True})
             cookiebot.restrictChatMember(chat_id, user['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
-            send_message(cookiebot, chat_id, f"ATENÇÃO! Suas mídias estão restritas por <b>{round(limbotimespan/60)} minutos</b>. Por favor se apresente e se enturme na conversa com os membros.\n<blockquote>Aperte o botão abaixo ou use o /regras para ver as regras do grupo</blockquote>", language=language)
+            send_message(cookiebot, chat_id, f"ATENÇÃO! Suas mídias estão restritas por <b> {round(limbotimespan/60)} minutos </b>. Por favor se apresente e se enturme na conversa com os membros.\n<blockquote> Aperte o botão abaixo ou use o /regras para ver as regras do grupo </blockquote>", language=language)
         except Exception as e:
             logger.log_text(f"Could not restrict chat member media: {e}", severity="INFO")
     welcome = get_request_backend(f'welcomes/{chat_id}')
@@ -169,7 +169,7 @@ def check_human(cookiebot, msg, chat_id, language):
         userphotos = cookiebot.getUserProfilePhotos(user_id)
         if userphotos['total_count'] == 0:
             cookiebot.kickChatMember(chat_id, user_id)
-            send_message(cookiebot, chat_id, "Kickei o novo usuário por <b>suspeita de ser um robô</b>\n<blockquote>Se isso foi um erro, peça para ele adicionar um username (@) ou foto de perfil e um ADM adicioná-lo de volta</blockquote>", language=language)
+            send_message(cookiebot, chat_id, "Kickei o novo usuário por <b> suspeita de ser um robô </b>\n<blockquote> Se isso foi um erro, peça para ele adicionar um username (@) ou foto de perfil e um ADM adicioná-lo de volta </blockquote>", language=language)
             cookiebot.unbanChatMember(chat_id, user_id)
             recently_kicked_users[cache_key] = current_time
             logger.log_text(f"Kicked user with ID {user_id} in chat with ID {chat_id} for suspicion of being a bot", severity="INFO")
@@ -185,7 +185,7 @@ def check_cas(cookiebot, msg, chat_id, language):
         return False
     if in_banlist:
         ban_and_blacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-        send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado pelo sistema anti-spam CAS (https://cas.chat/)</b>", language=language)
+        send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b> ser flagrado pelo sistema anti-spam CAS (https://cas.chat/) </b>", language=language)
         logger.log_text(f"Banned user with ID {msg['new_chat_participant']['id']} in chat with ID {chat_id} by CAS", severity="INFO")
         return True
     return False
@@ -198,7 +198,7 @@ def check_spamwatch(cookiebot, msg, chat_id, language):
         return False
     if isbanned:
         ban_and_blacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-        send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado pelo sistema anti-spam Spamwatch</b>", language=language)
+        send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b> ser flagrado pelo sistema anti-spam Spamwatch </b>", language=language)
         logger.log_text(f"Banned user with ID {msg['new_chat_participant']['id']} in chat with ID {chat_id} by Spamwatch", severity="INFO")
         return True
     return False
@@ -210,7 +210,7 @@ def check_banlist(cookiebot, msg, chat_id, language):
     if 'error' in is_blacklisted and 'error' in is_blacklisted_username and '卐' not in fullname:
         return False
     cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-    send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b>ser flagrado como conta falsa/spam em outros chats</b>", language=language)
+    send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b> ser flagrado como conta falsa/spam em outros chats </b>", language=language)
     logger.log_text(f"Banned user with ID {msg['new_chat_participant']['id']} in chat with ID {chat_id} by blacklist", severity="INFO")
     return True
 
@@ -282,11 +282,11 @@ def check_captcha(cookiebot, msg, chat_id, captchatimespan, language):
                     reason = "exceder o limite de tentativas para resolver o captcha" if attempts <= 0 else "não solucionar o captcha a tempo"
                     try:
                         cookiebot.kickChatMember(chat_id, user)
-                        send_message(cookiebot, chat_id, f"Kickei o usuário com id <b>{user}</b> por <b>{reason}</b>.\n<blockquote>Se isso foi um erro, peça para um staff adicioná-lo de volta</blockquote>", language=language)
+                        send_message(cookiebot, chat_id, f"Kickei o usuário com id <b> {user} </b> por <b> {reason} </b>.\n<blockquote> Se isso foi um erro, peça para um staff adicioná-lo de volta </blockquote>", language=language)
                         cookiebot.unbanChatMember(chat_id, user)
                         logger.log_text(f"Kicked user with ID {user} in chat with ID {chat_id} by captcha", severity="INFO")
                     except Exception as e:
-                        send_message(cookiebot, chat_id, f"Erro ao kickar o usuário com id <b>{user}</b> por <b>{reason}</b>.\n<blockquote>Usuário não está mais no chat, ou não tenho permissão para kickar</blockquote>", language=language)
+                        send_message(cookiebot, chat_id, f"Erro ao kickar o usuário com id <b> {user} </b> por <b> {reason} </b>.\n<blockquote> Usuário não está mais no chat, ou não tenho permissão para kickar </blockquote>", language=language)
                         logger.log_text(f"Could not kick user with ID {user} in chat with ID {chat_id}: {e}", severity="INFO")
                     delete_message(cookiebot, (str(chat), str(captcha_id)))
                     recently_kicked_users[(chat_id, user)] = time.time()

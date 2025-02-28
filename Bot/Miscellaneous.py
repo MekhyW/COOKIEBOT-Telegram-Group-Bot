@@ -90,7 +90,7 @@ def privacy_statement(cookiebot, msg, chat_id, language):
 def is_alive(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
     send_chat_action(cookiebot, chat_id, 'typing')
-    send_message(cookiebot, chat_id, "<b>Estou vivo</b>\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
+    send_message(cookiebot, chat_id, "<b> Estou vivo </b>\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
     logger.log_text(f"Alive message sent to chat with ID {chat_id}", severity="INFO")
 
 def analyze(cookiebot, msg, chat_id, language, is_alternate_bot=0):
@@ -157,11 +157,11 @@ def list_commands(cookiebot, msg, chat_id, language):
     logger.log_text(f"List of commands sent to chat with ID {chat_id}", severity="INFO")
 
 def notify_fun_off(cookiebot, msg, chat_id, language):
-    send_message(cookiebot, chat_id, "<i>Funções de diversão estão desativadas nesse chat</i>", msg, language)
+    send_message(cookiebot, chat_id, "<i> Funções de diversão estão desativadas nesse chat </i>", msg, language)
     logger.log_text(f"Notify fun off message sent to chat with ID {chat_id}", severity="INFO")
 
 def notify_utility_off(cookiebot, msg, chat_id, language):
-    send_message(cookiebot, chat_id, "<i>Funções de utilidade estão desativadas nesse chat</i>", msg, language)
+    send_message(cookiebot, chat_id, "<i> Funções de utilidade estão desativadas nesse chat </i>", msg, language)
     logger.log_text(f"Notify utility off message sent to chat with ID {chat_id}", severity="INFO")
 
 def drawing_idea(cookiebot, msg, chat_id, language):
@@ -181,7 +181,7 @@ def drawing_idea(cookiebot, msg, chat_id, language):
 def pesh(cookiebot, msg, chat_id, language, photo, image_id):
     with open('Static/pesh.txt', 'r', encoding='utf8') as file:
         species = random.choice(file.readlines()).replace('\n', '')
-    caption = f"Pesh com ID {image_id}\n🐟 Seu glub glub da sorte: <b>{species}</b> 🐟"
+    caption = f"Pesh com ID {image_id}\n🐟 Seu glub glub da sorte: <b> {species} </b> 🐟"
     inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Pesh Gang", url=f"https://t.me/peshspecies")]])
     send_photo(cookiebot, chat_id, photo, caption=caption, reply_markup=inline_keyboard, msg_to_reply=msg, language=language)
     logger.log_text(f"Pesh sent to chat with ID {chat_id}", severity="INFO")
@@ -204,9 +204,9 @@ def custom_command(cookiebot, msg, chat_id, language):
 def roll_dice(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     if msg['text'].startswith("/dado"):
-        send_message(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n<blockquote>EXEMPLO: /d20 5\nRoda um d20 5 vezes</blockquote>")
+        send_message(cookiebot, chat_id, "Rodo um dado de 1 até x, n vezes\n<blockquote> EXEMPLO: /d20 5\nRoda um d20 5 vezes </blockquote>")
     elif msg['text'].startswith("/dice"):
-        send_message(cookiebot, chat_id, "Roll a dice from 1 to x, n times\n<blockquote>EXAMPLE: /d20 5\nRolls a d20 5 times</blockquote>")
+        send_message(cookiebot, chat_id, "Roll a dice from 1 to x, n times\n<blockquote> EXAMPLE: /d20 5\nRolls a d20 5 times </blockquote>")
     else:
         if len(msg['text'].split()) == 1:
             vezes = 1
@@ -228,7 +228,7 @@ def roll_dice(cookiebot, msg, chat_id, language):
 
 def age(cookiebot, msg, chat_id, language):
     if not " " in msg['text']:
-        send_message(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n<blockquote>Exemplo: '/idade Mekhy'\n(obs: só o primeiro nome conta)</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Digite um nome, vou dizer a sua idade!\n<blockquote> Exemplo: '/idade Mekhy'\n(obs: só o primeiro nome conta) </blockquote>", msg, language)
     else:
         nome = msg['text'].replace("/idade ", '').replace("/edad ", '').replace("/age ", '').replace("/idade@CookieMWbot", '').replace("/age@CookieMWbot", '').replace("/edad@CookieMWbot", '').split()[0]
         response = json.loads(requests.get(f"https://api.agify.io?name={nome}", timeout=10).text)
@@ -237,13 +237,13 @@ def age(cookiebot, msg, chat_id, language):
         if registered_times == 0:
             send_message(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
         else:
-            send_message(cookiebot, chat_id, f'Sua idade é <span class="tg-spoiler">{idade} anos! 👴</span>\nRegistrado <b>{registered_times}</b> vezes', msg, language)
+            send_message(cookiebot, chat_id, f'Sua idade é <span class="tg-spoiler">{idade} anos! 👴</span>\nRegistrado <b> {registered_times} </b> vezes', msg, language)
         logger.log_text(f"Age message sent to chat with ID {chat_id}", severity="INFO")
 
 def gender(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     if not " " in msg['text']:
-        send_message(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n<blockquote>Exemplo: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA)</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n<blockquote> Exemplo: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA) </blockquote>", msg, language)
     else:
         nome = msg['text'].replace("/genero ", '').replace("/gênero ", '').replace("/gender ", '').replace("/genero@CookieMWbot", '').replace("/gênero@CookieMWbot", '').replace("/gender@CookieMWbot", '').split()[0]
         response = json.loads(requests.get(f"https://api.genderize.io?name={nome}", timeout=10).text)
@@ -270,7 +270,7 @@ def firecracker(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
             n = 1
         send_message(cookiebot, chat_id, "pra "*n, thread_id=thread_id, is_alternate_bot=is_alternate_bot)
         amount -= n
-    send_message(cookiebot, chat_id, "<b>💥POOOOOOOWW💥</b>", thread_id=thread_id, is_alternate_bot=is_alternate_bot)
+    send_message(cookiebot, chat_id, "<b> 💥POOOOOOOWW💥 </b>", thread_id=thread_id, is_alternate_bot=is_alternate_bot)
     logger.log_text(f"Firecracker sent to chat with ID {chat_id}", severity="INFO")
 
 def complaint(cookiebot, msg, chat_id, language):
@@ -317,7 +317,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o Patas!</b>\n\n<i>{calltoaction}</i>\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @EventoPatas"
+            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o Patas! </b>\n\n<i> {calltoaction} </i>\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @EventoPatas"
     elif msg['text'].lower().startswith('/bff'):
         day, month, year = 18, 7, 2025
         calltoaction = random.choice(['A Brasil FurFest tem, entre outros objetivos, levantar fundos para caridade em prol do Projeto Social SOS Vida Pet Litoral, que ajuda protetores a manter abrigos para animais de rua na Baixada Santista',
@@ -340,7 +340,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões!</b>\n\n<i>{calltoaction}</i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}\n📍 Hotel Nacional Inn Jaraguá - São Paulo\n💻 Ingressos disponíveis no site: reg.brasilfurfest.com.br, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
+            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para a Brasil FurFest 2025 - Heróis & Vilões! </b>\n\n<i> {calltoaction} </i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}\n📍 Hotel Nacional Inn Jaraguá - São Paulo\n💻 Ingressos disponíveis no site: reg.brasilfurfest.com.br, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
     elif msg['text'].lower().startswith('/fursmeet'):
         day, month, year = 15, 11, 2024
         calltoaction = random.choice(['O FurSMeet é uma convenção furry de 3 dias realizada em Santa Maria no Rio grande do Sul.Venha viver novas experiências, fazer amigos e se divertir muito no FurSMeet!',
@@ -358,7 +358,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet {year}!</b>\n\n<i>{calltoaction}</i>\n🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n🎫Link para comprar ingresso: fursmeet.carrd.co\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeetchat"
+            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet {year}! </b>\n\n<i> {calltoaction} </i>\n🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n🎫Link para comprar ingresso: fursmeet.carrd.co\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeetchat"
     elif msg['text'].lower().startswith('/trex'):
         day, month, year = 21, 9, 2024
         calltoaction = random.choice(['Já pensou em se divertir com sua própria fursuit ou cosplay dentro de um Shopping? Então venha conhecer o T-Rex Furplayer!',
@@ -376,7 +376,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b>Faltam {number_to_emojis(daysremaining)} dias para o T-Rex Furplayer!</b>\n\n<i>{calltoaction}</i>\n🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖\n\n📆 {day}/{month} - Shopping D, Canindé São Paulo - SP\n💻 Ingressos em: trexfurplayer.wordpress.com\n📲 Grupo do evento: @trexfurplayergroup"
+            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o T-Rex Furplayer! </b>\n\n<i> {calltoaction} </i>\n🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖\n\n📆 {day}/{month} - Shopping D, Canindé São Paulo - SP\n💻 Ingressos em: trexfurplayer.wordpress.com\n📲 Grupo do evento: @trexfurplayergroup"
     else:
         send_message(cookiebot, chat_id, "Evento não encontrado", msg, language)
         return
@@ -413,7 +413,7 @@ def death(cookiebot, msg, chat_id, language):
     with open('Static/death.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
-    caption += '\nMotivo: <b>' + line + '</b> 🔥\nF no chat. 🫡'
+    caption += '\nMotivo: <b> ' + line + ' </b> 🔥\nF no chat. 🫡'
     if filename.endswith('.gif'):
         send_animation(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg, language=language)
     else:

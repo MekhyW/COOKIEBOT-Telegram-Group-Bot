@@ -79,6 +79,21 @@ def delete_request_backend(route, params=None):
     except Exception as e:
         logger.log_text(f"Error deleting request from backend: {e}", severity="INFO")
         return ''
+    
+def translate(text, dest='en'):
+    tags = {}
+    count = 0
+    def replace_tag(match):
+        nonlocal count
+        placeholder = f"htmltag{count}"
+        tags[placeholder] = match.group(0)
+        count += 1
+        return placeholder
+    text_with_placeholders = re.sub(r'<[^>]+>', replace_tag, text)
+    translated = GoogleTranslator(source='auto', target=dest[:2]).translate(text_with_placeholders)
+    for placeholder, tag in tags.items():
+        translated = re.sub(re.escape(placeholder), tag, translated, flags=re.IGNORECASE)
+    return translated
 
 def send_chat_action(cookiebot, chat_id, action):
     try:
@@ -115,7 +130,7 @@ def send_error_traceback(cookiebot, msg, traceback_text):
 
 def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, link_preview_options=None, disable_notification=False, parse_mode='HTML'):
     try:
-        text = GoogleTranslator(source='auto', target=language[:2]).translate(text) if language in ['eng', 'es'] else text
+        text = translate(text, language) if language in ['eng', 'es'] else text
         if msg_to_reply and link_preview_options:
             url = f"https://api.telegram.org/bot{get_bot_token(is_alternate_bot)}/sendMessage"
             params = {'chat_id': chat_id, 'text': text, 'reply_markup': reply_markup, 'link_preview_options': link_preview_options, 'disable_notification': disable_notification, 'parse_mode': parse_mode}
@@ -149,7 +164,7 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
 def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
     try:
         if language in ['eng', 'es']:
-            caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
+            caption = translate(caption, language) if caption else None
         if len(caption) > 1024:
             caption = caption[:1018] + '(...)'
         if thread_id is not None:
@@ -180,7 +195,7 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
 def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
     try:
         if language in ['eng', 'es']:
-            caption = GoogleTranslator(source='auto', target=language[:2]).translate(caption) if caption else None
+            caption = translate(caption, language) if caption else None
         if thread_id is not None:
             token = get_bot_token(is_alternate_bot)
             url = f"https://api.telegram.org/bot{token}/sendAnimation?chat_id={chat_id}&animation={animation}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"

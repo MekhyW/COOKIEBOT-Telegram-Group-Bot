@@ -5,11 +5,10 @@ import re
 import json
 import traceback
 import requests
-from universal_funcs import send_chat_action, send_message, forward_message, get_request_backend, react_to_message, emojis_to_numbers, send_photo, ownerID, exchangerate_key, logger
+from universal_funcs import send_chat_action, send_message, forward_message, get_request_backend, react_to_message, emojis_to_numbers, ownerID, exchangerate_key, logger, translate
 from Configurations import get_config
 from UserRegisters import get_members_chat
 from price_parser import Price
-from deep_translator import GoogleTranslator
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import telepot.exception
 publisher_db = sqlite3.connect('Publisher.db', check_same_thread=False)
@@ -196,8 +195,8 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     if origin_user is not None and 'Mekhy' not in origin_user['first_name']:
         inline_keyboard.append([InlineKeyboardButton(text=origin_user['first_name'], url=f"https://t.me/{origin_user['username']}")])
     inline_keyboard.append([InlineKeyboardButton(text="Mural 📬", url=POSTMAIL_CHAT_LINK)])
-    caption_pt = GoogleTranslator(source='auto', target='pt').translate(caption_new)
-    caption_en = GoogleTranslator(source='auto', target='en').translate(caption_new)
+    caption_pt = translate(caption_new, 'pt')
+    caption_en = translate(caption_new, 'en')
     caption_pt = convert_prices_in_text(caption_pt, 'BRL').replace('<', '⩽').replace('>', '⩾').replace('&', '＆')
     caption_en = convert_prices_in_text(caption_en, 'USD').replace('<', '⩽').replace('>', '⩾').replace('&', '＆')
     if 'Error 500 (Server Error)' in caption_pt:
@@ -278,7 +277,7 @@ def schedule_post(cookiebot, query_data):
         logger.log_text("Post added to the publication queue", severity="INFO")
     except Exception:
         send_message(cookiebot, ownerID, traceback.format_exc())
-        send_message(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n<blockquote>Send /start in my DM so I can send you messages.</blockquote>", msg_to_reply={'message_id': second_messageid})
+        send_message(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n<blockquote> Send /start in my DM so I can send you messages. </blockquote>", msg_to_reply={'message_id': second_messageid})
         logger.log_text("Post added to the publication queue, but DM failed", severity="INFO")
 
 def schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):

@@ -124,7 +124,7 @@ def thread_function(msg):
                         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
                         send_message(cookiebot, chat_id, "Apenas admins podem adicionar bots!", msg, language)
                     else:
-                        send_message(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\n<blockquote>Caso algum comando entre em conflito, fale com o Mekhy</blockquote>", msg, language)
+                        send_message(cookiebot, chat_id, "Um novo companheiro bot foi adicionado!\n<blockquote> Caso algum comando entre em conflito, fale com o Mekhy </blockquote>", msg, language)
                 else:
                     welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
             elif not check_human(cookiebot, msg, chat_id, language) and not check_cas(cookiebot, msg, chat_id, language) and not check_banlist(cookiebot, msg, chat_id, language) and not check_spamwatch(cookiebot, msg, chat_id, language):
@@ -357,7 +357,7 @@ def thread_function_query(msg):
                 origin_chat_id = query_data.split()[4]
                 post_request_backend(f'blacklist/{targetid}')
                 send_message(cookiebot, ownerID, f"Blacklisted {targetid}")
-                send_message(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam\n<blockquote>Obrigado pela denúncia!</blockquote>", language=language)
+                send_message(cookiebot, origin_chat_id, f"Conta com ID {targetid} marcada como spam\n<blockquote> Obrigado pela denúncia! </blockquote>", language=language)
             delete_message(cookiebot, telepot.message_identifier(msg['message']))
         elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(ownerID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
             solve_captcha(cookiebot, msg, chat_id, True, is_alternate_bot=is_alternate_bot, language=query_data.split()[1])

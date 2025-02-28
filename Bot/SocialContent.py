@@ -9,12 +9,11 @@ import time
 import threading
 import math
 from bs4 import BeautifulSoup
-from universal_funcs import googleAPIkey, searchEngineCX, saucenao_key, storage_bucket, get_request_backend, post_request_backend, delete_request_backend, send_chat_action, send_message, react_to_message, send_photo, forward_message, cookiebotTOKEN, logger
+from universal_funcs import googleAPIkey, searchEngineCX, saucenao_key, storage_bucket, get_request_backend, post_request_backend, delete_request_backend, send_chat_action, send_message, react_to_message, send_photo, forward_message, cookiebotTOKEN, logger, translate
 from UserRegisters import get_members_chat
 from Configurations import get_config
 import google_images_search
 import googleapiclient.discovery
-from deep_translator import GoogleTranslator
 from saucenao_api import SauceNao, errors
 import cv2
 import numpy as np
@@ -102,7 +101,7 @@ def get_members_tagged(msg):
 def reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
-        send_message(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n<blockquote>Para busca direta, use o /qualquercoisa</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n<blockquote> Para busca direta, use o /qualquercoisa </blockquote>", msg, language)
         return
     url = fetch_temp_jpg(cookiebot, msg['reply_to_message'], only_return_url=True)
     try:
@@ -129,7 +128,7 @@ def reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         logger.log_text(f"Reverse search result not found for chat with ID {chat_id}", severity="INFO")
 
 def prompt_qualquer_coisa(cookiebot, msg, chat_id, language):
-    send_message(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n<blockquote>EXEMPLO: /fennec</blockquote>", msg, language)
+    send_message(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n<blockquote> EXEMPLO: /fennec </blockquote>", msg, language)
 
 def qualquer_coisa(cookiebot, msg, chat_id, sfw, language, is_alternate_bot=0):
     searchterm = msg['text'].split("@")[0].replace("/", ' ').replace("@CookieMWbot", '')
@@ -153,12 +152,12 @@ def qualquer_coisa(cookiebot, msg, chat_id, sfw, language, is_alternate_bot=0):
         except Exception as e:
             pass
     react_to_message(msg, '🤷', is_big=False, is_alternate_bot=is_alternate_bot)
-    send_message(cookiebot, chat_id, "Não consegui achar uma imagem <i>(ou era NSFW e eu filtrei)</i>", msg, language)
+    send_message(cookiebot, chat_id, "Não consegui achar uma imagem <i> (ou era NSFW e eu filtrei) </i>", msg, language)
     logger.log_text(f"Image search failed for chat with ID {chat_id}", severity="INFO")
 
 def youtube_search(cookiebot, msg, chat_id, language):
     if len(msg['text'].split()) == 1:
-        send_message(cookiebot, chat_id, "Você precisa digitar o nome do vídeo\n<blockquote>EXEMPLO: /youtube batata assada</blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Você precisa digitar o nome do vídeo\n<blockquote> EXEMPLO: /youtube batata assada </blockquote>", msg, language)
         return
     query = ' '.join(msg['text'].split()[1:])
     request = youtubesearcher.search().list(q=query, part="snippet", type="video", maxResults=10)
@@ -171,7 +170,7 @@ def youtube_search(cookiebot, msg, chat_id, language):
     random_video = random.choice(videos)
     video_url = f"https://www.youtube.com/watch?v={random_video['id']['videoId']}"
     video_description = random_video["snippet"]["description"]
-    send_message(cookiebot, chat_id, f"<i>{video_url}</i>\n\n<b>{video_description}</b>", msg, language, parse_mode='HTML')
+    send_message(cookiebot, chat_id, f"<i> {video_url} </i>\n\n<b> {video_description} </b>", msg, language, parse_mode='HTML')
     logger.log_text(f"Youtube search successful for chat with ID {chat_id}", severity="INFO")
 
 def add_to_random_database(msg, chat_id, photo_id=''):
@@ -316,10 +315,10 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         caption += f"\n\nTipo: {random.choice(['Boxe 🥊🥊', 'Luta Livre 🎭', 'Luta Greco 🤼‍♂️', 'Artes Marciais 🥋', 'Sambo 👊', 'Muay Thai 🥋', 'Luta de rua 👊', 'Luta de piscina💧', 'Judo 🇯🇵', 'Sumo ⛩', 'Gutpunching 💪', 'Ballbusting 🍳🍳'])}\nRegras: {random.choice(['KO por rounds', 'KO sem rounds', 'Vale tudo', 'Mais gols no Bomba Patch', 'Mais latinhas bebidas', 'Maior numero de litrão', 'Até Beber, Cair, Levantar', 'O último do mesão de magic'])}\nEquipamento: {random.choice(['Full Gear', 'Só luvas', 'De calcinha', 'Pelados', 'Uniforme de luta', 'Vale tudo', 'Tanguinha de sumô', 'Robô gigante', 'Uniforme de Maid', 'Kimono de Judô', 'Armadura Samurai', 'Toalha de nerdola', 'Uniforme de Waifu escolar', 'Roupa da Sailor Moon', 'Menininha mágica', 'Cosplay da Akatsuki', 'Aqueles maiôs de natação japoneses', 'Bunnysuit', 'Casaco de inverno cyberpunk', 'Chinelo', 'Ronaldinho Gaúcho', 'Uniforme do Vasco', 'Uniforme do Curintia', 'Camiseta do São Paulo', 'Uniforme do Parmeira', 'Roupa de bruxinha', 'Óculos Juliett', 'Tanguinha de Ratanabá'])}"
         if language == 'eng':
             poll_title = "WHO WINS?"
-            caption = GoogleTranslator(source='auto', target='en').translate(caption)
+            caption = translate(caption, 'en')
         elif language == 'es':
             poll_title = "¿QUIÉN GANA?"
-            caption = GoogleTranslator(source='auto', target='es').translate(caption)
+            caption = translate(caption, 'es')
         medias[0]['caption'] = caption
         cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'])
         cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'])
@@ -342,7 +341,7 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         try:
             user_image = cookiebot.getUserProfilePhotos(msg['from']['id'], limit=1)['photos'][0][-1]['file_id']
         except IndexError:
-            send_message(cookiebot, chat_id, "Você precisa ter uma foto de perfil <i>(ou está privado)</i>", msg, language)
+            send_message(cookiebot, chat_id, "Você precisa ter uma foto de perfil <i> (ou está privado) </i>", msg, language)
             logger.log_text(f"Battle failed for chat with ID {chat_id}", severity="INFO")
             return
     if language == 'pt':
