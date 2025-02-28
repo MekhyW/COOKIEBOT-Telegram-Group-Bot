@@ -10,7 +10,7 @@ def translate(text, dest='en'):
         tags[placeholder] = match.group(0)
         count += 1
         return placeholder
-    text_with_placeholders = re.sub(r'<[^>]+>', replace_tag, text)
+    text_with_placeholders = re.sub(r'<[^>]*>', replace_tag, text)
     translated = GoogleTranslator(source='auto', target=dest).translate(text_with_placeholders)
     for placeholder, tag in tags.items():
         translated = re.sub(re.escape(placeholder), tag, translated, flags=re.IGNORECASE)
