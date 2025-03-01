@@ -365,10 +365,9 @@ def birthday(cookiebot, current_date_formatted, msg=None, manual_chat_id=None):
         send_message(cookiebot, manual_chat_id, "Você precisa digitar os usernames dos aniversariantes de hoje!", msg)
         return
     bd_users = get_request_backend(f"users?birthdate={current_date_formatted}")
-    for group in get_request_backend('registers'):
+    groups = get_request_backend('registers') if not manual_chat_id else [get_request_backend(f"registers/{manual_chat_id}")]
+    for group in groups:
         if group['id'] != '-1001891420773':
-            continue
-        if manual_chat_id and group['id'] != manual_chat_id:
             continue
         try:
             _, _, _, _, _, funfunctions, _, language, _, _, _, _, _ = get_config(cookiebot, group['id'])
@@ -380,7 +379,7 @@ def birthday(cookiebot, current_date_formatted, msg=None, manual_chat_id=None):
         users_in_group = get_members_chat(group['id'])
         bd_users_in_group = []
         is_new_birthday_pinned, is_old_birthday_pinned = False, False
-        if 'pinned_message' in chatinfo and 'text' in chatinfo['pinned_message'] and any(x in chatinfo['pinned_message']['text'] for x in ['Feliz Aniversário!', 'Happy Birthday!', 'Feliz Cumpleaños!']):
+        if 'pinned_message' in chatinfo and 'text' in chatinfo['pinned_message'] and any(x in chatinfo['pinned_message']['text'].lower() for x in ['feliz aniversário!', 'happy birthday!', 'feliz cumpleaños!']):
             is_new_birthday_pinned, is_old_birthday_pinned = (True, False) if current_date_formatted in chatinfo['pinned_message']['text'] else (False, True)
         for bd_user in bd_users:
             if 'username' not in bd_user or bd_user['username'] not in [x['user'] for x in users_in_group]:
@@ -397,7 +396,7 @@ def birthday(cookiebot, current_date_formatted, msg=None, manual_chat_id=None):
             logger.log_text(f"Unpinned old birthday message for group with ID {group['id']}", severity="INFO")
         if (not is_new_birthday_pinned and len(bd_users_in_group)) or manual_chat_id:
             collage_image = make_birthday_collage(bd_users_in_group)
-            collage_caption = make_birthday_caption(bd_users_in_group)
+            collage_caption = make_birthday_caption(bd_users_in_group, current_date_formatted)
             collage_message_id = send_photo(cookiebot, group['id'], collage_image, caption=collage_caption, language=language)
             cookiebot.pinChatMessage(group['id'], collage_message_id)
             cookiebot.sendMessage(group['id'], '🎂')
@@ -405,7 +404,7 @@ def birthday(cookiebot, current_date_formatted, msg=None, manual_chat_id=None):
             timer_next_birthdays.start()
             logger.log_text(f"Triggered birthday message for group with ID {group['id']}", severity="INFO")
         if manual_chat_id:
-            break
+            return
         time.sleep(1)
 
 def make_birthday_collage(bd_users_in_group):
@@ -441,13 +440,14 @@ def make_birthday_collage(bd_users_in_group):
     confetti[transparent_indices] = collage[transparent_indices]
     return confetti
 
-def make_birthday_caption(bd_users_in_group):
+def make_birthday_caption(bd_users_in_group, current_date_formatted):
     users_str = ""
     for index in range(len(bd_users_in_group)):
         users_str += " e " if index == len(bd_users_in_group) - 1 else ", " if index > 0 else ""
         users_str += f"@{bd_users_in_group[index]['username']}" if 'username' in bd_users_in_group[index] else f"{bd_users_in_group[index]['firstName']} {bd_users_in_group[index]['lastName']}"
     caption = random.choice([f'WOW! Hoje é o aniversário de {users_str} :000 parabéns por essa data tão especial e que seu dia seja cheio de fofuras e muitos uwu',
                              f'Hoje é o melhor dia do ano! Sabe pq? Pq é o dia do bolo de {users_str}! Não deixem de encher o bucho com muito bolo e salgadinhos ^^'])
+    caption += f"\n\n<i> Feliz aniversário! </i>\n{current_date_formatted}"
     return caption
 
 def next_birthdays(cookiebot, msg, chat_id, language, current_date_formatted):

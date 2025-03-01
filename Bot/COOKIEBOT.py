@@ -317,7 +317,7 @@ def thread_function(msg):
         send_error_traceback(cookiebot, msg, errormsg)
         logger.log_text(f"Error in chat with ID {chat_id}: {errormsg}", severity="WARNING")
     finally:
-        if 'date' in msg and msg['date'] != current_date:
+        if 'date' in msg and msg['date'] != current_date and not is_alternate_bot:
             current_date = msg['date']
             #birthday(cookiebot, datetime.datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'), msg=msg)
 
