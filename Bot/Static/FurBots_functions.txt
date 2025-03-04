@@ -95,7 +95,6 @@
 /ship
 /ajuda
 /sorteio
-/regras
 /pinpls
 /gay
 /tts
