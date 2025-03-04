@@ -9,12 +9,13 @@ BSKY_REGEX = r'bsky\.app/profile/[a-zA-Z0-9.-]{1,253}'
 
 def fix_embed_if_social_link(message: str) -> str | bool:
     message = message.strip()
-    if any(domain in message for domain in ['fxtwitter.com', 'fixupx.com', 'd.tnktok.com', 'vm.vxtiktok.com', 'ddinstagram.com', 'fxbsky.app']):
+    if any(domain in message for domain in ['vxtwitter.com', 'fxtwitter.com', 'fixupx.com', 'd.tnktok.com', 'vm.vxtiktok.com', 'ddinstagram.com', 'fxbsky.app']):
+        print("Domain blocked")
         return False
     try:
-        if requests.get(message, timeout=2).status_code != 200:
-            return False
+        requests.get(message, timeout=2)
     except:
+        print("Exception")
         return False
     transformations = [
         (TWITTER_REGEX, "https://fixupx.com/{}", r'[^/]+/status/[0-9]+'),
@@ -26,6 +27,7 @@ def fix_embed_if_social_link(message: str) -> str | bool:
         try:
             message = requests.get(message, timeout=1).url
         except:
+            print("Exception")
             return False
     for main_pattern, template, extract_pattern in transformations:
         if re.search(main_pattern, message):
@@ -35,7 +37,9 @@ def fix_embed_if_social_link(message: str) -> str | bool:
                     query = message[message.find('?'):] if '?' in message else ''
                     return template.format(path) + query
                 return template.format(match.group(1) if '(' in extract_pattern else match.group())
+            print("No match")
             return False
+    print("No transformations")
     return False
 
 if __name__ == "__main__":
