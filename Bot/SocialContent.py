@@ -436,7 +436,7 @@ def make_birthday_collage(bd_users_in_group):
             collage = np.vstack([collage, rows[i]])
     confetti = cv2.imread('Static/Confetti.png', cv2.IMREAD_COLOR)
     confetti = cv2.resize(confetti, (collage.shape[1], collage.shape[0]))
-    transparent_indices = np.where(confetti[:, :, 3] == 0)
+    transparent_indices = np.where(confetti[:, :, -1] == 0)
     confetti[transparent_indices] = collage[transparent_indices]
     return confetti
 
@@ -458,6 +458,9 @@ def next_birthdays(cookiebot, msg, chat_id, language, current_date):
         target_date = datetime.datetime.utcfromtimestamp(current_date) + datetime.timedelta(days=offset)
         target_date_formatted = target_date.strftime('%y-%m-%d')
         bd_users = get_request_backend(f"users?birthdate={target_date_formatted}")
+        if not type(bd_users) == list:
+            send_message(cookiebot, chat_id, str(bd_users))
+            return
         text += f"{offset} dias:\n"
         for bd_user in bd_users:
             text += f"@{bd_user['username']}\n" if 'username' in bd_user else f"{bd_user['firstName']} {bd_user['lastName']}\n"
