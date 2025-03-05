@@ -390,7 +390,7 @@ def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
             except:
                 delete_request_backend(f"registers/{group['id']}/users", {"user": bd_user})
         if manual_chat_id and msg and 'text' in msg:
-            bd_users_in_group.extend([{'username': x.replace('@', '')} for x in msg['text'].split()])
+            bd_users_in_group.extend([{'username': x.replace('@', '')} for x in msg['text'].split() if x.startswith('@')])
         if is_old_birthday_pinned or (is_new_birthday_pinned and manual_chat_id):
             cookiebot.unpinChatMessage(group['id'], chatinfo['pinned_message']['message_id'])
             logger.log_text(f"Unpinned old birthday message for group with ID {group['id']}", severity="INFO")
@@ -453,19 +453,16 @@ def make_birthday_caption(bd_users_in_group, current_date_formatted):
     return caption
 
 def next_birthdays(cookiebot, msg, chat_id, language, current_date):
-    if str(msg['chat']['id']) != '-1001891420773':
-        return
     text = "PRÓXIMOS ANIVERSARIANTES (todos os grupos):\n\n"
     for offset in range(1, 5):
         target_date = datetime.datetime.utcfromtimestamp(current_date) + datetime.timedelta(days=offset)
         target_date_formatted = target_date.strftime('%Y-%m-%d')
         bd_users = get_request_backend(f"users?birthdate={target_date_formatted}")
-        if not type(bd_users) == list:
-            send_message(cookiebot, chat_id, str(bd_users))
-            return
         text += f"{offset} dias:\n"
         for bd_user in bd_users:
             text += f"@{bd_user['username']}\n" if 'username' in bd_user else f"{bd_user['firstName']} {bd_user['lastName']}\n"
+        if not len(bd_users):
+            text += "- \n"
         text += "\n"
     send_message(cookiebot, chat_id, text, msg, language)
     logger.log_text(f"Next birthdays message sent to chat with ID {chat_id}", severity="INFO")
