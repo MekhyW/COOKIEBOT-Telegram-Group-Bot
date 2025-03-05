@@ -397,7 +397,8 @@ def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
         if (not is_new_birthday_pinned and len(bd_users_in_group)) or manual_chat_id:
             collage_image = make_birthday_collage(bd_users_in_group)
             collage_caption = make_birthday_caption(bd_users_in_group, current_date_formatted)
-            collage_message_id = send_photo(cookiebot, group['id'], collage_image, caption=collage_caption, language=language)
+            with open(collage_image, 'rb') as final_img:
+                collage_message_id = send_photo(cookiebot, group['id'], final_img, caption=collage_caption, language=language)
             cookiebot.pinChatMessage(group['id'], collage_message_id)
             cookiebot.sendMessage(group['id'], '🎂')
             timer_next_birthdays = threading.Timer(900, next_birthdays, args=(cookiebot, msg, group['id'], language, current_date))
@@ -438,7 +439,8 @@ def make_birthday_collage(bd_users_in_group):
     confetti = cv2.resize(confetti, (collage.shape[1], collage.shape[0]))
     transparent_indices = np.where(confetti[:, :, -1] == 0)
     confetti[transparent_indices] = collage[transparent_indices]
-    return confetti
+    cv2.imwrite("birthday.png", confetti)
+    return "birthday.png"
 
 def make_birthday_caption(bd_users_in_group, current_date_formatted):
     users_str = ""
