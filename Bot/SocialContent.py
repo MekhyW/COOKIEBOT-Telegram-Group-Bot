@@ -407,7 +407,7 @@ def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
             logger.log_text(f"Triggered birthday message for group with ID {group['id']}", severity="INFO")
         if manual_chat_id:
             return
-        time.sleep(1)
+        time.sleep(3)
 
 def make_birthday_collage(bd_users_in_group):
     collage_images = []

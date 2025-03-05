@@ -316,9 +316,8 @@ def thread_function(msg):
     finally:
         check_new_name(cookiebot, msg, chat_id, chat_type)
         if (not is_alternate_bot) and 'date' in msg and (current_date is None or datetime.datetime.utcfromtimestamp(current_date).strftime('%Y-%m-%d') != datetime.datetime.utcfromtimestamp(msg['date']).strftime('%Y-%m-%d')):
-            print(current_date, msg['date'], msg['date'] == current_date)
             current_date = msg['date']
-            #birthday(cookiebot, current_date, msg=msg)
+            birthday(cookiebot, current_date, msg=msg)
 
 def thread_function_query(msg):
     try:
