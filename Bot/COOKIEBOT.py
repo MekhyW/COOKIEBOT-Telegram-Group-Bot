@@ -316,7 +316,7 @@ def thread_function(msg):
     finally:
         check_new_name(cookiebot, msg, chat_id, chat_type)
         if 'date' in msg and msg['date'] != current_date and not is_alternate_bot:
-            print(current_date)
+            print(current_date, msg['date'], msg['date'] == current_date)
             current_date = msg['date']
             #birthday(cookiebot, current_date, msg=msg)
 
