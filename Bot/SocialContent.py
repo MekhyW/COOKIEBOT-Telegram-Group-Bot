@@ -426,7 +426,7 @@ def make_birthday_collage(bd_users_in_group):
     collage_size = len(collage_images)
     rows = []
     k = 0
-    for i in range(collage_size**2):
+    for i in range(collage_size):
         if i % collage_size == 0:
             if k > 0:
                 rows.append(cur_row)
