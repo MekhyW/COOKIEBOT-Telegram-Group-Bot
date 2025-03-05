@@ -399,7 +399,10 @@ def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
             collage_caption = make_birthday_caption(bd_users_in_group, current_date_formatted)
             with open(collage_image, 'rb') as final_img:
                 collage_message_id = send_photo(cookiebot, group['id'], final_img, caption=collage_caption, language=language)
-            cookiebot.pinChatMessage(group['id'], collage_message_id)
+            try:
+                cookiebot.pinChatMessage(group['id'], collage_message_id)
+            except Exception as e:
+                logger.log_text(f"Error pinning birthday collage for group with ID {group['id']}: {e}", severity="INFO")
             cookiebot.sendMessage(group['id'], '🎂')
             timer_next_birthdays = threading.Timer(900, next_birthdays, args=(cookiebot, msg, group['id'], language, current_date))
             timer_next_birthdays.start()
@@ -420,7 +423,7 @@ def make_birthday_collage(bd_users_in_group):
         else:
             user_img = cv2.imread('Static/No_Image_Available.jpg', cv2.IMREAD_COLOR)
         collage_images.append(user_img)
-    collage_size = int(math.floor(math.sqrt(len(collage_images))))
+    collage_size = len(collage_images)
     rows = []
     k = 0
     for i in range(collage_size**2):
