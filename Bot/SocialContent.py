@@ -426,6 +426,7 @@ def make_birthday_collage(bd_users_in_group):
     num_cells = len(collage_images)
     row_size = int(math.ceil(math.sqrt(num_cells)))
     rows = []
+    cur_row = None
     for image_index  in range(num_cells):
         if image_index % row_size == 0 and image_index != 0:  
             rows.append(cur_row)
