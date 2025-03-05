@@ -425,19 +425,11 @@ def make_birthday_collage(bd_users_in_group):
         collage_images.append(user_img)
     num_cells = len(collage_images)
     row_size = int(math.ceil(math.sqrt(num_cells)))
-    rows = []
-    cur_row = None
-    for image_index  in range(num_cells):
-        if image_index % row_size == 0 and image_index != 0:  
-            rows.append(cur_row)
-            cur_row = None
-        width, height, _ = collage_images[image_index].shape  
-        if not cur_row is None:
-            cur_row = np.hstack((cur_row, np.zeros((height,width,3), dtype='uint8')))
-        else:
-            cur_row = np.zeros((height,width*row_size,3), dtype='uint8')  
-        cur_row[0:height, (image_index % row_size) * width : (image_index % row_size + 1) * width] = collage_images[image_index]
-    collage = np.vstack(rows)
+    collage = np.zeros((row_size * collage_images[0].shape[0], row_size * collage_images[0].shape[1], 3), dtype=np.uint8)
+    for i in range(num_cells):
+        row = int(i / row_size)
+        col = i % row_size
+        collage[row * collage_images[i].shape[0]:(row + 1) * collage_images[i].shape[0], col * collage_images[i].shape[1]:(col + 1) * collage_images[i].shape[1]] = collage_images[i]
     confetti = cv2.imread('Static/Confetti.png', cv2.IMREAD_COLOR)
     confetti = cv2.resize(confetti, (collage.shape[1], collage.shape[0]))
     transparent_indices = np.where(confetti[:, :, -1] == 0)
