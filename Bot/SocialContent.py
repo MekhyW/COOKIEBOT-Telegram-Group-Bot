@@ -377,8 +377,8 @@ def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
         users_in_group = get_members_chat(group['id'])
         bd_users_in_group = []
         is_new_birthday_pinned, is_old_birthday_pinned = False, False
-        if 'pinned_message' in chatinfo and 'text' in chatinfo['pinned_message'] and any(x in chatinfo['pinned_message']['text'].lower() for x in ['feliz aniversário!', 'happy birthday!', 'feliz cumpleaños!']):
-            is_new_birthday_pinned, is_old_birthday_pinned = (True, False) if current_date_formatted in chatinfo['pinned_message']['text'] else (False, True)
+        if 'pinned_message' in chatinfo and 'caption' in chatinfo['pinned_message'] and any(x in chatinfo['pinned_message']['caption'].lower() for x in ['feliz aniversário!', 'happy birthday!', 'feliz cumpleaños!']):
+            is_new_birthday_pinned, is_old_birthday_pinned = (True, False) if current_date_formatted in chatinfo['pinned_message']['caption'] else (False, True)
         for bd_user in bd_users:
             if 'username' not in bd_user or bd_user['username'] not in [x['user'] for x in users_in_group]:
                 continue
@@ -447,7 +447,12 @@ def make_birthday_caption(bd_users_in_group, current_date_formatted):
         users_str += " e " if index == len(bd_users_in_group) - 1 else ", " if index > 0 else ""
         users_str += f"@{bd_users_in_group[index]['username']}" if 'username' in bd_users_in_group[index] else f"{bd_users_in_group[index]['firstName']} {bd_users_in_group[index]['lastName']}"
     caption = random.choice([f'WOW! Hoje é o aniversário de {users_str} :000 parabéns por essa data tão especial e que seu dia seja cheio de fofuras e muitos uwu',
-                             f'Hoje é o melhor dia do ano! Sabe pq? Pq é o dia do bolo de {users_str}! Não deixem de encher o bucho com muito bolo e salgadinhos ^^'])
+                             f'Hoje é o melhor dia do ano! Sabe pq? Pq é o dia do bolo de {users_str}! Não deixem de encher o bucho com muito bolo e salgadinhos ^^',
+                             f'Awooo! Hoje é um dia especial porque é o aniversário de {users_str}! 🥳 Que seu dia seja recheado de fofuras, abraços quentinhos e muitos momentos incríveis! UwU 🎂✨',
+                             f'MIAU! 🎉 Hoje é dia de festa, pois {users_str} está completando mais um ano de fofura! Que seu dia seja tão incrível quanto um abraço de um fur amigo! 🐾💖',
+                             f'OMG!! 🦊💖 Hoje é o aniversário de {users_str}! Que seu dia seja recheado de carinho, abraços peludos e montanhas de bolo! 🎂🥰',
+                             f'AAAAH! 🎊 Parabéns {users_str}! Que esse dia seja tão especial quanto você e que tenha muitas mordidinhas de carinho e ronrons! 🐾💞',
+                             f'YIP YIP! 🐺💙 Hoje o mundo brilha mais porque {users_str} está comemorando mais um ciclo de fofura! 🎂 Não se esqueça de aproveitar cada momento e comer muitos docinhos! 🍩✨'])
     caption += f"\n\n<i> Feliz aniversário! </i>\n{current_date_formatted}"
     return caption
 
