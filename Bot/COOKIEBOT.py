@@ -53,7 +53,6 @@ def thread_function(msg):
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
         print(content_type, chat_type, chat_id, msg['message_id'])
-        check_new_name(cookiebot, msg, chat_id, chat_type)
         if chat_type == 'channel':
             return
         if chat_type == 'private':
@@ -317,6 +316,7 @@ def thread_function(msg):
         send_error_traceback(cookiebot, msg, errormsg)
         logger.log_text(f"Error in chat with ID {chat_id}: {errormsg}", severity="WARNING")
     finally:
+        check_new_name(cookiebot, msg, chat_id, chat_type)
         if 'date' in msg and msg['date'] != current_date and not is_alternate_bot:
             current_date = msg['date']
             #birthday(cookiebot, datetime.datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d'), msg=msg)
