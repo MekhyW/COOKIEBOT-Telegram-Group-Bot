@@ -366,7 +366,7 @@ def birthday(cookiebot, current_date_formatted, msg=None, manual_chat_id=None):
     bd_users = get_request_backend(f"users?birthdate={current_date_formatted}")
     groups = get_request_backend('registers') if not manual_chat_id else [get_request_backend(f"registers/{manual_chat_id}")]
     for group in groups:
-        if group['id'] != '-1001891420773':
+        if str(group['id']) != '-1001891420773':
             continue
         try:
             _, _, _, _, _, funfunctions, _, language, _, _, _, _, _ = get_config(cookiebot, group['id'])
@@ -450,6 +450,8 @@ def make_birthday_caption(bd_users_in_group, current_date_formatted):
     return caption
 
 def next_birthdays(cookiebot, msg, chat_id, language, current_date_formatted):
+    if str(msg['chat']['id']) != '-1001891420773':
+        return
     text = "PRÓXIMOS ANIVERSARIANTES (todos os grupos):\n\n"
     for offset in range(1, 5):
         target_date = current_date_formatted + datetime.timedelta(days=offset)
