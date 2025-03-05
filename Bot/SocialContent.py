@@ -392,7 +392,7 @@ def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
         if is_old_birthday_pinned or (is_new_birthday_pinned and manual_chat_id):
             cookiebot.unpinChatMessage(group['id'], chatinfo['pinned_message']['message_id'])
             logger.log_text(f"Unpinned old birthday message for group with ID {group['id']}", severity="INFO")
-        if (not is_new_birthday_pinned and len(bd_users_in_group)) or manual_chat_id:
+        if (len(bd_users_in_group) and not is_new_birthday_pinned) or manual_chat_id:
             collage_image = make_birthday_collage(bd_users_in_group)
             collage_caption = make_birthday_caption(bd_users_in_group, current_date_formatted)
             with open(collage_image, 'rb') as final_img:
