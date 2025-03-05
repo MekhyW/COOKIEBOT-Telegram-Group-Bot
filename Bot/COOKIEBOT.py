@@ -315,7 +315,7 @@ def thread_function(msg):
         logger.log_text(f"Error in chat with ID {chat_id}: {errormsg}", severity="WARNING")
     finally:
         check_new_name(cookiebot, msg, chat_id, chat_type)
-        if 'date' in msg and msg['date'] != current_date and not is_alternate_bot:
+        if (not is_alternate_bot) and 'date' in msg and datetime.datetime.utcfromtimestamp(current_date).strftime('%Y-%m-%d') != datetime.datetime.utcfromtimestamp(msg['date']).strftime('%Y-%m-%d'):
             print(current_date, msg['date'], msg['date'] == current_date)
             current_date = msg['date']
             #birthday(cookiebot, current_date, msg=msg)
