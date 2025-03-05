@@ -454,9 +454,8 @@ def make_birthday_caption(bd_users_in_group, current_date_formatted):
 def next_birthdays(cookiebot, msg, chat_id, language, current_date):
     text = "PRÓXIMOS ANIVERSARIANTES (todos os grupos):\n\n"
     for offset in range(1, 5):
-        #target_date = datetime.datetime.utcfromtimestamp(current_date) + datetime.timedelta(days=offset)
-        #target_date_formatted = target_date.strftime('%Y-%m-%d')
-        target_date_formatted = "2023-06-19"
+        target_date = datetime.datetime.utcfromtimestamp(current_date) + datetime.timedelta(days=offset)
+        target_date_formatted = target_date.strftime('%Y-%m-%d')
         bd_users = get_request_backend(f"users?birthdate={target_date_formatted}")
         text += f"{offset} dias:\n"
         for bd_user in bd_users:
