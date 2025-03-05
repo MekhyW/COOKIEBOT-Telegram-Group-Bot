@@ -359,7 +359,8 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'])
     logger.log_text(f"Battle sent to chat with ID {chat_id}", severity="INFO")
 
-def birthday(cookiebot, current_date_formatted, msg=None, manual_chat_id=None):
+def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
+    current_date_formatted = datetime.datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d')
     if manual_chat_id and len(msg['text'].split()) == 1:
         send_message(cookiebot, manual_chat_id, "Você precisa digitar os usernames dos aniversariantes de hoje!", msg)
         return
@@ -399,7 +400,7 @@ def birthday(cookiebot, current_date_formatted, msg=None, manual_chat_id=None):
             collage_message_id = send_photo(cookiebot, group['id'], collage_image, caption=collage_caption, language=language)
             cookiebot.pinChatMessage(group['id'], collage_message_id)
             cookiebot.sendMessage(group['id'], '🎂')
-            timer_next_birthdays = threading.Timer(900, next_birthdays, args=(cookiebot, msg, group['id'], language, current_date_formatted))
+            timer_next_birthdays = threading.Timer(900, next_birthdays, args=(cookiebot, msg, group['id'], language, current_date))
             timer_next_birthdays.start()
             logger.log_text(f"Triggered birthday message for group with ID {group['id']}", severity="INFO")
         if manual_chat_id:
@@ -430,7 +431,7 @@ def make_birthday_collage(bd_users_in_group):
         else:
             cur_img = collage_images[i]
             cur_row = np.hstack([cur_row, cur_img])
-        collage = rows[0]
+        collage = rows[0] if len(rows) else collage_images[i]
         for i in range(1, len(rows)):
             collage = np.vstack([collage, rows[i]])
     confetti = cv2.imread('Static/Confetti.png', cv2.IMREAD_COLOR)
@@ -449,13 +450,14 @@ def make_birthday_caption(bd_users_in_group, current_date_formatted):
     caption += f"\n\n<i> Feliz aniversário! </i>\n{current_date_formatted}"
     return caption
 
-def next_birthdays(cookiebot, msg, chat_id, language, current_date_formatted):
+def next_birthdays(cookiebot, msg, chat_id, language, current_date):
     if str(msg['chat']['id']) != '-1001891420773':
         return
     text = "PRÓXIMOS ANIVERSARIANTES (todos os grupos):\n\n"
     for offset in range(1, 5):
-        target_date = current_date_formatted + datetime.timedelta(days=offset)
-        bd_users = get_request_backend(f"users?birthdate={target_date}")
+        target_date = datetime.datetime.utcfromtimestamp(current_date) + datetime.timedelta(days=offset)
+        target_date_formatted = target_date.strftime('%y-%m-%d')
+        bd_users = get_request_backend(f"users?birthdate={target_date_formatted}")
         text += f"{offset} dias:\n"
         for bd_user in bd_users:
             text += f"@{bd_user['username']}\n" if 'username' in bd_user else f"{bd_user['firstName']} {bd_user['lastName']}\n"
