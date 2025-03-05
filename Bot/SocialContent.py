@@ -360,7 +360,7 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     logger.log_text(f"Battle sent to chat with ID {chat_id}", severity="INFO")
 
 def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
-    current_date_formatted = datetime.datetime.utcfromtimestamp(current_date).strftime('%y-%m-%d')
+    current_date_formatted = datetime.datetime.utcfromtimestamp(current_date).strftime('%Y-%m-%d')
     if manual_chat_id and len(msg['text'].split()) == 1:
         send_message(cookiebot, manual_chat_id, "Você precisa digitar os usernames dos aniversariantes de hoje!", msg)
         return
@@ -458,7 +458,7 @@ def next_birthdays(cookiebot, msg, chat_id, language, current_date):
     text = "PRÓXIMOS ANIVERSARIANTES (todos os grupos):\n\n"
     for offset in range(1, 5):
         target_date = datetime.datetime.utcfromtimestamp(current_date) + datetime.timedelta(days=offset)
-        target_date_formatted = target_date.strftime('%y-%m-%d')
+        target_date_formatted = target_date.strftime('%Y-%m-%d')
         bd_users = get_request_backend(f"users?birthdate={target_date_formatted}")
         if not type(bd_users) == list:
             send_message(cookiebot, chat_id, str(bd_users))
