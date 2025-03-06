@@ -18,7 +18,7 @@ import numpy as np
 from PIL import ImageFont, ImageDraw, Image
 
 captcha = ImageCaptcha()
-recently_kicked_users = {}  # Format: {(chat_id, user_id): timestamp}
+recently_kicked_checkhuman = {}
 KICK_CACHE_DURATION = 300
 try:
     spamwatch_client = spamwatch.Client(spamwatch_token)
@@ -160,10 +160,10 @@ def check_human(cookiebot, msg, chat_id, language):
     user_id = msg['new_chat_participant']['id']
     current_time = time.time()
     cache_key = (chat_id, user_id)
-    expired = [(c, u) for (c, u), timestamp in recently_kicked_users.items() if current_time - timestamp > KICK_CACHE_DURATION]
+    expired = [(c, u) for (c, u), timestamp in recently_kicked_checkhuman.items() if current_time - timestamp > KICK_CACHE_DURATION]
     for key in expired:
-        del recently_kicked_users[key]
-    if cache_key in recently_kicked_users:
+        del recently_kicked_checkhuman[key]
+    if cache_key in recently_kicked_checkhuman:
         return False
     if 'username' not in msg['new_chat_participant']:
         userphotos = cookiebot.getUserProfilePhotos(user_id)
@@ -171,7 +171,7 @@ def check_human(cookiebot, msg, chat_id, language):
             cookiebot.kickChatMember(chat_id, user_id)
             send_message(cookiebot, chat_id, "Kickei o novo usuário por <b> suspeita de ser um robô </b>\n<blockquote> Se isso foi um erro, peça para ele adicionar um username (@) ou foto de perfil e um ADM adicioná-lo de volta </blockquote>", language=language)
             cookiebot.unbanChatMember(chat_id, user_id)
-            recently_kicked_users[cache_key] = current_time
+            recently_kicked_checkhuman[cache_key] = current_time
             logger.log_text(f"Kicked user with ID {user_id} in chat with ID {chat_id} for suspicion of being a bot", severity="INFO")
             return True
     return False
@@ -216,15 +216,6 @@ def check_banlist(cookiebot, msg, chat_id, language):
 
 def captcha_message(cookiebot, msg, chat_id, captchatimespan, limbotimespan, language, is_alternate_bot=0):
     user_id = msg['new_chat_participant']['id']
-    current_time = time.time()
-    cache_key = (chat_id, user_id)
-    expired = [(c, u) for (c, u), timestamp in recently_kicked_users.items() if current_time - timestamp > KICK_CACHE_DURATION]
-    for key in expired:
-        del recently_kicked_users[key]
-    if cache_key in recently_kicked_users:
-        send_message(cookiebot, chat_id, "Usuário kickado recentemente. Pulando captcha...", language=language)
-        welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
-        return
     try:
         cookiebot.restrictChatMember(chat_id, user_id, permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + captchatimespan))
     except Exception as e:
@@ -289,7 +280,6 @@ def check_captcha(cookiebot, msg, chat_id, captchatimespan, language):
                         send_message(cookiebot, chat_id, f"Erro ao kickar o usuário com id <b> {user} </b> por <b> {reason} </b>.\n<blockquote> Usuário não está mais no chat, ou não tenho permissão para kickar </blockquote>", language=language)
                         logger.log_text(f"Could not kick user with ID {user} in chat with ID {chat_id}: {e}", severity="INFO")
                     delete_message(cookiebot, (str(chat), str(captcha_id)))
-                    recently_kicked_users[(chat_id, user)] = time.time()
                 elif chat == chat_id and user == msg['from']['id']:
                     text.write(line)
                     delete_message(cookiebot, telepot.message_identifier(msg))
