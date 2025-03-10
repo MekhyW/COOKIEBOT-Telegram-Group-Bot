@@ -92,7 +92,7 @@ def translate(text, dest='en'):
     newline_token = " NEWLINE_TOKEN_XYZ "
     text_with_placeholders = re.sub(r'<[^>]*>', replace_tag, text)
     text_with_tokens = text_with_placeholders.replace('\n', newline_token)
-    translated = GoogleTranslator(source='auto', target=dest).translate(text_with_tokens)
+    translated = GoogleTranslator(source='auto', target=dest[:2]).translate(text_with_tokens)
     for placeholder, tag in tags.items():
         translated = re.sub(re.escape(placeholder.strip()), tag, translated, flags=re.IGNORECASE)
     translated = re.sub(re.escape(newline_token.strip()), '\n', translated, flags=re.IGNORECASE)
