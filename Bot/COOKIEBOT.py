@@ -272,7 +272,7 @@ def thread_function(msg):
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules":
                 listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                 update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=is_alternate_bot)
-            elif funfunctions and (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and 'from' in msg and msg['reply_to_message']['from']['id'] == myself['id'])) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']):
+            elif funfunctions and (msg['text'].lower().startswith("cookiebot") or ('reply_to_message' in msg and 'from' in msg and msg['reply_to_message']['from']['id'] == myself['id'])) and any(x in msg['text'].lower() for x in ['quem', 'who', 'quién', 'quien']) and ("?" in msg['text']) and not any(x in msg['text'].lower() for x in ['você', 'voce', 'vc', 'you', 'usted', 'tú']):
                 who(cookiebot, msg, chat_id, language)
             elif 'reply_to_message' in msg and 'photo' in msg['reply_to_message'] and 'caption' in msg['reply_to_message'] and any(x in msg['reply_to_message']['caption'] for x in [f"{round(captchatimespan/60)} minutes", f"{round(captchatimespan/60)} minutos"]):
                 solve_captcha(cookiebot, msg, chat_id, False, limbotimespan, language, is_alternate_bot=is_alternate_bot)
