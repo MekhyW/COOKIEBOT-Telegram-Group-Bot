@@ -44,7 +44,7 @@ def get_request_backend(route, params=None):
     try:
         response = requests.get(f'https://backend.cookiebotfur.net/{route}', json=params,
                             auth = HTTPBasicAuth(login_backend, password_backend),
-                            verify=False, timeout=60)
+                            verify=False, timeout=10)
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error getting request from backend: {e}", severity="INFO")
@@ -54,7 +54,7 @@ def post_request_backend(route, params=None):
     try:
         response = requests.post(f'https://backend.cookiebotfur.net/{route}', json=params,
                              auth = HTTPBasicAuth(login_backend, password_backend),
-                             verify=False, timeout=60)
+                             verify=False, timeout=10)
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error posting request to backend: {e}", severity="INFO")
@@ -64,7 +64,7 @@ def put_request_backend(route, params=None):
     try:
         response = requests.put(f'https://backend.cookiebotfur.net/{route}', json=params,
                             auth = HTTPBasicAuth(login_backend, password_backend),
-                            verify=False, timeout=60)
+                            verify=False, timeout=10)
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error putting request to backend: {e}", severity="INFO")
@@ -74,7 +74,7 @@ def delete_request_backend(route, params=None):
     try:
         response = requests.delete(f'https://backend.cookiebotfur.net/{route}', json=params,
                                auth = HTTPBasicAuth(login_backend, password_backend),
-                               verify=False, timeout=60)
+                               verify=False, timeout=10)
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error deleting request from backend: {e}", severity="INFO")
