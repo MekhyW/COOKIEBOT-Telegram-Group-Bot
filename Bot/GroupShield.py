@@ -204,6 +204,7 @@ def check_spamwatch(cookiebot, msg, chat_id, language):
     return False
 
 def check_banlist(cookiebot, msg, chat_id, language):
+    return False
     is_blacklisted = get_request_backend(f"blacklist/{msg['new_chat_participant']['id']}")
     is_blacklisted_username = get_request_backend(f"blacklist/username/{msg['new_chat_participant']['username']}") if 'username' in msg['new_chat_participant'] else {'error': 'no username'}
     fullname = f"{msg['new_chat_participant']['first_name']} {msg['new_chat_participant']['last_name']}" if 'last_name' in msg['new_chat_participant'] else msg['new_chat_participant']['first_name']
