@@ -45,6 +45,9 @@ def get_request_backend(route, params=None):
         response = requests.get(f'https://backend.cookiebotfur.net/{route}', json=params,
                             auth = HTTPBasicAuth(login_backend, password_backend),
                             verify=False, timeout=10)
+        if response.status_code > 299:
+            logger.log_text(f"Error in GET request backend: {response.status_code} {response.text}", severity="INFO")
+            raise Exception(f"BACKEND GET REQUEST ERROR {response.status_code} {response.text}")
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error getting request from backend: {e}", severity="INFO")
@@ -55,6 +58,9 @@ def post_request_backend(route, params=None):
         response = requests.post(f'https://backend.cookiebotfur.net/{route}', json=params,
                              auth = HTTPBasicAuth(login_backend, password_backend),
                              verify=False, timeout=10)
+        if response.status_code > 299:
+            logger.log_text(f"Error in POST request backend: {response.status_code} {response.text}", severity="INFO")
+            raise Exception(f"BACKEND POST REQUEST ERROR {response.status_code} {response.text}")
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error posting request to backend: {e}", severity="INFO")
@@ -65,6 +71,9 @@ def put_request_backend(route, params=None):
         response = requests.put(f'https://backend.cookiebotfur.net/{route}', json=params,
                             auth = HTTPBasicAuth(login_backend, password_backend),
                             verify=False, timeout=10)
+        if response.status_code > 299:
+            logger.log_text(f"Error in PUT request backend: {response.status_code} {response.text}", severity="INFO")
+            raise Exception(f"BACKEND PUT REQUEST ERROR {response.status_code} {response.text}")
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error putting request to backend: {e}", severity="INFO")
@@ -75,6 +84,9 @@ def delete_request_backend(route, params=None):
         response = requests.delete(f'https://backend.cookiebotfur.net/{route}', json=params,
                                auth = HTTPBasicAuth(login_backend, password_backend),
                                verify=False, timeout=10)
+        if response.status_code > 299:
+            logger.log_text(f"Error in DELETE request backend: {response.status_code} {response.text}", severity="INFO")
+            raise Exception(f"BACKEND DELETE REQUEST ERROR {response.status_code} {response.text}")
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error deleting request from backend: {e}", severity="INFO")
