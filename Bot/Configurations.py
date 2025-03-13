@@ -114,9 +114,8 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
         'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 
         'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask, 'threadPosts': threadPosts, 'maxPosts': maxPosts, 
         'publisherMembersOnly': publisherMembersOnly})
-    elif 'error' in configs:
-        raise Exception(f"Error getting config: {configs['error']}")
     else:
+        cookiebot.sendMessage(ownerID, str(configs))
         FurBots = configs['furbots']
         sfw = configs['sfw']
         stickerspamlimit = configs['stickerSpamLimit']
