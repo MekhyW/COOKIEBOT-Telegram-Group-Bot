@@ -204,16 +204,15 @@ def check_spamwatch(cookiebot, msg, chat_id, language):
     return False
 
 def check_banlist(cookiebot, msg, chat_id, language):
-    return False
     is_blacklisted = get_request_backend(f"blacklist/{msg['new_chat_participant']['id']}")
     is_blacklisted_username = get_request_backend(f"blacklist/username/{msg['new_chat_participant']['username']}") if 'username' in msg['new_chat_participant'] else {'error': 'no username'}
     fullname = f"{msg['new_chat_participant']['first_name']} {msg['new_chat_participant']['last_name']}" if 'last_name' in msg['new_chat_participant'] else msg['new_chat_participant']['first_name']
-    if 'error' in is_blacklisted and 'error' in is_blacklisted_username and '卐' not in fullname:
-        return False
-    cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-    send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b> ser flagrado como conta falsa/spam em outros chats </b>", language=language)
-    logger.log_text(f"Banned user with ID {msg['new_chat_participant']['id']} in chat with ID {chat_id} by blacklist", severity="INFO")
-    return True
+    if ('id' in is_blacklisted and is_blacklisted['id'] == str(msg['new_chat_participant']['id'])) or ('id' in is_blacklisted_username and is_blacklisted_username['id'] == msg['new_chat_participant']['username']) or '卐' in fullname:
+        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+        send_message(cookiebot, chat_id, "Bani o usuário recém-chegado por <b> ser flagrado como conta falsa/spam em outros chats </b>", language=language)
+        logger.log_text(f"Banned user with ID {msg['new_chat_participant']['id']} in chat with ID {chat_id} by blacklist", severity="INFO")
+        return True
+    return False
 
 def captcha_message(cookiebot, msg, chat_id, captchatimespan, limbotimespan, language, is_alternate_bot=0):
     user_id = msg['new_chat_participant']['id']
