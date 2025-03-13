@@ -51,7 +51,7 @@ def get_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error getting request from backend: {e}", severity="INFO")
-        return ''
+        return e
 
 def post_request_backend(route, params=None):
     try:
@@ -64,7 +64,7 @@ def post_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error posting request to backend: {e}", severity="INFO")
-        return ''
+        return e
 
 def put_request_backend(route, params=None):
     try:
@@ -77,7 +77,7 @@ def put_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error putting request to backend: {e}", severity="INFO")
-        return ''
+        return e
 
 def delete_request_backend(route, params=None):
     try:
@@ -90,7 +90,7 @@ def delete_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error deleting request from backend: {e}", severity="INFO")
-        return ''
+        return e
     
 def translate(text, dest='en'):
     tags = {}
@@ -156,9 +156,9 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
             requests.get(full_url, timeout=5)
         elif msg_to_reply:
             try:
-                cookiebot.sendMessage(chat_id, text, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup, disable_notification=disable_notification, parse_mode=parse_mode)
+                return cookiebot.sendMessage(chat_id, text, reply_to_message_id=msg_to_reply['message_id'], reply_markup=reply_markup, disable_notification=disable_notification, parse_mode=parse_mode)
             except telepot.exception.TelegramError:
-                cookiebot.sendMessage(chat_id, text.replace('\\', '').replace('>', ''), reply_to_message_id=msg_to_reply['message_id'], disable_notification=disable_notification, reply_markup=reply_markup)
+                return cookiebot.sendMessage(chat_id, text.replace('\\', '').replace('>', ''), reply_to_message_id=msg_to_reply['message_id'], disable_notification=disable_notification, reply_markup=reply_markup)
         elif thread_id is not None:
             url = f"https://api.telegram.org/bot{get_bot_token(is_alternate_bot)}/sendMessage?chat_id={chat_id}&text={text}&message_thread_id={thread_id}&reply_markup={reply_markup}&disable_notification={disable_notification}&parse_mode={parse_mode}"
             if reply_markup is None:
@@ -166,9 +166,9 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
             requests.get(url, timeout=5)
         else:
             try:
-                cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, disable_notification=disable_notification, parse_mode=parse_mode)
+                return cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, disable_notification=disable_notification, parse_mode=parse_mode)
             except telepot.exception.TelegramError:
-                cookiebot.sendMessage(chat_id, text.replace('\\', '').replace('>', ''), disable_notification=disable_notification, reply_markup=reply_markup)
+                return cookiebot.sendMessage(chat_id, text.replace('\\', '').replace('>', ''), disable_notification=disable_notification, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
         send_message(cookiebot, chat_id, text, msg_to_reply, language, thread_id, is_alternate_bot, reply_markup, link_preview_options, disable_notification, parse_mode)
     except Exception:

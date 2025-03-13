@@ -138,7 +138,7 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
         except Exception as e:
             logger.log_text(f"Could not restrict chat member media: {e}", severity="INFO")
     welcome = get_request_backend(f'welcomes/{chat_id}')
-    if 'error' in welcome and welcome['error'] == "Not Found":
+    if ('error' in welcome and welcome['error'] == "Not Found") or 'message' not in welcome:
         welcome = f"Olá! As boas-vindas ao grupo {msg['chat']['title']}!" if 'chat' in msg and 'title' in msg['chat'] else "Olá! As boas-vindas ao grupo!"
     elif len(welcome['message']) > 0:
         welcome = welcome['message'].replace('\\n', '\n')
