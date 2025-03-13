@@ -103,7 +103,7 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
     if chat_id in cache_configurations and not ignorecache:
         return cache_configurations[chat_id]
     isBlacklisted = get_request_backend(f"blacklist/{chat_id}")
-    if not 'error' in isBlacklisted and 'id' in isBlacklisted and isBlacklisted['id'] == str(chat_id):
+    if type(isBlacklisted) is not str and not 'error' in isBlacklisted and 'id' in isBlacklisted and isBlacklisted['id'] == str(chat_id):
         leave_and_blacklist(cookiebot, chat_id)
         send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
         return

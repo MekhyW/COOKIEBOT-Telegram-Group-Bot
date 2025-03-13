@@ -51,7 +51,7 @@ def get_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error getting request from backend: {e}", severity="INFO")
-        return e
+        return str(e)
 
 def post_request_backend(route, params=None):
     try:
@@ -64,7 +64,7 @@ def post_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error posting request to backend: {e}", severity="INFO")
-        return e
+        return str(e)
 
 def put_request_backend(route, params=None):
     try:
@@ -77,7 +77,7 @@ def put_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error putting request to backend: {e}", severity="INFO")
-        return e
+        return str(e)
 
 def delete_request_backend(route, params=None):
     try:
@@ -90,7 +90,7 @@ def delete_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         logger.log_text(f"Error deleting request from backend: {e}", severity="INFO")
-        return e
+        return str(e)
     
 def translate(text, dest='en'):
     tags = {}
