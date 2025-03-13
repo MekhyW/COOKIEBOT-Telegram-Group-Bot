@@ -17,7 +17,6 @@
 /eat
 /delete
 /termo
-/aniversario
 /averageyiffometro
 /yiffometro
 /welcome
