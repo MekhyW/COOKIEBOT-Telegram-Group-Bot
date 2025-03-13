@@ -50,6 +50,7 @@ def get_request_backend(route, params=None):
             raise Exception(f"BACKEND GET REQUEST ERROR {response.status_code} {response.text}")
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
+        print(e)
         logger.log_text(f"Error getting request from backend: {e}", severity="INFO")
         return str(e)
 
@@ -63,6 +64,7 @@ def post_request_backend(route, params=None):
             raise Exception(f"BACKEND POST REQUEST ERROR {response.status_code} {response.text}")
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
+        print(e)
         logger.log_text(f"Error posting request to backend: {e}", severity="INFO")
         return str(e)
 
@@ -76,6 +78,7 @@ def put_request_backend(route, params=None):
             raise Exception(f"BACKEND PUT REQUEST ERROR {response.status_code} {response.text}")
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
+        print(e)
         logger.log_text(f"Error putting request to backend: {e}", severity="INFO")
         return str(e)
 
@@ -89,6 +92,7 @@ def delete_request_backend(route, params=None):
             raise Exception(f"BACKEND DELETE REQUEST ERROR {response.status_code} {response.text}")
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
+        print(e)
         logger.log_text(f"Error deleting request from backend: {e}", severity="INFO")
         return str(e)
     
