@@ -109,13 +109,14 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
         return
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 1, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
     configs = get_request_backend(f"configs/{chat_id}")
+    if type(configs) is str:
+        return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
     if 'error' in configs and configs['error'] == "Not Found":
         post_request_backend(f"configs/{chat_id}", {'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 
         'timeWithoutSendingImages': limbotimespan, 'timeCaptcha': captchatimespan, 'functionsFun': funfunctions, 'functionsUtility': utilityfunctions, 
         'language': language, 'publisherPost': publisherpost, 'publisherAsk': publisherask, 'threadPosts': threadPosts, 'maxPosts': maxPosts, 
         'publisherMembersOnly': publisherMembersOnly})
     else:
-        cookiebot.sendMessage(ownerID, str(configs))
         FurBots = configs['furbots']
         sfw = configs['sfw']
         stickerspamlimit = configs['stickerSpamLimit']
