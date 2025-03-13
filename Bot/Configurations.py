@@ -36,6 +36,8 @@ def get_group_info(cookiebot, chat_id, listaadmins_id, title, photo_big_id, is_a
         if blob:
             photo_signed_url = blob.generate_signed_url(datetime.timedelta(days=10), method='GET')
     group = get_request_backend(f"groups/{chat_id}")
+    if type(group) is str:
+        return {"groupId": chat_id, "adminUsers": [], "name": title, "imageUrl": photo_signed_url}
     if 'error' in group and "Not Found" in group['error']:
         cache_groups[chat_id] = {"groupId": chat_id, "adminUsers": [], "name": title, "imageUrl": photo_signed_url}
         post_request_backend(f"groups/{chat_id}", cache_groups[chat_id])
