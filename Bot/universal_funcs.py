@@ -44,7 +44,7 @@ def get_request_backend(route, params=None):
     try:
         response = requests.get(f'https://backend.cookiebotfur.net/{route}', json=params,
                             auth = HTTPBasicAuth(login_backend, password_backend),
-                            verify=False, timeout=10)
+                            verify=False, timeout=60)
         if response.status_code > 299:
             logger.log_text(f"Error in GET request backend: {response.status_code} {response.text}", severity="INFO")
             raise Exception(f"BACKEND GET REQUEST ERROR {response.status_code} {response.text}")
@@ -58,7 +58,7 @@ def post_request_backend(route, params=None):
     try:
         response = requests.post(f'https://backend.cookiebotfur.net/{route}', json=params,
                              auth = HTTPBasicAuth(login_backend, password_backend),
-                             verify=False, timeout=10)
+                             verify=False, timeout=60)
         if response.status_code > 299:
             logger.log_text(f"Error in POST request backend: {response.status_code} {response.text}", severity="INFO")
             raise Exception(f"BACKEND POST REQUEST ERROR {response.status_code} {response.text}")
@@ -72,7 +72,7 @@ def put_request_backend(route, params=None):
     try:
         response = requests.put(f'https://backend.cookiebotfur.net/{route}', json=params,
                             auth = HTTPBasicAuth(login_backend, password_backend),
-                            verify=False, timeout=10)
+                            verify=False, timeout=60)
         if response.status_code > 299:
             logger.log_text(f"Error in PUT request backend: {response.status_code} {response.text}", severity="INFO")
             raise Exception(f"BACKEND PUT REQUEST ERROR {response.status_code} {response.text}")
@@ -86,7 +86,7 @@ def delete_request_backend(route, params=None):
     try:
         response = requests.delete(f'https://backend.cookiebotfur.net/{route}', json=params,
                                auth = HTTPBasicAuth(login_backend, password_backend),
-                               verify=False, timeout=10)
+                               verify=False, timeout=60)
         if response.status_code > 299:
             logger.log_text(f"Error in DELETE request backend: {response.status_code} {response.text}", severity="INFO")
             raise Exception(f"BACKEND DELETE REQUEST ERROR {response.status_code} {response.text}")
@@ -129,7 +129,7 @@ def get_media_content(cookiebot, msg, media_type, is_alternate_bot=0, downloadfi
         except TypeError:
             file_path_telegram = cookiebot.getFile(msg[media_type][-1]['file_id'])['file_path']
         url = f"https://api.telegram.org/file/bot{token}/{file_path_telegram}"
-        r = requests.get(url, allow_redirects=True, timeout=10)
+        r = requests.get(url, allow_redirects=True, timeout=60)
         if not downloadfile:
             return r.content
         filename = file_path_telegram.split('/')[-1]
@@ -192,7 +192,7 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
             url = f"https://api.telegram.org/bot{token}/sendPhoto?chat_id={chat_id}&photo={photo}&caption={caption}&message_thread_id={thread_id}&reply_markup={reply_markup}"
             if reply_markup is None:
                 url = url.replace('&reply_markup=None', '')
-            response = requests.get(url, timeout=10)
+            response = requests.get(url, timeout=60)
             sentphoto = {'message_id': json.loads(response.text)['result']['message_id']}
         else:
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
@@ -247,7 +247,7 @@ def set_bot_commands(cookiebot, commands, scope_chat_id, is_alternate_bot=0, lan
     data = {'commands': commands,
             'scope': {'type': 'chat', 'chat_id': scope_chat_id},
             'language_code': language[0:2].lower()}
-    r = requests.get(url, json=data, timeout=10)
+    r = requests.get(url, json=data, timeout=60)
     return r.text
 
 def forward_message(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, is_alternate_bot=0):
@@ -255,7 +255,7 @@ def forward_message(cookiebot, chat_id, from_chat_id, message_id, thread_id=None
     token = get_bot_token(is_alternate_bot)
     if thread_id:
         url_req = f"https://api.telegram.org/bot{token}/forwardMessage?chat_id={chat_id}&from_chat_id={from_chat_id}&message_id={message_id}&message_thread_id={thread_id}"
-        requests.get(url_req, timeout=10)
+        requests.get(url_req, timeout=60)
     else:
         cookiebot.forwardMessage(chat_id, from_chat_id, message_id)
 
@@ -264,7 +264,7 @@ def react_to_message(msg, emoji, is_big=True, is_alternate_bot=0):
     reaction = [{'type': 'emoji', 'emoji': emoji}]
     reaction_json = json.dumps(reaction)
     url = f'https://api.telegram.org/bot{token}/setMessageReaction?chat_id={msg["chat"]["id"]}&message_id={msg["message_id"]}&reaction={reaction_json}&is_big={is_big}'
-    requests.get(url, timeout=10)
+    requests.get(url, timeout=60)
 
 def blacklist_user(user_id):
     id = str(user_id).replace('@', '')
