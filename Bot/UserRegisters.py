@@ -9,6 +9,8 @@ def get_members_chat(chat_id):
     if chat_id in cache_members:
         return cache_members[chat_id]
     members = get_request_backend(f"registers/{chat_id}", {"id": chat_id})
+    if type(members) is str:
+        return []
     if 'error' in members and members['error'] == "Not Found":
         post_request_backend(f"registers/{chat_id}", {"id": chat_id, "users": []})
         cache_members[chat_id] = []
@@ -22,6 +24,8 @@ def get_user_info(user_id, username, first_name, last_name, language_code, birth
     if user_id in cache_users and all(cache_users[user_id][key] == info[key] or info[key] is None for key in info):
         return cache_users[user_id]
     user = get_request_backend(f"users/{user_id}", {"id": user_id})
+    if type(user) is str:
+        return info
     if 'error' in user and user['error'] == "Not Found":
         user = info
         post_request_backend(f"users", user)
