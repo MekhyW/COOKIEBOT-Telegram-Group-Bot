@@ -36,7 +36,7 @@ def get_group_info(cookiebot, chat_id, listaadmins_id, title, photo_big_id, is_a
         if blob:
             photo_signed_url = blob.generate_signed_url(datetime.timedelta(days=10), method='GET')
     group = get_request_backend(f"groups/{chat_id}")
-    if type(group) is str:
+    if type(group) is str and not(len(group)):
         return {"groupId": chat_id, "adminUsers": [], "name": title, "imageUrl": photo_signed_url}
     if 'error' in group and "Not Found" in group['error']:
         cache_groups[chat_id] = {"groupId": chat_id, "adminUsers": [], "name": title, "imageUrl": photo_signed_url}
@@ -106,7 +106,7 @@ def get_config(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
         return cache_configurations[chat_id]
     FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly = 1, 1, 5, 600, 300, 1, 1, "pt", 0, 1, "9999", 9999, 0
     configs = get_request_backend(f"configs/{chat_id}")
-    if type(configs) is str:
+    if type(configs) is str and not(len(configs)):
         return [FurBots, sfw, stickerspamlimit, limbotimespan, captchatimespan, funfunctions, utilityfunctions, language, publisherpost, publisherask, threadPosts, maxPosts, publisherMembersOnly]
     if 'error' in configs and configs['error'] == "Not Found":
         post_request_backend(f"configs/{chat_id}", {'furbots': FurBots, 'sfw': sfw, 'stickerSpamLimit': stickerspamlimit, 
