@@ -6,8 +6,10 @@ import json
 import urllib3
 from urllib.parse import quote
 import requests
-from dotenv import load_dotenv
 from requests.auth import HTTPBasicAuth
+from dotenv import load_dotenv
+from functools import wraps
+import threading
 import telepot
 from telepot.exception import TelegramError
 from deep_translator import GoogleTranslator
@@ -39,7 +41,27 @@ def get_bot_token(is_alternate_bot):
             return connectbotTOKEN
         case _:
             return None
+        
+def cached_api_call(ttl_seconds):
+    cache = {}
+    cache_lock = threading.RLock()
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            key = str(args) + str(kwargs)
+            with cache_lock:
+                if key in cache:
+                    result, timestamp = cache[key]
+                    if time.time() - timestamp < ttl_seconds:
+                        return result
+            result = func(*args, **kwargs)
+            with cache_lock:
+                cache[key] = (result, time.time())
+            return result
+        return wrapper
+    return decorator
 
+@cached_api_call(ttl_seconds=60)
 def get_request_backend(route, params=None):
     try:
         response = requests.get(f'https://backend.cookiebotfur.net/{route}', json=params,
