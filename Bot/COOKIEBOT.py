@@ -196,7 +196,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
                                                 "/rojao", "/rojão", "/acende", "/fogos", "/firecracker", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
                                                 "/batalha", "/battle", "/batalla", "/desenterrar", "/unearth", "/morte", "/death", "/muerte", "/sorte", "/fortunecookie", "/suerte",
-                                                "/zoar", "/destroy", "/destruir", "/aniversario", "/birthday", "/cumpleanos", "/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
+                                                "/zoar", "/destroy", "/destruir", "/aniversário", "/aniversario", "/birthday", "/cumpleanos", "/cumpleaños", "/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
                     if not funfunctions:
                         notify_fun_off(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
@@ -223,7 +223,7 @@ def thread_function(msg):
                         fortune_cookie(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
                         destroy(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
-                    elif msg['text'].startswith(("/aniversario", "/birthday", "/cumpleaños")):
+                    elif msg['text'].startswith(("/aniversário", "/aniversario", "/birthday", "/cumpleaños", "/cumpleanos")):
                         birthday(cookiebot, current_date, msg=msg, manual_chat_id=chat_id)
                     elif msg['text'].startswith(("/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
                         next_birthdays(cookiebot, msg, chat_id, language, current_date)
