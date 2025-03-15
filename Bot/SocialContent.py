@@ -92,7 +92,7 @@ def get_members_tagged(msg):
     members_tagged = []
     if '@' in msg['text']:
         for target in msg['text'].split("@")[1:]:
-            if 'CookieMWbot' in target:
+            if 'CookieMWbot' or 'pawstralbot' in target:
                 continue
             members_tagged.append(target)
     return members_tagged
@@ -130,7 +130,7 @@ def prompt_qualquer_coisa(cookiebot, msg, chat_id, language):
     send_message(cookiebot, chat_id, "Troque o 'qualquercoisa' por algo, vou mandar uma foto desse algo\n<blockquote> EXEMPLO: /fennec </blockquote>", msg, language)
 
 def qualquer_coisa(cookiebot, msg, chat_id, sfw, language, is_alternate_bot=0):
-    searchterm = msg['text'].split("@")[0].replace("/", ' ').replace("@CookieMWbot", '')
+    searchterm = msg['text'].split("@")[0].replace("/", ' ').replace("@CookieMWbot", '').replace("@pawstralbot", '')
     if searchterm.split()[0] in avoid_search:
         return
     send_chat_action(cookiebot, chat_id, 'upload_photo')

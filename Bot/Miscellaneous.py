@@ -188,7 +188,7 @@ def pesh(cookiebot, msg, chat_id, language, photo, image_id):
 
 def custom_command(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
-    bloblist = list(storage_bucket.list_blobs(prefix="Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '').split()[0]))
+    bloblist = list(storage_bucket.list_blobs(prefix="Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '').replace("@pawstralbot", '').split()[0]))
     if len(msg['text'].split()) > 1 and msg['text'].split()[1].isdigit():
         image_id = int(msg['text'].split()[1])
     else:
@@ -211,9 +211,9 @@ def roll_dice(cookiebot, msg, chat_id, language):
         if len(msg['text'].split()) == 1:
             vezes = 1
         else:
-            vezes = int(msg['text'].replace("@CookieMWbot", '').split()[1])
+            vezes = int(msg['text'].replace("@CookieMWbot", '').replace("@pawstralbot", '').split()[1])
             vezes = max(min(20, vezes), 1)
-        limite = int(msg['text'].replace("@CookieMWbot", '').split()[0][2:])
+        limite = int(msg['text'].replace("@CookieMWbot", '').replace("@pawstralbot", '').split()[0][2:])
         resposta = f"(d{limite}) "
         if vezes == 1:
             resposta += f"🎲 -> {random.randint(1, limite)}"

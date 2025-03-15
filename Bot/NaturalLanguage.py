@@ -67,7 +67,7 @@ def conversational_ai(cookiebot, msg, chat_id, language, sfw):
     message = ""
     answer_final = ""
     if "Cookiebot" in msg['text'] or "cookiebot" in msg['text'] or "@CookieMWbot" in msg['text'] or "COOKIEBOT" in msg['text'] or "CookieBot" in msg['text']:
-        message = msg['text'].replace("Cookiebot", '').replace("cookiebot", '').replace("@CookieMWbot", '').replace("COOKIEBOT", '').replace("CookieBot", '').replace("\n", ' ').strip().capitalize()
+        message = msg['text'].replace("Cookiebot", '').replace("cookiebot", '').replace("@CookieMWbot", '').replace("@pawstralbot", '').replace("COOKIEBOT", '').replace("CookieBot", '').replace("\n", ' ').strip().capitalize()
     else:
         message = msg['text'].replace("\n", ' ').strip().capitalize()
     if len(message) == 0:

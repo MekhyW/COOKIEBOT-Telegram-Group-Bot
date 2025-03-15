@@ -258,7 +258,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/configurar", "/configure")):
                     listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, language)
-                elif funfunctions and msg['text'].replace('/', '').replace("@CookieMWbot", '').split()[0] in custom_commands:
+                elif funfunctions and msg['text'].replace('/', '').replace("@CookieMWbot", '').replace("@pawstralbot", '').split()[0] in custom_commands:
                     custom_command(cookiebot, msg, chat_id, language)
                 elif utilityfunctions and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot', 'pawstralbot', 'SCTarinBot', 'MekhysConnectBot']):
                     decrease_remaining_image_searches(msg['from']['id'])
