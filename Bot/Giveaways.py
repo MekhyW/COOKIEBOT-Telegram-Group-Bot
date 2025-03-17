@@ -129,7 +129,7 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
         giveaways_msg_id_new = send_message(cookiebot, chat_id, "Sortear mais ganhadores?", language=language, reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✅", callback_data="GIVEAWAY end")],
             [InlineKeyboardButton(text="❌", callback_data="GIVEAWAY delete")],
-        ]))
+        ]))['message_id']
         with db_lock:
             db, cursor = get_db_connection()
             cursor.execute("UPDATE giveaways SET message_id = ? WHERE message_id = ?", (giveaways_msg_id_new, giveaways_msg_id))
