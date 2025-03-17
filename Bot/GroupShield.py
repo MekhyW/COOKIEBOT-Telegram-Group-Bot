@@ -172,7 +172,8 @@ def check_human(cookiebot, msg, chat_id, language):
         if userphotos['total_count'] == 0:
             cookiebot.kickChatMember(chat_id, user_id)
             send_message(cookiebot, chat_id, "Kickei o novo usuário por <b> suspeita de ser um robô </b>\n<blockquote> Se isso foi um erro, peça para ele adicionar um username (@) ou foto de perfil e um ADM adicioná-lo de volta </blockquote>", language=language)
-            cookiebot.unbanChatMember(chat_id, user_id)
+            timer_unban = threading.Timer(30, cookiebot.unbanChatMember, [chat_id, user_id])
+            timer_unban.start()
             recently_kicked_checkhuman[cache_key] = current_time
             logger.log_text(f"Kicked user with ID {user_id} in chat with ID {chat_id} for suspicion of being a bot", severity="INFO")
             return True
@@ -276,7 +277,8 @@ def check_captcha(cookiebot, msg, chat_id, captchatimespan, language):
                     try:
                         cookiebot.kickChatMember(chat_id, user)
                         send_message(cookiebot, chat_id, f"Kickei o usuário com id <b> {user} </b> por <b> {reason} </b>.\n<blockquote> Se isso foi um erro, peça para um staff adicioná-lo de volta </blockquote>", language=language)
-                        cookiebot.unbanChatMember(chat_id, user)
+                        timer_unban = threading.Timer(30, cookiebot.unbanChatMember, [chat_id, user])
+                        timer_unban.start()
                         logger.log_text(f"Kicked user with ID {user} in chat with ID {chat_id} by captcha", severity="INFO")
                     except Exception as e:
                         send_message(cookiebot, chat_id, f"Erro ao kickar o usuário com id <b> {user} </b> por <b> {reason} </b>.\n<blockquote> Usuário não está mais no chat, ou não tenho permissão para kickar </blockquote>", language=language)
