@@ -20,7 +20,7 @@ adm - Chama os administradores do chat
 qualquercoisa - Manda uma foto do que vc quiser
 youtube - Procura um video no youtube
 buscarfonte - Pesquisa a fonte de uma obra de arte
-sortear - Cria um sorteio
+giveaway - Cria um sorteio
 aniversario - Manda um collage de aniversariantes do dia
 proximosaniversarios - Mostra os próximos aniversariantes
 meme - Gera um meme

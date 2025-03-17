@@ -229,7 +229,7 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
                         next_birthdays(cookiebot, msg, chat_id, language, current_date)
                 elif msg['text'].startswith(("/dado", "/dice", "/patas", "/bff", "/fursmeet", "/trex", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
-                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube", "/sortear", "/giveaway", "/sorteo")) or (msg['text'].startswith("/d") and msg['text'].split()[0].split('/d')[1].isdigit()):
+                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube", "/giveaway")) or (msg['text'].startswith("/d") and msg['text'].split()[0].split('/d')[1].isdigit()):
                     if msg['text'].startswith(("/patas", "/bff", "/fursmeet", "/trex")):
                         event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                     elif not utilityfunctions:
@@ -242,7 +242,7 @@ def thread_function(msg):
                         prompt_qualquer_coisa(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/youtube")):
                         youtube_search(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/sortear", "/giveaway", "/sorteo")):
+                    elif msg['text'].startswith("/giveaway"):
                         giveaways_ask(cookiebot, msg, chat_id, language, listaadmins_id, listaadmins_status)
                 elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                     new_welcome_message(cookiebot, msg, chat_id)
