@@ -127,11 +127,13 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
                 else:
                     send_message(cookiebot, chat_id, caption, language=language)
         giveaways_msg_id_new = send_message(cookiebot, chat_id, "Sortear mais ganhadores?", language=language, reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton("✅", callback_data="GIVEAWAY end")],
-            [InlineKeyboardButton("❌", callback_data="GIVEAWAY delete")],
+            [InlineKeyboardButton(text="✅", callback_data="GIVEAWAY end")],
+            [InlineKeyboardButton(text="❌", callback_data="GIVEAWAY delete")],
         ]))
-        cursor.execute("UPDATE giveaways SET message_id = ? WHERE message_id = ?", (giveaways_msg_id_new, giveaways_msg_id))
-        db.commit()
+        with db_lock:
+            db, cursor = get_db_connection()
+            cursor.execute("UPDATE giveaways SET message_id = ? WHERE message_id = ?", (giveaways_msg_id_new, giveaways_msg_id))
+            db.commit()
         cookiebot.answerCallbackQuery(msg['id'], text="Ganhadores sorteados" if language =='pt' else "Winners selected")
         delete_message(cookiebot, telepot.message_identifier(msg['message']))
     except Exception as e:
