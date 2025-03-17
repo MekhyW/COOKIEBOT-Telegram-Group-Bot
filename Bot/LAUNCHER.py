@@ -5,8 +5,8 @@ import psutil
 from Server import kill_api_server
 from universal_funcs import logger
 
-CPU_THRESHOLD = 60  # in percent
-MEMORY_THRESHOLD = 60  # in percent
+CPU_THRESHOLD = 80  # in percent
+MEMORY_THRESHOLD = 80  # in percent
 
 def monitor_resources(process):
     try:
