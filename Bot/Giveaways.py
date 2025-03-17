@@ -44,11 +44,7 @@ def giveaways_create(cookiebot, msg, n_winners, chat_id, prize):
         logger.log_text(f"Invalid number of giveaway winners: {n_winners}", severity="WARNING")
         return
     language = get_config(cookiebot, chat_id)[7]
-    try:
-        prize = json.loads(prize)
-    except:
-        pass
-    giveaways_msg_id = send_message(cookiebot, chat_id, f"🎰 É HORA DO SORTEIO! 🎰 \n 🎯 O Prêmio é: <b> {prize} </b>", language=language,
+    giveaways_msg_id = send_message(cookiebot, chat_id, f"🎰 É HORA DO SORTEIO! 🎰 \n 🎯 O Prêmio é: <b> {prize} </b> \n 👥 Número de vencedores: {n_winners}", language=language,
                                  reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                                      [InlineKeyboardButton(text="Quero Entrar!" if language=='pt' else "Put me in!", callback_data=f'GIVEAWAY enter')],
                                      [InlineKeyboardButton(text="ADMINS: Finalizar Sorteio" if language=='pt' else "ADMINS: End Giveaway", callback_data=f'GIVEAWAY end')],
@@ -60,8 +56,9 @@ def giveaways_create(cookiebot, msg, n_winners, chat_id, prize):
         db.commit()
     logger.log_text(f"Giveaway created in chat with ID {chat_id}", severity="INFO")
 
-def giveaways_enter(cookiebot, msg, chat_id, language):
+def giveaways_enter(cookiebot, msg, chat_id):
     try:
+        language = get_config(cookiebot, chat_id)[7]
         participant = msg['from']['username'] if 'username' in msg['from'] else msg['from']['first_name']
         giveaways_msg_id = msg['message']['message_id']
         with db_lock:
@@ -83,7 +80,7 @@ def giveaways_enter(cookiebot, msg, chat_id, language):
         logger.log_text(f"Error entering giveaway: {str(e)}", severity="ERROR")
         cookiebot.answerCallbackQuery(msg['id'], text="Erro ao entrar no sorteio" if language =='pt' else "Error entering giveaway")
 
-def giveaways_end(cookiebot, msg, chat_id, language, listaadmins_id):
+def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
     try:
         language = get_config(cookiebot, chat_id)[7]
         giveaways_msg_id = msg['message']['message_id']

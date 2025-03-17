@@ -384,11 +384,11 @@ def thread_function_query(msg):
                 return
             if query_data.split()[1].isnumeric():
                 delete_message(cookiebot, telepot.message_identifier(msg['message']))
-                giveaways_create(cookiebot, msg, int(query_data.split()[1]), chat_id, query_data.split()[2:])
+                giveaways_create(cookiebot, msg, int(query_data.split()[1]), chat_id, query_data.replace('"', '').split()[2:])
             elif query_data.split()[1] == 'enter':
-                giveaways_enter(cookiebot, msg, chat_id, language)
+                giveaways_enter(cookiebot, msg, chat_id)
             elif query_data.split()[1] == 'end':
-                giveaways_end(cookiebot, msg, chat_id, language, listaadmins_id)
+                giveaways_end(cookiebot, msg, chat_id, listaadmins_id)
             else:
                 cookiebot.answerCallbackQuery(query_id, text="ERROR! please contact @MekhyW")
         else:
