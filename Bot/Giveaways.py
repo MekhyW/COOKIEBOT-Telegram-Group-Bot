@@ -68,7 +68,7 @@ def giveaways_enter(cookiebot, msg, chat_id):
         giveaways_msg_id = msg['message']['message_id']
         with db_lock:
             db, cursor = get_db_connection()
-            cursor.execute("SELECT participants FROM giveaways WHERE message_id = ?", (giveaways_msg_id))
+            cursor.execute("SELECT participants FROM giveaways WHERE message_id = ?", (giveaways_msg_id,))
             result = cursor.fetchone()
             if not result:
                 cookiebot.answerCallbackQuery(msg['id'], text="Sorteio não encontrado" if language =='pt' else "Giveaway not found")
@@ -78,7 +78,7 @@ def giveaways_enter(cookiebot, msg, chat_id):
                 cookiebot.answerCallbackQuery(msg['id'], text="Você já está participando!" if language =='pt' else "You are already participating!")
                 return
             updated_participants = (current_participants + ", " + participant).strip(", ") if current_participants else participant
-            cursor.execute("UPDATE giveaways SET participants = ? WHERE message_id = ?", (updated_participants, giveaways_msg_id))
+            cursor.execute("UPDATE giveaways SET participants = ? WHERE message_id = ?", (updated_participants, giveaways_msg_id,))
             db.commit()
         cookiebot.answerCallbackQuery(msg['id'], text="YAY! Você entrou no sorteio!" if language =='pt' else "YAY! You entered the giveaway!")
     except Exception as e:
@@ -91,7 +91,7 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
         giveaways_msg_id = msg['message']['message_id']
         with db_lock:
             db, cursor = get_db_connection()
-            cursor.execute("SELECT creator_id, prize, number_of_winners, participants FROM giveaways WHERE message_id = ?", (giveaways_msg_id))
+            cursor.execute("SELECT creator_id, prize, number_of_winners, participants FROM giveaways WHERE message_id = ?", (giveaways_msg_id,))
             result = cursor.fetchone()
             if not result:
                 cookiebot.answerCallbackQuery(msg['id'], text="Sorteio não encontrado" if language =='pt' else "Giveaway not found")
@@ -102,7 +102,7 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
                 return
             if not participants_str:
                 send_message(cookiebot, chat_id, "Nenhum participante no sorteio!" if language =='pt' else "No participants in the giveaway!", language=language)
-                cursor.execute("DELETE FROM giveaways WHERE message_id = ?", (giveaways_msg_id))
+                cursor.execute("DELETE FROM giveaways WHERE message_id = ?", (giveaways_msg_id,))
                 db.commit()
                 cookiebot.answerCallbackQuery(msg['id'], text="Sorteio encerrado" if language =='pt' else "Giveaway ended")
                 delete_message(cookiebot, telepot.message_identifier(msg['message']))
@@ -124,7 +124,7 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
                     send_photo(cookiebot, chat_id, user_img, caption, language=language)
                 else:
                     send_message(cookiebot, chat_id, caption, language=language)
-            cursor.execute("DELETE FROM giveaways WHERE message_id = ?", (giveaways_msg_id))
+            cursor.execute("DELETE FROM giveaways WHERE message_id = ?", (giveaways_msg_id,))
             db.commit()
         cookiebot.answerCallbackQuery(msg['id'], text="Sorteio encerrado" if language =='pt' else "Giveaway ended")
         delete_message(cookiebot, telepot.message_identifier(msg['message']))
