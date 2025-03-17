@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 import threading
 import json
+import datetime
 from Configurations import get_config
 from SocialContent import get_profile_image
 local_storage = threading.local()
@@ -26,7 +27,7 @@ def giveaways_ask(cookiebot, msg, chat_id, language, listaadmins_id, listaadmins
         send_message(cookiebot, chat_id, "Você não tem permissão para criar sorteios! \n <blockquote> Se está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada! </blockquote>", msg, language)
         return
     if len(msg['text'].split()) == 1:
-        send_message(cookiebot, chat_id, "Você precisa digitar o que está sendo sorteado! \n <blockquote> EXEMPLO: /sorteio Fursuit do Mekhy 🐾🦝 </blockquote>", msg, language)
+        send_message(cookiebot, chat_id, "Você precisa digitar o que está sendo sorteado! \n <blockquote> EXEMPLO: /giveaway Fursuit do Mekhy 🐾🦝 </blockquote>", msg, language)
         return
     prize_text = " ".join(msg["text"].split()[1:])
     prize = json.dumps(prize_text)[:20]
@@ -44,7 +45,7 @@ def giveaways_create(cookiebot, msg, n_winners, chat_id, prize):
         logger.log_text(f"Invalid number of giveaway winners: {n_winners}", severity="WARNING")
         return
     language = get_config(cookiebot, chat_id)[7]
-    giveaways_msg_id = send_message(cookiebot, chat_id, f"🎰 É HORA DO SORTEIO! 🎰 \n 🎯 O Prêmio é: <b> {prize} </b> \n 👥 Número de vencedores: {n_winners}", language=language,
+    giveaways_msg_id = send_message(cookiebot, chat_id, f"🎰 É HORA DO SORTEIO! 🎰 \n \n 🎯 O Prêmio é: <b> {prize} </b> \n 👥 Número de vencedores: {n_winners} \n ⌛ Começou em: {datetime.datetime.now().strftime('%d/%m, %H:%M')}", language=language,
                                  reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                                      [InlineKeyboardButton(text="Quero Entrar!" if language=='pt' else "Put me in!", callback_data=f'GIVEAWAY enter')],
                                      [InlineKeyboardButton(text="ADMINS: Finalizar Sorteio" if language=='pt' else "ADMINS: End Giveaway", callback_data=f'GIVEAWAY end')],
