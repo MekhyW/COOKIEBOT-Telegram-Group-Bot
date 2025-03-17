@@ -55,6 +55,10 @@ def giveaways_create(cookiebot, msg, n_winners, chat_id, prize):
         db, cursor = get_db_connection()
         cursor.execute("INSERT INTO giveaways VALUES (?, ?, ?, ?, ?, ?)", (int(msg['from']['id']), int(giveaways_msg_id), int(chat_id), str(prize), int(n_winners), ""))
         db.commit()
+    try:
+        cookiebot.pinChatMessage(chat_id, giveaways_msg_id)
+    except Exception:
+        pass
     logger.log_text(f"Giveaway created in chat with ID {chat_id}", severity="INFO")
 
 def giveaways_enter(cookiebot, msg, chat_id):
