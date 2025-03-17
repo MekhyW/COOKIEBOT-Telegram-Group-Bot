@@ -120,8 +120,10 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
                 except Exception as e:
                     logger.log_text(f"Error getting profile image: {str(e)}", severity="WARNING")
                     user_img = None
-                if user_img is not None:
-                    send_photo(cookiebot, chat_id, user_img, caption, language=language)
+                if user_img:
+                    cv2.imwrite('temp.jpg', user_img)
+                    with open('temp.jpg', 'rb') as final_img:
+                        send_photo(cookiebot, chat_id, final_img, caption, language=language)
                 else:
                     send_message(cookiebot, chat_id, caption, language=language)
             cursor.execute("DELETE FROM giveaways WHERE message_id = ?", (giveaways_msg_id,))
