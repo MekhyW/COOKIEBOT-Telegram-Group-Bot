@@ -321,6 +321,8 @@ def thread_function(msg):
 
 def thread_function_query(msg):
     try:
+        if any(key in msg for key in IGNORED_MSG_TYPES):
+            return
         query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
         print('Callback Query:', query_id, from_id, query_data)
         try:
