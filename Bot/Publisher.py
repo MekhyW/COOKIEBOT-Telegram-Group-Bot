@@ -199,6 +199,8 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
     caption_en = translate(caption_new, 'en')
     caption_pt = convert_prices_in_text(caption_pt, 'BRL').replace('<', '⩽').replace('>', '⩾').replace('&', '＆')
     caption_en = convert_prices_in_text(caption_en, 'USD').replace('<', '⩽').replace('>', '⩾').replace('&', '＆')
+    caption_pt = caption_pt[:1020]
+    caption_en = caption_en[:1020]
     if 'Error 500 (Server Error)' in caption_pt:
         caption_pt = caption_new
     if 'Error 500 (Server Error)' in caption_en:
