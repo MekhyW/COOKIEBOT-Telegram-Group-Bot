@@ -64,7 +64,7 @@ def giveaways_create(cookiebot, msg, n_winners, chat_id, prize):
 def giveaways_enter(cookiebot, msg, chat_id):
     try:
         language = get_config(cookiebot, chat_id)[7]
-        participant = msg['from']['username'] if 'username' in msg['from'] else msg['from']['first_name']
+        participant = "@" + msg['from']['username'] if 'username' in msg['from'] else msg['from']['first_name']
         giveaways_msg_id = msg['message']['message_id']
         with db_lock:
             db, cursor = get_db_connection()
