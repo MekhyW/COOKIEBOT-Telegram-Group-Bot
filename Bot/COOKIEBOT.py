@@ -389,6 +389,8 @@ def thread_function_query(msg):
                 giveaways_enter(cookiebot, msg, msg['message']['chat']['id'])
             elif query_data.split()[1] == 'end':
                 giveaways_end(cookiebot, msg, msg['message']['chat']['id'], listaadmins_id)
+            elif query_data.split()[1] == 'delete':
+                giveaways_delete(cookiebot, msg, msg['message']['chat']['id'])
             else:
                 cookiebot.answerCallbackQuery(query_id, text="ERROR! please contact @MekhyW")
         else:

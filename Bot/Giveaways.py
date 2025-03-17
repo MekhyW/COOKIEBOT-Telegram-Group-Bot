@@ -126,10 +126,23 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
                         send_photo(cookiebot, chat_id, final_img, caption, language=language)
                 else:
                     send_message(cookiebot, chat_id, caption, language=language)
-            cursor.execute("DELETE FROM giveaways WHERE message_id = ?", (giveaways_msg_id,))
-            db.commit()
-        cookiebot.answerCallbackQuery(msg['id'], text="Sorteio encerrado" if language =='pt' else "Giveaway ended")
+        giveaways_msg_id_new = send_message(cookiebot, chat_id, "Sortear mais ganhadores?", language=language, reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton("✅", callback_data="GIVEAWAY end")],
+            [InlineKeyboardButton("❌", callback_data="GIVEAWAY delete")],
+        ]))
+        cursor.execute("UPDATE giveaways SET message_id = ? WHERE message_id = ?", (giveaways_msg_id_new, giveaways_msg_id))
+        db.commit()
+        cookiebot.answerCallbackQuery(msg['id'], text="Ganhadores sorteados" if language =='pt' else "Winners selected")
         delete_message(cookiebot, telepot.message_identifier(msg['message']))
     except Exception as e:
         logger.log_text(f"Error ending giveaway: {str(e)}", severity="ERROR")
         cookiebot.answerCallbackQuery(msg['id'], text="Erro ao encerrar sorteio" if language =='pt' else "Error ending giveaway")
+
+def giveaways_delete(cookiebot, msg, chat_id):
+    language = get_config(cookiebot, chat_id)[7]
+    with db_lock:
+        db, cursor = get_db_connection()
+        cursor.execute("DELETE FROM giveaways WHERE message_id = ?", (msg['message']['message_id'],))
+        db.commit()
+    cookiebot.answerCallbackQuery(msg['id'], text="Sorteio encerrado" if language =='pt' else "Giveaway ended")
+    delete_message(cookiebot, telepot.message_identifier(msg['message']))
