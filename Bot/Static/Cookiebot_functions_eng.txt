@@ -20,6 +20,7 @@ adm - Call chat admins
 anything - send a picture of what you want
 youtube - Search for a video on youtube
 searchsource - Searches for the source of an artwork
+giveaway - Create a giveaway
 birthday - Send a birthday collage
 nextbirthdays - Show the next birthdays
 meme - Generate a meme

@@ -15,6 +15,7 @@ from NaturalLanguage import *
 from Publisher import *
 from SocialContent import *
 from UserRegisters import *
+from Giveaways import *
 from Server import *
 
 if len(sys.argv) < 2:
@@ -228,7 +229,7 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
                         next_birthdays(cookiebot, msg, chat_id, language, current_date)
                 elif msg['text'].startswith(("/dado", "/dice", "/patas", "/bff", "/fursmeet", "/trex", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
-                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube")) or (msg['text'].startswith("/d") and msg['text'].split()[0].split('/d')[1].isdigit()):
+                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube", "/sortear", "/giveaway", "/sorteo")) or (msg['text'].startswith("/d") and msg['text'].split()[0].split('/d')[1].isdigit()):
                     if msg['text'].startswith(("/patas", "/bff", "/fursmeet", "/trex")):
                         event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                     elif not utilityfunctions:
@@ -241,6 +242,8 @@ def thread_function(msg):
                         prompt_qualquer_coisa(cookiebot, msg, chat_id, language)
                     elif msg['text'].startswith(("/youtube")):
                         youtube_search(cookiebot, msg, chat_id, language)
+                    elif msg['text'].startswith(("/sortear", "/giveaway", "/sorteo")):
+                        giveaways_ask(cookiebot, msg, chat_id, language, listaadmins_id, listaadmins_status)
                 elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                     new_welcome_message(cookiebot, msg, chat_id)
                 elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
@@ -336,17 +339,19 @@ def thread_function_query(msg):
         elif 'Pub' in query_data:
             if 'creator' in listaadmins_status and str(from_id) not in listaadmins_id and str(from_id) != str(ownerID):
                 cookiebot.answerCallbackQuery(query_id, text="Only admins can do this")
+                return
+            try:
+                delete_message(cookiebot, telepot.message_identifier(msg['message']))
+            except Exception:
+                pass
+            if query_data.startswith('SendToApproval'):
+                ask_approval(cookiebot, query_data, from_id, is_alternate_bot=is_alternate_bot)
+            elif query_data.startswith('y'):
+                schedule_post(cookiebot, query_data)
+            elif query_data.startswith('n'):
+                deny_post(query_data)
             else:
-                try:
-                    delete_message(cookiebot, telepot.message_identifier(msg['message']))
-                except Exception:
-                    pass
-                if query_data.startswith('SendToApproval'):
-                    ask_approval(cookiebot, query_data, from_id, is_alternate_bot=is_alternate_bot)
-                elif query_data.startswith('y'):
-                    schedule_post(cookiebot, query_data)
-                elif query_data.startswith('n'):
-                    deny_post(query_data)
+                cookiebot.answerCallbackQuery(query_id, text="ERROR! please contact @MekhyW")
         elif query_data.startswith('Report'):
             command = query_data.split()[1]
             targetid = query_data.split()[2]
@@ -373,6 +378,21 @@ def thread_function_query(msg):
         elif query_data.startswith('RULES'):
             rules_message(cookiebot, msg['message'], msg['message']['chat']['id'], query_data.split()[1])
             cookiebot.editMessageReplyMarkup((msg['message']['chat']['id'], msg['message']['message_id']), reply_markup=None)
+        elif query_data.startswith('GIVEAWAY'):
+            if 'creator' in listaadmins_status and str(from_id) not in listaadmins_id and str(from_id) != str(ownerID):
+                cookiebot.answerCallbackQuery(query_id, text="Only admins can do this")
+                return
+            if query_data.split()[1].isnumeric():
+                delete_message(cookiebot, telepot.message_identifier(msg['message']))
+                giveaways_create(cookiebot, msg, int(query_data.split()[1]), chat_id, query_data.split()[2:])
+            elif query_data.split()[1] == 'enter':
+                giveaways_enter(cookiebot, msg, chat_id, language)
+            elif query_data.split()[1] == 'end':
+                giveaways_end(cookiebot, msg, chat_id, language, listaadmins_id)
+            else:
+                cookiebot.answerCallbackQuery(query_id, text="ERROR! please contact @MekhyW")
+        else:
+            cookiebot.answerCallbackQuery(query_id, text="ERROR! please contact @MekhyW")
         run_unnatendedthreads()
     except Exception:
         errormsg = f"{traceback.format_exc()}"

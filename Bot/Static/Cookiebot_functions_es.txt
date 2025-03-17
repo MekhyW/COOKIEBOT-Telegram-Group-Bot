@@ -20,6 +20,7 @@ adm - Llamar a los administradores del chat
 cualquiercosa - envía una foto de lo que quieres
 youtube - Buscar un video en youtube
 buscarfuente - Busca la fuente de una obra de arte
+sorteo - Crea un sorteo
 cumpleanos - Enviar un collage de cumpleaños
 proximoscumpleanos - Mostrar los próximos cumpleaños
 meme - Generar un meme
