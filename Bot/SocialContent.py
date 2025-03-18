@@ -92,7 +92,7 @@ def get_members_tagged(msg):
     members_tagged = []
     if '@' in msg['text']:
         for target in msg['text'].split("@")[1:]:
-            if 'CookieMWbot' or 'pawstralbot' in target:
+            if target.endswith('bot'):
                 continue
             members_tagged.append(target)
     return members_tagged
@@ -267,7 +267,8 @@ def get_profile_image(username):
             return urllib.request.urlopen(images[0]['src'])
         else:
             return None
-    except (IndexError, urllib.error.URLError):
+    except (IndexError, urllib.error.URLError) as e:
+        logger.log_text(f"Error fetching profile image for user {username}: {e}", severity="WARNING")
         return None
 
 def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
