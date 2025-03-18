@@ -15,6 +15,7 @@ from NaturalLanguage import *
 from Publisher import *
 from SocialContent import *
 from UserRegisters import *
+from Birthdays import *
 from Giveaways import *
 from Server import *
 
