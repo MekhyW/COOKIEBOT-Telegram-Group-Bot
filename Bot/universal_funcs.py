@@ -73,6 +73,7 @@ def get_request_backend(route, params=None):
         logger.log_text(f"Error getting request from backend: {e}", severity="INFO")
         return str(e)
 
+@cached_api_call(ttl_seconds=60)
 def post_request_backend(route, params=None):
     try:
         response = requests.post(f'https://backend.cookiebotfur.net/{route}', json=params,
@@ -84,6 +85,7 @@ def post_request_backend(route, params=None):
         logger.log_text(f"Error posting request to backend: {e}", severity="INFO")
         return str(e)
 
+@cached_api_call(ttl_seconds=60)
 def put_request_backend(route, params=None):
     try:
         response = requests.put(f'https://backend.cookiebotfur.net/{route}', json=params,
@@ -95,6 +97,7 @@ def put_request_backend(route, params=None):
         logger.log_text(f"Error putting request to backend: {e}", severity="INFO")
         return str(e)
 
+@cached_api_call(ttl_seconds=60)
 def delete_request_backend(route, params=None):
     try:
         response = requests.delete(f'https://backend.cookiebotfur.net/{route}', json=params,
