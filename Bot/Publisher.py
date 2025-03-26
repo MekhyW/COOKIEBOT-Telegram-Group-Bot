@@ -243,10 +243,10 @@ def schedule_post(cookiebot, query_data):
     answer = f"Post set for the following times ({days} days):\nNOW - Cookiebot Mural 📬\n"
     for group in get_request_backend('registers'):
         try:
-            _, _, _, _, _, _, _, language, publisherpost, _, _, max_posts, publisher_members_only = get_config(cookiebot, group['id'])
+            _, sfw, _, _, _, _, _, language, publisherpost, _, _, max_posts, publisher_members_only = get_config(cookiebot, group['id'])
         except TypeError:
             continue
-        if (not publisherpost) or (has_nsfw == '1' and group['id'] == '-1001882117738'):
+        if (not publisherpost) or (has_nsfw == '1' and sfw):
             continue
         if publisher_members_only:
             members = get_members_chat(group['id'])
