@@ -73,10 +73,6 @@ def conversational_ai(cookiebot, msg, chat_id, language, sfw):
     if len(message) == 0:
         answer_final = "?"
     else:
-        num_members = cookiebot.getChatMembersCount(chat_id)
-        if sfw and num_members >= 3:
-            answer_final = conversational_model_sfw(message, msg, language)
-        else:
-            answer_final = conversational_model_nsfw(message, language)
+        answer_final = conversational_model_sfw(message, msg, language)
     logger.log_text(f"Conversational AI answer sent to chat with ID {chat_id}", severity="INFO")
     return answer_final
