@@ -39,6 +39,7 @@ firecracker - Pra pra pra pra poooow
 unearth - Unearth a message from the past
 patas - Hotel furry event in brazil
 bff - Hotel furry event in brazil
+furcamp - Camp furry event in brazil
 fursmeet - Hotel furry event in brazil
 trex - Amusement park furry event in brazil
 pesh - Be a pesh

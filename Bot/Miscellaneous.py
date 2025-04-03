@@ -16,6 +16,7 @@ bloblist_bff = list(storage_bucket.list_blobs(prefix="Countdown/BFF"))
 bloblist_patas = list(storage_bucket.list_blobs(prefix="Countdown/Patas"))
 bloblist_fursmeet = list(storage_bucket.list_blobs(prefix="Countdown/FurSMeet"))
 bloblist_trex = list(storage_bucket.list_blobs(prefix="Countdown/Trex"))
+bloblist_furcamp = list(storage_bucket.list_blobs(prefix="Countdown/Furcamp"))
 custom_commands = list(dict.fromkeys([folder.name.split('/')[1] for folder in storage_bucket.list_blobs(prefix="Custom/")]))
 NEW_CHAT_LINK = "https://t.me/CookieMWbot?startgroup=new"
 WEBSITE_LINK = "https://cookiebotfur.net"
@@ -377,6 +378,23 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
             while daysremaining < -5:
                 daysremaining += 365
             caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o T-Rex Furplayer! </b>\n\n<i> {calltoaction} </i>\n🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖\n\n📆 {day}/{month} - Shopping D, Canindé São Paulo - SP\n💻 Ingressos em: trexfurplayer.wordpress.com\n📲 Grupo do evento: @trexfurplayergroup"
+    elif msg['text'].lower().startswith('/furcamp'):
+        day, month, year = 14, 2, 2026
+        calltoaction = random.choice(['O FURCAMP é um evento furry criado no Brasil e acontece todos os anos em meados de fevereiro (durante o Carnaval). Com sua primeira edição piloto em março de 2019 sendo um sucesso, o evento cativou seus participantes e a equipe que o criou.',
+                                      'Com sua bela paisagem, o Acampamento Terra do Saber possui pomar, trilhas e lagos para a pesca esportiva. É destinado a grupos grandes e especialmente aos visitantes que estejam em busca de uma acomodação diferenciada, podendo contar com todo o conforto da hospedagem em suítes e também em alojamentos.',
+                                      'O Acampamento Terra do Saber conta com alojamentos com beliches, refeitórios, salões para reunião, janelas com tela de proteção contra insetos, banheiros com aquecimento central a gás, reservatórios de água, poços artesianos e muito mais.',
+                                      'O FURCAMP oferece várias atividades emocionantes para os participantes durante todo o evento, como Batalha no Campo e Gincana, Show de Talentos e Balada Furry, com cada atividade tendo uma pontuação para o participante ou equipe do participante!',
+                                      'Se você sabe atuar, dançar, cantar, tocar um instrumento, fazer truques de mágica ou tem qualquer habilidade maluca, este é o lugar para mostrá-las. Que tal contar uma piada ruim, fazer o público chorar ou rir com um stand-up? No Show de Talentos, vale tudo!',
+                                      'Prepare-se para dançar, agitar, pular e se divertir na boate do FURCAMP com música eletrizante e um show de luzes, junto com um set incrível dos DJs Furries!',
+                                      'Você perdeu a nossa livestream especial no dia 19? Quer saber tudo que rolou sobre as atualizações do evento e informações cruciais que não pode deixar passar? Não se preocupe! Assista ao VOD da live no nosso canal do YouTube e fique por dentro de tudo! 🎥✨'])
+        pic = bloblist_furcamp[random.randint(0, len(bloblist_furcamp)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
+        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
+        if -5 <= daysremaining <= 0:
+            caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
+        else:
+            while daysremaining < -5:
+                daysremaining += 365
+            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurCamp! </b>\n\n<i> {calltoaction} </i>\n🐾🌲🐾🌳🐾🌲🐾🌳🐾🌲🐾🌳\n\n📆 {day} a {day+2}/{month}, Acampamento Terra do Saber\n💻 Ingressos em: furcamp.com\n📲 Grupo do evento: @FurcampOficial"
     else:
         send_message(cookiebot, chat_id, "Evento não encontrado", msg, language)
         return

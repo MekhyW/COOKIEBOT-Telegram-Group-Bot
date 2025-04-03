@@ -39,6 +39,7 @@ rojao - Pra pra pra pra poooow
 desenterrar - Desenterrar un mensaje antiguo
 patas - Evento furry de hotel en brasil
 bff - Evento furry de hotel en brasil
+furcamp - Evento furry en acampamento en brasil
 fursmeet - Evento furry de hotel en brasil
 trex - Evento de parque de diversiones furry en brasil
 pesh - Ser un pesh
