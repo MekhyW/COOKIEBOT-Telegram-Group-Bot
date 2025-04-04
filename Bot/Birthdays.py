@@ -11,7 +11,7 @@ import cv2
 import numpy as np
 
 def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
-    current_date_formatted = datetime.datetime.utcfromtimestamp(current_date).strftime('%Y-%m-%d')
+    current_date_formatted = datetime.datetime.fromtimestamp(current_date, tz=datetime.timezone.utc).strftime('%Y-%m-%d')
     if manual_chat_id and len(msg['text'].split()) == 1:
         send_message(cookiebot, manual_chat_id, "Você precisa digitar os usernames dos aniversariantes de hoje!", msg)
         return
