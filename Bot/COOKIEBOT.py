@@ -1,4 +1,4 @@
-import threading
+from threading import Thread, Lock, Timer, active_count
 import gc
 import sys
 import traceback
@@ -25,6 +25,9 @@ if len(sys.argv) < 2:
 for file in os.listdir():
     if not (os.path.isdir(file) or file.endswith('.py') or file.endswith('.db') or file.endswith('.txt')):
         os.remove(file)
+current_date = None
+current_date_mutex = Lock()
+is_alternate_bot = int(sys.argv[1])
 furbots_cmds = [x.strip() for x in open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()]
 unnatended_threads = list()
 MAX_THREADS = 50
@@ -36,8 +39,6 @@ IGNORED_MSG_TYPES = {
     'forum_topic_reopened', 'story', 'poll_answer', 'boost_added',
     'chat_boost', 'removed_chat_boost', 'message_auto_delete_timer_changed'
 }
-current_date = None
-is_alternate_bot = int(sys.argv[1])
 cookiebot = telepot.Bot(get_bot_token(is_alternate_bot))
 myself = cookiebot.getMe()
 updates = cookiebot.getUpdates()
@@ -319,9 +320,13 @@ def thread_function(msg):
         logger.log_text(f"Error in chat with ID {chat_id}: {errormsg}", severity="WARNING")
     finally:
         check_new_name(cookiebot, msg, chat_id, chat_type)
-        if (not is_alternate_bot) and 'date' in msg and (current_date is None or datetime.datetime.utcfromtimestamp(current_date).strftime('%Y-%m-%d') != datetime.datetime.utcfromtimestamp(msg['date']).strftime('%Y-%m-%d')):
-            current_date = msg['date']
-            birthday(cookiebot, current_date, msg=msg)
+        msg_date = datetime.datetime.utcfromtimestamp(msg['date']).date() if 'date' in msg else None
+        if not is_alternate_bot and msg_date is not None:
+            with current_date_mutex:
+                current_stored_date = datetime.datetime.utcfromtimestamp(current_date).date() if current_date else None
+                if current_stored_date != msg_date:
+                    current_date = msg['date']
+                    birthday(cookiebot, current_date, msg=msg)
 
 def thread_function_query(msg):
     try:
@@ -406,7 +411,7 @@ def thread_function_query(msg):
             logger.log_text(f"Error in callback query: {errormsg}", severity="WARNING")
 
 def run_unnatendedthreads():
-    num_running_threads = threading.active_count()
+    num_running_threads = active_count()
     for unnatended_thread in list(unnatended_threads):
         if unnatended_thread.is_alive() and unnatended_thread in unnatended_threads:
             unnatended_threads.remove(unnatended_thread)
@@ -423,7 +428,7 @@ def run_unnatendedthreads():
 
 def handle(msg):
     try:
-        new_thread = threading.Thread(target=thread_function, args=(msg,))
+        new_thread = Thread(target=thread_function, args=(msg,))
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except Exception:
@@ -432,7 +437,7 @@ def handle(msg):
 
 def handle_query(msg):
     try:
-        new_thread = threading.Thread(target=thread_function_query, args=(msg,))
+        new_thread = Thread(target=thread_function_query, args=(msg,))
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except Exception:
@@ -447,7 +452,7 @@ def scheduler_check():
         send_error_traceback(cookiebot, None, traceback.format_exc())
         logger.log_text(f"Error in scheduler check: {traceback.format_exc()}", severity="WARNING")
     finally:
-        timer_scheduler_check = threading.Timer(300, scheduler_check)
+        timer_scheduler_check = Timer(300, scheduler_check)
         timer_scheduler_check.start()
 
 if __name__ == '__main__':
