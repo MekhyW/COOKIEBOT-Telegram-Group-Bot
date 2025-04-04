@@ -119,5 +119,5 @@ def next_birthdays(cookiebot, msg, chat_id, language, current_date):
         if not len(bd_users):
             text += "- \n"
         text += "\n"
-    send_message(cookiebot, chat_id, text, msg, language)
+    send_message(cookiebot, chat_id, text, language=language)
     logger.log_text(f"Next birthdays message sent to chat with ID {chat_id}", severity="INFO")
