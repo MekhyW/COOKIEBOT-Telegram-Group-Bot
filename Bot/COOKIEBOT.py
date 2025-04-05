@@ -25,7 +25,7 @@ if len(sys.argv) < 2:
 for file in os.listdir():
     if not (os.path.isdir(file) or file.endswith('.py') or file.endswith('.db') or file.endswith('.txt')):
         os.remove(file)
-current_date = None
+current_date_utc = None
 current_date_mutex = Lock()
 is_alternate_bot = int(sys.argv[1])
 furbots_cmds = [x.strip() for x in open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()]
@@ -50,7 +50,7 @@ logger.log_text(f"Bot [{myself['username']}] started", severity="NOTICE")
 gc.enable()
 
 def thread_function(msg):
-    global current_date
+    global current_date_utc
     try:
         if any(key in msg for key in IGNORED_MSG_TYPES):
             return
@@ -227,9 +227,9 @@ def thread_function(msg):
                     elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
                         destroy(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                     elif msg['text'].startswith(("/aniversário", "/aniversario", "/birthday", "/cumpleaños", "/cumpleanos")):
-                        birthday(cookiebot, current_date, msg=msg, manual_chat_id=chat_id)
+                        birthday(cookiebot, current_date_utc, msg=msg, manual_chat_id=chat_id)
                     elif msg['text'].startswith(("/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
-                        next_birthdays(cookiebot, msg, chat_id, language, current_date)
+                        next_birthdays(cookiebot, msg, chat_id, language, current_date_utc)
                 elif msg['text'].startswith(("/dado", "/dice", "/patas", "/bff", "/furcamp", "/fursmeet", "/trex", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
                                              "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube", "/giveaway")) or (msg['text'].startswith("/d") and msg['text'].split()[0].split('/d')[1].isdigit()):
                     if msg['text'].startswith(("/patas", "/bff", "/furcamp", "/fursmeet", "/trex")):
@@ -320,15 +320,15 @@ def thread_function(msg):
         logger.log_text(f"Error in chat with ID {chat_id}: {errormsg}", severity="WARNING")
     finally:
         check_new_name(cookiebot, msg, chat_id, chat_type)
-        if current_date_mutex.locked():
+        if is_alternate_bot or current_date_mutex.locked():
             return
-        msg_date = datetime.datetime.fromtimestamp(msg['date'], tz=datetime.timezone.utc).strftime('%Y-%m-%d') if 'date' in msg else None
-        if not is_alternate_bot and msg_date is not None:
-            with current_date_mutex:
-                current_stored_date = datetime.datetime.fromtimestamp(current_date, tz=datetime.timezone.utc).strftime('%Y-%m-%d') if current_date else None
-                if current_stored_date != msg_date:
-                    current_date = msg['date']
-                    birthday(cookiebot, current_date, msg=msg)
+        msg_date_utc = datetime.datetime.now(datetime.timezone.utc).timestamp()
+        msg_date = datetime.datetime.fromtimestamp(msg_date_utc, tz=datetime.timezone.utc).strftime('%Y-%m-%d')
+        with current_date_mutex:
+            current_stored_date = datetime.datetime.fromtimestamp(current_date_utc, tz=datetime.timezone.utc).strftime('%Y-%m-%d') if current_date_utc else None
+            if current_stored_date != msg_date:
+                current_date_utc = msg_date_utc
+                birthday(cookiebot, current_date_utc, msg=msg)
 
 def thread_function_query(msg):
     try:

@@ -10,8 +10,8 @@ from SocialContent import get_profile_image
 import cv2
 import numpy as np
 
-def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
-    current_date_formatted = datetime.datetime.fromtimestamp(current_date, tz=datetime.timezone.utc).strftime('%Y-%m-%d')
+def birthday(cookiebot, current_date_utc, msg=None, manual_chat_id=None):
+    current_date_formatted = datetime.datetime.fromtimestamp(current_date_utc, tz=datetime.timezone.utc).strftime('%Y-%m-%d')
     if manual_chat_id and len(msg['text'].split()) == 1:
         send_message(cookiebot, manual_chat_id, "Você precisa digitar os usernames dos aniversariantes de hoje!", msg)
         return
@@ -53,7 +53,7 @@ def birthday(cookiebot, current_date, msg=None, manual_chat_id=None):
             except Exception as e:
                 logger.log_text(f"Error pinning birthday collage for group with ID {group['id']}: {e}", severity="INFO")
             cookiebot.sendMessage(group['id'], '🎂')
-            timer_next_birthdays = threading.Timer(900, next_birthdays, args=(cookiebot, msg, group['id'], language, current_date))
+            timer_next_birthdays = threading.Timer(900, next_birthdays, args=(cookiebot, msg, group['id'], language, current_date_utc))
             timer_next_birthdays.start()
             logger.log_text(f"Triggered birthday message for group with ID {group['id']}", severity="INFO")
         if manual_chat_id:
@@ -107,10 +107,10 @@ def make_birthday_caption(bd_users_in_group, current_date_formatted):
     caption += f"\n\n<i> Feliz aniversário! </i>\n{current_date_formatted}"
     return caption
 
-def next_birthdays(cookiebot, msg, chat_id, language, current_date):
+def next_birthdays(cookiebot, msg, chat_id, language, current_date_utc):
     text = "PRÓXIMOS ANIVERSARIANTES (todos os grupos):\n\n"
     for offset in range(1, 5):
-        target_date = datetime.datetime.utcfromtimestamp(current_date) + datetime.timedelta(days=offset)
+        target_date = datetime.datetime.utcfromtimestamp(current_date_utc) + datetime.timedelta(days=offset)
         target_date_formatted = target_date.strftime('%Y-%m-%d')
         bd_users = get_request_backend(f"users?birthdate={target_date_formatted}")
         text += f"{offset} dias:\n"
