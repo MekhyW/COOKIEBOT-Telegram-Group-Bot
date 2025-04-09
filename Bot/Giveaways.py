@@ -24,14 +24,18 @@ def get_db_connection():
 def giveaways_ask(cookiebot, msg, chat_id, language, listaadmins_id, listaadmins_status):
     send_chat_action(cookiebot, chat_id, 'typing')
     if 'creator' in listaadmins_status and str(msg['from']['id']) not in listaadmins_id and str(msg['from']['id']) != str(ownerID):
-        send_message(cookiebot, chat_id, "Você não tem permissão para criar sorteios! \n <blockquote> Se está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada! </blockquote>", msg, language)
+        text = "Você não tem permissão para criar sorteios! \n <blockquote> Se está falando como usuário e não como canal? A permissão 'permanecer anônimo' deve estar desligada! </blockquote>" if language == 'pt' else "¡No tienes permiso para crear sorteos! \n <blockquote> ¿Si hablas como usuario y no como canal? ¡El permiso de anonimato debe estar desactivado! </blockquote>" if language == 'es' else "You don't have permission to create giveaways! \n <blockquote> If you are speaking as a user and not as a channel? The 'stay anonymous' permission must be turned off! </blockquote>"
+        send_message(cookiebot, chat_id, text, msg)
         return
     if len(msg['text'].split()) == 1:
-        send_message(cookiebot, chat_id, "Você precisa digitar o que está sendo sorteado! \n <blockquote> EXEMPLO: /giveaway Fursuit do Mekhy 🐾🦝 </blockquote>", msg, language)
+        text = "Você precisa digitar o que está sendo sorteado! \n <blockquote> EXEMPLO: /giveaway Fursuit do Mekhy 🐾🦝 </blockquote>" if language == 'pt' else "¡Necesitas escribir lo que se está sorteando! \n <blockquote> EJEMPLO: /giveaway Fursuit de Mekhy 🐾🦝 </blockquote>" if language == 'es' else "You need to type what is being raffled! \n <blockquote> EXAMPLE: /giveaway Fursuit of Mekhy 🐾🦝 </blockquote>"
+        send_message(cookiebot, chat_id, text, msg)
         return
     prize_text = " ".join(msg["text"].split()[1:])
     prize = json.dumps(prize_text)[:20]
-    send_message(cookiebot, chat_id, "Vamos criar um sorteio! \n Quantos usuários serão sorteados?", msg, language, 
+    text = "Vamos criar um sorteio! \n Quantos usuários serão sorteados?" if language == 'pt' else "¡Vamos a crear un sorteo! \n ¿Cuántos usuarios serán sorteados?" if language == 'es' else "Let's create a giveaway! \n How many users will be drawn?"
+    send_chat_action(cookiebot, chat_id, 'typing')
+    send_message(cookiebot, chat_id, text, msg, 
                  reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                      [InlineKeyboardButton(text="1", callback_data=f'GIVEAWAY 1 {prize}')],
                      [InlineKeyboardButton(text="2", callback_data=f'GIVEAWAY 2 {prize}')],
@@ -45,7 +49,8 @@ def giveaways_create(cookiebot, msg, n_winners, chat_id, prize):
         logger.log_text(f"Invalid number of giveaway winners: {n_winners}", severity="WARNING")
         return
     language = get_config(cookiebot, chat_id)[7]
-    giveaways_msg_id = send_message(cookiebot, chat_id, f"🎰 É HORA DO SORTEIO! 🎰 \n \n 🎯 O Prêmio é: <b> {prize} </b> \n 👥 Número de vencedores: {n_winners} \n ⌛ Começou em: {datetime.datetime.now().strftime('%d/%m, %H:%M')}", language=language,
+    text = f"🎰 É HORA DO SORTEIO! 🎰 \n \n 🎯 O Prêmio é: <b> {prize} </b> \n 👥 Número de vencedores: {n_winners} \n ⌛ Começou em: {datetime.datetime.now().strftime('%d/%m, %H:%M')}" if language == 'pt' else f"🎰 ¡ES HORA DEL SORTEO! 🎰 \n \n 🎯 El premio es: <b>{prize}</b> \n 👥 Número de ganadores: {n_winners} \n ⌛ Comenzó el: {datetime.datetime.now().strftime('%d/%m, %H:%M')}" if language == 'es' else f"🎰 IT'S GIVEAWAY TIME! 🎰 \n \n 🎯 The Prize is: <b>{prize}</b> \n 👥 Number of winners: {n_winners} \n ⌛ Started on: {datetime.datetime.now().strftime('%m/%d, %H:%M')}"
+    giveaways_msg_id = send_message(cookiebot, chat_id, text,
                                  reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                                      [InlineKeyboardButton(text="Quero Entrar!" if language=='pt' else "Put me in!", callback_data=f'GIVEAWAY enter')],
                                      [InlineKeyboardButton(text="ADMINS: Finalizar Sorteio" if language=='pt' else "ADMINS: End Giveaway", callback_data=f'GIVEAWAY end')],
@@ -126,7 +131,8 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
                         send_photo(cookiebot, chat_id, final_img, caption, language=language)
                 else:
                     send_message(cookiebot, chat_id, caption, language=language)
-        giveaways_msg_id_new = send_message(cookiebot, chat_id, "Sortear mais ganhadores?", language=language, reply_markup=InlineKeyboardMarkup(inline_keyboard=[
+        text = "Sortear mais ganhadores?" if language =='pt' else "Sortear más ganadores?" if language == 'es' else "Draw more winners?"
+        giveaways_msg_id_new = send_message(cookiebot, chat_id, text, reply_markup=InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="✅", callback_data="GIVEAWAY end")],
             [InlineKeyboardButton(text="❌", callback_data="GIVEAWAY delete")],
         ]))['message_id']

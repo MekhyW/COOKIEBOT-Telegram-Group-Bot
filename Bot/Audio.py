@@ -15,11 +15,9 @@ def identify_music(cookiebot, msg, chat_id, content, language):
     title = response[1]['track']['title']
     subtitle = response[1]['track']['subtitle']
     if language in ['pt', 'es']:
-        send_message(cookiebot, chat_id,
-                     f"MÚSICA: 🎵 <b> {title} </b> - <i> {subtitle} </i> 🎵", msg, language)
+        send_message(cookiebot, chat_id, f"MÚSICA: 🎵 <b> {title} </b> - <i> {subtitle} </i> 🎵", msg)
     else:
-        send_message(cookiebot, chat_id,
-                     f"SONG: 🎵 <b> {title} </b> - <i> {subtitle} </i> 🎵", msg, language)
+        send_message(cookiebot, chat_id, f"SONG: 🎵 <b> {title} </b> - <i> {subtitle} </i> 🎵", msg)
     logger.log_text(f"Music identified: {title} - {subtitle}", severity="INFO")
 
 def speech_to_text(content):

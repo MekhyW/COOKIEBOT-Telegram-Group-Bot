@@ -56,15 +56,18 @@ def ask_publisher(cookiebot, msg, chat_id, language):
 def ask_publisher_command(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
-        send_message(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder divulgar ela!", msg_to_reply=msg, language=language)
+        text = "Você precisa responder a uma mensagem com o comando para eu poder divulgar ela!" if language == "pt" else "¡Debes responder un mensaje con el comando para que pueda compartirlo!" if language == "es" else "You need to reply to a message with the command for me to be able to share it!"
+        send_message(cookiebot, chat_id, text, msg_to_reply=msg)
         return
     if 'forward_from_chat' not in msg['reply_to_message'] or 'forward_from_message_id' not in msg['reply_to_message']:
-        send_message(cookiebot, chat_id, "Essa mensagem não é de um canal!", msg_to_reply=msg, language=language)
+        text = "Essa mensagem não é de um canal!" if language == "pt" else "¡Este mensaje no es de un canal!" if language == "es" else "This message is not from a channel!"
+        send_message(cookiebot, chat_id, text, msg_to_reply=msg)
         return
     replied_post = msg['reply_to_message']
     add_post_to_cache(replied_post)
     ask_approval(cookiebot, f"SendToApprovalPub {replied_post['forward_from_chat']['id']} {chat_id} {replied_post['forward_from_message_id']} {replied_post['message_id']}", msg['from']['id'])
-    send_message(cookiebot, chat_id, "Post enviado para aprovação, aguarde", msg_to_reply=msg, language=language)
+    text = "Post enviado para aprovação, aguarde" if language == "pt" else "Publicación enviada para aprobación, por favor espere" if language == "es" else "Post sent for approval, please wait"
+    send_message(cookiebot, chat_id, text, msg_to_reply=msg)
     logger.log_text(f"Sent post for approval to chat with ID {chat_id}", severity="INFO")
 
 def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
@@ -275,49 +278,56 @@ def schedule_post(cookiebot, query_data):
         answer += "OBS: private chats are not listed!"
         send_message(cookiebot, ownerID, answer)
         send_message(cookiebot, origin_userid, answer)
-        send_message(cookiebot, second_chatid, "Post added to the publication queue!", msg_to_reply={'message_id': second_messageid})
+        text = "Post adicionado à fila de publicação!" if language == "pt" else "¡Publicación agregada a la cola de publicación!" if language == "es" else "Post added to the publication queue!"
+        send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid})
         logger.log_text("Post added to the publication queue", severity="INFO")
     except Exception:
         send_message(cookiebot, ownerID, traceback.format_exc())
-        send_message(cookiebot, second_chatid, "Post added to the publication queue, but I was unable to send you the times.\n<blockquote> Send /start in my DM so I can send you messages. </blockquote>", msg_to_reply={'message_id': second_messageid})
+        text = "Post adicionado à fila de publicação, mas não consegui te enviar os horários.\n<blockquote> Envie /start no meu DM para que eu possa te enviar mensagens. </blockquote>" if language == "pt" else "¡Publicación agregada a la cola de publicación, pero no pude enviarte los horarios!\n<blockquote> Envíame /start en mi DM para que pueda enviarte mensajes. </blockquote>" if language == "es" else "Post added to the publication queue, but I was unable to send you the times.\n<blockquote> Send /start in my DM so I can send you messages. </blockquote>"
+        send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid})
         logger.log_text("Post added to the publication queue, but DM failed", severity="INFO")
 
 def schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id and int(msg['from']['id']) != ownerID and 'sender_chat' not in msg:
-        send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+        text = "Você não é um administrador do grupo!" if language == "pt" else "¡No eres un administrador del grupo!" if language == "es" else "You are not a group admin!"
+        send_message(cookiebot, chat_id, text, msg_to_reply=msg)
         return
     if 'reply_to_message' not in msg:
-        send_message(cookiebot, chat_id, "Você precisa responder a uma mensagem com o comando para eu poder repostar ela nesse grupo!", msg_to_reply=msg, language=language)
+        text = "Você precisa responder a uma mensagem com o comando para eu poder repostar ela nesse grupo!" if language == "pt" else "¡Debes responder un mensaje con el comando para que pueda compartirlo en este grupo!" if language == "es" else "You need to reply to a message with the command for me to be able to repost it in this group!"
+        send_message(cookiebot, chat_id, text, msg_to_reply=msg)
         return
     if len(msg['text'].split()) > 1:
         if not msg['text'].split()[1].isnumeric():
-            send_message(cookiebot, chat_id, "Número de dias inválido", msg_to_reply=msg, language=language)
+            text = "Você precisa colocar um número de dias válido!" if language == "pt" else "¡Debes poner un número de días válido!" if language == "es" else "You need to put a valid number of days!"
+            send_message(cookiebot, chat_id, text, msg_to_reply=msg)
             return
         days = msg['text'].split()[1]
-        text = f"Repostagem programada para o grupo por {days} dias!"
+        text = f"Repostagem programada para o grupo por {days} dias!" if language == "pt" else f"¡Reposteo programado para el grupo por {days} días!" if language == "es" else f"Repost scheduled for the group for {days} days!"
     else:
         days = 9999
-        text = "Repostagem programada para o grupo! (sem limite de dias)"
+        text = "Repostagem programada para o grupo! (sem limite de dias)" if language == "pt" else "¡Reposteo programado para el grupo! (sin límite de días)" if language == "es" else "Repost scheduled for the group! (no limit of days)"
     original_msg_id = msg['reply_to_message']['message_id']
     chat = cookiebot.getChat(chat_id)
     hour = random.randint(10,17)
     minute = random.randint(0,59)
     create_job(hour, minute, f"{chat['title']} --> {chat['title']}, at {hour}:{minute} ", int(days), int(chat_id), int(chat_id), int(chat_id), int(original_msg_id), int(original_msg_id), int(msg['from']['id']))
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
-    send_message(cookiebot, chat_id, text, msg_to_reply=msg, language=language, parse_mode='HTML')
+    send_message(cookiebot, chat_id, text, msg_to_reply=msg, parse_mode='HTML')
     logger.log_text(f"Autopost scheduled for chat with ID {chat_id}", severity="INFO")
 
 def cancel_posts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
     if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
-        send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
+        text = "Você não é um administrador do grupo!" if language == "pt" else "¡No eres un administrador del grupo!" if language == "es" else "You are not a group admin!"
+        send_message(cookiebot, chat_id, text, msg_to_reply=msg)
         return
     for job in list_jobs():
         if str(job['second_chatid']) == str(chat_id):
             delete_job(job['name'])
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
-    send_message(cookiebot, chat_id, "Posts e reposts do grupo cancelados!", msg_to_reply=msg, language=language)
+    text = "Posts e reposts do grupo cancelados!" if language == "pt" else "¡Publicaciones y reenvíos del grupo cancelados!" if language == "es" else "Posts and reposts canceled!"
+    send_message(cookiebot, chat_id, text, msg_to_reply=msg)
     logger.log_text(f"Posts and reposts canceled for chat with ID {chat_id}", severity="INFO")
 
 def scheduler_pull(cookiebot, is_alternate_bot=0):
@@ -357,8 +367,9 @@ def check_notify_post_reply(cookiebot, msg, chat_id, language):
             second_messageid = str(job['second_messageid'])
             text = f"@{msg['from']['username']}" if 'username' in msg['from'] else f"{msg['from']['first_name']} {msg['from']['last_name']}"
             text += f" replied:\n'{msg['text']}'\n\nIn chat {msg['chat']['title']}"
-            send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid}, language=language)
-            send_message(cookiebot, chat_id, "Resposta enviada ao dono do post!", msg_to_reply=msg, language=language)
+            send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid})
+            text = "Resposta enviada ao dono do post!" if language == "pt" else "¡Respuesta enviada al dueño del post!" if language == "es" else "Reply sent to the owner of the post!"
+            send_message(cookiebot, chat_id, text, msg_to_reply=msg)
             logger.log_text(f"Notify post reply sent to chat with ID {second_chatid}", severity="INFO")
             return
 

@@ -14,7 +14,8 @@ def sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language):
     else:
         last_used = int(last_used_sticker[chat_id]) + 1
         if last_used == int(stickerspamlimit):
-            send_message(cookiebot, chat_id, "Cuidado com o flood de stickers", msg, language)
+            text = "Cuidado com o flood de stickers" if language == 'pt' else "Cuidado con las inundaciones de stickers" if language == 'es' else "Be careful with sticker flood"
+            send_message(cookiebot, chat_id, text, msg)
         if int(last_used) > int(stickerspamlimit):
             delete_message(cookiebot, telepot.message_identifier(msg))
         last_used_sticker[chat_id] = last_used

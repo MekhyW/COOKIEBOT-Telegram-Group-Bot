@@ -6,8 +6,8 @@ Pillow
 opencv-python==4.10.0.84
 Wand
 ffmpeg-python
-deep-translator
 google-api-python-client==2.48.0
+google-cloud-translate
 google-cloud-storage
 google-cloud-logging
 Google-Images-Search
@@ -22,4 +22,3 @@ flask
 flask-cors
 gunicorn
 pyopenssl
-Pylint

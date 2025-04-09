@@ -10,10 +10,11 @@ from SocialContent import get_profile_image
 import cv2
 import numpy as np
 
-def birthday(cookiebot, current_date_utc, msg=None, manual_chat_id=None):
+def birthday(cookiebot, current_date_utc, msg=None, manual_chat_id=None, language=None):
     current_date_formatted = datetime.datetime.fromtimestamp(current_date_utc, tz=datetime.timezone.utc).strftime('%Y-%m-%d')
     if manual_chat_id and len(msg['text'].split()) == 1:
-        send_message(cookiebot, manual_chat_id, "Você precisa digitar os usernames dos aniversariantes de hoje!", msg)
+        text = "Você precisa digitar os usernames dos aniversariantes de hoje!" if language == 'pt' else "¡Debes ingresar los nombres de usuario de las personas que cumplen años hoy!" if language == 'es' else "You need to type the usernames of today's birthday people!"
+        send_message(cookiebot, manual_chat_id, text, msg)
         return
     bd_users = get_request_backend(f"users?birthdate={current_date_formatted}")
     groups = get_request_backend('registers') if not manual_chat_id else [get_request_backend(f"registers/{manual_chat_id}")]
@@ -119,5 +120,5 @@ def next_birthdays(cookiebot, msg, chat_id, language, current_date_utc):
         if not len(bd_users):
             text += "- \n"
         text += "\n"
-    send_message(cookiebot, chat_id, text, language=language)
+    send_message(cookiebot, chat_id, text)
     logger.log_text(f"Next birthdays message sent to chat with ID {chat_id}", severity="INFO")

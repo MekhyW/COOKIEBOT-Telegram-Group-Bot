@@ -12,9 +12,9 @@ from functools import wraps
 import threading
 import telepot
 from telepot.exception import TelegramError
-from deep_translator import GoogleTranslator
 from google.cloud import storage
 from google.cloud import logging
+from google.cloud import translate_v2
 load_dotenv('../.env')
 login_backend, password_backend = os.getenv('backend_login'), os.getenv('backend_password')
 googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token')
@@ -23,6 +23,7 @@ ownerID = int(os.getenv('ownerID'))
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../cookiebot-bucket-key.json'
 storage_client = storage.Client()
 logging_client = logging.Client()
+translate_client = translate_v2.Client()
 storage_bucket = storage_client.get_bucket("cookiebot-bucket")
 storage_bucket_public = storage_client.get_bucket("cookiebot-bucket-public")
 logger = logging_client.logger('bot-logs')
@@ -110,6 +111,8 @@ def delete_request_backend(route, params=None):
         return str(e)
     
 def translate(text, dest='en'):
+    if isinstance(text, bytes):
+        text = text.decode("utf-8")
     tags = {}
     count = 0
     def replace_tag(match):
@@ -122,7 +125,7 @@ def translate(text, dest='en'):
     newline_token_alts = ["NEWLINE_TOKEN_XYZ", "NEWLINE_XYZ_XYZ", "newline_xyz", "token_xyz", "_TOKEN_TOKKN_XYZ", "NEWLINE_TOKN_XYZ", "newline_xyz_token_xyz_xyz", "newloken_token_xyz", "_xyz", "newlina_TOKEN_XYZ"]
     text_with_placeholders = re.sub(r'<[^>]*>', replace_tag, text)
     text_with_tokens = text_with_placeholders.replace('\n', newline_token)
-    translated = GoogleTranslator(source='auto', target=dest[:2]).translate(text_with_tokens)
+    translated = translate_client.translate(text_with_tokens, target_language=dest[:2])["translatedText"]
     for placeholder, tag in tags.items():
         translated = re.sub(re.escape(placeholder.strip()), tag, translated, flags=re.IGNORECASE)
     for token in newline_token_alts:

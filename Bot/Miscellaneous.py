@@ -85,19 +85,22 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
 
 def privacy_statement(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
-    send_message(cookiebot, chat_id, "Privacy terms of Cookiebot (and its clones) are available at https://cookiebotfur.net/privacy", msg_to_reply=msg, language=language, parse_mode='HTML')
+    text = "Os termos de privacidade do Cookiebot (e seus clones) estão disponíveis em https://cookiebotfur.net/privacy" if language == 'pt' else "Las condiciones de privacidad de Cookiebot (y sus clones) están disponibles en https://cookiebotfur.net/privacy" if language == 'es' else "Cookiebot's privacy terms (and its clones) are available at https://cookiebotfur.net/privacy"
+    send_message(cookiebot, chat_id, text, msg_to_reply=msg, parse_mode='HTML')
     logger.log_text(f"Privacy statement sent to chat with ID {chat_id}", severity="INFO")
 
 def is_alive(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
     send_chat_action(cookiebot, chat_id, 'typing')
-    send_message(cookiebot, chat_id, "<b> Estou vivo </b>\n\nPing enviado em:\n" + str(datetime.datetime.now()), msg, language)
+    text = "<b> Estou vivo </b>\n\nPing enviado em:\n" if language == 'pt' else "<b>Estoy vivo</b>\n\nPing enviado a:\n" if language == 'es' else "<b> I'm alive </b>\n\nPing sent at:\n"
+    send_message(cookiebot, chat_id, text + str(datetime.datetime.now()), msg)
     logger.log_text(f"Alive message sent to chat with ID {chat_id}", severity="INFO")
 
 def analyze(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
-        send_message(cookiebot, chat_id, "Responda uma mensagem com o comando para analisar", msg, language)
+        text = "Responda uma mensagem com o comando para analisar" if language == 'pt' else "Responde a un mensaje con el comando para analizar" if language == 'es' else "Reply to a message with the command to analyze"
+        send_message(cookiebot, chat_id, text, msg)
         return
     react_to_message(msg, '🤔', is_alternate_bot=is_alternate_bot)
     result = ''
@@ -158,11 +161,13 @@ def list_commands(cookiebot, msg, chat_id, language):
     logger.log_text(f"List of commands sent to chat with ID {chat_id}", severity="INFO")
 
 def notify_fun_off(cookiebot, msg, chat_id, language):
-    send_message(cookiebot, chat_id, "<i> Funções de diversão estão desativadas nesse chat </i>", msg, language)
+    text = "<i> Funções de diversão estão desativadas nesse chat </i>" if language == 'pt' else "<i> Funções de diversión están desactivadas en este chat </i>" if language == 'es' else "<i> Fun functions are disabled in this chat </i>"
+    send_message(cookiebot, chat_id, text, msg)
     logger.log_text(f"Notify fun off message sent to chat with ID {chat_id}", severity="INFO")
 
 def notify_utility_off(cookiebot, msg, chat_id, language):
-    send_message(cookiebot, chat_id, "<i> Funções de utilidade estão desativadas nesse chat </i>", msg, language)
+    text = "<i> Funções de utilidade estão desativadas nesse chat </i>" if language == 'pt' else "<i> Las funciones de utilidad están deshabilitadas en este chat. </i>" if language == 'es' else "<i> Utility functions are disabled in this chat </i>"
+    send_message(cookiebot, chat_id, text, msg)
     logger.log_text(f"Notify utility off message sent to chat with ID {chat_id}", severity="INFO")
 
 def drawing_idea(cookiebot, msg, chat_id, language):
@@ -170,21 +175,15 @@ def drawing_idea(cookiebot, msg, chat_id, language):
     idea_id = random.randint(0, len(bloblist_ideiadesenho)-1)
     blob = bloblist_ideiadesenho[idea_id]
     photo = blob.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
-    if language == 'pt':
-        caption = f"Referência com ID {idea_id}\n\nNão trace sem dar créditos! (use a busca reversa do google images)"
-    elif language == 'es':
-        caption = f"Referencia con ID {idea_id}\n\n¡No rastrear sin dar créditos! (utilice la búsqueda inversa de imágenes de Google)"
-    else:
-        caption = f"Reference ID {idea_id}\n\nDo not trace without credits! (use the reverse google images search)"
+    caption = f"Referência com ID {idea_id}\n\nNão trace sem dar créditos! (use a busca reversa do google images)" if language == 'pt' else f"Referencia con ID {idea_id}\n\n¡No rastrear sin dar créditos! (utilice la búsqueda inversa de imágenes de Google)" if language == 'es' else f"Reference ID {idea_id}\n\nDo not trace without credits! (use the reverse google images search)"
     send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
     logger.log_text(f"Drawing idea sent to chat with ID {chat_id}", severity="INFO")
 
 def pesh(cookiebot, msg, chat_id, language, photo, image_id):
     with open('Static/pesh.txt', 'r', encoding='utf8') as file:
         species = random.choice(file.readlines()).replace('\n', '')
-    caption = f"Pesh com ID {image_id}\n🐟 Seu glub glub da sorte: <b> {species} </b> 🐟"
-    inline_keyboard = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Pesh Gang", url=f"https://t.me/peshspecies")]])
-    send_photo(cookiebot, chat_id, photo, caption=caption, reply_markup=inline_keyboard, msg_to_reply=msg, language=language)
+    caption = f"Pesh com ID {image_id}\n🐟 Seu glub glub da sorte: <b> {species} </b> 🐟" if language == 'pt' else f"Pesh con ID {image_id}\n🐟 Tu glub glub de la suerte: <b> {species} </b> 🐟" if language == 'es' else f"Pesh with ID {image_id}\n🐟 Your lucky glub glub: <b> {species} </b> 🐟"
+    send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
     logger.log_text(f"Pesh sent to chat with ID {chat_id}", severity="INFO")
 
 def custom_command(cookiebot, msg, chat_id, language):
@@ -198,8 +197,9 @@ def custom_command(cookiebot, msg, chat_id, language):
     if msg['text'].startswith("/pesh"):
         pesh(cookiebot, msg, chat_id, language, photo, image_id)
         return
-    caption = f"Foto custom de {msg['text'].replace('/', '').replace('@CookieMWbot', '').split()[0].capitalize()} com ID {image_id}"
-    send_photo(cookiebot, chat_id, photo, msg_to_reply=msg, caption=caption, language=language)
+    name = msg['text'].replace('/', '').replace('@CookieMWbot', '').split()[0].capitalize()
+    caption = f"Foto custom de {name} com ID {image_id}" if language == 'pt' else f"Foto custom de {name} con ID {image_id}" if language == 'es' else f"Custom photo of {name} with ID {image_id}"
+    send_photo(cookiebot, chat_id, photo, msg_to_reply=msg, caption=caption)
     logger.log_text(f"Custom command sent to chat with ID {chat_id}", severity="INFO")
 
 def roll_dice(cookiebot, msg, chat_id, language):
@@ -236,15 +236,18 @@ def age(cookiebot, msg, chat_id, language):
         idade = response['age']
         registered_times = response['count']
         if registered_times == 0:
-            send_message(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
+            text = "Não conheço esse nome!" if language == 'pt' else "No conozco ese nombre!" if language == 'es' else "I don't know that name!"
+            send_message(cookiebot, chat_id, text, msg)
         else:
-            send_message(cookiebot, chat_id, f'Sua idade é <span class="tg-spoiler">{idade} anos! 👴</span>\nRegistrado <b> {registered_times} </b> vezes', msg, language)
+            text = f'Sua idade é <span class="tg-spoiler">{idade} anos! 👴</span>\nRegistrado <b> {registered_times} </b> vezes' if language == 'pt' else f'¡Tu edad es <span class="tg-spoiler">{age} años! 👴</span>\nRegistrado <b>{registered_times}</b> veces' if language == 'es' else f'Your age is <span class="tg-spoiler">{age} years! 👴</span>\nRegistered <b>{registered_times}</b> times'
+            send_message(cookiebot, chat_id, text, msg)
         logger.log_text(f"Age message sent to chat with ID {chat_id}", severity="INFO")
 
 def gender(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     if not " " in msg['text']:
-        send_message(cookiebot, chat_id, "Digite um nome, vou dizer o seu gênero!\n<blockquote> Exemplo: '/genero Mekhy'\n(obs: só o primeiro nome conta)\n(obs 2: POR FAVOR NÃO LEVAR ISSO A SÉRIO, É ZUERA) </blockquote>", msg, language)
+        text = "Digite um nome, vou dizer o seu gênero!\n<blockquote> Exemplo: '/genero Mekhy' </blockquote>" if language == 'pt' else "Introduce un nombre y te diré tu género.\n<blockquote> Ejemplo: '/gender Mekhy'</blockquote>" if language == 'es' else "Enter a name, I'll tell you your gender!\n<blockquote> Example: '/gender Mekhy'</blockquote>"
+        send_message(cookiebot, chat_id, text, msg)
     else:
         nome = msg['text'].replace("/genero ", '').replace("/gênero ", '').replace("/gender ", '').replace("/genero@CookieMWbot", '').replace("/gênero@CookieMWbot", '').replace("/gender@CookieMWbot", '').split()[0]
         response = json.loads(requests.get(f"https://api.genderize.io?name={nome}", timeout=10).text)
@@ -252,11 +255,14 @@ def gender(cookiebot, msg, chat_id, language):
         probability = response['probability']
         registered_times = response['count']
         if registered_times == 0:
-            send_message(cookiebot, chat_id, "Não conheço esse nome!", msg, language)
+            text = "Não conheço esse nome!" if language == 'pt' else "No conozco ese nombre!" if language == 'es' else "I don't know that name!"
+            send_message(cookiebot, chat_id, text, msg)
         elif genero == 'male':
-            send_message(cookiebot, chat_id, f'É <span class="tg-spoiler">um menino! 👨</span> \n\nProbabilidade --> {probability*100}%\nRegistrado {registered_times} vezes', msg, language)
+            text = f'É <span class="tg-spoiler">um menino! 👨</span> \n\nProbabilidade --> {probability*100}%\nRegistrado {registered_times} vezes' if language == 'pt' else f'¡Es un niño! 👨</span> \n\nProbabilidad --> {probability*100}%\nRegistrado {registered_times} veces' if language == 'es' else f'Its <span class="tg-spoiler">a boy! 👨</span> \n\nProbability --> {probability*100}%\nRegistered {registered_times} times'
+            send_message(cookiebot, chat_id, text, msg)
         elif genero == 'female':
-            send_message(cookiebot, chat_id, f'É <span class="tg-spoiler">uma menina! 👩</span> \n\nProbabilidade --> {probability*100}%\nRegistrado {registered_times} vezes', msg, language)
+            text = f'É <span class="tg-spoiler">uma menina! 👩</span> \n\nProbabilidade --> {probability*100}%\nRegistrado {registered_times} vezes' if language == 'pt' else f'¡Es una niña! 👩</span> \n\nProbabilidad --> {probability*100}%\nRegistrado {registered_times} veces' if language == 'es' else f'Its <span class="tg-spoiler">a girl! 👩</span> \n\nProbability --> {probability*100}%\nRegistered {registered_times} times'
+            send_message(cookiebot, chat_id, text, msg)
         logger.log_text(f"Gender message sent to chat with ID {chat_id}", severity="INFO")
 
 def firecracker(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
@@ -296,10 +302,9 @@ def complaint_answer(cookiebot, msg, chat_id, language):
         hold_msg = cookiebot.sendVoice(chat_id, hold_audio, caption=f"Protocol: {protocol}", reply_to_message_id=msg['message_id'])
     time.sleep(random.randint(10, 20))
     delete_message(cookiebot, telepot.message_identifier(hold_msg))
-    with open('Static/reclamacao/answers.txt', 'r', encoding='utf8') as answers:
+    with open(f'Static/reclamacao/answers_{language}.txt', 'r', encoding='utf8') as answers:
         answer = random.choice(answers.readlines()).replace('\n', '')
-        answer += '\n\nAtenciosamente,\nMilton do RH.'
-    send_message(cookiebot, chat_id, answer, msg_to_reply=msg, language=language)
+    send_message(cookiebot, chat_id, answer, msg_to_reply=msg)
     logger.log_text(f"Complaint answer sent to chat with ID {chat_id}", severity="INFO")
 
 def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
@@ -396,9 +401,10 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                 daysremaining += 365
             caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurCamp! </b>\n\n<i> {calltoaction} </i>\n🐾🌲🐾🌳🐾🌲🐾🌳🐾🌲🐾🌳\n\n📆 {day} a {day+3}/{month}, Acampamento Terra do Saber\n💻 Ingressos em: furcamp.com\n📲 Grupo do evento: @FurcampOficial"
     else:
-        send_message(cookiebot, chat_id, "Evento não encontrado", msg, language)
+        text = "Evento não encontrado!" if language == 'pt' else "¡Evento no encontrado!" if language == 'es' else "Event not found!"
+        send_message(cookiebot, chat_id, text, msg)
         return
-    send_photo(cookiebot, chat_id, pic, caption=caption, msg_to_reply=msg, language=language, is_alternate_bot=is_alternate_bot)
+    send_photo(cookiebot, chat_id, pic, caption=caption, msg_to_reply=msg, is_alternate_bot=is_alternate_bot)
     logger.log_text(f"Event countdown sent to chat with ID {chat_id}", severity="INFO")
 
 def unearth(cookiebot, msg, chat_id, thread_id=None):
@@ -427,21 +433,22 @@ def death(cookiebot, msg, chat_id, language):
     if language == 'pt':
         caption += ' foi de ' + random.choice(['ARRASTA PRA CIMA', 'AMERICANAS', 'F NO CHAT', 'HEXA 2022', 'COMES E BEBES', 'WAKANDA FOREVER NA HORIZONTAL', 'VOLANTE NO VASCO', 'DRAKE E JOSH', 'OLAVO DE CARVALHO', 'SEGUE PRA PARTE 2', 'TELA AZUL', 'FUNDADOR DA FAROFA YOKI', 'ESTAMPA DE CAMISA', 'CPF CANCELADO', 'KICK DO SERVIDOR', 'CARRINHO BATE BATE', 'SAMBARILOVE', 'ESTUDAR EM REALENGO', 'FISH AND CHIPS', 'LINK NA BIO', 'TOBOGÃ PRO INFERNO', 'CRINJOLAS', 'FRAIDI NAITES ATE FREDE']) + '! 💀💀💀'
     else:
-        caption += random.choice([' ESTÁ MORTO', ' FOI-SE EMBORA', ' FALECEU']) + '! 💀💀💀'
-    with open('Static/death.txt', 'r', encoding='utf-8') as f:
+        caption += random.choice([' IS DEAD', ' IS GONE', ' DECEASED']) + '! 💀💀💀'
+    with open(f'Static/death/death_{language}.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
-    caption += '\nMotivo: <b> ' + line + ' </b> 🔥\nF no chat. 🫡'
+    additional = '\nMotivo: <b> ' + line + ' </b> 🔥\nF no chat. 🫡' if language == 'pt' else '\nReason: <b> ' + line + ' </b> 🔥\nF in chat. 🫡'
+    caption += additional
     if filename.endswith('.gif'):
-        send_animation(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg, language=language)
+        send_animation(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg)
     else:
-        send_photo(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg, language=language)
+        send_photo(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg)
     logger.log_text(f"Death message sent to chat with ID {chat_id}", severity="INFO")
 
 def fortune_cookie(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
-    anim_id = send_animation(cookiebot, chat_id, 'https://s12.gifyu.com/images/S5e9b.gif', msg_to_reply=msg, language=language)
-    with open('Static/Sorte/sorte.txt', 'r', encoding='utf-8') as f:
+    anim_id = send_animation(cookiebot, chat_id, 'https://s12.gifyu.com/images/S5e9b.gif', msg_to_reply=msg)
+    with open(f'Static/Sorte/sorte_{language}.txt', 'r', encoding='utf-8') as f:
         line = random.choice(f.readlines())
         line = line.replace('\n', '')
     numbers = []
@@ -452,19 +459,15 @@ def fortune_cookie(cookiebot, msg, chat_id, language):
             numbers.append(number)
             tens.append(math.floor(number / 10))
     numbers_str = ' '.join([str(number) for number in numbers])
-    answer = f'Sua sorte:\n 🥠 <span class="tg-spoiler">" {line} "</span> 🥠'
-    answer += f'\nSeus números da sorte: <span class="tg-spoiler">{numbers_str}</span>'
+    answer = f'Sua sorte:\n 🥠 <span class="tg-spoiler">" {line} "</span> 🥠\nSeus números da sorte: <span class="tg-spoiler">{numbers_str}</span>' if language == 'pt' else f'Tu suerte:\n 🥠 <span class="tg-spoiler">" {line} "</span> 🥠\nTus números de la suerte: <span class="tg-spoiler">{numbers_str}</span>' if language == 'es' else f'Your luck:\n 🥠 <span class="tg-spoiler">" {line} "</span> 🥠\nYour lucky numbers: <span class="tg-spoiler">{numbers_str}</span>'
     time.sleep(3)
     delete_message(cookiebot, (str(chat_id), str(anim_id)))
     send_chat_action(cookiebot, chat_id, 'typing')
-    send_message(cookiebot, chat_id, answer, msg_to_reply=msg, language=language, parse_mode='HTML')
+    send_message(cookiebot, chat_id, answer, msg_to_reply=msg, parse_mode='HTML')
     logger.log_text(f"Fortune cookie sent to chat with ID {chat_id}", severity="INFO")
 
 def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
-    if language == 'pt':
-        instru = "Responda a uma foto, audio ou sticker com o comando para distorcer (ou use /zoar pfp)"
-    else:
-        instru = "Reply to a photo, audio or sticker with the command to distort (or use /destroy pfp)"
+    instru = "Responda a uma foto, audio ou sticker com o comando para distorcer (ou use /zoar pfp)" if language == 'pt' else "Responde a una foto, audio o sticker con el comando para distorsionar (o usa /zoar pfp)" if language == 'es' else "Reply to a photo, audio or sticker with the command to distort (or use /destroy pfp)"
     if msg['text'].endswith('pfp'):
         send_chat_action(cookiebot, chat_id, 'upload_photo')
         token = get_bot_token(is_alternate_bot)
@@ -479,9 +482,10 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         os.remove('distorted.jpg')
         os.remove(filename)
     elif not 'reply_to_message' in msg:
-        send_message(cookiebot, chat_id, instru, msg, language)
+        send_message(cookiebot, chat_id, instru, msg)
     elif 'video' in msg['reply_to_message']:
-        send_message(cookiebot, chat_id, "Video distortioning is currently disabled.", msg, language)
+        text = "A distorção de vídeo está desativada no momento." if language == 'pt' else "La distorsión de video está desactivada en este momento." if language == 'es' else "Video distortioning is currently disabled."
+        send_message(cookiebot, chat_id, text, msg)
     elif 'photo' in msg['reply_to_message']:
         send_chat_action(cookiebot, chat_id, 'upload_photo')
         photo_file = get_media_content(cookiebot, msg['reply_to_message'], 'photo', is_alternate_bot=is_alternate_bot, downloadfile=True)
@@ -503,7 +507,8 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         os.remove(audio_file)
     elif 'sticker' in msg['reply_to_message']:
         if msg['reply_to_message']['sticker']['is_animated'] or msg['reply_to_message']['sticker']['is_video']:
-            send_message(cookiebot, chat_id, "GIF distortioning is currently disabled.", msg, language)
+            text = "A distorção de GIF está desativada no momento." if language == 'pt' else "La distorsión de GIF está desactivada en este momento." if language == 'es' else "GIF distortioning is currently disabled."
+            send_message(cookiebot, chat_id, text, msg)
             return
         send_chat_action(cookiebot, chat_id, 'upload_photo')
         sticker_file = get_media_content(cookiebot, msg['reply_to_message'], 'sticker', is_alternate_bot=is_alternate_bot, downloadfile=True)
@@ -513,7 +518,8 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         os.remove('distorted.png')
         os.remove(sticker_file)
     elif 'animation' in msg['reply_to_message']:
-        send_message(cookiebot, chat_id, "GIF distortioning is currently disabled.", msg, language)
+        text = "A distorção de GIF está desativada no momento." if language == 'pt' else "La distorsión de GIF está desactivada en este momento." if language == 'es' else "GIF distortioning is currently disabled."
+        send_message(cookiebot, chat_id, text, msg)
     else:
-        send_message(cookiebot, chat_id, instru, msg, language)
+        send_message(cookiebot, chat_id, instru, msg)
     logger.log_text(f"/destroy called in chat with ID {chat_id}", severity="INFO")

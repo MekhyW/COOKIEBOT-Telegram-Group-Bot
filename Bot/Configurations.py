@@ -95,7 +95,8 @@ def set_language_commands(cookiebot, chat_id, chat_to_alter, language, is_altern
         set_bot_commands(cookiebot, comandos, chat_to_alter, is_alternate_bot=is_alternate_bot, language=language)
         print(f"Comandos no chat com ID {chat_to_alter} alterados para o idioma {language}")
         if not silent:
-            send_message(cookiebot, chat_id, f"Comandos no chat com ID <b> {chat_to_alter} </b> alterados para o idioma <b> {language} </b>", language=language)
+            text = f"Comandos no chat com ID <b> {chat_to_alter} </b> alterados para o idioma <b> Português </b>" if language == "pt" else f"Comandos en el chat con ID <b> {chat_to_alter} </b> cambiados a idioma <b> Español </b>" if language == "es" else f"Commands in chat with ID <b> {chat_to_alter} </b> changed to language <b> English </b>"
+            send_message(cookiebot, chat_id, text)
             logger.log_text(f"Commands in chat with ID {chat_to_alter} changed to language {language} (silent=False)", severity="INFO")
 
 def set_private_commands(cookiebot, chat_id, is_alternate_bot=0):
