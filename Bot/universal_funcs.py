@@ -170,7 +170,8 @@ def send_error_traceback(cookiebot, msg, traceback_text):
 
 def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, link_preview_options=None, disable_notification=False, parse_mode='HTML'):
     try:
-        text = translate(text, language) if language in ['eng', 'es'] else text
+        if language in ['eng', 'es']:
+            text = translate(text, language)
         if msg_to_reply and link_preview_options:
             url = f"https://api.telegram.org/bot{get_bot_token(is_alternate_bot)}/sendMessage"
             params = {'chat_id': chat_id, 'text': text, 'reply_markup': reply_markup, 'link_preview_options': link_preview_options, 'disable_notification': disable_notification, 'parse_mode': parse_mode}
