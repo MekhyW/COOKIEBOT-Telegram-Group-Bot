@@ -236,3 +236,8 @@
 /evil
 /evilusername
 /security
+/newpoll
+/poll
+/results
+/endpoll
+/help
