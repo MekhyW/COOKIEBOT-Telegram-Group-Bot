@@ -42,7 +42,6 @@ bff - Evento furry de hotel em santos
 furcamp - Evento furry em acampamento
 fursmeet - Evento furry de hotel em santa maria
 trex - Evento furry de parque de diversoes em sao paulo
-pesh - Seja um pesh
 tavivo - Manda um ping de teste com data do servidor
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo

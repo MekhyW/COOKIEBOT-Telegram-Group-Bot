@@ -179,13 +179,6 @@ def drawing_idea(cookiebot, msg, chat_id, language):
     send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
     logger.log_text(f"Drawing idea sent to chat with ID {chat_id}", severity="INFO")
 
-def pesh(cookiebot, msg, chat_id, language, photo, image_id):
-    with open('Static/pesh.txt', 'r', encoding='utf8') as file:
-        species = random.choice(file.readlines()).replace('\n', '')
-    caption = f"Pesh com ID {image_id}\n🐟 Seu glub glub da sorte: <b> {species} </b> 🐟" if language == 'pt' else f"Pesh con ID {image_id}\n🐟 Tu glub glub de la suerte: <b> {species} </b> 🐟" if language == 'es' else f"Pesh with ID {image_id}\n🐟 Your lucky glub glub: <b> {species} </b> 🐟"
-    send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
-    logger.log_text(f"Pesh sent to chat with ID {chat_id}", severity="INFO")
-
 def custom_command(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
     bloblist = list(storage_bucket.list_blobs(prefix="Custom/"+msg['text'].replace('/', '').replace("@CookieMWbot", '').replace("@pawstralbot", '').split()[0]))
@@ -194,9 +187,6 @@ def custom_command(cookiebot, msg, chat_id, language):
     else:
         image_id = random.randint(0, len(bloblist)-1)
     photo = bloblist[image_id].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
-    if msg['text'].startswith("/pesh"):
-        pesh(cookiebot, msg, chat_id, language, photo, image_id)
-        return
     name = msg['text'].replace('/', '').replace('@CookieMWbot', '').split()[0].capitalize()
     caption = f"Foto custom de {name} com ID {image_id}" if language == 'pt' else f"Foto custom de {name} con ID {image_id}" if language == 'es' else f"Custom photo of {name} with ID {image_id}"
     send_photo(cookiebot, chat_id, photo, msg_to_reply=msg, caption=caption)

@@ -42,7 +42,6 @@ bff - Evento furry de hotel en brasil
 furcamp - Evento furry en acampamento en brasil
 fursmeet - Evento furry de hotel en brasil
 trex - Evento de parque de diversiones furry en brasil
-pesh - Ser un pesh
 estavivo - Envía un ping de prueba con la fecha del servidor
 reglas - Muestra las reglas del grupo
 nuevasreglas - Actualiza las reglas del grupo
