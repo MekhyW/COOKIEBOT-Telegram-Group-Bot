@@ -6,7 +6,7 @@ import requests
 import re
 import json
 from bs4 import BeautifulSoup
-from universal_funcs import googleAPIkey, searchEngineCX, saucenao_key, storage_bucket, get_request_backend, post_request_backend, send_chat_action, send_message, react_to_message, send_photo, forward_message, cookiebotTOKEN, logger, translate
+from universal_funcs import googleAPIkey, searchEngineCX, saucenao_key, storage_bucket, get_request_backend, post_request_backend, send_chat_action, send_message, react_to_message, send_photo, forward_message, cookiebotTOKEN, translate
 from UserRegisters import get_members_chat
 import google_images_search
 import googleapiclient.discovery
@@ -119,12 +119,10 @@ def reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         answer += f"\n{best.urls[0]}\n\n"
         react_to_message(msg, '🫡', is_big=False, is_alternate_bot=is_alternate_bot)
         send_message(cookiebot, chat_id, answer, msg, language)
-        logger.log_text(f"Reverse search result sent to chat with ID {chat_id}", severity="INFO")
     else:
         react_to_message(msg, '🤷', is_big=False, is_alternate_bot=is_alternate_bot)
         text = "A busca não encontrou correspondência, parece ser uma imagem original!" if language == 'pt' else "La búsqueda no encontró coincidencias, ¡parece ser una imagen original!" if language == 'es' else "The search found no matches, it seems to be an original image!"
         send_message(cookiebot, chat_id, text, msg)
-        logger.log_text(f"Reverse search result not found for chat with ID {chat_id}", severity="INFO")
 
 def prompt_qualquer_coisa(cookiebot, msg, chat_id, language):
     text = "Você precisa digitar o nome do que quer procurar\n<blockquote> EXEMPLO: /batata frita </blockquote>" if language == 'pt' else "Necesitas escribir el nombre de lo que quieres buscar\n<blockquote> EJEMPLO: /french fries </blockquote>" if language == 'es' else "You need to type the name of what you want to search for\n<blockquote> EXAMPLE: /french fries </blockquote>"
@@ -147,14 +145,12 @@ def qualquer_coisa(cookiebot, msg, chat_id, sfw, language, is_alternate_bot=0):
                 cookiebot.sendAnimation(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url)
             else:
                 cookiebot.sendPhoto(chat_id, image.url, reply_to_message_id=msg['message_id'], caption=image.referrer_url)
-            logger.log_text(f"Image search successful for chat with ID {chat_id}", severity="INFO")
             return True
         except Exception as e:
             pass
     react_to_message(msg, '🤷', is_big=False, is_alternate_bot=is_alternate_bot)
     text = "Não consegui achar uma imagem <i> (ou era NSFW e eu filtrei) </i>" if language == 'pt' else "No pude encontrar una imagen <i> (o era NSFW y lo filtré) </i>" if language == 'es' else "I couldn't find an image <i> (or it was NSFW and I filtered it) </i>"
     send_message(cookiebot, chat_id, text, msg)
-    logger.log_text(f"Image search failed for chat with ID {chat_id}", severity="INFO")
 
 def youtube_search(cookiebot, msg, chat_id, language):
     if len(msg['text'].split()) == 1:
@@ -169,13 +165,11 @@ def youtube_search(cookiebot, msg, chat_id, language):
         react_to_message(msg, '🤷', is_big=False)
         text = "Não consegui achar nenhum vídeo" if language == 'pt' else "No pude encontrar ningún video" if language == 'es' else "I couldn't find any video"
         send_message(cookiebot, chat_id, text, msg)
-        logger.log_text(f"Youtube search failed for chat with ID {chat_id}", severity="INFO")
         return
     random_video = random.choice(videos)
     video_url = f"https://www.youtube.com/watch?v={random_video['id']['videoId']}"
     video_description = random_video["snippet"]["description"]
     send_message(cookiebot, chat_id, f"<i> {video_url} </i>\n\n<b> {video_description} </b>", msg, parse_mode='HTML')
-    logger.log_text(f"Youtube search successful for chat with ID {chat_id}", severity="INFO")
 
 def add_to_random_database(msg, chat_id, photo_id=''):
     if any(x in msg['chat']['title'].lower() for x in ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']):
@@ -192,7 +186,6 @@ def random_media(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
             break
         except Exception as e:
             pass
-    logger.log_text(f"Random media sent to chat with ID {chat_id}", severity="INFO")
 
 def add_to_sticker_database(msg):
     BANNED_EMOJIS = ['🍆', '🍑', '🍌', '🍭', '🥵', '💦', '🫦', '👄', '🔞', '😏', '🇩🇪', '⚡', '👌', '👌🏻', '👌🏼', '👌🏽', '👌🏾', '👌🏿', '❤️‍🔥', '🌽', '🍩', '🍼', '🥛', '😫', '😩', '🌚', '♋️', '🩸', '🪢', '👅', '😈', '🩲', '💋', '🤤', '🍒', '🥖', '🌶️', '💄', '🔩', '🐙']
@@ -209,7 +202,6 @@ def add_to_sticker_database(msg):
 def reply_sticker(cookiebot, msg, chat_id):
     sticker = get_request_backend("stickerdatabase")
     cookiebot.sendSticker(chat_id, sticker['id'], reply_to_message_id=msg['message_id'])
-    logger.log_text(f"Sticker reply sent to chat with ID {chat_id}", severity="INFO")
 
 def meme(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
@@ -260,7 +252,6 @@ def meme(cookiebot, msg, chat_id, language):
     cv2.imwrite("meme.png", template_img)
     with open("meme.png", 'rb') as final_img:
         send_photo(cookiebot, chat_id, photo=final_img, caption=caption, msg_to_reply=msg)
-    logger.log_text(f"Meme sent to chat with ID {chat_id}", severity="INFO")
 
 def get_profile_image(username):
     """Helper function to get a user's profile image"""
@@ -275,7 +266,6 @@ def get_profile_image(username):
         else:
             return None
     except (IndexError, urllib.error.URLError) as e:
-        logger.log_text(f"Error fetching profile image for user {username}: {e}", severity="WARNING")
         return None
 
 def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
@@ -288,7 +278,6 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
             if len(members) < 2:
                 text = "Não há membros suficientes para batalhar" if language == 'pt' else "No hay miembros suficientes para luchar" if language == 'es' else "Not enough members to battle"
                 send_message(cookiebot, chat_id, text, msg)
-                logger.log_text(f"Battle failed for chat with ID {chat_id}", severity="INFO")
                 return
             for _ in range(100):
                 random.shuffle(members)
@@ -303,12 +292,10 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         if len(images[0]) == 0:
             text = f"Não consegui extrair a foto de {members_tagged[0]}. Verifique se está público!" if language == 'pt' else f"No pude extraer la foto de {members_tagged[0]}. ¡Verifica si es público!" if language == 'es' else f"I couldn't extract the photo of {members_tagged[0]}. Check if it's public!"
             send_message(cookiebot, chat_id, text, msg)
-            logger.log_text(f"Battle failed for chat with ID {chat_id}", severity="INFO")
             return
         if len(images[1]) == 0:
             text = f"Não consegui extrair a foto de {members_tagged[1]}. Verifique se está público!" if language == 'pt' else f"No pude extraer la foto de {members_tagged[1]}. ¡Verifica si es público!" if language == 'es' else f"I couldn't extract the photo of {members_tagged[1]}. Check if it's public!"
             send_message(cookiebot, chat_id, text, msg)
-            logger.log_text(f"Battle failed for chat with ID {chat_id}", severity="INFO")
             return
         resp = urllib.request.urlopen(images[0][0]['src']), urllib.request.urlopen(images[1][0]['src'])
         user_images = cv2.imdecode(np.asarray(bytearray(resp[0].read()), dtype="uint8"), cv2.IMREAD_COLOR), cv2.imdecode(np.asarray(bytearray(resp[1].read()), dtype="uint8"), cv2.IMREAD_COLOR)
@@ -331,7 +318,6 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         medias[0]['caption'] = caption
         cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'])
         cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'])
-        logger.log_text(f"Battle sent to chat with ID {chat_id}", severity="INFO")
         return
     elif len(members_tagged):
         user = members_tagged[0]
@@ -353,7 +339,6 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         except IndexError:
             text = "Você precisa ter uma foto de perfil <i> (ou está privado) </i>" if language == 'pt' else "Necesitas tener una foto de perfil <i> (o está privado) </i>" if language == 'es' else "You need to have a profile picture <i> (or it's private) </i>"
             send_message(cookiebot, chat_id, text, msg)
-            logger.log_text(f"Battle failed for chat with ID {chat_id}", severity="INFO")
             return
     if language == 'pt':
         fighter = random.choice(random.choice([bloblist_fighters_eng, bloblist_fighters_pt]))
@@ -369,4 +354,3 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     medias[0]['caption'] = caption
     cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'])
     cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'])
-    logger.log_text(f"Battle sent to chat with ID {chat_id}", severity="INFO")

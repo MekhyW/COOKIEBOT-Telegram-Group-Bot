@@ -5,7 +5,7 @@ import time
 import math
 import datetime
 import requests
-from universal_funcs import get_request_backend, send_message, delete_message, storage_bucket, send_photo, send_chat_action, react_to_message, forward_message, number_to_emojis, wait_open, get_media_content, get_bot_token, send_animation, logger
+from universal_funcs import get_request_backend, send_message, delete_message, storage_bucket, send_photo, send_chat_action, react_to_message, forward_message, number_to_emojis, wait_open, get_media_content, get_bot_token, send_animation
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from Publisher import POSTMAIL_CHAT_LINK
@@ -22,7 +22,7 @@ NEW_CHAT_LINK = "https://t.me/CookieMWbot?startgroup=new"
 WEBSITE_LINK = "https://cookiebotfur.net"
 TEST_CHAT_LINK = "https://t.me/+mX6W3tGXPew2OTIx"
 UPDATES_CHANNEL_LINK = "https://t.me/cookiebotupdates"
-NUMBER_CHATS = 994
+NUMBER_CHATS = 997
 
 def decapitalize(s, upper_rest = False):
     return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
@@ -81,20 +81,17 @@ def pv_default_message(cookiebot, msg, chat_id, is_alternate_bot):
         [InlineKeyboardButton(text="Grupo de teste/assistência 🧪" if is_portuguese else "Test/assistance Group 🧪", url=TEST_CHAT_LINK)]
     ])
     send_message(cookiebot, chat_id, message, reply_markup=reply_markup)
-    logger.log_text(f"Default message sent to chat with ID {chat_id}", severity="INFO")
 
 def privacy_statement(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     text = "Os termos de privacidade do Cookiebot (e seus clones) estão disponíveis em https://cookiebotfur.net/privacy" if language == 'pt' else "Las condiciones de privacidad de Cookiebot (y sus clones) están disponibles en https://cookiebotfur.net/privacy" if language == 'es' else "Cookiebot's privacy terms (and its clones) are available at https://cookiebotfur.net/privacy"
     send_message(cookiebot, chat_id, text, msg_to_reply=msg, parse_mode='HTML')
-    logger.log_text(f"Privacy statement sent to chat with ID {chat_id}", severity="INFO")
 
 def is_alive(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
     send_chat_action(cookiebot, chat_id, 'typing')
     text = "<b> Estou vivo </b>\n\nPing enviado em:\n" if language == 'pt' else "<b>Estoy vivo</b>\n\nPing enviado a:\n" if language == 'es' else "<b> I'm alive </b>\n\nPing sent at:\n"
     send_message(cookiebot, chat_id, text + str(datetime.datetime.now()), msg)
-    logger.log_text(f"Alive message sent to chat with ID {chat_id}", severity="INFO")
 
 def analyze(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -107,7 +104,6 @@ def analyze(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     for item in msg['reply_to_message']:
         result += str(item) + ': ' + str(msg['reply_to_message'][item]) + '\n'
     send_message(cookiebot, chat_id, result, msg_to_reply=msg)
-    logger.log_text(f"Analyzed message sent to chat with ID {chat_id}", severity="INFO")
 
 def list_groups(cookiebot, chat_id):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -139,7 +135,6 @@ def list_groups(cookiebot, chat_id):
         cookiebot.sendMessage(chat_id, f"New groups found: {', '.join(new_chats)}")
     if removed_chats:
         cookiebot.sendMessage(chat_id, f"Removed groups: {', '.join(removed_chats)}")
-    logger.log_text(f"List of groups sent to chat with ID {chat_id}", severity="INFO")
 
 def broadcast_message(cookiebot, msg):
     groups = get_request_backend('registers')
@@ -150,7 +145,6 @@ def broadcast_message(cookiebot, msg):
             time.sleep(0.5)
         except Exception:
             pass
-    logger.log_text(f"Broadcast message sent to {len(groups)} groups", severity="INFO")
 
 def list_commands(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -158,17 +152,14 @@ def list_commands(cookiebot, msg, chat_id, language):
     with open(f"Static/Cookiebot_functions_{language}.txt", "r+", encoding='utf8') as text_file:
         string = text_file.read()
     send_message(cookiebot, chat_id, string, msg_to_reply=msg)
-    logger.log_text(f"List of commands sent to chat with ID {chat_id}", severity="INFO")
 
 def notify_fun_off(cookiebot, msg, chat_id, language):
     text = "<i> Funções de diversão estão desativadas nesse chat </i>" if language == 'pt' else "<i> Funções de diversión están desactivadas en este chat </i>" if language == 'es' else "<i> Fun functions are disabled in this chat </i>"
     send_message(cookiebot, chat_id, text, msg)
-    logger.log_text(f"Notify fun off message sent to chat with ID {chat_id}", severity="INFO")
 
 def notify_utility_off(cookiebot, msg, chat_id, language):
     text = "<i> Funções de utilidade estão desativadas nesse chat </i>" if language == 'pt' else "<i> Las funciones de utilidad están deshabilitadas en este chat. </i>" if language == 'es' else "<i> Utility functions are disabled in this chat </i>"
     send_message(cookiebot, chat_id, text, msg)
-    logger.log_text(f"Notify utility off message sent to chat with ID {chat_id}", severity="INFO")
 
 def drawing_idea(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
@@ -177,7 +168,6 @@ def drawing_idea(cookiebot, msg, chat_id, language):
     photo = blob.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     caption = f"Referência com ID {idea_id}\n\nNão trace sem dar créditos! (use a busca reversa do google images)" if language == 'pt' else f"Referencia con ID {idea_id}\n\n¡No rastrear sin dar créditos! (utilice la búsqueda inversa de imágenes de Google)" if language == 'es' else f"Reference ID {idea_id}\n\nDo not trace without credits! (use the reverse google images search)"
     send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg)
-    logger.log_text(f"Drawing idea sent to chat with ID {chat_id}", severity="INFO")
 
 def custom_command(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
@@ -190,7 +180,6 @@ def custom_command(cookiebot, msg, chat_id, language):
     name = msg['text'].replace('/', '').replace('@CookieMWbot', '').split()[0].capitalize()
     caption = f"Foto custom de {name} com ID {image_id}" if language == 'pt' else f"Foto custom de {name} con ID {image_id}" if language == 'es' else f"Custom photo of {name} with ID {image_id}"
     send_photo(cookiebot, chat_id, photo, msg_to_reply=msg, caption=caption)
-    logger.log_text(f"Custom command sent to chat with ID {chat_id}", severity="INFO")
 
 def roll_dice(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -215,7 +204,6 @@ def roll_dice(cookiebot, msg, chat_id, language):
                 else:
                     resposta += f"\n{vez+1}th Roll: 🎲 -> {random.randint(1, limite)}"
         send_message(cookiebot, chat_id, resposta, msg_to_reply=msg)
-        logger.log_text(f"Dice roll sent to chat with ID {chat_id}", severity="INFO")
 
 def age(cookiebot, msg, chat_id, language):
     if not " " in msg['text']:
@@ -231,7 +219,6 @@ def age(cookiebot, msg, chat_id, language):
         else:
             text = f'Sua idade é <span class="tg-spoiler">{idade} anos! 👴</span>\nRegistrado <b> {registered_times} </b> vezes' if language == 'pt' else f'¡Tu edad es <span class="tg-spoiler">{age} años! 👴</span>\nRegistrado <b>{registered_times}</b> veces' if language == 'es' else f'Your age is <span class="tg-spoiler">{age} years! 👴</span>\nRegistered <b>{registered_times}</b> times'
             send_message(cookiebot, chat_id, text, msg)
-        logger.log_text(f"Age message sent to chat with ID {chat_id}", severity="INFO")
 
 def gender(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -253,7 +240,6 @@ def gender(cookiebot, msg, chat_id, language):
         elif genero == 'female':
             text = f'É <span class="tg-spoiler">uma menina! 👩</span> \n\nProbabilidade --> {probability*100}%\nRegistrado {registered_times} vezes' if language == 'pt' else f'¡Es una niña! 👩</span> \n\nProbabilidad --> {probability*100}%\nRegistrado {registered_times} veces' if language == 'es' else f'Its <span class="tg-spoiler">a girl! 👩</span> \n\nProbability --> {probability*100}%\nRegistered {registered_times} times'
             send_message(cookiebot, chat_id, text, msg)
-        logger.log_text(f"Gender message sent to chat with ID {chat_id}", severity="INFO")
 
 def firecracker(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
     react_to_message(msg, '🎉', is_alternate_bot=is_alternate_bot)
@@ -268,7 +254,6 @@ def firecracker(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
         send_message(cookiebot, chat_id, "pra "*n, thread_id=thread_id, is_alternate_bot=is_alternate_bot)
         amount -= n
     send_message(cookiebot, chat_id, "<b> 💥POOOOOOOWW💥 </b>", thread_id=thread_id, is_alternate_bot=is_alternate_bot)
-    logger.log_text(f"Firecracker sent to chat with ID {chat_id}", severity="INFO")
 
 def complaint(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
@@ -282,7 +267,6 @@ def complaint(cookiebot, msg, chat_id, language):
             send_photo(cookiebot, chat_id, photo,
                       caption=f"Good morning/afternoon/evening, {msg['from']['first_name']},\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.",
                       msg_to_reply=msg)
-    logger.log_text(f"Complaint message sent to chat with ID {chat_id}", severity="INFO")
 
 def complaint_answer(cookiebot, msg, chat_id, language):
     delete_message(cookiebot, telepot.message_identifier(msg['reply_to_message']))
@@ -295,7 +279,6 @@ def complaint_answer(cookiebot, msg, chat_id, language):
     with open(f'Static/reclamacao/answers_{language}.txt', 'r', encoding='utf8') as answers:
         answer = random.choice(answers.readlines()).replace('\n', '')
     send_message(cookiebot, chat_id, answer, msg_to_reply=msg)
-    logger.log_text(f"Complaint answer sent to chat with ID {chat_id}", severity="INFO")
 
 def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
     react_to_message(msg, '🔥', is_alternate_bot=is_alternate_bot)
@@ -395,7 +378,6 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         send_message(cookiebot, chat_id, text, msg)
         return
     send_photo(cookiebot, chat_id, pic, caption=caption, msg_to_reply=msg, is_alternate_bot=is_alternate_bot)
-    logger.log_text(f"Event countdown sent to chat with ID {chat_id}", severity="INFO")
 
 def unearth(cookiebot, msg, chat_id, thread_id=None):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -406,7 +388,6 @@ def unearth(cookiebot, msg, chat_id, thread_id=None):
             return chosenid
         except Exception:
             return None
-    logger.log_text(f"Unearthed message sent to chat with ID {chat_id}", severity="INFO")
 
 def death(cookiebot, msg, chat_id, language):
     react_to_message(msg, '👻')
@@ -433,7 +414,6 @@ def death(cookiebot, msg, chat_id, language):
         send_animation(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg)
     else:
         send_photo(cookiebot, chat_id, fileurl, caption=caption, msg_to_reply=msg)
-    logger.log_text(f"Death message sent to chat with ID {chat_id}", severity="INFO")
 
 def fortune_cookie(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
@@ -454,7 +434,6 @@ def fortune_cookie(cookiebot, msg, chat_id, language):
     delete_message(cookiebot, (str(chat_id), str(anim_id)))
     send_chat_action(cookiebot, chat_id, 'typing')
     send_message(cookiebot, chat_id, answer, msg_to_reply=msg, parse_mode='HTML')
-    logger.log_text(f"Fortune cookie sent to chat with ID {chat_id}", severity="INFO")
 
 def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     instru = "Responda a uma foto, audio ou sticker com o comando para distorcer (ou use /zoar pfp)" if language == 'pt' else "Responde a una foto, audio o sticker con el comando para distorsionar (o usa /zoar pfp)" if language == 'es' else "Reply to a photo, audio or sticker with the command to distort (or use /destroy pfp)"
@@ -512,4 +491,3 @@ def destroy(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         send_message(cookiebot, chat_id, text, msg)
     else:
         send_message(cookiebot, chat_id, instru, msg)
-    logger.log_text(f"/destroy called in chat with ID {chat_id}", severity="INFO")

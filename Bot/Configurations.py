@@ -1,4 +1,4 @@
-from universal_funcs import get_bot_token, send_message, send_chat_action, react_to_message, delete_message, get_request_backend, put_request_backend, post_request_backend, wait_open, set_bot_commands, leave_and_blacklist, ownerID, storage_bucket_public, logger
+from universal_funcs import get_bot_token, send_message, send_chat_action, react_to_message, delete_message, get_request_backend, put_request_backend, post_request_backend, wait_open, set_bot_commands, leave_and_blacklist, ownerID, storage_bucket_public
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import time, datetime, requests, os
@@ -32,7 +32,7 @@ def get_group_info(cookiebot, chat_id, listaadmins_id, title, photo_big_id, is_a
                         if os.path.exists(temp_file):
                             os.remove(temp_file)
                 except Exception as e:
-                    logger.log_text(f"Error getting file from Telegram: {e}", severity="INFO")
+                    print(f"Error uploading photo: {e}")
         if blob:
             photo_signed_url = blob.generate_signed_url(datetime.timedelta(days=10), method='GET')
     group = get_request_backend(f"groups/{chat_id}")
@@ -97,7 +97,6 @@ def set_language_commands(cookiebot, chat_id, chat_to_alter, language, is_altern
         if not silent:
             text = f"Comandos no chat com ID <b> {chat_to_alter} </b> alterados para o idioma <b> Português </b>" if language == "pt" else f"Comandos en el chat con ID <b> {chat_to_alter} </b> cambiados a idioma <b> Español </b>" if language == "es" else f"Commands in chat with ID <b> {chat_to_alter} </b> changed to language <b> English </b>"
             send_message(cookiebot, chat_id, text)
-            logger.log_text(f"Commands in chat with ID {chat_to_alter} changed to language {language} (silent=False)", severity="INFO")
 
 def set_private_commands(cookiebot, chat_id, is_alternate_bot=0):
     set_language_commands(cookiebot, chat_id, chat_id, "private", is_alternate_bot)
@@ -165,10 +164,8 @@ def configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, lang
                             ]
                         ))
         send_message(cookiebot, chat_id, "Te mandei uma mensagem no chat privado para configurar!", msg, language)
-        logger.log_text(f"Configuration menu sent to chat with ID {chat_id}", severity="INFO")
     except Exception as e:
         send_message(cookiebot, chat_id, "Não consegui te mandar o menu de configuração\n<blockquote> Mande uma mensagem no meu chat privado para que eu consiga fazer isso) </blockquote>" , msg, language)
-        logger.log_text(f"Error sending configuration menu: {e}", severity="INFO")
 
 def configurar_set(cookiebot, msg, chat_id, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -211,10 +208,8 @@ def configurar_set(cookiebot, msg, chat_id, is_alternate_bot=0):
         cache_configurations[chat_id] = current_configs
         react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
         cookiebot.sendMessage(chat_id, "Successfully changed the variable!\nSend /reload in the chat if the old config persists")
-        logger.log_text(f"Variable changed in chat with ID {chat_id}", severity="INFO")
     else:
         cookiebot.sendMessage(chat_id, "ERROR: invalid input\nTry again", reply_to_message_id=msg['message_id'])
-        logger.log_text(f"Invalid input in chat with ID {chat_id}", severity="INFO")
 
 def config_variable_button(cookiebot, msg, query_data):
     chat = query_data.split()[2]
@@ -244,7 +239,6 @@ def config_variable_button(cookiebot, msg, query_data):
         cookiebot.sendMessage(msg['message']['chat']['id'], f"Chat = {chat}\nThis is the maximum number of posts I should publish in the chat per day\n\nREPLY THIS MESSAGE with the new variable value")
     elif query_data.startswith('q'):
         cookiebot.sendMessage(msg['message']['chat']['id'], f"Chat = {chat}\nUse 1 if the bot should only allow members of the channel to use the publisher, or 0 if not\n\nREPLY THIS MESSAGE with the new variable value")
-    logger.log_text(f"Configuration variable button clicked in chat with ID {chat}", severity="INFO")
 
 def set_language(cookiebot, msg, chat_id, language_code):
     if 'pt' in language_code:
@@ -268,12 +262,10 @@ def update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
     cookiebot.sendMessage(chat_id, "Welcome message updated! ✅", reply_to_message_id=msg['message_id'])
     delete_message(cookiebot, telepot.message_identifier(msg['reply_to_message']))
-    logger.log_text(f"Welcome message updated in chat with ID {chat_id}", severity="INFO")
 
 def new_welcome_message(cookiebot, msg, chat_id):
     send_chat_action(cookiebot, chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name", reply_to_message_id=msg['message_id'])
-    logger.log_text(f"New welcome message requested in chat with ID {chat_id}", severity="INFO")
 
 def update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=0):
     if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
@@ -286,9 +278,7 @@ def update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_b
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
     cookiebot.sendMessage(chat_id, "Updated rules message! ✅", reply_to_message_id=msg['message_id'])
     delete_message(cookiebot, telepot.message_identifier(msg['reply_to_message']))
-    logger.log_text(f"Rules message updated in chat with ID {chat_id}", severity="INFO")
 
 def new_rules_message(cookiebot, msg, chat_id):
     send_chat_action(cookiebot, chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules", reply_to_message_id=msg['message_id'])
-    logger.log_text(f"New rules message requested in chat with ID {chat_id}", severity="INFO")

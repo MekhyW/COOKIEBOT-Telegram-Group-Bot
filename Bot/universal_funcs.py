@@ -13,7 +13,6 @@ import threading
 import telepot
 from telepot.exception import TelegramError
 from google.cloud import storage
-from google.cloud import logging
 from google.cloud import translate_v2
 load_dotenv('../.env')
 login_backend, password_backend = os.getenv('backend_login'), os.getenv('backend_password')
@@ -22,11 +21,9 @@ cookiebotTOKEN, bombotTOKEN, pawstralbotTOKEN, tarinbotTOKEN, connectbotTOKEN = 
 ownerID = int(os.getenv('ownerID'))
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../cookiebot-bucket-key.json'
 storage_client = storage.Client()
-logging_client = logging.Client()
 translate_client = translate_v2.Client()
 storage_bucket = storage_client.get_bucket("cookiebot-bucket")
 storage_bucket_public = storage_client.get_bucket("cookiebot-bucket-public")
-logger = logging_client.logger('bot-logs')
 
 def get_bot_token(is_alternate_bot):
     match is_alternate_bot:
@@ -71,7 +68,6 @@ def get_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         print(e)
-        logger.log_text(f"Error getting request from backend: {e}", severity="INFO")
         return str(e)
 
 @cached_api_call(ttl_seconds=60)
@@ -83,7 +79,6 @@ def post_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         print(e)
-        logger.log_text(f"Error posting request to backend: {e}", severity="INFO")
         return str(e)
 
 @cached_api_call(ttl_seconds=60)
@@ -95,7 +90,6 @@ def put_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         print(e)
-        logger.log_text(f"Error putting request to backend: {e}", severity="INFO")
         return str(e)
 
 @cached_api_call(ttl_seconds=60)
@@ -107,7 +101,6 @@ def delete_request_backend(route, params=None):
         return json.loads(response.text) if len(response.text) else ''
     except Exception as e:
         print(e)
-        logger.log_text(f"Error deleting request from backend: {e}", severity="INFO")
         return str(e)
     
 def translate(text, dest='en'):
@@ -199,7 +192,6 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
     except Exception:
         traceback_text = traceback.format_exc()
         if not 'Bad Request: PEER_ID_INVALID' in traceback_text:
-            logger.log_text(f"Error sending message: {traceback_text}", severity="INFO")
             send_error_traceback(cookiebot, None, traceback_text)
 
 def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
@@ -228,7 +220,6 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
         return send_photo(cookiebot, chat_id, photo, caption, 
                           msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
     except TelegramError:
-        logger.log_text(f"Error sending photo: {traceback.format_exc()}", severity="INFO")
         send_error_traceback(cookiebot, None, traceback.format_exc())
         return None
     return sentphoto['message_id']
@@ -257,7 +248,6 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
         return send_animation(cookiebot, chat_id, animation, caption, 
                               msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
     except TelegramError:
-        logger.log_text(f"Error sending animation: {traceback.format_exc()}", severity="INFO")
         send_error_traceback(cookiebot, None, traceback.format_exc())
         return None
     return sentanimation['message_id']
@@ -290,18 +280,15 @@ def react_to_message(msg, emoji, is_big=True, is_alternate_bot=0):
 def blacklist_user(user_id):
     id = str(user_id).replace('@', '')
     post_request_backend(f'blacklist/{id}')
-    logger.log_text(f"Blacklisted user with ID {id}", severity="INFO")
 
 def unblacklist_user(user_id):
     id = str(user_id).replace('@', '')
     delete_request_backend(f'blacklist/{id}')
-    logger.log_text(f"Unblacklisted user with ID {id}", severity="INFO")
 
 def ban_and_blacklist(cookiebot, chat_id, user_id):
     id = str(user_id).replace('@', '')
     post_request_backend(f'blacklist/{id}')
     cookiebot.kickChatMember(chat_id, user_id)
-    logger.log_text(f"Banned user with ID {id} in chat with ID {chat_id}", severity="INFO")
 
 def leave_and_blacklist(cookiebot, chat_id):
     id = str(chat_id).replace('@', '')
@@ -311,9 +298,8 @@ def leave_and_blacklist(cookiebot, chat_id):
     delete_request_backend(f'groups/{chat_id}')
     try:
         cookiebot.leaveChat(chat_id)
-        logger.log_text(f"Left chat with ID {chat_id} and blacklisted", severity="INFO")
     except Exception as e:
-        logger.log_text(f"Error leaving chat with ID {chat_id}: {e}", severity="INFO")
+        print("Error leaving chat: " + str(e))
 
 def wait_open(filename):
     if os.path.exists(filename):
@@ -327,7 +313,7 @@ def delete_message(cookiebot, identifier):
     try:
         cookiebot.deleteMessage(identifier)
     except Exception as e:
-        logger.log_text(f"Error deleting message: {e}", severity="INFO")
+        print(e)
 
 def check_if_string_in_file(file_name, string_to_search):
     for line in file_name:

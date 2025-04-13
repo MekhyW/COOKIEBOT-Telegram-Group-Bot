@@ -5,7 +5,7 @@ import re
 import json
 import traceback
 import requests
-from universal_funcs import send_chat_action, send_message, forward_message, get_request_backend, react_to_message, emojis_to_numbers, ownerID, exchangerate_key, logger, translate
+from universal_funcs import send_chat_action, send_message, forward_message, get_request_backend, react_to_message, emojis_to_numbers, ownerID, exchangerate_key, translate
 from Configurations import get_config
 from UserRegisters import get_members_chat
 from price_parser import Price
@@ -51,7 +51,6 @@ def ask_publisher(cookiebot, msg, chat_id, language):
         ]
     ))
     add_post_to_cache(msg)
-    logger.log_text(f"Sent publisher button to chat with ID {chat_id}", severity="INFO")
 
 def ask_publisher_command(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -68,7 +67,6 @@ def ask_publisher_command(cookiebot, msg, chat_id, language):
     ask_approval(cookiebot, f"SendToApprovalPub {replied_post['forward_from_chat']['id']} {chat_id} {replied_post['forward_from_message_id']} {replied_post['message_id']}", msg['from']['id'])
     text = "Post enviado para aprovação, aguarde" if language == "pt" else "Publicación enviada para aprobación, por favor espere" if language == "es" else "Post sent for approval, please wait"
     send_message(cookiebot, chat_id, text, msg_to_reply=msg)
-    logger.log_text(f"Sent post for approval to chat with ID {chat_id}", severity="INFO")
 
 def ask_approval(cookiebot, query_data, from_id, is_alternate_bot=0):
     origin_chatid = query_data.split()[1]
@@ -219,7 +217,6 @@ def prepare_post(cookiebot, origin_messageid, origin_chat, origin_user):
         sent_en = cookiebot.sendAnimation(chat_id=POSTMAIL_CHAT_ID, animation=cached_post['animation'], caption=caption_en, reply_markup=InlineKeyboardMarkup(inline_keyboard=inline_keyboard))['message_id']
     if origin_messageid in cache_posts:
         cache_posts.pop(origin_messageid)
-    logger.log_text("Post sent to postmail chat", severity="INFO")
     return sent_pt, sent_en
 
 def deny_post(query_data):
@@ -228,7 +225,6 @@ def deny_post(query_data):
     origin_messageid = query_data.split()[1]
     if origin_messageid in cache_posts:
         cache_posts.pop(origin_messageid)
-    logger.log_text("Post denied", severity="INFO")
 
 def schedule_post(cookiebot, query_data):
     _, origin_chatid, second_chatid, origin_messageid, origin_userid, days, second_messageid, has_nsfw = query_data.split()[:8]
@@ -280,12 +276,10 @@ def schedule_post(cookiebot, query_data):
         send_message(cookiebot, origin_userid, answer)
         text = "Post adicionado à fila de publicação!" if language == "pt" else "¡Publicación agregada a la cola de publicación!" if language == "es" else "Post added to the publication queue!"
         send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid})
-        logger.log_text("Post added to the publication queue", severity="INFO")
     except Exception:
         send_message(cookiebot, ownerID, traceback.format_exc())
         text = "Post adicionado à fila de publicação, mas não consegui te enviar os horários.\n<blockquote> Envie /start no meu DM para que eu possa te enviar mensagens. </blockquote>" if language == "pt" else "¡Publicación agregada a la cola de publicación, pero no pude enviarte los horarios!\n<blockquote> Envíame /start en mi DM para que pueda enviarte mensajes. </blockquote>" if language == "es" else "Post added to the publication queue, but I was unable to send you the times.\n<blockquote> Send /start in my DM so I can send you messages. </blockquote>"
         send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid})
-        logger.log_text("Post added to the publication queue, but DM failed", severity="INFO")
 
 def schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -314,7 +308,6 @@ def schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alte
     create_job(hour, minute, f"{chat['title']} --> {chat['title']}, at {hour}:{minute} ", int(days), int(chat_id), int(chat_id), int(chat_id), int(original_msg_id), int(original_msg_id), int(msg['from']['id']))
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
     send_message(cookiebot, chat_id, text, msg_to_reply=msg, parse_mode='HTML')
-    logger.log_text(f"Autopost scheduled for chat with ID {chat_id}", severity="INFO")
 
 def cancel_posts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -328,7 +321,6 @@ def cancel_posts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate
     react_to_message(msg, '👍', is_alternate_bot=is_alternate_bot)
     text = "Posts e reposts do grupo cancelados!" if language == "pt" else "¡Publicaciones y reenvíos del grupo cancelados!" if language == "es" else "Posts and reposts canceled!"
     send_message(cookiebot, chat_id, text, msg_to_reply=msg)
-    logger.log_text(f"Posts and reposts canceled for chat with ID {chat_id}", severity="INFO")
 
 def scheduler_pull(cookiebot, is_alternate_bot=0):
     current_time = datetime.datetime.now()
@@ -370,6 +362,5 @@ def check_notify_post_reply(cookiebot, msg, chat_id, language):
             send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid})
             text = "Resposta enviada ao dono do post!" if language == "pt" else "¡Respuesta enviada al dueño del post!" if language == "es" else "Reply sent to the owner of the post!"
             send_message(cookiebot, chat_id, text, msg_to_reply=msg)
-            logger.log_text(f"Notify post reply sent to chat with ID {second_chatid}", severity="INFO")
             return
 

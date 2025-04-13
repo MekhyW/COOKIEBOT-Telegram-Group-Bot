@@ -1,5 +1,5 @@
 import sqlite3
-from universal_funcs import send_chat_action, send_message, send_photo, delete_message, ownerID, logger
+from universal_funcs import send_chat_action, send_message, send_photo, delete_message, ownerID
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import random
@@ -46,7 +46,6 @@ def giveaways_ask(cookiebot, msg, chat_id, language, listaadmins_id, listaadmins
     
 def giveaways_create(cookiebot, msg, n_winners, chat_id, prize):
     if not isinstance(n_winners, int) or n_winners <= 0 or n_winners > 5:
-        logger.log_text(f"Invalid number of giveaway winners: {n_winners}", severity="WARNING")
         return
     language = get_config(cookiebot, chat_id)[7]
     text = f"🎰 É HORA DO SORTEIO! 🎰 \n \n 🎯 O Prêmio é: <b> {prize} </b> \n 👥 Número de vencedores: {n_winners} \n ⌛ Começou em: {datetime.datetime.now().strftime('%d/%m, %H:%M')}" if language == 'pt' else f"🎰 ¡ES HORA DEL SORTEO! 🎰 \n \n 🎯 El premio es: <b>{prize}</b> \n 👥 Número de ganadores: {n_winners} \n ⌛ Comenzó el: {datetime.datetime.now().strftime('%d/%m, %H:%M')}" if language == 'es' else f"🎰 IT'S GIVEAWAY TIME! 🎰 \n \n 🎯 The Prize is: <b>{prize}</b> \n 👥 Number of winners: {n_winners} \n ⌛ Started on: {datetime.datetime.now().strftime('%m/%d, %H:%M')}"
@@ -64,7 +63,6 @@ def giveaways_create(cookiebot, msg, n_winners, chat_id, prize):
         cookiebot.pinChatMessage(chat_id, giveaways_msg_id)
     except Exception:
         pass
-    logger.log_text(f"Giveaway created in chat with ID {chat_id}", severity="INFO")
 
 def giveaways_enter(cookiebot, msg, chat_id):
     try:
@@ -87,7 +85,6 @@ def giveaways_enter(cookiebot, msg, chat_id):
             db.commit()
         cookiebot.answerCallbackQuery(msg['id'], text="YAY! Você entrou no sorteio!" if language =='pt' else "YAY! You entered the giveaway!")
     except Exception as e:
-        logger.log_text(f"Error entering giveaway: {str(e)}", severity="ERROR")
         cookiebot.answerCallbackQuery(msg['id'], text="Erro ao entrar no sorteio" if language =='pt' else "Error entering giveaway")
 
 def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
@@ -114,8 +111,6 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
                 return
             participants = participants_str.split(", ")
             actual_winners = min(n_winners, len(participants))
-            if actual_winners < n_winners:
-                logger.log_text(f"Warning: Only {actual_winners} winners selected for giveaway (requested {n_winners})", severity="WARNING")
             winners = random.sample(participants, actual_winners)
             for winner_idx, winner in enumerate(winners):
                 caption = f"Temos um vencedor! \n 🎉 Parabéns {winner}, você ganhou <b> {prize} </b>! 🎉" if n_winners == 1 else f"Nosso {winner_idx + 1}º vencedor é... \n 🎉 Parabéns {winner}, você ganhou <b> {prize} </b>! 🎉"
@@ -123,7 +118,6 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
                     user_img = get_profile_image(winner.replace('@',''))
                     user_img = cv2.imdecode(np.asarray(bytearray(user_img.read()), dtype="uint8"), cv2.IMREAD_COLOR)
                 except Exception as e:
-                    logger.log_text(f"Error getting profile image: {str(e)}", severity="WARNING")
                     user_img = None
                 if user_img is not None:
                     cv2.imwrite('temp.jpg', user_img)
@@ -143,7 +137,6 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
         cookiebot.answerCallbackQuery(msg['id'], text="Ganhadores sorteados" if language =='pt' else "Winners selected")
         delete_message(cookiebot, telepot.message_identifier(msg['message']))
     except Exception as e:
-        logger.log_text(f"Error ending giveaway: {str(e)}", severity="ERROR")
         cookiebot.answerCallbackQuery(msg['id'], text="Erro ao encerrar sorteio" if language =='pt' else "Error ending giveaway")
 
 def giveaways_delete(cookiebot, msg, chat_id):

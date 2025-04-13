@@ -2,7 +2,7 @@ import json
 import datetime
 import re
 import requests
-from universal_funcs import send_chat_action, openai_key, logger
+from universal_funcs import send_chat_action, openai_key
 import openai
 openai_client = openai.OpenAI(api_key=openai_key)
 data_initial = json.load(open('Static/AI_SFW.json', 'r', encoding='utf-8'))
@@ -74,5 +74,4 @@ def conversational_ai(cookiebot, msg, chat_id, language, sfw):
         answer_final = "?"
     else:
         answer_final = conversational_model_sfw(message, msg, language)
-    logger.log_text(f"Conversational AI answer sent to chat with ID {chat_id}", severity="INFO")
     return answer_final

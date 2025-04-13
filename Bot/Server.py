@@ -13,7 +13,6 @@ from dotenv import load_dotenv
 import os
 import time
 import json
-from universal_funcs import logger
 load_dotenv()
 
 app = Flask("Cookiebot")
@@ -53,14 +52,12 @@ def generate_jwt_token(key, sub, iss):
 
 @app.route('/')
 def home():
-    logger.log_text("Request to home page", severity="INFO")
     return jsonify({'status': 'Bot is online'})
 
 @app.route('/login', methods=['POST'])
 def generate_key():
     data = request.get_json()
     if not data:
-        logger.log_text("Request to generate key with missing data", severity="INFO")
         return jsonify({'error': 'Missing data'}), 400
     valid_tokens = [
         str(os.getenv('cookiebotTOKEN')),
@@ -72,7 +69,6 @@ def generate_key():
     for token in valid_tokens:
         if validate_telegram_auth(data, token):
             jwt_token = generate_jwt_token(public_key, data['id'], request.url_root.rstrip('/'))
-            logger.log_text(f"Token generated for user with ID {data['id']}", severity="INFO")
             return jsonify({
                 'status': 'Token generated',
                 'accessToken': jwt_token
@@ -84,13 +80,11 @@ def jwks():
     jwks_dict = {
         'keys': [json.loads(public_key.export_public())]
     }
-    logger.log_text("Request to JWKS", severity="INFO")
     return jsonify(jwks_dict)
 
 @app.route('/.well-known/openid-configuration', methods=['GET'])
 def openid_configuration():
     base_url = request.url_root.rstrip('/')
-    logger.log_text("Request to OpenID configuration", severity="INFO")
     return jsonify({
         'issuer': base_url,
         'jwks_uri': f'{base_url}/.well-known/jwks.json',

@@ -3,7 +3,7 @@ import datetime
 import time
 import threading
 import math
-from universal_funcs import get_request_backend, delete_request_backend, send_message, send_photo, logger
+from universal_funcs import get_request_backend, delete_request_backend, send_message, send_photo
 from UserRegisters import get_members_chat
 from Configurations import get_config
 from SocialContent import get_profile_image
@@ -43,7 +43,6 @@ def birthday(cookiebot, current_date_utc, msg=None, manual_chat_id=None, languag
             bd_users_in_group.extend([{'username': x.replace('@', '')} for x in msg['text'].split() if x.startswith('@')])
         #if is_old_birthday_pinned or (is_new_birthday_pinned and manual_chat_id):
         #    cookiebot.unpinChatMessage(group['id'], chatinfo['pinned_message']['message_id'])
-        #    logger.log_text(f"Unpinned old birthday message for group with ID {group['id']}", severity="INFO")
         if (len(bd_users_in_group) and not is_new_birthday_pinned) or manual_chat_id:
             collage_image = make_birthday_collage(bd_users_in_group)
             collage_caption = make_birthday_caption(bd_users_in_group, current_date_formatted)
@@ -52,11 +51,10 @@ def birthday(cookiebot, current_date_utc, msg=None, manual_chat_id=None, languag
             try:
                 cookiebot.pinChatMessage(group['id'], collage_message_id)
             except Exception as e:
-                logger.log_text(f"Error pinning birthday collage for group with ID {group['id']}: {e}", severity="INFO")
+                pass
             cookiebot.sendMessage(group['id'], '🎂')
             timer_next_birthdays = threading.Timer(900, next_birthdays, args=(cookiebot, msg, group['id'], language, current_date_utc))
             timer_next_birthdays.start()
-            logger.log_text(f"Triggered birthday message for group with ID {group['id']}", severity="INFO")
         if manual_chat_id:
             return
         time.sleep(3)
@@ -121,4 +119,3 @@ def next_birthdays(cookiebot, msg, chat_id, language, current_date_utc):
             text += "- \n"
         text += "\n"
     send_message(cookiebot, chat_id, text)
-    logger.log_text(f"Next birthdays message sent to chat with ID {chat_id}", severity="INFO")

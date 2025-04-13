@@ -46,7 +46,6 @@ if updates:
     last_update_id = updates[-1]['update_id']
     cookiebot.getUpdates(offset=last_update_id+1)
 send_message(cookiebot, ownerID, 'I am online')
-logger.log_text(f"Bot [{myself['username']}] started", severity="NOTICE")
 gc.enable()
 
 def thread_function(msg):
@@ -306,22 +305,21 @@ def thread_function(msg):
             sticker_cooldown_updates(chat_id)
         run_unnatendedthreads()
     except TooManyRequestsError:
-        logger.log_text(f"Too many requests in chat with ID {chat_id}", severity="WARNING")
+        print("Too many requests")
     except BotWasBlockedError:
-        logger.log_text(f"Bot was blocked in chat with ID {chat_id}", severity="INFO")
+        print("Bot was blocked")
     except MigratedToSupergroupChatError:
-        logger.log_text(f"Chat with ID {chat_id} was migrated to a supergroup", severity="INFO")
+        print("Migrated to supergroup chat")
     except NotEnoughRightsError:
-        logger.log_text(f"Not enough rights to send message in chat with ID {chat_id}", severity="INFO")
+        print("Not enough rights")
     except requests.exceptions.ReadTimeout:
-        logger.log_text(f"Read timeout in chat with ID {chat_id}", severity="INFO")
+        print("Read timeout")
     except Exception:
         errormsg = traceback.format_exc()
         if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
             handle(msg)
             return
         send_error_traceback(cookiebot, msg, errormsg)
-        logger.log_text(f"Error in chat with ID {chat_id}: {errormsg}", severity="WARNING")
     finally:
         check_new_name(cookiebot, msg, chat_id, chat_type)
         if is_alternate_bot or current_date_mutex.locked():
@@ -416,7 +414,6 @@ def thread_function_query(msg):
             handle_query(msg)
         else:
             send_error_traceback(cookiebot, msg, errormsg)
-            logger.log_text(f"Error in callback query: {errormsg}", severity="WARNING")
 
 def run_unnatendedthreads():
     num_running_threads = active_count()
@@ -441,7 +438,6 @@ def handle(msg):
         run_unnatendedthreads()
     except Exception:
         send_error_traceback(cookiebot, msg, traceback.format_exc())
-        logger.log_text(f"Error handling message: {traceback.format_exc()}", severity="WARNING")
 
 def handle_query(msg):
     try:
@@ -450,7 +446,6 @@ def handle_query(msg):
         run_unnatendedthreads()
     except Exception:
         send_error_traceback(cookiebot, msg, traceback.format_exc())
-        logger.log_text(f"Error in callback query: {traceback.format_exc()}", severity="WARNING")
 
 def scheduler_check():
     print("SCHEDULER CHECK")
@@ -458,7 +453,6 @@ def scheduler_check():
         scheduler_pull(cookiebot, is_alternate_bot=is_alternate_bot)
     except Exception:
         send_error_traceback(cookiebot, None, traceback.format_exc())
-        logger.log_text(f"Error in scheduler check: {traceback.format_exc()}", severity="WARNING")
     finally:
         timer_scheduler_check = Timer(300, scheduler_check)
         timer_scheduler_check.start()
