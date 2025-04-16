@@ -1,6 +1,6 @@
 import os
 import time
-import re
+import re, html
 import traceback
 import json
 import urllib3
