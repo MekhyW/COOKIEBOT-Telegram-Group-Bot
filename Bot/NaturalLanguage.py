@@ -31,7 +31,7 @@ def conversational_model_sfw(message, msg, language):
     message += f'\n\n{reduction_msgs.get(language, "")}'
     messages.append({"role": "user", "content": message})
     try:
-        completion = openai_client.chat.completions.create(model="gpt-4o-mini", messages=messages, temperature=1)
+        completion = openai_client.chat.completions.create(model="gpt-4o-mini", messages=messages, temperature=1, timeout=10)
     except (openai.RateLimitError, openai.APIConnectionError, openai.APIStatusError):
         return "AI is temporarily unavailable. Please try again later."
     answer_final = completion.choices[0].message.content
