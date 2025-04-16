@@ -119,6 +119,7 @@ def translate(text, dest='en'):
     text_with_placeholders = re.sub(r'<[^>]*>', replace_tag, text)
     text_with_tokens = text_with_placeholders.replace('\n', newline_token)
     translated = translate_client.translate(text_with_tokens, target_language=dest[:2])["translatedText"]
+    translated = html.unescape(translated)
     for placeholder, tag in tags.items():
         translated = re.sub(re.escape(placeholder.strip()), tag, translated, flags=re.IGNORECASE)
     for token in newline_token_alts:
