@@ -372,7 +372,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurCamp! </b>\n\n<i> {calltoaction} </i>\n🐾🌲🐾🌳🐾🌲🐾🌳🐾🌲🐾🌳\n\n📆 {day} a {day+3}/{month}, Acampamento Terra do Saber\n💻 Ingressos em: furcamp.com\n📲 Grupo do evento: @FurcampOficial"
+            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurCamp! </b>\n\n<i> {calltoaction} </i>\n🐾🌲🐾🌳🐾🌲🐾🌳🐾🌲🐾🌳\n\n📆 {day} a {day+3}/{month}, Acampamento Terra do Saber - Cajamar - SP\n💻 Ingressos em: furcamp.com\n📲 Grupo do evento: @FurcampOficial"
     else:
         text = "Evento não encontrado!" if language == 'pt' else "¡Evento no encontrado!" if language == 'es' else "Event not found!"
         send_message(cookiebot, chat_id, text, msg)
