@@ -14,6 +14,7 @@ import os
 import time
 import json
 load_dotenv()
+NUMBER_CHATS = 999
 
 app = Flask("Cookiebot")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
@@ -52,7 +53,7 @@ def generate_jwt_token(key, sub, iss):
 
 @app.route('/')
 def home():
-    return jsonify({'status': 'Bot is online'})
+    return jsonify({'status': 'Bot is online', 'number_chats': NUMBER_CHATS}), 200
 
 @app.route('/login', methods=['POST'])
 def generate_key():

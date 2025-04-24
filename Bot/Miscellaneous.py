@@ -9,6 +9,7 @@ from universal_funcs import get_request_backend, send_message, delete_message, s
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from Publisher import POSTMAIL_CHAT_LINK
+from Server import NUMBER_CHATS
 import Distortioner
 bloblist_ideiadesenho = list(storage_bucket.list_blobs(prefix="IdeiaDesenho"))
 bloblist_death = list(storage_bucket.list_blobs(prefix="Death"))
@@ -22,7 +23,6 @@ NEW_CHAT_LINK = "https://t.me/CookieMWbot?startgroup=new"
 WEBSITE_LINK = "https://cookiebotfur.net"
 TEST_CHAT_LINK = "https://t.me/+mX6W3tGXPew2OTIx"
 UPDATES_CHANNEL_LINK = "https://t.me/cookiebotupdates"
-NUMBER_CHATS = 997
 
 def decapitalize(s, upper_rest = False):
     return ''.join([s[:1].lower(), (s[1:].upper() if upper_rest else s[1:])])
