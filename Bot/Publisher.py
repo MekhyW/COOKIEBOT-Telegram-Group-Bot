@@ -274,11 +274,11 @@ def schedule_post(cookiebot, query_data):
         answer += "OBS: private chats are not listed!"
         send_message(cookiebot, ownerID, answer)
         send_message(cookiebot, origin_userid, answer)
-        text = "Post adicionado à fila de publicação!" if language == "pt" else "¡Publicación agregada a la cola de publicación!" if language == "es" else "Post added to the publication queue!"
+        text = "Post added to the publication queue!"
         send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid})
     except Exception:
         send_message(cookiebot, ownerID, traceback.format_exc())
-        text = "Post adicionado à fila de publicação, mas não consegui te enviar os horários.\n<blockquote> Envie /start no meu DM para que eu possa te enviar mensagens. </blockquote>" if language == "pt" else "¡Publicación agregada a la cola de publicación, pero no pude enviarte los horarios!\n<blockquote> Envíame /start en mi DM para que pueda enviarte mensajes. </blockquote>" if language == "es" else "Post added to the publication queue, but I was unable to send you the times.\n<blockquote> Send /start in my DM so I can send you messages. </blockquote>"
+        text = "Post added to the publication queue, but I was unable to send you the times.\n<blockquote> Send /start in my DM so I can send you messages. </blockquote>"
         send_message(cookiebot, second_chatid, text, msg_to_reply={'message_id': second_messageid})
 
 def schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=0):
