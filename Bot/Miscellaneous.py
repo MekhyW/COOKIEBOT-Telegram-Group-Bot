@@ -339,7 +339,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                 daysremaining += 365
             caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet {year}! </b>\n\n<i> {calltoaction} </i>\n🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n🎫Link para comprar ingresso: fursmeet.carrd.co\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeetchat"
     elif msg['text'].lower().startswith('/trex'):
-        day, month, year = 21, 9, 2024
+        day, month, year = 20, 9, 2025
         calltoaction = random.choice(['Já pensou em se divertir com sua própria fursuit ou cosplay dentro de um Shopping? Então venha conhecer o T-Rex Furplayer!',
                                       'Um evento muito acolhedor e divertido, com intuito de reunir furries e cosplayers para criar novas amizades e memórias inesquecíveis enquanto se divertem nas incríveis atrações do T-Rex Park!',
                                       'O T-Rex Park é um parque de diversões votado a um tema Jurássico, aonde reúne vários brinquedos divertidos com vários dinossauros espalhados pelo parque, e o melhor, é que de noite ele se torna um parque mágico com muitas luzes em neon!',
