@@ -355,7 +355,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o T-Rex Furplayer! </b>\n\n<i> {calltoaction} </i>\n🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖\n\n📆 {day}/{month} - Shopping D, Canindé São Paulo - SP\n💻 Ingressos em: trexfurplayer.wordpress.com\n📲 Grupo do evento: @trexfurplayergroup"
+            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o T-Rex Furplayer! </b>\n\n<i> {calltoaction} </i>\n🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖\n\n📆 {day}/{month} - Shopping D, Canindé São Paulo - SP\n💻 Ingressos em: trexfurplayer.com.br\n📲 Grupo do evento: @trexfurplayergroup"
     elif msg['text'].lower().startswith('/furcamp'):
         day, month, year = 14, 2, 2026
         calltoaction = random.choice(['O FURCAMP é um evento furry criado no Brasil e acontece todos os anos em meados de fevereiro (durante o Carnaval). Com sua primeira edição piloto em março de 2019 sendo um sucesso, o evento cativou seus participantes e a equipe que o criou.',
