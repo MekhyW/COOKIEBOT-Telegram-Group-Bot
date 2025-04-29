@@ -62,6 +62,10 @@ def ask_publisher_command(cookiebot, msg, chat_id, language):
         text = "Essa mensagem não é de um canal!" if language == "pt" else "¡Este mensaje no es de un canal!" if language == "es" else "This message is not from a channel!"
         send_message(cookiebot, chat_id, text, msg_to_reply=msg)
         return
+    if 'caption' not in msg['reply_to_message']:
+        text = "O anúncio precisa ter uma foto, vídeo ou GIF" if language == "pt" else "¡El anuncio necesita tener una foto, vídeo o GIF!" if language == "es" else "This ad needs to have a photo, video or GIF"
+        send_message(cookiebot, chat_id, text, msg_to_reply=msg)
+        return
     replied_post = msg['reply_to_message']
     add_post_to_cache(replied_post)
     ask_approval(cookiebot, f"SendToApprovalPub {replied_post['forward_from_chat']['id']} {chat_id} {replied_post['forward_from_message_id']} {replied_post['message_id']}", msg['from']['id'])
