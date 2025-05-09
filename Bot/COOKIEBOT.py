@@ -1,4 +1,5 @@
-from threading import Thread, Lock, Timer, active_count
+from threading import Thread, Lock, Timer
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
 import gc
 import sys
 import traceback
@@ -30,7 +31,6 @@ current_date_mutex = Lock()
 is_alternate_bot = int(sys.argv[1])
 furbots_cmds = [x.strip() for x in open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()]
 unnatended_threads = list()
-MAX_THREADS = 50
 IGNORED_MSG_TYPES = {
     'dice', 'poll', 'voice_chat_started', 'voice_chat_ended', 
     'video_chat_scheduled', 'video_chat_started', 'video_chat_ended',
@@ -39,6 +39,9 @@ IGNORED_MSG_TYPES = {
     'forum_topic_reopened', 'story', 'poll_answer', 'boost_added',
     'chat_boost', 'removed_chat_boost', 'message_auto_delete_timer_changed'
 }
+MAX_THREADS = 50
+THREAD_TIMEOUT = 15
+executor = ThreadPoolExecutor(max_workers=MAX_THREADS)
 cookiebot = telepot.Bot(get_bot_token(is_alternate_bot))
 myself = cookiebot.getMe()
 updates = cookiebot.getUpdates()
@@ -415,8 +418,18 @@ def thread_function_query(msg):
         else:
             send_error_traceback(cookiebot, msg, errormsg)
 
+def thread_with_timeout(msg, isquery):
+    future = executor.submit(thread_function if not isquery else thread_function_query, msg)
+    try:
+        future.result(timeout = THREAD_TIMEOUT if not isquery else None)
+    except TimeoutError:
+        print("Timeout")
+    except Exception as e:
+        print(f"Error in thread: {str(e)}")
+        traceback.print_exc()
+
 def run_unnatendedthreads():
-    num_running_threads = active_count()
+    num_running_threads = len([t for t in threading.enumerate() if t.is_alive() and not t.daemon])
     for unnatended_thread in list(unnatended_threads):
         if unnatended_thread.is_alive() and unnatended_thread in unnatended_threads:
             unnatended_threads.remove(unnatended_thread)
@@ -433,7 +446,7 @@ def run_unnatendedthreads():
 
 def handle(msg):
     try:
-        new_thread = Thread(target=thread_function, args=(msg,))
+        new_thread = Thread(target=thread_with_timeout, args=(msg,False,))
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except Exception:
@@ -441,7 +454,7 @@ def handle(msg):
 
 def handle_query(msg):
     try:
-        new_thread = Thread(target=thread_function_query, args=(msg,))
+        new_thread = Thread(target=thread_with_timeout, args=(msg,True,))
         unnatended_threads.append(new_thread)
         run_unnatendedthreads()
     except Exception:
