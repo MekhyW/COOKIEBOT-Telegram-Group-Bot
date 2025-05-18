@@ -14,7 +14,7 @@ import os
 import time
 import json
 load_dotenv()
-NUMBER_CHATS = 1020
+NUMBER_CHATS = 1034
 
 app = Flask("Cookiebot")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
