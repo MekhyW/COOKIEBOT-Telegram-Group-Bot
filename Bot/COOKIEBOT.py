@@ -124,13 +124,8 @@ def thread_function(msg):
                     get_config(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
             elif msg['from']['id'] != msg['new_chat_participant']['id']:
                 if msg['new_chat_participant']['is_bot']:
-                    if 'creator' in listaadmins_status and str(msg['from']['id']) not in listaadmins_id and str(msg['from']['id']) != str(ownerID):
-                        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-                        text = "Apenas admins podem adicionar bots!" if language == 'pt' else "¡Solo los administradores pueden agregar bots!" if language == 'es' else "Only admins can add bots!"
-                        send_message(cookiebot, chat_id, text, msg)
-                    else:
-                        text = "Um novo companheiro bot foi adicionado!\n<blockquote> Caso algum comando entre em conflito, fale com o Mekhy </blockquote>" if language == 'pt' else "¡Un nuevo compañero bot ha sido agregado!\n<blockquote> Si algún comando entra en conflicto, hable con el Mekhy </blockquote>" if language == 'es' else "A new bot companion has been added!\n<blockquote> If any command conflicts, talk to Mekhy </blockquote>"
-                        send_message(cookiebot, chat_id, text, msg)
+                    text = "Um novo companheiro bot foi adicionado!\n<blockquote> Caso algum comando entre em conflito, fale com o Mekhy </blockquote>" if language == 'pt' else "¡Un nuevo compañero bot ha sido agregado!\n<blockquote> Si algún comando entra en conflicto, hable con el Mekhy </blockquote>" if language == 'es' else "A new bot companion has been added!\n<blockquote> If any command conflicts, talk to Mekhy </blockquote>"
+                    send_message(cookiebot, chat_id, text, msg)
                 else:
                     welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
             elif not check_human(cookiebot, msg, chat_id, language) and not check_cas(cookiebot, msg, chat_id, language) and not check_banlist(cookiebot, msg, chat_id, language) and not check_spamwatch(cookiebot, msg, chat_id, language):
