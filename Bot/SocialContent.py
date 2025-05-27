@@ -40,7 +40,7 @@ def fix_embed_if_social_link(message: str) -> str | bool:
     transformations = [
         (TWITTER_REGEX, "https://fixupx.com/{}", r'[^/]+/status/[0-9]+'),
         (TIKTOK_REGEX, "https://vm.vxtiktok.com/{}", r'@[^/]+/video/[0-9]+'),
-        (INSTAGRAM_REGEX, "https://ddinstagram.com/{}", r'(reel|p)/([^?/]+)'),
+        #(INSTAGRAM_REGEX, "https://ddinstagram.com/{}", r'(reel|p)/([^?/]+)'),
         (BSKY_REGEX, "https://fxbsky.app/profile/{}", r'\.app/profile/(.+)')
     ]
     if re.search(TIKTOK_REGEX, message) and re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+', message):
