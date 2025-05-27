@@ -19,18 +19,17 @@ from PIL import ImageFont, ImageDraw, Image
 
 captcha = ImageCaptcha()
 recently_kicked_checkhuman = {}
+join_tracker = {}
+join_tracker_lock = threading.Lock()
+raid_banned_users = set()
 KICK_CACHE_DURATION = 300
+JOIN_WINDOW = 10
+JOIN_LIMIT = 5
+EMOJI_PATTERN = re.compile("[" + u"\U0001F600-\U0001F64F" + u"\U0001F300-\U0001F5FF" + u"\U0001F680-\U0001F6FF" + u"\U0001F1E0-\U0001F1FF" + "]+", flags=re.UNICODE)
 try:
     spamwatch_client = spamwatch.Client(spamwatch_token)
 except Exception as e:
     spamwatch_client = None
-
-emoji_pattern = re.compile("["
-        u"\U0001F600-\U0001F64F"  # emoticons
-        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-        u"\U0001F680-\U0001F6FF"  # transport & map symbols
-        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-                           "]+", flags=re.UNICODE)
 
 def open_telegram_image(cookiebot, token, photo_id):
     photo_info = cookiebot.getFile(photo_id)
@@ -108,8 +107,8 @@ def welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     font = ImageFont.truetype('Static/Roadgeek2005Engschrift-lgJw.ttf', 32)
     img_pil = Image.fromarray(blurred_chat_img)
     draw = ImageDraw.Draw(img_pil)
-    chat_title = emoji_pattern.sub(r'', cookiebot.getChat(chat_id)['title'].strip())
-    user_firstname = emoji_pattern.sub(r'', user['first_name'].strip())
+    chat_title = EMOJI_PATTERN.sub(r'', cookiebot.getChat(chat_id)['title'].strip())
+    user_firstname = EMOJI_PATTERN.sub(r'', user['first_name'].strip())
     text = f'{welcome} {chat_title}, {user_firstname}!'
     text_w, text_h = draw.textbbox((0, 0), text, font=font)[2:]
     text_x, text_y = int(((size[1]*2.2) - text_w) / 2), int(((size[0]*0.69) + text_h) / 2)
@@ -120,7 +119,31 @@ def welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     final_img = open("welcome_card.png", 'rb')
     return final_img
 
+def check_raid(cookiebot, msg, chat_id, language):
+    current_time = time.time()
+    with join_tracker_lock:
+        if chat_id not in join_tracker:
+            join_tracker[chat_id] = []
+        join_tracker[chat_id] = [(uid, t) for uid, t in join_tracker[chat_id] if current_time - t <= JOIN_WINDOW] # Clean old entries
+        join_tracker[chat_id].append((msg['new_chat_participant']['id'], current_time))
+        if(len(join_tracker[chat_id]) <= JOIN_LIMIT):
+            return False
+        # It's a raid - ban all users who joined in this window
+        users_to_ban = [(uid, t) for uid, t in join_tracker[chat_id] if uid not in raid_banned_users]
+        for uid, _ in users_to_ban:
+            try:
+                ban_and_blacklist(cookiebot, chat_id, uid)
+                raid_banned_users.add(uid)
+            except Exception as e:
+                print(f"Failed to ban user {uid}: {e}")
+        join_tracker[chat_id] = []
+        text = "🚨 Detected and blocked a raid attempt! Multiple users tried joining simultaneously (if it didn't work, check my admin permissions)." if language == 'eng' else "🚨 Detectei e bloqueei uma tentativa de raid! Vários usuários tentaram entrar simultaneamente (se não funcionar, verifique minhas permissões de administrador)." if language == 'pt' else "🚨 ¡Detecté y bloqueé un intento de raid! Varios usuarios intentaron unirse simultáneamente (Si no funcionó, verifique mis permisos de administrador)."
+        send_message(cookiebot, chat_id, text)
+        return True
+
 def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=0):
+    if check_raid(cookiebot, msg, chat_id, language):
+        return
     if str(chat_id) in ['-1001063487371', '-1001649779623', '-1001582063371', '-1002048063981', '-1002193913344']: # Groups where the bot should not welcome new members
         return
     send_chat_action(cookiebot, chat_id, 'typing')

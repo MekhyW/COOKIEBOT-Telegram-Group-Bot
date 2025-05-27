@@ -5,6 +5,7 @@ import re
 import json
 import traceback
 import requests
+from Bot.GroupShield import EMOJI_PATTERN
 from universal_funcs import send_chat_action, send_message, forward_message, get_request_backend, react_to_message, emojis_to_numbers, ownerID, exchangerate_key, translate
 from Configurations import get_config
 from UserRegisters import get_members_chat
@@ -20,6 +21,7 @@ POSTMAIL_CHAT_LINK = "https://t.me/CookiebotPostmail"
 POSTMAIL_CHAT_ID = -1001869523792
 APPROVAL_CHAT_ID = -1001659344607
 URL_REGEX = r'\b((?:https?|ftp|file):\/\/[-a-zA-Z0-9+&@#\/%?=~_|!:,.;]{1,2048})'
+EMOJI_PATTERN = re.compile(r"[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F\U0001F780-\U0001F7FF\U0001F800-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F\U0001FA70-\U0001FAFF\U00002702-\U000027B0\U000024C2-\U0001F251]+")
 
 def add_post_to_cache(msg):
     if 'photo' in msg:
@@ -171,14 +173,9 @@ def convert_prices_in_text(text, code_target):
     return final_text
 
 def remove_emojis_from_ends(input_string):
-    emoji_pattern = re.compile(
-        r"[\U0001F600-\U0001F64F\U0001F300-\U0001F5FF\U0001F680-\U0001F6FF\U0001F700-\U0001F77F"
-        r"\U0001F780-\U0001F7FF\U0001F800-\U0001F8FF\U0001F900-\U0001F9FF\U0001FA00-\U0001FA6F"
-        r"\U0001FA70-\U0001FAFF\U00002702-\U000027B0\U000024C2-\U0001F251]+"
-    )
-    while emoji_pattern.match(input_string):
+    while EMOJI_PATTERN.match(input_string):
         input_string = input_string[1:]
-    while emoji_pattern.match(input_string[::-1]):
+    while EMOJI_PATTERN.match(input_string[::-1]):
         input_string = input_string[:-1]
     return input_string
 
