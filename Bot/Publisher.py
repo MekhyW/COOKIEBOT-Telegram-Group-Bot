@@ -5,7 +5,7 @@ import re
 import json
 import traceback
 import requests
-from Bot.GroupShield import EMOJI_PATTERN
+from GroupShield import EMOJI_PATTERN
 from universal_funcs import send_chat_action, send_message, forward_message, get_request_backend, react_to_message, emojis_to_numbers, ownerID, exchangerate_key, translate
 from Configurations import get_config
 from UserRegisters import get_members_chat
