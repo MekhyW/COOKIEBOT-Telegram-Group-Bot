@@ -130,7 +130,7 @@ def thread_function(msg):
                     welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
             elif not check_human(cookiebot, msg, chat_id, language) and not check_cas(cookiebot, msg, chat_id, language) and not check_banlist(cookiebot, msg, chat_id, language) and not check_spamwatch(cookiebot, msg, chat_id, language):
                 if captchatimespan > 0 and myself['username'] in listaadmins:
-                    captcha_message(cookiebot, msg, chat_id, captchatimespan, limbotimespan, language, is_alternate_bot=is_alternate_bot)
+                    captcha_message(cookiebot, msg, chat_id, captchatimespan, language)
                 else:
                     welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
         elif content_type == "left_chat_member":

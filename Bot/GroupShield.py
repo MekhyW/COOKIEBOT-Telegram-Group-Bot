@@ -142,8 +142,6 @@ def check_raid(cookiebot, msg, chat_id, language):
         return True
 
 def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=0):
-    if check_raid(cookiebot, msg, chat_id, language):
-        return
     if str(chat_id) in ['-1001063487371', '-1001649779623', '-1001582063371', '-1002048063981', '-1002193913344']: # Groups where the bot should not welcome new members
         return
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -234,7 +232,9 @@ def check_banlist(cookiebot, msg, chat_id, language):
         return True
     return False
 
-def captcha_message(cookiebot, msg, chat_id, captchatimespan, limbotimespan, language, is_alternate_bot=0):
+def captcha_message(cookiebot, msg, chat_id, captchatimespan, language):
+    if check_raid(cookiebot, msg, chat_id, language):
+        return
     user_id = msg['new_chat_participant']['id']
     try:
         cookiebot.restrictChatMember(chat_id, user_id, permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + captchatimespan))
