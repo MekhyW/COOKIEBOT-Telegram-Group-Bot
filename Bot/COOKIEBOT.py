@@ -128,11 +128,14 @@ def thread_function(msg):
                     send_message(cookiebot, chat_id, text, msg)
                 else:
                     welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
-            elif not check_human(cookiebot, msg, chat_id, language) and not check_cas(cookiebot, msg, chat_id, language) and not check_banlist(cookiebot, msg, chat_id, language) and not check_spamwatch(cookiebot, msg, chat_id, language):
-                if captchatimespan > 0 and myself['username'] in listaadmins:
-                    captcha_message(cookiebot, msg, chat_id, captchatimespan, language)
-                else:
-                    welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
+            elif check_human(cookiebot, msg, chat_id, language) or check_cas(cookiebot, msg, chat_id, language) or check_banlist(cookiebot, msg, chat_id, language) or check_spamwatch(cookiebot, msg, chat_id, language):
+                if (funfunctions or is_alternate_bot) and random.randint(1, 10) == 1:
+                    with open('Static/silence_scammer.jpg', 'rb') as silence_scammer:
+                        send_photo(cookiebot, chat_id, silence_scammer)
+            elif captchatimespan > 0 and myself['username'] in listaadmins:
+                captcha_message(cookiebot, msg, chat_id, captchatimespan, language)
+            else:
+                welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
         elif content_type == "left_chat_member":
             left_chat_member(msg, chat_id)
             if not msg['left_chat_member']['is_bot'] and msg['left_chat_member']['id'] != msg['from']['id'] and myself['id'] not in [msg['from']['id'], msg['left_chat_member']['id']]:
