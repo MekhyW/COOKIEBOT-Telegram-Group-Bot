@@ -26,7 +26,7 @@ def birthday(cookiebot, current_date_utc, msg=None, manual_chat_id=None, languag
         except TypeError:
             continue
         chatinfo = cookiebot.getChat(group['id'])
-        users_in_group = get_members_chat(group['id'])
+        users_in_group = get_members_chat(cookiebot, group['id'])
         bd_users_in_group = []
         is_new_birthday_pinned, is_old_birthday_pinned = False, False
         if 'pinned_message' in chatinfo and 'caption' in chatinfo['pinned_message'] and any(x in chatinfo['pinned_message']['caption'].lower() for x in ['feliz aniversário!', 'happy birthday!', 'feliz cumpleaños!']):

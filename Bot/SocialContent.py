@@ -206,7 +206,7 @@ def reply_sticker(cookiebot, msg, chat_id):
 
 def meme(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
-    members = get_members_chat(chat_id)
+    members = get_members_chat(cookiebot, chat_id)
     members_tagged = get_members_tagged(msg)
     if len(members_tagged) > 5:
         text = "Não é possível criar memes com mais de 5 membros" if language == 'pt' else "No se pueden crear memes con más de 5 miembros" if language == 'es' else "It is not possible to create memes with more than 5 members"
@@ -275,7 +275,7 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     members_tagged = get_members_tagged(msg)
     if len(members_tagged) > 1 or 'random' in msg['text'].lower():
         if 'random' in msg['text'].lower():
-            members = get_members_chat(chat_id)
+            members = get_members_chat(cookiebot, chat_id)
             if len(members) < 2:
                 text = "Não há membros suficientes para batalhar" if language == 'pt' else "No hay miembros suficientes para luchar" if language == 'es' else "Not enough members to battle"
                 send_message(cookiebot, chat_id, text, msg)

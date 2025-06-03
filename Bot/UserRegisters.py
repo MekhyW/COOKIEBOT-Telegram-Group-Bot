@@ -5,13 +5,13 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_members = {}
 cache_users = {}
 
-def get_members_chat(chat_id):
+def get_members_chat(cookiebot, chat_id):
     if chat_id in cache_members:
         return cache_members[chat_id]
     members = get_request_backend(f"registers/{chat_id}", {"id": chat_id})
     if type(members) is str and not len(members):
         return []
-    if 'error' in members and members['error'] == "Not Found":
+    if ('error' in members and members['error'] == "Not Found") or ('users' in members and len(members['users']) > 2 * cookiebot.getChatMembersCount(chat_id)):
         post_request_backend(f"registers/{chat_id}", {"id": chat_id, "users": []})
         cache_members[chat_id] = []
         return []
@@ -55,7 +55,7 @@ def check_new_name(cookiebot, msg, chat_id, chat_type):
             cookiebot.sendMessage(chat_id, f"<b> Birthday registered! </b> <i> {month}/{day} </i>", parse_mode='HTML')
     get_user_info(id, username, first_name, last_name, language_code, birthdate)
     if chat_type in ['group', 'supergroup']:
-        members = get_members_chat(chat_id)
+        members = get_members_chat(cookiebot, chat_id)
         if username and username not in str(members):
             post_request_backend(f"registers/{chat_id}/users", {"user": username, "date": ''})
             if chat_id not in cache_members:
@@ -75,7 +75,7 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         text = "Você não tem permissão para chamar todos os membros do grupo!\n<blockquote> Se está falando como canal, entre e use o comando como user </blockquote>" if language == 'pt' else "¡No tienes permiso para llamar a todos los miembros del grupo!\n<blockquote>Si estás hablando como canal, únete y usa el comando como usuario</blockquote>" if language == 'es' else "You don't have permission to call all members of the group!\n<blockquote>If you're speaking as a channel, join and use the command as a user</blockquote>"
         send_message(cookiebot, chat_id, text, msg)
         return
-    members = get_members_chat(chat_id)
+    members = get_members_chat(cookiebot, chat_id)
     top_message_index = 0
     usernames_list = [member['user'] for member in members if 'user' in member]
     usernames_list.extend(admin for admin in listaadmins if admin not in usernames_list)
@@ -178,7 +178,7 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
 
 def who(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
-    members = get_members_chat(chat_id)
+    members = get_members_chat(cookiebot, chat_id)
     valid_members = [member['user'] for member in members if isinstance(member, dict) and 'user' in member]
     if not valid_members:
         send_message(cookiebot, chat_id, "Não sei", msg, language)
@@ -198,7 +198,7 @@ def who(cookiebot, msg, chat_id, language):
 def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     react_to_message(msg, '❤️', is_alternate_bot=is_alternate_bot)
     send_chat_action(cookiebot, chat_id, 'typing')
-    members = get_members_chat(chat_id)
+    members = get_members_chat(cookiebot, chat_id)
     if len(msg['text'].split()) >= 3:
         target_a = msg['text'].split()[1]
         target_b = msg['text'].split()[2]
@@ -214,7 +214,7 @@ def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         except TypeError:
             if chat_id in cache_members:
                 cache_members.pop(chat_id)
-            members = get_members_chat(chat_id)
+            members = get_members_chat(cookiebot, chat_id)
             target_a = members[0]['user']
             target_b = members[1]['user']
     divorce_prob = str(random.randint(0, 100))
