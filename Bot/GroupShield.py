@@ -232,6 +232,16 @@ def check_banlist(cookiebot, msg, chat_id, language):
         return True
     return False
 
+def check_banlist_public(cookiebot, msg, chat_id, language):
+    is_blacklisted = requests.post("https://burrbot.xyz/noraid.php", data={"id": str(msg['new_chat_participant']['id'])})
+    raider = json.loads(is_blacklisted.text.replace('""', '"'))['raider']
+    if raider:
+        cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
+        text = "Bani o usuário recém-chegado por <b> estar na blacklist </b>" if language == 'pt' else "Eché al nuevo usuario por <b> estar en la lista negra </b>" if language == 'es' else "Banned the new user for <b> being on the blacklist </b>"
+        send_message(cookiebot, chat_id, text)
+        return True
+    return False
+
 def captcha_message(cookiebot, msg, chat_id, captchatimespan, language):
     if check_raid(cookiebot, msg, chat_id, language):
         return
