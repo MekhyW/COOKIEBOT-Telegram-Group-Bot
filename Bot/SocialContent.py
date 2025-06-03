@@ -172,16 +172,17 @@ def youtube_search(cookiebot, msg, chat_id, language):
     send_message(cookiebot, chat_id, f"<i> {video_url} </i>\n\n<b> {video_description} </b>", msg, parse_mode='HTML')
 
 def add_to_random_database(msg, chat_id, photo_id=''):
+    if 'forward_from' in msg or 'forward_from_chat' in msg:
+        return
     if any(x in msg['chat']['title'].lower() for x in ['yiff', 'porn', '18+', '+18', 'nsfw', 'hentai', 'rule34', 'r34', 'nude', '🔞']):
         return
-    if not 'forward_from' in msg and not 'forward_from_chat' in msg:
-        post_request_backend('randomdatabase', {'id': chat_id, 'idMessage': str(msg['message_id']), 'idMedia': photo_id})
+    post_request_backend('randomdatabase', {'id': chat_id, 'idMessage': str(msg['message_id']), 'idMedia': photo_id})
 
 def random_media(cookiebot, msg, chat_id, thread_id=None, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'upload_photo')
     for _ in range(50):
         try:
-            target = get_request_backend("randomdatabase")
+            target = get_request_backend.__wrapped__("randomdatabase")
             forward_message(cookiebot, chat_id, target['id'], target['idMessage'], thread_id=thread_id, is_alternate_bot=is_alternate_bot)
             break
         except Exception as e:
