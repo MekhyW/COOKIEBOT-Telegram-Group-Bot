@@ -227,7 +227,7 @@ def check_banlist(cookiebot, msg, chat_id, language):
     fullname = f"{msg['new_chat_participant']['first_name']} {msg['new_chat_participant']['last_name']}" if 'last_name' in msg['new_chat_participant'] else msg['new_chat_participant']['first_name']
     if ('id' in is_blacklisted and is_blacklisted['id'] == str(msg['new_chat_participant']['id'])) or ('id' in is_blacklisted_username and is_blacklisted_username['id'] == msg['new_chat_participant']['username']) or '卐' in fullname:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        text = "Bani o usuário recém-chegado por <b> estar na blacklist </b>" if language == 'pt' else "Eché al nuevo usuario por <b> estar en la lista negra </b>" if language == 'es' else "Banned the new user for <b> being on the blacklist </b>"
+        text = "Bani o usuário recém-chegado por <b> ser denunciado em outros chats </b>" if language == 'pt' else "Eché al nuevo usuario por <b> haber sido reportado en otros chats </b>" if language == 'es' else "Banned the new user for <b> being reported in other chats </b>"
         send_message(cookiebot, chat_id, text)
         return True
     return False
@@ -237,7 +237,7 @@ def check_banlist_public(cookiebot, msg, chat_id, language):
     raider = json.loads(is_blacklisted.text.replace('""', '"'))['raider']
     if raider:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        text = "Bani o usuário recém-chegado por <b> estar na blacklist </b>" if language == 'pt' else "Eché al nuevo usuario por <b> estar en la lista negra </b>" if language == 'es' else "Banned the new user for <b> being on the blacklist </b>"
+        text = "Bani o usuário recém-chegado por <b> ser denunciado em outros chats </b>" if language == 'pt' else "Eché al nuevo usuario por <b> haber sido reportado en otros chats </b>" if language == 'es' else "Banned the new user for <b> being reported in other chats </b>"
         send_message(cookiebot, chat_id, text)
         return True
     return False
