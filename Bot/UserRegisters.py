@@ -41,10 +41,10 @@ def get_user_info(cookiebot, msg, chat_id, user_id, username, first_name, last_n
             try:
                 delete_message(cookiebot, telepot.message_identifier(msg))
                 send_message(cookiebot, chat_id, f"Spam message detected and deleted", msg)
-                cookiebot.kickChatMember(chat_id, user_id)
             except:
                 send_message(cookiebot, chat_id, f"Spam message detected, but I don't have admin rights to delete", msg)
             print(f"Spam message detected in chat {chat_id}")
+            cookiebot.kickChatMember(chat_id, user_id)
             return info
         user = info
         post_request_backend(f"users", user)
