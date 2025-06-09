@@ -9,10 +9,9 @@ import urllib.request
 import requests
 import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
-from universal_funcs import spamwatch_token, get_bot_token, send_photo, delete_message, ban_and_blacklist, wait_open
+from universal_funcs import get_bot_token, send_photo, delete_message, ban_and_blacklist, wait_open
 from UserRegisters import get_request_backend, send_message, send_chat_action
 from captcha.image import ImageCaptcha
-import spamwatch
 import cv2
 import numpy as np
 from PIL import ImageFont, ImageDraw, Image
@@ -26,10 +25,6 @@ KICK_CACHE_DURATION = 300
 JOIN_WINDOW = 10
 JOIN_LIMIT = 5
 EMOJI_PATTERN = re.compile("[" + u"\U0001F600-\U0001F64F" + u"\U0001F300-\U0001F5FF" + u"\U0001F680-\U0001F6FF" + u"\U0001F1E0-\U0001F1FF" + "]+", flags=re.UNICODE)
-try:
-    spamwatch_client = spamwatch.Client(spamwatch_token)
-except Exception as e:
-    spamwatch_client = None
 
 def open_telegram_image(cookiebot, token, photo_id):
     photo_info = cookiebot.getFile(photo_id)
