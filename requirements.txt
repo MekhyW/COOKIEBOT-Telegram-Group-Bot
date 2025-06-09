@@ -15,7 +15,6 @@ saucenao_api
 ShazamAPI
 captcha
 price-parser
-spamwatch
 openai
 jwcrypto
 flask

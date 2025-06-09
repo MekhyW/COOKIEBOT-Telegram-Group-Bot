@@ -209,18 +209,6 @@ def check_cas(cookiebot, msg, chat_id, language):
         return True
     return False
 
-def check_spamwatch(cookiebot, msg, chat_id, language):
-    try:
-        isbanned = spamwatch_client.get_ban(int(msg['new_chat_participant']['id']))
-    except Exception as e:
-        return False
-    if isbanned:
-        ban_and_blacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-        text = "Bani o usuário recém-chegado por <b> ser flagrado pelo sistema anti-spam Spamwatch </b>" if language == 'pt' else "Eché al nuevo usuario por <b> ser flagrado por el sistema anti-spam Spamwatch </b>" if language == 'es' else "Banned the new user for <b> being flagged by the anti-spam system Spamwatch </b>"
-        send_message(cookiebot, chat_id, text)
-        return True
-    return False
-
 def check_banlist(cookiebot, msg, chat_id, language):
     is_blacklisted = get_request_backend(f"blacklist/{msg['new_chat_participant']['id']}")
     is_blacklisted_username = get_request_backend(f"blacklist/username/{msg['new_chat_participant']['username']}") if 'username' in msg['new_chat_participant'] else {'error': 'no username'}
