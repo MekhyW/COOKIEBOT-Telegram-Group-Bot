@@ -40,10 +40,9 @@ def get_user_info(cookiebot, msg, chat_id, user_id, username, first_name, last_n
         if 'result' in response.json() and response.json()['result'] == 'spam':
             try:
                 delete_message(cookiebot, telepot.message_identifier(msg))
-                ban_and_blacklist(cookiebot, chat_id, user_id)
-                send_message(cookiebot, chat_id, f"Account {info['id']} banned for spam", msg)
+                send_message(cookiebot, chat_id, f"Spam message detected and deleted", msg)
             except:
-                pass
+                send_message(cookiebot, chat_id, f"Spam message detected, but I don't have admin rights to delete", msg)
             return info
         user = info
         post_request_backend(f"users", user)
