@@ -16,7 +16,8 @@ from google.cloud import storage
 from google.cloud import translate_v2
 load_dotenv('../.env')
 login_backend, password_backend = os.getenv('backend_login'), os.getenv('backend_password')
-googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key, spamwatch_token = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key'), os.getenv('spamwatch_token')
+spampouncer_url, spampouncer_key = os.getenv('spampouncer_url'), os.getenv('spampouncer_key')
+googleAPIkey, searchEngineCX, exchangerate_key, openai_key, saucenao_key = os.getenv('googleAPIkey'), os.getenv('searchEngineCX'), os.getenv('exchangerate_key'), os.getenv('openai_key'), os.getenv('saucenao_key')
 cookiebotTOKEN, bombotTOKEN, pawstralbotTOKEN, tarinbotTOKEN, connectbotTOKEN = os.getenv('cookiebotTOKEN'), os.getenv('bombotTOKEN'), os.getenv('pawstralbotTOKEN'), os.getenv('tarinbotTOKEN'), os.getenv('connectbotTOKEN')
 ownerID = int(os.getenv('ownerID'))
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '../cookiebot-bucket-key.json'

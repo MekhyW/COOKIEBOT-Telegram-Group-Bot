@@ -132,6 +132,7 @@ def thread_function(msg):
                 if (funfunctions or is_alternate_bot) and random.randint(1, 10) == 1:
                     with open('Static/silence_scammer.jpg', 'rb') as silence_scammer:
                         send_photo(cookiebot, chat_id, silence_scammer)
+                return
             elif captchatimespan > 0 and myself['username'] in listaadmins:
                 captcha_message(cookiebot, msg, chat_id, captchatimespan, language)
             else:

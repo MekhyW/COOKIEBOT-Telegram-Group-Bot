@@ -1,6 +1,11 @@
 import random
 import time
-from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, put_request_backend, delete_request_backend, ownerID
+from universal_funcs import ban_and_blacklist, send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, put_request_backend, delete_request_backend, ownerID, delete_message, spampouncer_url, spampouncer_key
+import requests
+import hmac
+import hashlib
+import json
+import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_members = {}
 cache_users = {}
@@ -19,14 +24,27 @@ def get_members_chat(cookiebot, chat_id):
     cache_members[chat_id] = members
     return members
 
-def get_user_info(user_id, username, first_name, last_name, language_code, birthdate):
+def get_user_info(cookiebot, msg, chat_id, user_id, username, first_name, last_name, language_code, birthdate):
     info = {"id": user_id, "username": username, "firstName": first_name, "lastName": last_name, "languageCode": language_code, "birthdate": birthdate}
     if user_id in cache_users and all(cache_users[user_id][key] == info[key] or info[key] is None for key in info):
         return cache_users[user_id]
+    if 'text' not in msg and 'caption' not in msg:
+        return info
     user = get_request_backend(f"users/{user_id}", {"id": user_id})
     if type(user) is str and not len(user):
         return info
     if 'error' in user and user['error'] == "Not Found":
+        text_to_classify = msg['caption'] if 'caption' in msg else msg['text']
+        request_body_bytes = json.dumps({"text": text_to_classify}).encode('utf-8')
+        response = requests.post(spampouncer_url, data=request_body_bytes, headers={"Content-Type": "application/json", "Authorization": f"HMAC {hmac.new(spampouncer_key.encode('utf-8'), request_body_bytes, hashlib.sha256).hexdigest()}"})
+        if 'result' in response.json() and response.json()['result'] == 'spam':
+            try:
+                delete_message(cookiebot, telepot.message_identifier(msg))
+                ban_and_blacklist(cookiebot, chat_id, user_id)
+                send_message(cookiebot, chat_id, f"Account {info['id']} banned for spam", msg)
+            except:
+                pass
+            return info
         user = info
         post_request_backend(f"users", user)
     elif any(user[key] != info[key] and info[key] is not None for key in info):
@@ -53,7 +71,7 @@ def check_new_name(cookiebot, msg, chat_id, chat_type):
             day = str(chat['birthdate']['day']).zfill(2)
             birthdate = f"{year}-{month}-{day}"
             cookiebot.sendMessage(chat_id, f"<b> Birthday registered! </b> <i> {month}/{day} </i>", parse_mode='HTML')
-    get_user_info(id, username, first_name, last_name, language_code, birthdate)
+    get_user_info(cookiebot, msg, chat_id, id, username, first_name, last_name, language_code, birthdate)
     if chat_type in ['group', 'supergroup']:
         members = get_members_chat(cookiebot, chat_id)
         if username and username not in str(members):
