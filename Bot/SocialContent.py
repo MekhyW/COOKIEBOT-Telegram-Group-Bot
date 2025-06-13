@@ -64,7 +64,7 @@ def check_reply_embed(cookiebot, msg, chat_id, is_alternate_bot):
         return
     url_embed = fix_embed_if_social_link(msg['text'])
     if url_embed and url_embed.strip() != msg['text'].strip():
-        send_message(cookiebot, chat_id, url_embed, msg_to_reply=msg, is_alternate_bot=is_alternate_bot, link_preview_options=json.dumps({'show_above_text': True, 'prefer_large_media': True, 'disable_web_page_preview': False}), disable_notification=True)
+        send_message(cookiebot, chat_id, url_embed, msg_to_reply=msg, is_alternate_bot=is_alternate_bot, link_preview_options=json.dumps({'show_above_text': True, 'prefer_large_media': True, 'disable_web_page_preview': False}))
 
 def fetch_temp_jpg(cookiebot, msg, only_return_url=False):
     try:
