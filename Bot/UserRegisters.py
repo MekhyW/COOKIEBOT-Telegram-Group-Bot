@@ -45,7 +45,6 @@ def get_user_info(cookiebot, msg, chat_id, user_id, username, first_name, last_n
             except:
                 send_message(cookiebot, chat_id, f"Spam message detected, but I don't have admin rights to kick/delete", msg)
             print(f"Spam message detected in chat {chat_id}")
-            
             return info
         user = info
         post_request_backend(f"users", user)
