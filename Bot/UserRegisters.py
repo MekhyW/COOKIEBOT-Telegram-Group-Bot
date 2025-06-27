@@ -1,6 +1,6 @@
 import random
 import time
-from universal_funcs import ban_and_blacklist, send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, put_request_backend, delete_request_backend, ownerID, delete_message, spampouncer_url, spampouncer_key
+from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, put_request_backend, delete_request_backend, ownerID, spampouncer_url, spampouncer_key
 import requests
 import hmac
 import hashlib
@@ -13,7 +13,7 @@ cache_users = {}
 def get_members_chat(cookiebot, chat_id):
     if chat_id in cache_members:
         return cache_members[chat_id]
-    members = get_request_backend(f"registers/{chat_id}", {"id": chat_id})
+    members = get_request_backend.__wrapped__(f"registers/{chat_id}", {"id": chat_id})
     if type(members) is str and not len(members):
         return []
     if ('error' in members and members['error'] == "Not Found") or ('users' in members and len(members['users']) > 2 * cookiebot.getChatMembersCount(chat_id)):
