@@ -14,6 +14,7 @@ def get_members_chat(cookiebot, chat_id):
     if chat_id in cache_members and len(cache_members[chat_id]):
         return cache_members[chat_id]
     members = get_request_backend.__wrapped__(f"registers/{chat_id}", {"id": chat_id})
+    print(members)
     if type(members) is str and not len(members):
         return []
     if ('error' in members and members['error'] == "Not Found") or ('users' in members and len(members['users']) > 2 * cookiebot.getChatMembersCount(chat_id)):
