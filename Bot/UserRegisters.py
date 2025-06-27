@@ -79,7 +79,6 @@ def check_new_name(cookiebot, msg, chat_id, chat_type):
             post_request_backend(f"registers/{chat_id}/users", {"user": username, "date": ''})
             if chat_id not in cache_members:
                 cache_members[chat_id] = []
-            cache_members[chat_id].append(username)
 
 def left_chat_member(msg, chat_id):
     if 'username' not in msg['left_chat_member']:
