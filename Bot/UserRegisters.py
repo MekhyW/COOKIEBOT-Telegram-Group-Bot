@@ -11,15 +11,20 @@ cache_members = {}
 cache_users = {}
 
 def get_members_chat(cookiebot, chat_id):
-    if chat_id in cache_members and len(cache_members[chat_id]):
+    if chat_id in cache_members and cache_members[chat_id]:
         return cache_members[chat_id]
     members = get_request_backend(f"registers/{chat_id}", {"id": chat_id})
-    if type(members) is str and not len(members):
+    if type(members) is str and not members:
         return []
-    #if ('error' in members and members['error'] == "Not Found") or ('users' in members and len(members['users']) > 2 * cookiebot.getChatMembersCount(chat_id)):
-    #    post_request_backend(f"registers/{chat_id}", {"id": chat_id, "users": []})
-    #    cache_members[chat_id] = []
-    #    return []
+    if 'error' in members and members['error'] == "Not Found":
+        post_request_backend(f"registers/{chat_id}", {"id": chat_id, "users": []})
+        cache_members[chat_id] = []
+        return []
+    elif len(members['users']) > 2 * cookiebot.getChatMembersCount(chat_id):
+        delete_request_backend(f"registers/{chat_id}")
+        post_request_backend(f"registers/{chat_id}", {"id": chat_id, "users": []})
+        cache_members[chat_id] = []
+        return []
     members = members['users']
     cache_members[chat_id] = members
     return members
@@ -79,6 +84,7 @@ def check_new_name(cookiebot, msg, chat_id, chat_type):
             post_request_backend(f"registers/{chat_id}/users", {"user": username, "date": ''})
             if chat_id not in cache_members:
                 cache_members[chat_id] = []
+            cache_members[chat_id].append(username)
 
 def left_chat_member(msg, chat_id):
     if 'username' not in msg['left_chat_member']:
