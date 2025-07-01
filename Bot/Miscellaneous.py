@@ -301,7 +301,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         day, month, year = 18, 7, 2025
         calltoaction = random.choice(['A Brasil FurFest tem, entre outros objetivos, levantar fundos para caridade em prol do Projeto Social SOS Vida Pet Litoral, que ajuda protetores a manter abrigos para animais de rua na Baixada Santista',
                                   'Quem são os furries? O que é a Brasil FurFest? Descubra em youtube.com/watch?v=vuFGHSL8X34&ab_channel=BrasilFurFest',
-                                  'Esperamos para ver todos os furries nas praias da maravilhosa cidade de Santos para essa festa que será inesquecível!',
+                                  'Esperamos para ver todos os furries nos parques da maravilhosa cidade de São Paulo para essa festa que será inesquecível!',
                                   'Entre as atividades planejadas, temos atividades de social mixer (dinâmicas de grupo) no início do evento para que você engrene os primeiros contatos com os demais participantes no evento.',
                                   'Bombom nasceu na Fantástica Fábrica de Doces com intuito de reunir os furries na Brasil FurFest para muita festa e diversão. Aliás, se a festa tiver caipirinhas melhor ainda!',
                                   'Heróis e Vilões travarão uma batalha épica! Mal podemos esperar! Venha participar desta grande festa do furry fandom brasileiro com o hotel inteiro fechado para o evento!',

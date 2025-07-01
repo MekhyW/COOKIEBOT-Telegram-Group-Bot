@@ -260,7 +260,7 @@ def thread_function(msg):
                     is_alive(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                 elif msg['text'].startswith(("/everyone", "@everyone")):
                     everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=is_alternate_bot)
-                elif msg['text'].startswith(("/adm", "@admin")):
+                elif msg['text'].startswith(("/adm", "@admin", "/report")):
                     call_admins_ask(cookiebot, msg, chat_id, language)
                 elif msg['text'].startswith(("/comandos", "/commands")):
                     list_commands(cookiebot, msg, chat_id, language)
