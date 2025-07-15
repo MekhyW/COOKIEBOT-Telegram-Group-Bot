@@ -290,7 +290,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                                   'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!',
                                   'As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais!'])
         pic = bloblist_patas[random.randint(0, len(bloblist_patas)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
-        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
+        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days + 1
         if -5 <= daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
         else:
@@ -313,7 +313,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                                   'Com mais de 70 anos de existência, o hotel foi inaugurado para o IV Centenário da cidade de São Paulo e se tornou sinônimo de glamour e sofisticação nas décadas de 50 a 70.',
                                   'O hotel oferece dez categorias diferentes de acomodações, todas equipadas com as comodidades necessárias para garantir uma estadia confortável e sofisticada.'])
         pic = bloblist_bff[random.randint(0, len(bloblist_bff)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
-        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
+        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days + 1
         if -5 <= daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
         else:
@@ -331,7 +331,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                                       'Um bom gaúcho sempre anda bem pilchado, então Capibára não dispensa sua boina, seu lenço e sua faixa pampa da cintura! Para completar ele não larga seu mate de jeito nenhum!',
                                       'A primeira convenção furry no sul do Brasil está voltando com mais uma edição! O vale dos dinossauros aguarda você para uma aventura jurássica!! 🦖🦕'])
         pic = bloblist_fursmeet[random.randint(0, len(bloblist_fursmeet)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
-        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
+        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days + 1
         if -5 <= daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
         else:
@@ -349,7 +349,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                                       'No T-Rex Furplayer, a criatividade se funde com a diversão em um encontro único! Reunindo as comunidades Cosplayers e Furries, em um ambiente cheio de energia e pura diversão!',
                                       'A Staff dedicada do T-Rex Furplayer, garante que cada detalhe seja uma experiência incrível e perfeita para todos, proporcionando aos participantes uma experiência impecável e acolhedora, repleta de diversão e memórias inesquecíveis!'])
         pic = bloblist_trex[random.randint(0, len(bloblist_trex)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
-        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
+        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days + 1
         if -5 <= daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
         else:
@@ -366,7 +366,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                                       'Prepare-se para dançar, agitar, pular e se divertir na boate do FURCAMP com música eletrizante e um show de luzes, junto com um set incrível dos DJs Furries!',
                                       'Você perdeu a nossa livestream especial no dia 19? Quer saber tudo que rolou sobre as atualizações do evento e informações cruciais que não pode deixar passar? Não se preocupe! Assista ao VOD da live no nosso canal do YouTube e fique por dentro de tudo! 🎥✨'])
         pic = bloblist_furcamp[random.randint(0, len(bloblist_furcamp)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
-        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days
+        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days + 1
         if -5 <= daysremaining <= 0:
             caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
         else:
