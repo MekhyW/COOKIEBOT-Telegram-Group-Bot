@@ -1,0 +1,157 @@
+version: '3.8'
+
+services:
+  cookiebot-0:
+    build: .
+    container_name: cookiebot-instance-0
+    environment:
+      - BOT_ID=0
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'        # 60% of one CPU core
+        reservations:
+          cpus: '0.1'        # Reserve 10% of one CPU core
+    volumes:
+      - ./Bot:/app/Bot:ro
+      - ./.env:/app/.env:ro
+      - ./cookiebot-bucket-key.json:/app/cookiebot-bucket-key.json:ro
+    networks:
+      - cookiebot-network
+    healthcheck:
+      test: ["/app/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  cookiebot-1:
+    build: .
+    container_name: cookiebot-instance-1
+    environment:
+      - BOT_ID=1
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+        reservations:
+          cpus: '0.1'
+    volumes:
+      - ./Bot:/app/Bot:ro
+      - ./.env:/app/.env:ro
+      - ./cookiebot-bucket-key.json:/app/cookiebot-bucket-key.json:ro
+    networks:
+      - cookiebot-network
+    healthcheck:
+      test: ["/app/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  cookiebot-2:
+    build: .
+    container_name: cookiebot-instance-2
+    environment:
+      - BOT_ID=2
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+        reservations:
+          cpus: '0.1'
+    volumes:
+      - ./Bot:/app/Bot:ro
+      - ./.env:/app/.env:ro
+      - ./cookiebot-bucket-key.json:/app/cookiebot-bucket-key.json:ro
+    networks:
+      - cookiebot-network
+    healthcheck:
+      test: ["/app/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  cookiebot-3:
+    build: .
+    container_name: cookiebot-instance-3
+    environment:
+      - BOT_ID=3
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+        reservations:
+          cpus: '0.1'
+    volumes:
+      - ./Bot:/app/Bot:ro
+      - ./.env:/app/.env:ro
+      - ./cookiebot-bucket-key.json:/app/cookiebot-bucket-key.json:ro
+    networks:
+      - cookiebot-network
+    healthcheck:
+      test: ["/app/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  cookiebot-4:
+    build: .
+    container_name: cookiebot-instance-4
+    environment:
+      - BOT_ID=4
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.6'
+        reservations:
+          cpus: '0.1'
+    volumes:
+      - ./Bot:/app/Bot:ro
+      - ./.env:/app/.env:ro
+      - ./cookiebot-bucket-key.json:/app/cookiebot-bucket-key.json:ro
+    networks:
+      - cookiebot-network
+    healthcheck:
+      test: ["/app/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Optional: Nginx reverse proxy for API endpoints
+  nginx:
+    image: nginx:alpine
+    container_name: cookiebot-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - cookiebot-network
+    restart: unless-stopped
+    depends_on:
+      - cookiebot-0
+      - cookiebot-1
+      - cookiebot-2
+      - cookiebot-3
+      - cookiebot-4
+
+networks:
+  cookiebot-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  cookiebot-data:
+    driver: local
