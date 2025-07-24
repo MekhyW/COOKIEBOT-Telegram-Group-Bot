@@ -23,4 +23,3 @@ gunicorn
 pyopenssl
 psutil
 PyJWT
-docker
