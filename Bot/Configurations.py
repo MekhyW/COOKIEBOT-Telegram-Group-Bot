@@ -252,7 +252,7 @@ def set_language(cookiebot, msg, chat_id, language_code):
     configurar_set(cookiebot, msg, ownerID)
 
 def update_welcome_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=0):
-    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
+    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg and int(msg['from']['id']) != ownerID:
         send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     send_chat_action(cookiebot, chat_id, 'typing')
@@ -268,7 +268,7 @@ def new_welcome_message(cookiebot, msg, chat_id):
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name", reply_to_message_id=msg['message_id'])
 
 def update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_bot=0):
-    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg:
+    if str(msg['from']['id']) not in listaadmins_id and 'sender_chat' not in msg and int(msg['from']['id']) != ownerID:
         send_message(cookiebot, chat_id, "You are not a group admin!", msg_to_reply=msg)
         return
     send_chat_action(cookiebot, chat_id, 'typing')
