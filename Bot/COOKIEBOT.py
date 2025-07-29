@@ -384,13 +384,19 @@ def thread_function_query(msg):
             language = query_data.split()[2]
             message_id = query_data.split()[3]
             delete_message(cookiebot, telepot.message_identifier(msg['message']))
+            if (datetime.datetime.now(datetime.timezone.utc).timestamp() - msg['message']['date']) > 600:
+                cookiebot.answerCallbackQuery(query_id, text="Message too old, use /adm again")
+                return
             if yesno == 'Yes':
                 call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id)
             else:
                 text = "Comando cancelado" if language == 'pt' else "Comando cancelado" if language == 'es' else "Command canceled"
                 send_message(cookiebot, chat_id, text)
         elif query_data.startswith('RULES'):
-            rules_message(cookiebot, msg['message'], msg['message']['chat']['id'], query_data.split()[1])
+            if (datetime.datetime.now(datetime.timezone.utc).timestamp() - msg['message']['date']) < 600:
+                rules_message(cookiebot, msg['message'], msg['message']['chat']['id'], query_data.split()[1])
+            else:
+                cookiebot.answerCallbackQuery(query_id, text="Message too old, use /rules!")
             cookiebot.editMessageReplyMarkup((msg['message']['chat']['id'], msg['message']['message_id']), reply_markup=None)
         elif query_data.startswith('GIVEAWAY'):
             if 'creator' in listaadmins_status and str(from_id) not in listaadmins_id and str(from_id) != str(ownerID):
