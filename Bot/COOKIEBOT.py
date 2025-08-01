@@ -234,9 +234,9 @@ def thread_function(msg):
                         birthday(cookiebot, current_date_utc, msg=msg, manual_chat_id=chat_id, language=language)
                     elif msg['text'].startswith(("/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
                         next_birthdays(cookiebot, msg, chat_id, language, current_date_utc)
-                elif msg['text'].startswith(("/dado", "/dice", "/patas", "/bff", "/furcamp", "/fursmeet", "/trex", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
+                elif msg['text'].startswith(("/dado", "/dice", "/patas", "/bff", "/furcamp", "/fursmeet", "/pawstral", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
                                              "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube", "/giveaway")) or (msg['text'].startswith("/d") and msg['text'].split()[0].split('/d')[1].isdigit()):
-                    if msg['text'].startswith(("/patas", "/bff", "/furcamp", "/fursmeet", "/trex")):
+                    if msg['text'].startswith(("/patas", "/bff", "/furcamp", "/fursmeet", "/pawstral")):
                         event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                     elif not utilityfunctions:
                         notify_utility_off(cookiebot, msg, chat_id, language)

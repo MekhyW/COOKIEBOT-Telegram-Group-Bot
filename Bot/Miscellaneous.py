@@ -16,8 +16,8 @@ bloblist_death = list(storage_bucket.list_blobs(prefix="Death"))
 bloblist_bff = list(storage_bucket.list_blobs(prefix="Countdown/BFF"))
 bloblist_patas = list(storage_bucket.list_blobs(prefix="Countdown/Patas"))
 bloblist_fursmeet = list(storage_bucket.list_blobs(prefix="Countdown/FurSMeet"))
-bloblist_trex = list(storage_bucket.list_blobs(prefix="Countdown/Trex"))
 bloblist_furcamp = list(storage_bucket.list_blobs(prefix="Countdown/Furcamp"))
+bloblist_pawstral = list(storage_bucket.list_blobs(prefix="Countdown/Pawstral"))
 custom_commands = list(dict.fromkeys([folder.name.split('/')[1] for folder in storage_bucket.list_blobs(prefix="Custom/")]))
 NEW_CHAT_LINK = "https://t.me/CookieMWbot?startgroup=new"
 WEBSITE_LINK = "https://cookiebotfur.net"
@@ -284,7 +284,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
     react_to_message(msg, '🔥', is_alternate_bot=is_alternate_bot)
     send_chat_action(cookiebot, chat_id, 'upload_photo')
     if msg['text'].lower().startswith('/patas'):
-        day, month, year = 18, 4, 2025
+        day, month, year = 11, 12, 2026
         calltoaction = random.choice(['Já comprou o seu ingresso? Não perca a oportunidade de participar do maior evento furry de Sorocaba-SP!',
                                   'Este é um evento beneficiente em formato de convenção, para promover e celebrar a cultura de apreciação animais antropomóficos na região de Sorocaba. Foi criado para ajudar as entidades que prestam apoio aos idosos da região.',
                                   'O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!',
@@ -337,24 +337,6 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
             while daysremaining < -5:
                 daysremaining += 365
             caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet {year}! </b>\n\n<i> {calltoaction} </i>\n🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n🎫Link para comprar ingresso: fursmeet.carrd.co\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeetchat"
-    elif msg['text'].lower().startswith('/trex'):
-        day, month, year = 20, 9, 2025
-        calltoaction = random.choice(['Já pensou em se divertir com sua própria fursuit ou cosplay dentro de um Shopping? Então venha conhecer o T-Rex Furplayer!',
-                                      'Um evento muito acolhedor e divertido, com intuito de reunir furries e cosplayers para criar novas amizades e memórias inesquecíveis enquanto se divertem nas incríveis atrações do T-Rex Park!',
-                                      'O T-Rex Park é um parque de diversões votado a um tema Jurássico, aonde reúne vários brinquedos divertidos com vários dinossauros espalhados pelo parque, e o melhor, é que de noite ele se torna um parque mágico com muitas luzes em neon!',
-                                      'No T-Rex Pool, conhecida por ter mais de 1 MILHÃO de bolinhas, os participantes mergulham em uma experiência única e colorida, onde a diversão é garantida em meio a um mar de bolinhas, proporcionando momentos inesquecíveis de brincadeira e descontração no evento.',
-                                      'No T-Rex Jump, a diversão é elevada a novas alturas, proporcionando aos participantes uma experiência saltitante e cheia de energia em meio à atmosfera jurássica do evento.',
-                                      'O que vocês estão esperando? Não perca esse momento incrível! Venha criar memórias inesquecíveis com os seus amigos!',
-                                      'No T-Rex Furplayer, a criatividade se funde com a diversão em um encontro único! Reunindo as comunidades Cosplayers e Furries, em um ambiente cheio de energia e pura diversão!',
-                                      'A Staff dedicada do T-Rex Furplayer, garante que cada detalhe seja uma experiência incrível e perfeita para todos, proporcionando aos participantes uma experiência impecável e acolhedora, repleta de diversão e memórias inesquecíveis!'])
-        pic = bloblist_trex[random.randint(0, len(bloblist_trex)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
-        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days + 1
-        if -5 <= daysremaining <= 0:
-            caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
-        else:
-            while daysremaining < -5:
-                daysremaining += 365
-            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o T-Rex Furplayer! </b>\n\n<i> {calltoaction} </i>\n🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖🐺🦖🦸‍♂🦖\n\n📆 {day}/{month} - Shopping D, Canindé São Paulo - SP\n💻 Ingressos em: trexfurplayer.com.br\n📲 Grupo do evento: @trexfurplayergroup"
     elif msg['text'].lower().startswith('/furcamp'):
         day, month, year = 14, 2, 2026
         calltoaction = random.choice(['O FURCAMP é um evento furry criado no Brasil e acontece todos os anos em meados de fevereiro (durante o Carnaval). Com sua primeira edição piloto em março de 2019 sendo um sucesso, o evento cativou seus participantes e a equipe que o criou.',
@@ -372,6 +354,22 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
             while daysremaining < -5:
                 daysremaining += 365
             caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurCamp! </b>\n\n<i> {calltoaction} </i>\n🐾🌲🐾🌳🐾🌲🐾🌳🐾🌲🐾🌳\n\n📆 {day} a {day+3}/{month}, Acampamento Terra do Saber - Cajamar - SP\n💻 Ingressos em: furcamp.com\n📲 Grupo do evento: @FurcampOficial"
+    elif msg['text'].lower().startswith('/pawstral'):
+        day, month, year = 29, 8, 2025
+        calltoaction = random.choice(['The furry convention that will fill the city of Santiago with color and energy!',
+                                      'Pawstral is more than just a convention; it is a space for furries, artists, and fans of furry culture to come together, celebrate, and share their passion.',
+                                      'There will be activities for everyone, from workshops and presentations to an amazing fursuiting space, art, and much more.',
+                                      'Santiago awaits you with its urban charm, surrounded by mountains and beautiful landscapes, perfect for enjoying the last days of winter.',
+                                      'With modern design and a privileged location in the district of Las Condes, you will find it at Alonso de Córdova #6050, Santiago de Chile. Just steps away from the Manquehue Metro Station.',
+                                      'Gastronomic proposals at ICON Hotel are designed to complete a unique and total experience during your stay, as well as to delight everyone who visits as a client or guest at an event.'])
+        pic = bloblist_pawstral[random.randint(0, len(bloblist_pawstral)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
+        daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days + 1
+        if -5 <= daysremaining <= 0:
+            caption = "https://www.youtube.com/watch?v=JsOVJ1PAC6s&ab_channel=TheVibeGuide"
+        else:
+            while daysremaining < -5:
+                daysremaining += 365
+            caption = f"<b> {number_to_emojis(daysremaining)} days left until Pawstral! </b>\n\n<i> {calltoaction} </i>\n🇨🇱⭐🐈🇨🇱⭐🐈🇨🇱⭐🐈🇨🇱⭐🐈🇨🇱⭐🐈\n\n📆 {day} a {day+2}/{month}, Santiago de Chile\n💻 Tickets at: https://pawstral.cl/\n📲 Event chat: @PawstralFurcon"
     else:
         text = "Evento não encontrado!" if language == 'pt' else "¡Evento no encontrado!" if language == 'es' else "Event not found!"
         send_message(cookiebot, chat_id, text, msg)

@@ -41,7 +41,7 @@ patas - Hotel furry event in brazil
 bff - Hotel furry event in brazil
 furcamp - Camp furry event in brazil
 fursmeet - Hotel furry event in brazil
-trex - Amusement park furry event in brazil
+pawstral - Hotel furry event in chile
 isalive - Send a test ping with server date
 rules - Shows the group's rules
 newrules - Updates group rules

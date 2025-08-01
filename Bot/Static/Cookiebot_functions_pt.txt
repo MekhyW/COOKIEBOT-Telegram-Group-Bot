@@ -38,10 +38,10 @@ genero - Sera que e menino ou menina
 rojao - Pra pra pra pra poooow
 desenterrar - Desenterra uma mensagem antiga
 patas - Evento furry de hotel em sorocaba
-bff - Evento furry de hotel em são paulo
+bff - Evento furry de hotel em campinas
 furcamp - Evento furry em acampamento
 fursmeet - Evento furry de hotel em santa maria
-trex - Evento furry de parque de diversoes em sao paulo
+pawstral - Evento furry de hotel no chile
 tavivo - Manda um ping de teste com data do servidor
 regras - Mostra as regras do grupo
 novasregras - Atualiza as regras do grupo
