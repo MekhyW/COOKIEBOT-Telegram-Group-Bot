@@ -205,6 +205,8 @@ def reply_sticker(cookiebot, msg, chat_id):
     cookiebot.sendSticker(chat_id, sticker['id'], reply_to_message_id=msg['message_id'])
 
 def meme(cookiebot, msg, chat_id, language):
+    send_message(cookiebot, chat_id, "Comando temporariamente desativado. Por favor, tente novamente mais tarde.", msg)
+    return
     send_chat_action(cookiebot, chat_id, 'upload_photo')
     members = get_members_chat(cookiebot, chat_id)
     members_tagged = get_members_tagged(msg)
