@@ -244,7 +244,7 @@ def meme(cookiebot, msg, chat_id, language):
         template_data = random.choice(suitable_templates)
         template_img = cv2.imread(template_data['full_path'])
         contours_green = [(rect[0], rect[1], rect[2], rect[3]) for rect in template_data['blob_rects']]
-    for rect in contours_green[len(contours_green)]:
+    for rect in contours_green[:len(members_tagged) if members_tagged else len(contours_green)]:
         if len(rect) == 4:  # Already a bounding rectangle (x, y, w, h)
             x, y, w, h = rect
         else:  # It's a contour, convert to bounding rectangle
