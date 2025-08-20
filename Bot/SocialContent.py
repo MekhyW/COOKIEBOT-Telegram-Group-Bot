@@ -5,6 +5,8 @@ import datetime
 import requests
 import re
 import json
+import csv
+import ast
 from bs4 import BeautifulSoup
 from universal_funcs import googleAPIkey, searchEngineCX, saucenao_key, storage_bucket, get_request_backend, post_request_backend, send_chat_action, send_message, react_to_message, send_photo, forward_message, cookiebotTOKEN
 from UserRegisters import get_members_chat
@@ -28,6 +30,20 @@ BSKY_REGEX = r'bsky\.app/profile/[a-zA-Z0-9.-]{1,253}'
 with open('Static/avoid_search.txt', 'r', encoding='utf-8') as f:
     avoid_search = f.readlines()
 avoid_search = [x.strip() for x in avoid_search]
+
+meme_metadata = {}
+with open('Static/Meme/meme_metadata.csv', 'r', encoding='utf-8') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        filename = row['filename']
+        language = row['language']
+        blob_count = int(row['blob_count'])
+        blob_rects = ast.literal_eval(row['blob_rects']) if row['blob_rects'] else []
+        if language not in meme_metadata:
+            meme_metadata[language] = {}
+        if blob_count not in meme_metadata[language]:
+            meme_metadata[language][blob_count] = []
+        meme_metadata[language][blob_count].append({'filename': filename, 'blob_rects': blob_rects, 'full_path': row['full_path']})
 
 def fix_embed_if_social_link(message: str) -> str | bool:
     message = message.strip()
@@ -80,7 +96,7 @@ def fetch_temp_jpg(cookiebot, msg, only_return_url=False):
             return video_url
         urllib.request.urlretrieve(video_url, 'temp.mp4')
         vidcap = cv2.VideoCapture('temp.mp4')
-        success, image = vidcap.read()
+        _, image = vidcap.read()
         cv2.imwrite('temp.jpg', image)
         os.remove('temp.mp4')
 
@@ -213,19 +229,26 @@ def meme(cookiebot, msg, chat_id, language):
         send_message(cookiebot, chat_id, text, msg)
         return
     caption = ""
-    for _ in range(100):
-        if 'pt' not in language.lower():
-            template = "Static/Meme/English/" + random.choice(templates_eng)
-        else:
-            template_id = random.randint(0, len(templates_pt)+len(templates_eng)-1)
-            template = "Static/Meme/Portuguese/" + templates_pt[template_id - len(templates_eng)] if template_id > len(templates_eng) - 1 else "Static/Meme/English/" + templates_eng[template_id]
-        template_img = cv2.imread(template)
-        mask_green = cv2.inRange(template_img, (0, 210, 0), (40, 255, 40))
-        contours_green, _ = cv2.findContours(mask_green, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-        if len(members_tagged) <= len(contours_green):
-            break
-    for green in contours_green:
-        x, y, w, h = cv2.boundingRect(green)
+    template_data = None
+    template_img = None
+    metadata_lang = 'Portuguese' if 'pt' in language.lower() else 'English'
+    suitable_templates = []
+    for blob_count in range(len(members_tagged), 6):
+        if metadata_lang in meme_metadata and blob_count in meme_metadata[metadata_lang]:
+            suitable_templates.extend(meme_metadata[metadata_lang][blob_count])
+    if not suitable_templates and metadata_lang == 'Portuguese':
+        for blob_count in range(len(members_tagged), 6):
+            if 'English' in meme_metadata and blob_count in meme_metadata['English']:
+                suitable_templates.extend(meme_metadata['English'][blob_count])
+    if suitable_templates:
+        template_data = random.choice(suitable_templates)
+        template_img = cv2.imread(template_data['full_path'])
+        contours_green = [(rect[0], rect[1], rect[2], rect[3]) for rect in template_data['blob_rects']]
+    for rect in contours_green[:len(members_tagged) if members_tagged else len(contours_green)]:
+        if len(rect) == 4:  # Already a bounding rectangle (x, y, w, h)
+            x, y, w, h = rect
+        else:  # It's a contour, convert to bounding rectangle
+            x, y, w, h = cv2.boundingRect(rect)
         chosen_member = None
         profile_image = None
         while members_tagged and not profile_image:
@@ -246,9 +269,7 @@ def meme(cookiebot, msg, chat_id, language):
             return
         image = cv2.imdecode(np.asarray(bytearray(profile_image.read()), dtype="uint8"), cv2.IMREAD_COLOR)
         image = cv2.resize(image, (w, h), interpolation=cv2.INTER_NEAREST)
-        mask_green_copy = mask_green[y:y+h, x:x+w]
-        mask_region = mask_green_copy == 255
-        template_img[y:y+h, x:x+w][mask_region] = image[mask_region]
+        template_img[y:y+h, x:x+w] = image
         caption += f"@{chosen_member} "
     cv2.imwrite("meme.png", template_img)
     with open("meme.png", 'rb') as final_img:
