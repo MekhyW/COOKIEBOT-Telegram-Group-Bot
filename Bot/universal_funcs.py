@@ -60,21 +60,26 @@ def cached_api_call(ttl_seconds):
         return wrapper
     return decorator
 
-def retry_with_backoff(func, max_retries=3, base_delay=1):
-    def wrapper(*args, **kwargs):
-        for attempt in range(max_retries + 1):
-            try:
-                return func(*args, **kwargs)
-            except urllib3.exceptions.ProtocolError as e:
-                if attempt == max_retries:
-                    send_error_traceback(args[0] if args else None, None, f"Max retries exceeded for {func.__name__}: {str(e)}")
-                    return None
-                delay = base_delay * (2 ** attempt)
-                time.sleep(delay)
-                continue
-            except Exception as e:
-                raise e
-    return wrapper
+def retry_with_backoff(max_retries=3, base_delay=1):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            for attempt in range(max_retries + 1):
+                try:
+                    return func(*args, **kwargs)
+                except urllib3.exceptions.ProtocolError as e:
+                    if attempt == max_retries:
+                        cookiebot = args[0] if args else None
+                        send_error_traceback(cookiebot, None, f"Max retries exceeded for {func.__name__}: {str(e)}")
+                        return None
+                    delay = base_delay * (2 ** attempt)
+                    time.sleep(delay)
+                    continue
+                except Exception as e:
+                    raise e
+            return None
+        return wrapper
+    return decorator
 
 @cached_api_call(ttl_seconds=60)
 def get_request_backend(route, params=None):
