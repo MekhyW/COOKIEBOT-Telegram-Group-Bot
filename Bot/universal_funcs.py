@@ -60,6 +60,22 @@ def cached_api_call(ttl_seconds):
         return wrapper
     return decorator
 
+def retry_with_backoff(func, max_retries=3, base_delay=1):
+    def wrapper(*args, **kwargs):
+        for attempt in range(max_retries + 1):
+            try:
+                return func(*args, **kwargs)
+            except urllib3.exceptions.ProtocolError as e:
+                if attempt == max_retries:
+                    send_error_traceback(args[0] if args else None, None, f"Max retries exceeded for {func.__name__}: {str(e)}")
+                    return None
+                delay = base_delay * (2 ** attempt)
+                time.sleep(delay)
+                continue
+            except Exception as e:
+                raise e
+    return wrapper
+
 @cached_api_call(ttl_seconds=60)
 def get_request_backend(route, params=None):
     try:
@@ -163,6 +179,7 @@ def send_error_traceback(cookiebot, msg, traceback_text):
             chunk = traceback_text[i:i + chunk_size]
             cookiebot.sendMessage(ownerID, chunk)
 
+@retry_with_backoff(max_retries=3, base_delay=1)
 def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, link_preview_options=None, disable_notification=False, parse_mode='HTML'):
     try:
         if language in ['eng', 'es']:
@@ -190,12 +207,13 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
             except telepot.exception.TelegramError:
                 return cookiebot.sendMessage(chat_id, text.replace('\\', '').replace('>', ''), disable_notification=disable_notification, reply_markup=reply_markup)
     except urllib3.exceptions.ProtocolError:
-        send_message(cookiebot, chat_id, text, msg_to_reply, language, thread_id, is_alternate_bot, reply_markup, link_preview_options, disable_notification, parse_mode)
+        raise
     except Exception:
         traceback_text = traceback.format_exc()
         if not 'Bad Request: PEER_ID_INVALID' in traceback_text:
             send_error_traceback(cookiebot, None, traceback_text)
 
+@retry_with_backoff(max_retries=3, base_delay=1)
 def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
     try:
         if language in ['eng', 'es']:
@@ -212,20 +230,17 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
         else:
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
             if reply_markup is None:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, 
-                            reply_to_message_id=reply_to_message_id, parse_mode=parse_mode)
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, parse_mode=parse_mode)
             else:
-                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, 
-                            reply_to_message_id=reply_to_message_id, 
-                            reply_markup=reply_markup, parse_mode=parse_mode)
+                sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode=parse_mode)
     except urllib3.exceptions.ProtocolError:
-        return send_photo(cookiebot, chat_id, photo, caption, 
-                          msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
+        raise
     except TelegramError:
         send_error_traceback(cookiebot, None, traceback.format_exc())
         return None
     return sentphoto['message_id']
 
+@retry_with_backoff(max_retries=3, base_delay=1)
 def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=None, language="pt", thread_id=None, is_alternate_bot=0, reply_markup=None, parse_mode='HTML'):
     try:
         if language in ['eng', 'es']:
@@ -240,15 +255,11 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
         else:
             reply_to_message_id = msg_to_reply['message_id'] if msg_to_reply else None
             if reply_markup is None:
-                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, 
-                                reply_to_message_id=reply_to_message_id, parse_mode=parse_mode)
+                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, parse_mode=parse_mode)
             else:
-                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, 
-                                reply_to_message_id=reply_to_message_id, 
-                                reply_markup=reply_markup, parse_mode=parse_mode)
+                sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode=parse_mode)
     except urllib3.exceptions.ProtocolError:
-        return send_animation(cookiebot, chat_id, animation, caption, 
-                              msg_to_reply, language, thread_id, is_alternate_bot, reply_markup)
+        raise
     except TelegramError:
         send_error_traceback(cookiebot, None, traceback.format_exc())
         return None
@@ -257,9 +268,7 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
 def set_bot_commands(cookiebot, commands, scope_chat_id, is_alternate_bot=0, language="pt"):
     token = get_bot_token(is_alternate_bot)
     url = f'https://api.telegram.org/bot{token}/setMyCommands'
-    data = {'commands': commands,
-            'scope': {'type': 'chat', 'chat_id': scope_chat_id},
-            'language_code': language[0:2].lower()}
+    data = {'commands': commands, 'scope': {'type': 'chat', 'chat_id': scope_chat_id}, 'language_code': language[0:2].lower()}
     r = requests.get(url, json=data, timeout=60)
     return r.text
 
@@ -304,12 +313,13 @@ def leave_and_blacklist(cookiebot, chat_id):
         print("Error leaving chat: " + str(e))
 
 def wait_open(filename):
-    if os.path.exists(filename):
-        try:
-            text = open(filename, 'r', encoding='utf-8')
-            text.close()
-        except IOError:
-            time.sleep(1)
+    if not os.path.exists(filename):
+        return
+    try:
+        text = open(filename, 'r', encoding='utf-8')
+        text.close()
+    except IOError:
+        time.sleep(1)
 
 def delete_message(cookiebot, identifier):
     try:
@@ -317,22 +327,14 @@ def delete_message(cookiebot, identifier):
     except Exception as e:
         print(e)
 
-def check_if_string_in_file(file_name, string_to_search):
-    for line in file_name:
-        if string_to_search in line:
-            return True
-    return False
-
 def number_to_emojis(number):
-    emojis = {'0': '0️⃣', '1': '1️⃣', '2': '2️⃣', '3': '3️⃣', '4': '4️⃣',
-              '5': '5️⃣', '6': '6️⃣', '7': '7️⃣', '8': '8️⃣', '9': '9️⃣'}
+    emojis = {'0': '0️⃣', '1': '1️⃣', '2': '2️⃣', '3': '3️⃣', '4': '4️⃣', '5': '5️⃣', '6': '6️⃣', '7': '7️⃣', '8': '8️⃣', '9': '9️⃣'}
     emojis_string = ''
     for digit in str(number):
         emojis_string += emojis[digit]
     return emojis_string
 
 def emojis_to_numbers(text):
-    numbers = {'0️⃣': '0', '1️⃣': '1', '2️⃣': '2', '3️⃣': '3', '4️⃣': '4',
-               '5️⃣': '5', '6️⃣': '6', '7️⃣': '7', '8️⃣': '8', '9️⃣': '9'}
+    numbers = {'0️⃣': '0', '1️⃣': '1', '2️⃣': '2', '3️⃣': '3', '4️⃣': '4', '5️⃣': '5', '6️⃣': '6', '7️⃣': '7', '8️⃣': '8', '9️⃣': '9'}
     pattern = re.compile('|'.join(map(re.escape, numbers.keys())))
     return pattern.sub(lambda x: numbers[x.group()], text)
