@@ -338,7 +338,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                 daysremaining += 365
             caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet {year}! </b>\n\n<i> {calltoaction} </i>\n🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n🎫Link para comprar ingresso: fursmeet.carrd.co\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeetchat"
     elif msg['text'].lower().startswith('/furcamp'):
-        day, month, year = 14, 2, 2026
+        day, month, year = 13, 2, 2026
         calltoaction = random.choice(['O FURCAMP é um evento furry criado no Brasil e acontece todos os anos em meados de fevereiro (durante o Carnaval). Com sua primeira edição piloto em março de 2019 sendo um sucesso, o evento cativou seus participantes e a equipe que o criou.',
                                       'Com sua bela paisagem, o Acampamento Terra do Saber possui pomar, trilhas e lagos para a pesca esportiva. É destinado a grupos grandes e especialmente aos visitantes que estejam em busca de uma acomodação diferenciada, podendo contar com todo o conforto da hospedagem em suítes e também em alojamentos.',
                                       'O Acampamento Terra do Saber conta com alojamentos com beliches, refeitórios, salões para reunião, janelas com tela de proteção contra insetos, banheiros com aquecimento central a gás, reservatórios de água, poços artesianos e muito mais.',
@@ -353,7 +353,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurCamp! </b>\n\n<i> {calltoaction} </i>\n🐾🌲🐾🌳🐾🌲🐾🌳🐾🌲🐾🌳\n\n📆 {day} a {day+3}/{month}, Acampamento Terra do Saber - Cajamar - SP\n💻 Ingressos em: furcamp.com\n📲 Grupo do evento: @FurcampOficial"
+            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurCamp! </b>\n\n<i> {calltoaction} </i>\n🐾🌲🐾🌳🐾🌲🐾🌳🐾🌲🐾🌳\n\n📆 {day} a {day+4}/{month}, Acampamento Terra do Saber - Cajamar - SP\n💻 Ingressos em: furcamp.com\n📲 Grupo do evento: @FurcampOficial"
     elif msg['text'].lower().startswith('/pawstral'):
         day, month, year = 29, 8, 2025
         calltoaction = random.choice(['The furry convention that will fill the city of Santiago with color and energy!',
