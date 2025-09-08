@@ -15,6 +15,7 @@ import googleapiclient.discovery
 from saucenao_api import SauceNao, errors
 import cv2
 import numpy as np
+from loc import i18n
 googleimagesearcher = google_images_search.GoogleImagesSearch(googleAPIkey, searchEngineCX, validate_images=False)
 youtubesearcher = googleapiclient.discovery.build("youtube", "v3", developerKey=googleAPIkey)
 reverseimagesearcher = SauceNao(saucenao_key)
@@ -112,23 +113,23 @@ def get_members_tagged(msg):
 def reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
     if not 'reply_to_message' in msg:
-        text = "Responda uma imagem com o comando para procurar a fonte (busca reversa)\n<blockquote> Para busca direta, use o /qualquercoisa </blockquote>" if language == 'pt' else "Responda a una imagen con el comando para buscar la fuente (búsqueda inversa)\n<blockquote> Para una búsqueda directa, use /lo que sea</blockquote>" if language == 'es' else "Reply an image with the command to search for the source (reverse search)\n<blockquote> For direct search, use /anything </blockquote>"
+        text = i18n.get("reverse_image", lang=language)
         send_message(cookiebot, chat_id, text, msg)
         return
     url = fetch_temp_jpg(cookiebot, msg['reply_to_message'], only_return_url=True)
     try:
         results = reverseimagesearcher.from_url(url)
     except errors.ShortLimitReachedError:
-        text = "Ainda estou processando outros resultados, aguarde e tente novamente" if language == 'pt' else "Todavía estoy procesando otros resultados, espera y vuelve a intentarlo" if language == 'es' else "I'm still processing other results, please wait and try again"
+        text = i18n.get("reverse_other", lang=language)
         send_message(cookiebot, chat_id, text, msg)
         return
     except errors.LongLimitReachedError:
-        text = "Limite diário de busca atingido, aguarde e tente novamente" if language == 'pt' else "Límite diario de búsqueda alcanzado, espere y vuelva a intentarlo" if language == 'es' else "Daily search limit reached, please wait and try again"
+        text = i18n.get("reverse_limit", lang=language)
         send_message(cookiebot, chat_id, text, msg)
         return
     if results and results[0].urls and results[0].similarity > 80:
         best = results[0]
-        answer = 'Melhor correspondência encontrada:\n\n' if language == 'pt' else 'Mejor coincidencia encontrada:\n\n' if language == 'es' else 'Best match found:\n\n'
+        answer = i18n.get("reverse_best", lang=language)
         answer += f'"{best.title}"'
         if best.author:
             answer +=  f" - {best.author}"
@@ -137,11 +138,11 @@ def reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         send_message(cookiebot, chat_id, answer, msg, language)
     else:
         react_to_message(msg, '🤷', is_big=False, is_alternate_bot=is_alternate_bot)
-        text = "A busca não encontrou correspondência, parece ser uma imagem original!" if language == 'pt' else "La búsqueda no encontró coincidencias, ¡parece ser una imagen original!" if language == 'es' else "The search found no matches, it seems to be an original image!"
+        text = i18n.get("reverse_no_found", lang=language)
         send_message(cookiebot, chat_id, text, msg)
 
 def prompt_qualquer_coisa(cookiebot, msg, chat_id, language):
-    text = "Você precisa digitar o nome do que quer procurar\n<blockquote> EXEMPLO: /batata frita </blockquote>" if language == 'pt' else "Necesitas escribir el nombre de lo que quieres buscar\n<blockquote> EJEMPLO: /french fries </blockquote>" if language == 'es' else "You need to type the name of what you want to search for\n<blockquote> EXAMPLE: /french fries </blockquote>"
+    text = i18n.get("anything_prompt", lang=language)
     send_message(cookiebot, chat_id, text, msg)
 
 def qualquer_coisa(cookiebot, msg, chat_id, sfw, language, is_alternate_bot=0):
@@ -165,12 +166,12 @@ def qualquer_coisa(cookiebot, msg, chat_id, sfw, language, is_alternate_bot=0):
         except Exception as e:
             pass
     react_to_message(msg, '🤷', is_big=False, is_alternate_bot=is_alternate_bot)
-    text = "Não consegui achar uma imagem <i> (ou era NSFW e eu filtrei) </i>" if language == 'pt' else "No pude encontrar una imagen <i> (o era NSFW y lo filtré) </i>" if language == 'es' else "I couldn't find an image <i> (or it was NSFW and I filtered it) </i>"
+    text = i18n.get("anything_no_find", lang=language)
     send_message(cookiebot, chat_id, text, msg)
 
 def youtube_search(cookiebot, msg, chat_id, language):
     if len(msg['text'].split()) == 1:
-        text = "Você precisa digitar o nome do vídeo\n<blockquote> EXEMPLO: /youtube batata assada </blockquote>" if language == 'pt' else "Debes escribir el nombre del video\n<blockquote> EJEMPLO: /youtube papa al horno</blockquote>" if language == 'es' else "You need to type the name of the video\n<blockquote> EXAMPLE: /youtube baked potato </blockquote>"
+        text = i18n.get("youtube_need", lang=language)
         send_message(cookiebot, chat_id, text, msg)
         return
     query = ' '.join(msg['text'].split()[1:])
@@ -179,7 +180,7 @@ def youtube_search(cookiebot, msg, chat_id, language):
     videos = response.get("items", [])
     if not videos:
         react_to_message(msg, '🤷', is_big=False)
-        text = "Não consegui achar nenhum vídeo" if language == 'pt' else "No pude encontrar ningún video" if language == 'es' else "I couldn't find any video"
+        text = i18n.get("youtube_no_find", lang=language)
         send_message(cookiebot, chat_id, text, msg)
         return
     random_video = random.choice(videos)
@@ -225,7 +226,7 @@ def meme(cookiebot, msg, chat_id, language):
     members = get_members_chat(cookiebot, chat_id)
     members_tagged = get_members_tagged(msg)
     if len(members_tagged) > 5:
-        text = "Não é possível criar memes com mais de 5 membros" if language == 'pt' else "No se pueden crear memes con más de 5 miembros" if language == 'es' else "It is not possible to create memes with more than 5 members"
+        text = i18n.get("meme_no", lang=language)
         send_message(cookiebot, chat_id, text, msg)
         return
     caption = ""
@@ -264,7 +265,7 @@ def meme(cookiebot, msg, chat_id, language):
             chosen_member = member['user']
             profile_image = get_profile_image(chosen_member)
         if not profile_image:
-            text = "Não consegui extrair a foto de perfil desse usuário. Verifique se está público!" if language == 'pt' else "No pude extraer la foto de perfil de este usuario. ¡Verifica si es público!" if language == 'es' else "I couldn't extract the profile picture of this user. Check if it's public!"
+            text = i18n.get("meme_error", lang=language)
             send_message(cookiebot, chat_id, text, msg)
             return
         image = cv2.imdecode(np.asarray(bytearray(profile_image.read()), dtype="uint8"), cv2.IMREAD_COLOR)
@@ -298,7 +299,7 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         if 'random' in msg['text'].lower():
             members = get_members_chat(cookiebot, chat_id)
             if len(members) < 2:
-                text = "Não há membros suficientes para batalhar" if language == 'pt' else "No hay miembros suficientes para luchar" if language == 'es' else "Not enough members to battle"
+                text = i18n.get("battle_no", lang=language)
                 send_message(cookiebot, chat_id, text, msg)
                 return
             for _ in range(100):
@@ -312,11 +313,11 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         soup2 = BeautifulSoup(urllib.request.urlopen(urllib.request.Request(f"https://telegram.me/{users[1]}", headers={'User-Agent' : "Magic Browser"})), "html.parser")
         images = list(soup1.findAll('img')), list(soup2.findAll('img'))
         if len(images[0]) == 0:
-            text = f"Não consegui extrair a foto de {members_tagged[0]}. Verifique se está público!" if language == 'pt' else f"No pude extraer la foto de {members_tagged[0]}. ¡Verifica si es público!" if language == 'es' else f"I couldn't extract the photo of {members_tagged[0]}. Check if it's public!"
+            text = i18n.get("battle_extract", lang=language, user=members_tagged[0])
             send_message(cookiebot, chat_id, text, msg)
             return
         if len(images[1]) == 0:
-            text = f"Não consegui extrair a foto de {members_tagged[1]}. Verifique se está público!" if language == 'pt' else f"No pude extraer la foto de {members_tagged[1]}. ¡Verifica si es público!" if language == 'es' else f"I couldn't extract the photo of {members_tagged[1]}. Check if it's public!"
+            text = i18n.get("battle_extract", lang=language, user=members_tagged[1])
             send_message(cookiebot, chat_id, text, msg)
             return
         resp = urllib.request.urlopen(images[0][0]['src']), urllib.request.urlopen(images[1][0]['src'])
@@ -330,13 +331,13 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         else:
             medias, choices = [{'type': 'photo', 'media': user_images[0]}, {'type': 'photo', 'media': user_images[1]}], [users[0], users[1]]
             caption = f"@{users[0]} VS @{users[1]}"
-        poll_title = "QUEM VENCE?" if language == 'pt' else "¿QUIÉN GANA?" if language == 'es' else "WHO WINS?"
-        if language == 'pt':
-            caption += f"\n\nTipo: {random.choice(['Boxe 🥊🥊', 'Luta Livre 🎭', 'Luta Greco 🤼‍♂️', 'Artes Marciais 🥋', 'Sambo 👊', 'Muay Thai 🥋', 'Luta de rua 👊', 'Luta de piscina💧', 'Judo 🇯🇵', 'Sumo ⛩', 'Gutpunching 💪', 'Ballbusting 🍳🍳'])}\nRegras: {random.choice(['KO por rounds', 'KO sem rounds', 'Vale tudo', 'Mais gols no Bomba Patch', 'Mais latinhas bebidas', 'Maior numero de litrão', 'Até Beber, Cair, Levantar', 'O último do mesão de magic'])}\nEquipamento: {random.choice(['Full Gear', 'Só luvas', 'De calcinha', 'Pelados', 'Uniforme de luta', 'Vale tudo', 'Tanguinha de sumô', 'Robô gigante', 'Uniforme de Maid', 'Kimono de Judô', 'Armadura Samurai', 'Toalha de nerdola', 'Uniforme de Waifu escolar', 'Roupa da Sailor Moon', 'Menininha mágica', 'Cosplay da Akatsuki', 'Aqueles maiôs de natação japoneses', 'Bunnysuit', 'Casaco de inverno cyberpunk', 'Chinelo', 'Ronaldinho Gaúcho', 'Uniforme do Vasco', 'Uniforme do Curintia', 'Camiseta do São Paulo', 'Uniforme do Parmeira', 'Roupa de bruxinha', 'Óculos Juliett', 'Tanguinha de Ratanabá'])}"
-        elif language == 'es':
-            caption += f"\n\nTipo: {random.choice(['Boxeo 🥊🥊', 'Lucha 🎭', 'Lucha griega 🤼‍♂️', 'Artes marciales 🥋', 'Sambo 👊', 'Muay Thai 🥋', 'Lucha callejera 👊', 'Lucha en la piscina💧', 'Judo 🇯🇵', 'Sumo ⛩', 'Golpes al estómago 💪', 'Romper pelotas 🍳🍳'])}\nReglas: {random.choice(['KO por asaltos', 'KO sin asaltos', 'Todo vale', 'Más goles en Bomba Patch', 'La mayor cantidad de latas bebidas', 'La mayor cantidad de litros', 'Hasta beber, caer, levantarse', 'El último de la mesa de Magic'])}\nEquipamento: {random.choice(['Equipo completo', 'Solo guantes', 'En bragas', 'Desnudo', 'Uniforme de combate', 'Vale todo', 'Tanga de sumo', 'Robot gigante', 'Uniforme de sirvienta', 'Kimono de judo', 'Armadura de samurái', 'Toalla de nerd', 'Uniforme de waifu escolar', 'Disfraz de Sailor Moon', 'Niña mágica', 'Cosplay de Akatsuki', 'Esos trajes de baño japoneses', 'Traje de conejita', 'Abrigo de invierno cyberpunk', 'Zapatilla', 'Traje de bruja', 'Tanga'])}"
-        else:
-            caption += f"\n\nType: {random.choice(['Boxing 🥊🥊', 'Wrestling 🎭', 'Greco Wrestling 🤼‍♂️', 'Martial Arts 🥋', 'Sambo 👊', 'Muay Thai 🥋', 'Street Fighting 👊', 'Pool Fighting💧', 'Judo 🇯🇵', 'Sumo ⛩', 'Gutpunching 💪', 'Ballbusting 🍳🍳'])}\nRules: {random.choice(['KO by rounds', 'KO without rounds', 'Anything goes', 'Most goals in Bomba Patch', 'Most cans of drinks', 'Biggest number of liters', 'Until Drinking, Falling, Getting Up', 'The last of the magic table'])}\nEquipment: {random.choice(['Full Gear', 'Gloves Only', 'In Panties', 'Naked', 'Fighting Uniform', 'Anything Goes', 'Sumo Thong', 'Giant Robot', 'Maid Uniform', 'Judo Kimono', 'Samurai Armor', 'Nerd Towel', 'School Waifu Uniform', 'Sailor Moon Outfit', 'Magical Little Girl', 'Akatsuki Cosplay', 'Those Japanese Swimming Swimsuits', 'Bunnysuit', 'Cyberpunk Winter Coat', 'Flip Flops', 'Witch Outfit', 'Thong'])}" 
+        poll_title = i18n.get("battle_title", lang=language)
+        ctx = {
+            "type": random.choice(i18n.get("battle_type", lang=language)),
+            "rule": random.choice(i18n.get("battle_rule", lang=language)),
+            "equip": random.choice(i18n.get("battle_equip", lang=language))
+        }
+        caption += i18n.get("battle_full", lang=language, **ctx)
         medias[0]['caption'] = caption
         cookiebot.sendMediaGroup(chat_id, medias, reply_to_message_id=msg['message_id'])
         cookiebot.sendPoll(chat_id, poll_title, choices, is_anonymous=False, allows_multiple_answers=False, reply_to_message_id=msg['message_id'])
@@ -347,7 +348,7 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         soup = BeautifulSoup(html, "html.parser")
         images = list(soup.findAll('img'))
         if not len(images):
-            text = "Não consegui extrair a foto de perfil desse usuário. Verifique se está público!" if language == 'pt' else "No pude extraer la foto de perfil de este usuario. ¡Verifica si es público!" if language == 'es' else "I couldn't extract the profile picture of this user. Check if it's public!"
+            text = i18n.get("battle_private", lang=language)
             send_message(cookiebot, chat_id, text, msg)
             return
         resp = urllib.request.urlopen(images[0]['src'])
@@ -359,15 +360,15 @@ def battle(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         try:
             user_image = cookiebot.getUserProfilePhotos(msg['from']['id'], limit=1)['photos'][0][-1]['file_id']
         except IndexError:
-            text = "Você precisa ter uma foto de perfil <i> (ou está privado) </i>" if language == 'pt' else "Necesitas tener una foto de perfil <i> (o está privado) </i>" if language == 'es' else "You need to have a profile picture <i> (or it's private) </i>"
+            text = i18n.get("battle_no_picture", lang=language)
             send_message(cookiebot, chat_id, text, msg)
             return
     if language == 'pt':
         fighter = random.choice(random.choice([bloblist_fighters_eng, bloblist_fighters_pt]))
-        poll_title = "QUEM VENCE " + random.choice(["NO TAPA", "NO X1", "NO SOCO", "NA MÃO", "NA PORRADA", "NO ARGUMENTO", "NO DUELO", "NA VIDA"]) + "?"
+        poll_title = i18n.get("battle_title_plus", lang=language, plus=random.choice(i18n.get("battle_title_list", lang=language)))
     else:
         fighter = random.choice(bloblist_fighters_eng)
-        poll_title = "¿QUIÉN GANA?" if language == 'es' else "WHO WINS?"
+        poll_title = i18n.get("battle_title", lang=language)
     fighter_image = fighter.generate_signed_url(datetime.timedelta(minutes=15), method='GET')
     fighter_name = fighter.name.split('/')[-1].replace(".png", "").replace(".jpg", "").replace(".jpeg", "").replace("_", " ").capitalize()
     medias, caption, choices = [{'type': 'photo', 'media': user_image}, {'type': 'photo', 'media': fighter_image}], f"{user} VS {fighter_name}", [user, fighter_name]

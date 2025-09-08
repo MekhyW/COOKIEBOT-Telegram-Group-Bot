@@ -6,6 +6,7 @@ import hmac
 import hashlib
 import json
 import telepot
+from loc import i18n
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 cache_members = {}
 cache_users = {}
@@ -96,7 +97,7 @@ def left_chat_member(msg, chat_id):
 def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
     if len(listaadmins) > 0 and 'from' in msg and str(msg['from']['username']) not in listaadmins and 'sender_chat' not in msg:
-        text = "Você não tem permissão para chamar todos os membros do grupo!\n<blockquote> Se está falando como canal, entre e use o comando como user </blockquote>" if language == 'pt' else "¡No tienes permiso para llamar a todos los miembros del grupo!\n<blockquote>Si estás hablando como canal, únete y usa el comando como usuario</blockquote>" if language == 'es' else "You don't have permission to call all members of the group!\n<blockquote>If you're speaking as a channel, join and use the command as a user</blockquote>"
+        text = i18n.get("everyone_no", lang=language)
         send_message(cookiebot, chat_id, text, msg)
         return
     members = get_members_chat(cookiebot, chat_id)
@@ -104,7 +105,7 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
     usernames_list = [member['user'] for member in members if 'user' in member]
     usernames_list.extend(admin for admin in listaadmins if admin not in usernames_list)
     if len(usernames_list) < 2:
-        text = "Ainda não vi nenhum membro no chat para chamar!\nCom o tempo, o bot vai reconhecer os membros e permitir chamar todos." if language == 'pt' else "¡Todavía no he visto ningún miembro en el chat para llamar!\nCon el tiempo, el bot reconocerá a los miembros y permitirá llamar a todos." if language == 'es' else "I haven't seen any members in the chat to call yet!\nOver time, the bot will recognize members and allow calling everyone."
+        text = i18n.get("everyone_len", lang=language)
         send_message(cookiebot, chat_id, text, msg)
         return
     react_to_message(msg, '🫡', is_alternate_bot=is_alternate_bot)
@@ -136,7 +137,7 @@ def everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=0)
         if notification_count % 10 == 0:
             cookiebot.forwardMessage(ownerID, chat_id, msg['message_id']) #will error if original message is deleted
         try:
-            text = f"Você foi chamado no chat <b> {chat['title']} </b>" if language == 'pt' else f"¡Te han llamado en el chat <b> {chat['title']} </b>!" if language == 'es' else f"You were called in the chat <b> {chat['title']} </b>"
+            text = i18n.get("everyone_call", lang=language, title=chat['title'])
             send_message(cookiebot, user[0]['id'], text, parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{msg['message_id']}")],
             ]))
@@ -166,7 +167,7 @@ def report(cookiebot, chat_id, targetid, language):
 
 def call_admins_ask(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
-    text = "Confirma chamar os administradores?" if language == 'pt' else "¿Confirma llamar a los administradores?" if language == 'es' else "Do you confirm to call the admins?"
+    text = i18n.get("call_admin_ask", lang=language)
     send_message(cookiebot, chat_id, text, msg_to_reply=msg, 
     reply_markup = InlineKeyboardMarkup (inline_keyboard = [
             [InlineKeyboardButton(text="✔️", callback_data=f"ADM Yes {language} {msg['message_id']}")], 
@@ -178,7 +179,7 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
     send_chat_action(cookiebot, chat_id, 'typing')
     response = " ".join(f"@{admin}" for admin in listaadmins)
     caller = msg['from'].get('username', msg['from']['first_name'])
-    additional = f"\n{caller} chamando todos os administradores!" if language == 'pt' else f"\n{caller} llamando a todos los administradores!" if language == 'es' else f"\n{caller} calling all admins!"
+    additional = i18n.get("call_admin", lang=language, caller=caller)
     response += additional
     send_message(cookiebot, chat_id, response, parse_mode='HTML')
     chat = cookiebot.getChat(chat_id)
@@ -192,7 +193,7 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
         if notification_count % 10 == 0:
             cookiebot.forwardMessage(ownerID, chat_id, message_id) #will error if original message is deleted
         try:
-            text = f"Você foi chamado no chat <b> {chat['title']} </b>" if language == 'pt' else f"¡Te han llamado en el chat <b> {chat['title']} </b>!" if language == 'es' else f"You were called in the chat <b> {chat['title']} </b>"
+            text = i18n.get("notification_admin", lang=language, title=chat['title'])
             send_message(cookiebot, user[0]['id'], text, parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                 [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{message_id}")],
             ]))
@@ -208,15 +209,7 @@ def who(cookiebot, msg, chat_id, language):
         send_message(cookiebot, chat_id, "Não sei", msg, language)
         return
     chosen = random.choice(valid_members)
-    adverbial_phrases = [
-        "Com certeza o(a)" if language == 'pt' else "Sin duda el/la" if language == 'es' else "Without a doubt",
-        "Sem sombra de dúvidas o(a)" if language == 'pt' else "Sin lugar a dudas el/la" if language == 'es' else "Without a shadow of a doubt",
-        "Suponho que o(a)" if language == 'pt' else "Supongo que el/la" if language == 'es' else "I suppose",
-        "Aposto que o(a)" if language == 'pt' else "Apuesto a que el/la" if language == 'es' else "I bet",
-        "Talvez o(a)" if language == 'pt' else "Quizás el/la" if language == 'es' else "Maybe",
-        "Quem sabe o(a)" if language == 'pt' else "Quién sabe el/la" if language == 'es' else "Who knows",
-        "Aparentemente o(a)" if language == 'pt' else "Aparentemente el/la" if language == 'es' else "Apparently",
-    ]
+    adverbial_phrases = i18n.get("adverbial_phrases", lang=language)
     send_message(cookiebot, chat_id, f"{random.choice(adverbial_phrases)} @{chosen}", msg)
 
 def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
@@ -232,7 +225,7 @@ def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
             target_a = members[0]['user']
             target_b = members[1]['user']
         except IndexError:
-            text = "Ainda não vi membros suficientes para shippar!" if language == 'pt' else "¡Todavía no he visto suficientes miembros para enviar un barco!" if language == 'es' else "I haven't seen enough members to ship yet!"
+            text = i18n.get("no_ship", lang=language)
             send_message(cookiebot, chat_id, text, msg)
             return
         except TypeError:
@@ -242,9 +235,15 @@ def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
             target_a = members[0]['user']
             target_b = members[1]['user']
     divorce_prob = str(random.randint(0, 100))
-    with open(f'Static/ship/ship_dynamics_{language}.txt', 'r', encoding='utf-8') as f:
-        lines = f.readlines()
-        ship_dynamic = random.choice(lines).replace('\n', '')
+
+    ship_dynamic = i18n.get_random_line("ship_dynamics.txt", lang=language)
     children_quantity = random.choice(['0', '1', '2', '3'])
-    text = f"Detectei um Casal! @{target_a} + @{target_b} = ❤️\n\nDinâmica: {ship_dynamic}\nFilhos: {children_quantity} 🧸\nChance de divórcio: {divorce_prob}% 📈" if language == 'pt' else f"¡Detecté una pareja! @{target_a} + @{target_b} = ❤️\n\nDinámica: {ship_dynamic}\nHijos: {children_quantity} 🧸\nProbabilidad de divorcio: {divorce_prob}% 📈" if language == 'es' else f"I detected a Couple! @{target_a} + @{target_b} = ❤️\n\nDynamics: {ship_dynamic}\nChildren: {children_quantity} 🧸\nChance of divorce: {divorce_prob}% 📈"
+    ctx = {
+        "target_a": target_a,
+        "target_b": target_b,
+        "ship_dynamic": ship_dynamic,
+        "children_count": children_quantity,
+        "divorce_prob": divorce_prob
+    }
+    text = i18n.get("ship", lang=language, **ctx)
     send_message(cookiebot, chat_id, text, msg)

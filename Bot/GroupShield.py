@@ -15,6 +15,7 @@ from captcha.image import ImageCaptcha
 import cv2
 import numpy as np
 from PIL import ImageFont, ImageDraw, Image
+from loc import i18n
 
 captcha = ImageCaptcha()
 recently_kicked_checkhuman = {}
@@ -49,7 +50,7 @@ def rules_message(cookiebot, msg, chat_id, language):
     send_chat_action(cookiebot, chat_id, 'typing')
     rules = get_request_backend(f"rules/{chat_id}")
     if (type(rules) is str and not len(rules)) or ('error' in rules and rules['error'] == "Not Found"):
-        text = "Ainda não há regras colocadas para esse grupo\n<blockquote> Se você é um admin e quer colocar regras, use /novasregras </blockquote>" if language == 'pt' else "Aún no hay reglas colocadas para este grupo\n<blockquote> Si eres un admin y quieres poner reglas, usa /novasregras </blockquote>" if language == 'es' else "There are no rules set for this group yet\n<blockquote> If you are an admin and want to set rules, use /newrules </blockquote>"
+        text = i18n.get("no_rules", lang=language)
         send_message(cookiebot, chat_id, text, msg, language)
     else:
         regras = rules['rules'].replace('\\n', '\n')
@@ -57,7 +58,7 @@ def rules_message(cookiebot, msg, chat_id, language):
         if not len(regras):
             return
         if not regras.endswith("@MekhyW"):
-            additional = "\n\nDúvidas em relação ao bot? Mande para @MekhyW" if language == 'pt' else "\n\n¿Preguntas sobre el bot? Envíalo a @MekhyW" if language == 'es' else "\n\nQuestions about the bot? Send to @MekhyW"
+            additional = i18n.get("questions", lang=language)
             regras += additional
         cookiebot.sendMessage(chat_id, regras, reply_to_message_id=msg['message_id'])
 
@@ -132,7 +133,7 @@ def check_raid(cookiebot, msg, chat_id, language):
             except Exception as e:
                 print(f"Failed to ban user {uid}: {e}")
         join_tracker[chat_id] = []
-        text = "🚨 Detected and blocked a raid attempt! Multiple users tried joining simultaneously (if it didn't work, check my admin permissions)." if language == 'eng' else "🚨 Detectei e bloqueei uma tentativa de raid! Vários usuários tentaram entrar simultaneamente (se não funcionar, verifique minhas permissões de administrador)." if language == 'pt' else "🚨 ¡Detecté y bloqueé un intento de raid! Varios usuarios intentaron unirse simultáneamente (Si no funcionó, verifique mis permisos de administrador)."
+        text = i18n.get("blocked_raid", lang=language)
         send_message(cookiebot, chat_id, text)
         return True
 
@@ -145,23 +146,21 @@ def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alterna
         try:
             cookiebot.restrictChatMember(chat_id, user['id'], permissions={'can_send_messages': True, 'can_send_media_messages': True, 'can_send_other_messages': True, 'can_add_web_page_previews': True})
             cookiebot.restrictChatMember(chat_id, user['id'], permissions={'can_send_messages': True, 'can_send_media_messages': False, 'can_send_other_messages': False, 'can_add_web_page_previews': False}, until_date=int(time.time() + limbotimespan))
-            text = f"ATENÇÃO! Suas mídias estão restritas por <b> {round(limbotimespan/60)} minutos </b>. Por favor se apresente e se enturme na conversa com os membros.\n<blockquote> Aperte o botão abaixo ou use o /regras para ver as regras do grupo </blockquote>" if language == 'pt' else f"¡ATENCIÓN! Sus medios están restringidos por <b> {round(limbotimespan/60)} minutos </b>. Por favor, preséntese y entérmese en la conversación con los miembros.\n<blockquote> Presione el botón de abajo o use el /regras para ver las reglas del grupo </blockquote>" if language == 'es' else f"ATTENTION! Your media is restricted for <b> {round(limbotimespan/60)} minutes </b>. Please introduce yourself and get to know the members in the conversation.\n<blockquote> Press the button below or use /rules to see the group rules </blockquote>"
+            text = i18n.get("restrict_message", lang=language, time = round(limbotimespan/60))
             send_message(cookiebot, chat_id, text, language=language)
         except Exception as e:
             print(e)
     welcome = get_request_backend(f'welcomes/{chat_id}')
     if type(welcome) is str or (type(welcome) is not str and 'error' in welcome and welcome['error'] == "Not Found") or 'message' not in welcome:
-        if language == 'pt':
-            welcome = f"Olá! As boas-vindas ao grupo {msg['chat']['title']}!" if 'chat' in msg and 'title' in msg['chat'] else "Olá! As boas-vindas ao grupo!"
-        elif language == 'es':
-            welcome = f"¡Hola! Bienvenido al grupo {msg['chat']['title']}!" if 'chat' in msg and 'title' in msg['chat'] else "¡Hola! Bienvenido al grupo!"
+        if 'chat' in msg and 'title' in msg['chat']:
+            welcome = i18n.get("welcome_user", lang=language,user = msg['chat']['title'])
         else:
-            welcome = f"Hello! Welcome to the group {msg['chat']['title']}!" if 'chat' in msg and 'title' in msg['chat'] else "Hello! Welcome to the group!"
+            welcome = i18n.get("welcome", lang=language)
     elif len(welcome['message']) > 0:
         welcome = welcome['message'].replace('\\n', '\n')
         welcome = substitute_user_tags(welcome, msg)
     try:
-        rulesbuttontext = {'pt': 'Veja as Regras!', 'es': 'Ver las Reglas!'}.get(language, 'See the Rules!')
+        rulesbuttontext = i18n.get("rules", lang=language)
         welcome_card_image = welcome_card(cookiebot, msg, chat_id, language, is_alternate_bot)
         send_photo(cookiebot, chat_id, welcome_card_image, caption=welcome, reply_markup=InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text=rulesbuttontext,callback_data=f'RULES {language}')]]))
     except Exception as e:
@@ -183,7 +182,7 @@ def check_human(cookiebot, msg, chat_id, language):
         userphotos = cookiebot.getUserProfilePhotos(user_id)
         if userphotos['total_count'] == 0:
             cookiebot.kickChatMember(chat_id, user_id)
-            text = "Kickei o novo usuário por <b> suspeita de ser um robô </b>\n<blockquote> Se isso foi um erro, peça para ele adicionar um username (@) ou foto de perfil e um ADM adicioná-lo de volta </blockquote>" if language == 'pt' else "Eché al nuevo usuario por <b> sospecha de ser un robot </b>\n<blockquote> Si esto fue un error, pídale que agregue un nombre de usuario (@) o una foto de perfil y un ADM lo agregue nuevamente </blockquote>" if language == 'es' else "Kicked the new user for <b> suspicion of being a bot </b>\n<blockquote> If this was a mistake, ask them to add a username (@) or profile picture and an ADM to add them back </blockquote>"
+            text = i18n.get("kick", lang=language)
             send_message(cookiebot, chat_id, text)
             timer_unban = threading.Timer(30, cookiebot.unbanChatMember, [chat_id, user_id])
             timer_unban.start()
@@ -199,7 +198,7 @@ def check_cas(cookiebot, msg, chat_id, language):
         return False
     if in_banlist:
         ban_and_blacklist(cookiebot, chat_id, msg['new_chat_participant']['id'])
-        text = "Bani o usuário recém-chegado por <b> ser flagrado pelo sistema anti-spam CAS (https://cas.chat/) </b>" if language == 'pt' else "Eché al nuevo usuario por <b> ser flagrado por el sistema anti-spam CAS (https://cas.chat/) </b>" if language == 'es' else "Banned the new user for <b> being flagged by the anti-spam system CAS (https://cas.chat/) </b>"
+        text = i18n.get("ban_cas", lang=language)
         send_message(cookiebot, chat_id, text)
         return True
     return False
@@ -210,7 +209,7 @@ def check_banlist(cookiebot, msg, chat_id, language):
     fullname = f"{msg['new_chat_participant']['first_name']} {msg['new_chat_participant']['last_name']}" if 'last_name' in msg['new_chat_participant'] else msg['new_chat_participant']['first_name']
     if ('id' in is_blacklisted and is_blacklisted['id'] == str(msg['new_chat_participant']['id'])) or ('id' in is_blacklisted_username and is_blacklisted_username['id'] == msg['new_chat_participant']['username']) or '卐' in fullname:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        text = "Bani o usuário recém-chegado por <b> ser denunciado em outros chats </b>" if language == 'pt' else "Eché al nuevo usuario por <b> haber sido reportado en otros chats </b>" if language == 'es' else "Banned the new user for <b> being reported in other chats </b>"
+        text = i18n.get("ban", lang=language)
         send_message(cookiebot, chat_id, text)
         return True
     return False
@@ -220,7 +219,7 @@ def check_banlist_public(cookiebot, msg, chat_id, language):
     raider = json.loads(is_blacklisted.text.replace('""', '"'))['raider']
     if raider:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
-        text = "Bani o usuário recém-chegado por <b> ser denunciado em outros chats </b>" if language == 'pt' else "Eché al nuevo usuario por <b> haber sido reportado en otros chats </b>" if language == 'es' else "Banned the new user for <b> being reported in other chats </b>"
+        text = i18n.get("ban", lang=language)
         send_message(cookiebot, chat_id, text)
         return True
     return False
@@ -238,7 +237,7 @@ def captcha_message(cookiebot, msg, chat_id, captchatimespan, language):
     password = random.choice(caracters)+random.choice(caracters)+random.choice(caracters)+random.choice(caracters)
     captcha.write(password, 'CAPTCHA.png')
     with open('CAPTCHA.png', 'rb') as photo:
-        caption = f"⚠️{msg['new_chat_participant']['first_name']}, Digite o código OU aperte o botão⚠️\n\nVocê tem {round(captchatimespan/60)} minutos, se não resolver nesse tempo te removerei do chat ⏳\n(Se não aparecem 4 digitos, abra a foto completa)" if language == 'pt' else f"⚠️{msg['new_chat_participant']['first_name']}, Escribe el código O presiona el botón⚠️\n\nTienes {round(captchatimespan/60)} minutos, si no lo resuelves en este tiempo te eliminaré del chat ⏳\n(Si no aparecen 4 dígitos, abre la foto completa)" if language == 'es' else f"⚠️{msg['new_chat_participant']['first_name']}, Type the code OR press the button⚠️\n\nYou have {round(captchatimespan/60)} minutes, if you don't solve it in this time I'll remove you from the chat ⏳\n(If 4 digits don't appear, open the full photo)"
+        caption = i18n.get("captcha.title", lang=language, name = msg['new_chat_participant']['first_name'], time = round(captchatimespan/60))
         captchaspawnID = send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg, reply_markup = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="ADMINS: Approve",callback_data=f'CAPTCHAAPPROVE {language} 0')],
             [InlineKeyboardButton(text="I'm not a Robot!",callback_data=f'CAPTCHASELF {language} {msg["new_chat_participant"]["id"]}')]
@@ -283,17 +282,21 @@ def check_captcha(cookiebot, msg, chat_id, captchatimespan, language):
                 _, _, _, captchasettime, chat, user, _, captcha_id, attempts = parse_line_captcha(line)
                 if chat == chat_id and (captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) or attempts <= 0):
                     if attempts <= 0:
-                        reason = "exceder o limite de tentativas para resolver o captcha" if language == 'pt' else "exceder el límite de intentos para resolver el captcha" if language == 'es' else "exceed the limit of attempts to solve the captcha"
+                        reason = i18n.get("captcha.limit", lang=language)
                     else:
-                        reason = "não solucionar o captcha a tempo" if language == 'pt' else "no solucionar el captcha a tiempo" if language == 'es' else "not solving the captcha in time"
+                        reason = i18n.get("captcha.time", lang=language)
+                    ctx= {
+                        "user": user,
+                        "reason": reason
+                    }
                     try:
                         cookiebot.kickChatMember(chat_id, user)
-                        text = f"Kickei o usuário com id <b> {user} </b> por <b> {reason} </b>.\n<blockquote> Se isso foi um erro, peça para um staff adicioná-lo de volta </blockquote>" if language == 'pt' else f"Eché al usuario con id <b> {user} </b> por <b> {reason} </b>.\n<blockquote> Si esto fue un error, pídale a un staff que lo agregue de nuevo </blockquote>" if language == 'es' else f"Kicked user with ID <b> {user} </b> for <b> {reason} </b>\n<blockquote> If this was a mistake, ask a staff to add them back </blockquote>"
+                        text = i18n.get("captcha.kick", lang=language, **ctx)
                         send_message(cookiebot, chat_id, text)
                         timer_unban = threading.Timer(30, cookiebot.unbanChatMember, [chat_id, user])
                         timer_unban.start()
                     except Exception as e:
-                        text = f"Erro ao kickar o usuário com id <b> {user} </b> por <b> {reason} </b>.\n<blockquote> Usuário não está mais no chat, ou não tenho permissão para kickar </blockquote>" if language == 'pt' else f"Error kicking user with ID <b> {user} </b> for <b> {reason} </b>\n<blockquote> User is no longer in the chat, or I don't have permission to kick </blockquote>" if language == 'es' else f"Error kicking user with ID <b> {user} </b> for <b> {reason} </b>\n<blockquote> User is no longer in the chat, or I don't have permission to kick </blockquote>"
+                        text = i18n.get("captcha.error_kick", lang=language, **ctx)
                         send_message(cookiebot, chat_id, text)
                     delete_message(cookiebot, (str(chat), str(captcha_id)))
                 elif chat == chat_id and user == msg['from']['id']:

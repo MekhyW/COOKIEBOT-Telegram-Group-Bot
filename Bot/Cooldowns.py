@@ -1,6 +1,7 @@
 import datetime
 from universal_funcs import send_message, delete_message
 import telepot
+from loc import i18n
 MAX_CONSECUTIVE_RESPONSES_AI = 7
 MAX_IMAGE_SEARCHES_DAILY = 180
 MAX_IMAGE_SEARCHES_DAILY_PER_USER = 15
@@ -14,7 +15,7 @@ def sticker_anti_spam(cookiebot, msg, chat_id, stickerspamlimit, language):
     else:
         last_used = int(last_used_sticker[chat_id]) + 1
         if last_used == int(stickerspamlimit):
-            text = "Cuidado com o flood de stickers" if language == 'pt' else "Cuidado con las inundaciones de stickers" if language == 'es' else "Be careful with sticker flood"
+            text = i18n.get("flood_stickers", lang=language)
             send_message(cookiebot, chat_id, text, msg)
         if int(last_used) > int(stickerspamlimit):
             delete_message(cookiebot, telepot.message_identifier(msg))

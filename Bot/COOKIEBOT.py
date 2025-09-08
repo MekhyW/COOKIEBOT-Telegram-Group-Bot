@@ -19,6 +19,7 @@ from UserRegisters import *
 from Birthdays import *
 from Giveaways import *
 from Server import *
+from loc import i18n
 
 if len(sys.argv) < 2:
     print("Usage: python COOKIEBOT.py [is_alternate_bot (int)]")
@@ -62,7 +63,7 @@ def thread_function(msg):
             return
         if chat_type == 'private':
             if 'text' not in msg:
-                send_message(cookiebot, chat_id, "This is a private chat, send a message in a group chat to use me!", msg)
+                send_message(cookiebot, chat_id, i18n.get("private_chat", lang="en"), msg)
                 return
             if msg['text'].startswith("/start"):
                 set_private_commands(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
@@ -118,13 +119,13 @@ def thread_function(msg):
                 send_message(cookiebot, ownerID, f"Added\n{chatinfo}")
                 if not is_alternate_bot:
                     cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
-                    caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /novobemvindo e /novasregras para alterar as mensagens de boas-vindas e regras\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e novas features virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW")
+                    caption= i18n.get("caption", lang=language))
                 if 'language_code' in msg['from']:
                     set_language(cookiebot, msg, chat_id, msg['from']['language_code'])
                     get_config(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
             elif msg['from']['id'] != msg['new_chat_participant']['id']:
                 if msg['new_chat_participant']['is_bot']:
-                    text = "Um novo companheiro bot foi adicionado!\n<blockquote> Caso algum comando entre em conflito, fale com o Mekhy </blockquote>" if language == 'pt' else "¡Un nuevo compañero bot ha sido agregado!\n<blockquote> Si algún comando entra en conflicto, hable con el Mekhy </blockquote>" if language == 'es' else "A new bot companion has been added!\n<blockquote> If any command conflicts, talk to Mekhy </blockquote>"
+                    text = i18n.get("new_bot_participant", lang=language)
                     send_message(cookiebot, chat_id, text, msg)
                 else:
                     welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=is_alternate_bot)
@@ -177,7 +178,7 @@ def thread_function(msg):
                     return
                 if msg['text'].startswith("/start@CookieMWbot") or msg['text'].startswith("/start@MekhysBombot"):
                     cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
-                    caption="Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW",
+                    caption= i18n.get("caption", lang=language),
                     reply_to_message_id=msg['message_id'])
                 elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
                     leave_and_blacklist(cookiebot, chat_id)
@@ -186,7 +187,7 @@ def thread_function(msg):
                 elif msg['text'].startswith(("/reload", "/recarregar")):
                     get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     get_config(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
-                    text = "Memória recarregada com sucesso!" if language == 'pt' else "¡Memoria recargada con éxito!" if language == 'es' else "Memory reloaded successfully!"
+                    text = i18n.get("reload", lang=language)
                     send_message(cookiebot, chat_id, text, msg)
                 elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
                     analyze(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
@@ -274,7 +275,7 @@ def thread_function(msg):
                     if remaining_image_searches[msg['from']['id']]['remaining'] >= 0 and remaining_image_searches['total_remaining']['remaining'] >= 0:
                         qualquer_coisa(cookiebot, msg, chat_id, sfw, language)
                     else:
-                        text = "Limite de buscas de imagens atingido" if language == 'pt' else "Límite de búsquedas de imágenes alcanzado" if language == 'es' else "Image search limit reached"
+                        text = i18n.get("image_limit", lang=language)
                         send_message(cookiebot, chat_id, text, msg)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and msg['reply_to_message']['text'] == "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone joins the group.\n\nYou can include <user> to be replaced with the user name":
                 listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
@@ -374,7 +375,7 @@ def thread_function_query(msg):
                 origin_chat_id = query_data.split()[4]
                 post_request_backend(f'blacklist/{targetid}')
                 send_message(cookiebot, ownerID, f"Blacklisted {targetid}")
-                text = f"Conta com ID {targetid} marcada como spam\n<blockquote> Obrigado pela denúncia! </blockquote>" if language == 'pt' else f"Cuenta con ID {targetid} marcada como spam\n<blockquote> ¡Gracias por la denuncia! </blockquote>" if language == 'es' else f"Account with ID {targetid} marked as spam\n<blockquote> Thank you for the report! </blockquote>"
+                text = i18n.get("account_report", lang=language,targetid=targetid)
                 send_message(cookiebot, origin_chat_id, text)
             delete_message(cookiebot, telepot.message_identifier(msg['message']))
         elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(ownerID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
@@ -390,7 +391,7 @@ def thread_function_query(msg):
             if yesno == 'Yes':
                 call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id)
             else:
-                text = "Comando cancelado" if language == 'pt' else "Comando cancelado" if language == 'es' else "Command canceled"
+                text = i18n.get("canceled", lang=language)
                 send_message(cookiebot, chat_id, text)
         elif query_data.startswith('RULES'):
             if (datetime.datetime.now(datetime.timezone.utc).timestamp() - msg['message']['date']) < 600:

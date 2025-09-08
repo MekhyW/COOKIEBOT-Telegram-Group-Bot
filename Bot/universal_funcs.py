@@ -343,3 +343,9 @@ def emojis_to_numbers(text):
     numbers = {'0️⃣': '0', '1️⃣': '1', '2️⃣': '2', '3️⃣': '3', '4️⃣': '4', '5️⃣': '5', '6️⃣': '6', '7️⃣': '7', '8️⃣': '8', '9️⃣': '9'}
     pattern = re.compile('|'.join(map(re.escape, numbers.keys())))
     return pattern.sub(lambda x: numbers[x.group()], text)
+
+def normalize_lang(code: str | None) -> str:
+    if not code:
+        return "eng"
+    code = code.lower().replace("_", "-")
+    return code.split("-")[0]
