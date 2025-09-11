@@ -44,7 +44,7 @@ def get_user_info(cookiebot, msg, chat_id, user_id, username, first_name, last_n
         response = requests.post(spampouncer_url, data=request_body_bytes, headers={"Content-Type": "application/json", "Authorization": f"HMAC {hmac.new(spampouncer_key.encode('utf-8'), request_body_bytes, hashlib.sha256).hexdigest()}"})
         if 'result' in response.json() and response.json()['result'] == 'spam':
             try:
-                cookiebot.kickChatMember(chat_id, user_id)
+                cookiebot.kickChatMember(chat_id, int(user_id))
                 cookiebot.deleteMessage(telepot.message_identifier(msg))
                 send_message(cookiebot, chat_id, f"Spam message detected. User banned", msg)
             except:
