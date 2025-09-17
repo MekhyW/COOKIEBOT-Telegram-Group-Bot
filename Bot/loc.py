@@ -149,7 +149,7 @@ fallback = {
 }
 
 i18n = Localizer(
-    base_dir="./Bot/Static/locales",
+    base_dir="./Static/locales",
     filename="lib.json",
     default_lang="eng",
     fallback=fallback,
