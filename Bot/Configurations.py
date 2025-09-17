@@ -76,8 +76,8 @@ def get_admins(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
     return listaadmins, listaadmins_id, listaadmins_status
 
 def set_language_commands(cookiebot, chat_id, chat_to_alter, language, is_alternate_bot=0, silent=False):
-    wait_open(f"Static/Cookiebot_functions_{language}.txt")
-    with open(f"Static/Cookiebot_functions_{language}.txt", "r", encoding='utf8') as text_file:
+    wait_open(f"Static/locates/{language}/Cookiebot_functions.txt")
+    with open(f"Static/locates/{language}/Cookiebot_functions.txt", "r", encoding='utf8') as text_file:
         lines = text_file.readlines()
     comandos = []
     for line in lines:

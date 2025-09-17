@@ -13,7 +13,7 @@ import numpy as np
 def birthday(cookiebot, current_date_utc, msg=None, manual_chat_id=None, language=None):
     current_date_formatted = datetime.datetime.fromtimestamp(current_date_utc, tz=datetime.timezone.utc).strftime('%Y-%m-%d')
     if manual_chat_id and len(msg['text'].split()) == 1:
-        text = "Você precisa digitar os usernames dos aniversariantes de hoje!" if language == 'pt' else "¡Debes ingresar los nombres de usuario de las personas que cumplen años hoy!" if language == 'es' else "You need to type the usernames of today's birthday people!"
+        text = i18n.get("bday.title", lang=language)
         send_message(cookiebot, manual_chat_id, text, msg)
         return
     bd_users = get_request_backend(f"users?birthdate={current_date_formatted}")
@@ -96,18 +96,12 @@ def make_birthday_caption(bd_users_in_group, current_date_formatted):
     for index in range(len(bd_users_in_group)):
         users_str += " e " if index > 0 else ""
         users_str += f"@{bd_users_in_group[index]['username']}" if 'username' in bd_users_in_group[index] else f"{bd_users_in_group[index]['firstName']} {bd_users_in_group[index]['lastName']}"
-    caption = random.choice([f'WOW! Hoje é o aniversário de {users_str} :000 parabéns por essa data tão especial e que seu dia seja cheio de fofuras e muitos uwu',
-                             f'Hoje é o melhor dia do ano! Sabe pq? Pq é o dia do bolo de {users_str}! Não deixem de encher o bucho com muito bolo e salgadinhos ^^',
-                             f'Awooo! Hoje é um dia especial porque é o aniversário de {users_str}! 🥳 Que seu dia seja recheado de fofuras, abraços quentinhos e muitos momentos incríveis! UwU 🎂✨',
-                             f'MIAU! 🎉 Hoje é dia de festa, pois {users_str} completa(m) mais um ano de fofura! Que seu dia seja tão incrível quanto um abraço de um fur amigo! 🐾💖',
-                             f'OMG!! 🦊💖 Hoje é o aniversário de {users_str}! Que seu dia seja recheado de carinho, abraços peludos e montanhas de bolo! 🎂🥰',
-                             f'AAAAH! 🎊 Parabéns {users_str}! Que esse dia seja tão especial quanto você e que tenha muitas mordidinhas de carinho e ronrons! 🐾💞',
-                             f'YIP YIP! 🐺💙 Hoje o mundo brilha mais porque {users_str} está comemorando mais um ciclo de fofura! 🎂 Não se esqueça de aproveitar cada momento e comer muitos docinhos! 🍩✨'])
-    caption += f"\n\n<i> Feliz aniversário! </i>\n{current_date_formatted}"
+        caption = i18n.get_choice("bday.cta", lang=language, names=users_str)
+    caption += i18n.get("bday.closing", lang=language, date=current_date_formatted)
     return caption
 
 def next_birthdays(cookiebot, msg, chat_id, language, current_date_utc):
-    text = "PRÓXIMOS ANIVERSARIANTES (todos os grupos):\n\n"
+    text = i18n.get("bday.next", lang=language)
     for offset in range(1, 5):
         target_date = datetime.datetime.utcfromtimestamp(current_date_utc) + datetime.timedelta(days=offset)
         target_date_formatted = target_date.strftime('%Y-%m-%d')
