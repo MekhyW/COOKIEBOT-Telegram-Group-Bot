@@ -215,7 +215,7 @@ def gender(cookiebot, msg, chat_id, language):
         if registered_times == 0:
             text = i18n.get("not_know", lang=language)
             send_message(cookiebot, chat_id, text, msg)
-        else
+        else:
             ctx = {
                 "probability": probability*100,
                 "registered_times": registered_times

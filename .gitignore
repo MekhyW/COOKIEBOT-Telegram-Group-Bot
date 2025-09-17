@@ -2,4 +2,5 @@
 result-master-ptbr.csv
 .vscode*
 *.env
+*key.json
 Bot/teste.py

@@ -50,7 +50,7 @@ def giveaways_create(cookiebot, msg, n_winners, chat_id, prize):
         return
     language = get_config(cookiebot, chat_id)[7]
     ctx = {
-        "prize" = prize,
+        "prize": json.loads(prize),
         "win": n_winners,
         "date": datetime.datetime.now().strftime(i18n.get("giveaway.strftime", lang=language))
     }
@@ -159,7 +159,7 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
         cookiebot.answerCallbackQuery(msg['id'], text=text)
         delete_message(cookiebot, telepot.message_identifier(msg['message']))
     except Exception as e:
-         = i18n.get("giveaway.end_error", lang=language)
+        text = i18n.get("giveaway.end_error", lang=language)
         cookiebot.answerCallbackQuery(msg['id'], text=text)
 
 def giveaways_delete(cookiebot, msg, chat_id):
