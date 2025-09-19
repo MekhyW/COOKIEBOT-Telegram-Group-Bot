@@ -13,7 +13,7 @@ sudo apt-get install git-all -y
 sudo apt install python3.11 -y
 sudo apt install python3-pip -y
 sudo apt install ffmpeg -y
-sudo apt-get install libmagickwand-dev -y
+sudo apt-get install imagemagick libmagickwand-dev -y
 sudo apt-get install screen -y
 sudo apt install fail2ban -y
 git clone https://github.com/MekhyW/COOKIEBOT-Telegram-Group-Bot.git
@@ -110,3 +110,4 @@ python3.11 LAUNCHER.py [is_alternate_bot (int)] # Run with process monitoring
 python3.11 COOKIEBOT.py [is_alternate_bot (int)] # Run without process monitoring
 # Press CTRL+A+D to detach from the screen
 ```
+
