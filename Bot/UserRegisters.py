@@ -242,8 +242,9 @@ def shipp(cookiebot, msg, chat_id, language, is_alternate_bot=0):
         "target_a": target_a,
         "target_b": target_b,
         "ship_dynamic": ship_dynamic,
-        "children_count": children_quantity,
+        "children_quantity": children_quantity,
         "divorce_prob": divorce_prob
     }
     text = i18n.get("ship", lang=language, **ctx)
     send_message(cookiebot, chat_id, text, msg)
+
