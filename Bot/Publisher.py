@@ -249,8 +249,11 @@ def schedule_post(cookiebot, query_data):
         if (not publisherpost) or (has_nsfw == '1' and sfw):
             continue
         if publisher_members_only:
-            members = get_members_chat(cookiebot, group['id'])
-            if origin_user is None or origin_user['username'] not in str(members):
+            try:
+                members = get_members_chat(cookiebot, group['id'])
+                if origin_user is None or origin_user['username'] not in str(members):
+                    continue
+            except Exception:
                 continue
         try:
             num_posts_for_group = 0
