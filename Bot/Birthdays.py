@@ -9,6 +9,7 @@ from Configurations import get_config
 from SocialContent import get_profile_image
 import cv2
 import numpy as np
+from loc import i18n
 
 def birthday(cookiebot, current_date_utc, msg=None, manual_chat_id=None, language=None):
     current_date_formatted = datetime.datetime.fromtimestamp(current_date_utc, tz=datetime.timezone.utc).strftime('%Y-%m-%d')
@@ -112,4 +113,5 @@ def next_birthdays(cookiebot, msg, chat_id, language, current_date_utc):
         if not len(bd_users):
             text += "- \n"
         text += "\n"
+
     send_message(cookiebot, chat_id, text)
