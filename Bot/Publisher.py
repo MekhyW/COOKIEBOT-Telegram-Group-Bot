@@ -340,7 +340,7 @@ def scheduler_pull(cookiebot, is_alternate_bot=0):
         try:
             group_id = str(job['target_chat_id'])
             config = get_config(cookiebot, group_id)
-            if not config[8]:
+            if not config or not config[8]:
                 delete_job(job['name'])
                 continue
             origin_messageid = str(job['postmail_message_id'])
