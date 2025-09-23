@@ -46,7 +46,7 @@ def birthday(cookiebot, current_date_utc, msg=None, manual_chat_id=None, languag
         #    cookiebot.unpinChatMessage(group['id'], chatinfo['pinned_message']['message_id'])
         if (len(bd_users_in_group) and not is_new_birthday_pinned) or manual_chat_id:
             collage_image = make_birthday_collage(bd_users_in_group)
-            collage_caption = make_birthday_caption(bd_users_in_group, current_date_formatted)
+            collage_caption = make_birthday_caption(bd_users_in_group, current_date_formatted, language)
             with open(collage_image, 'rb') as final_img:
                 collage_message_id = send_photo(cookiebot, group['id'], final_img, caption=collage_caption, language=language)
             try:
@@ -92,7 +92,7 @@ def make_birthday_collage(bd_users_in_group):
     cv2.imwrite("birthday.png", confetti)
     return "birthday.png"
 
-def make_birthday_caption(bd_users_in_group, current_date_formatted):
+def make_birthday_caption(bd_users_in_group, current_date_formatted, language):
     users_str = ""
     for index in range(len(bd_users_in_group)):
         users_str += " e " if index > 0 else ""
