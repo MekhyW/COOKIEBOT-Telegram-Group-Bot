@@ -3,6 +3,7 @@ import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 import time, datetime, requests, os
 from threading import Semaphore
+from loc import i18n
 
 bloblist_chatpfp = list(storage_bucket_public.list_blobs(prefix="chatpfp"))
 cache_configurations = {}
@@ -76,9 +77,7 @@ def get_admins(cookiebot, chat_id, ignorecache=False, is_alternate_bot=0):
     return listaadmins, listaadmins_id, listaadmins_status
 
 def set_language_commands(cookiebot, chat_id, chat_to_alter, language, is_alternate_bot=0, silent=False):
-    wait_open(f"Static/locates/{language}/Cookiebot_functions.txt")
-    with open(f"Static/locates/{language}/Cookiebot_functions.txt", "r", encoding='utf8') as text_file:
-        lines = text_file.readlines()
+    lines = i18n.get_file("Cookiebot_functions.txt", lang=language)
     comandos = []
     for line in lines:
         if " - " in line:
@@ -282,3 +281,4 @@ def update_rules_message(cookiebot, msg, chat_id, listaadmins_id, is_alternate_b
 def new_rules_message(cookiebot, msg, chat_id):
     send_chat_action(cookiebot, chat_id, 'typing')
     cookiebot.sendMessage(chat_id, "If you are an admin, REPLY THIS MESSAGE with the message that will be displayed when someone asks for the rules", reply_to_message_id=msg['message_id'])
+
