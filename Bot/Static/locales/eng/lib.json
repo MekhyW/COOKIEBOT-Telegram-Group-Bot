@@ -112,14 +112,14 @@
         "fursmeet": {
             "name": "FurSMeet %(year)s",
             "cta": [
-                "O FurSMeet é uma convenção furry de 3 dias realizada em Santa Maria no Rio grande do Sul.Venha viver novas experiências, fazer amigos e se divertir muito no FurSMeet!",
-                "A oportunidade perfeita para se conectar com outros furries, participar de atividades emocionantes e criar memórias que durarão para sempre!",
-                "O objetivo do evento é reunir amantes da cultura antropomórfica da região Sul e de todo o Brasil para fazer novos amigos e viver grandes momentos!",
-                "Nós não lucramos com o evento e pretendemos ajudar futuramente instituições carentes doando o dinheiro que sobra do evento.",
-                "Por ainda ser um evento pequeno e termos opções de infraestrutura limitadas em Santa Maria, todo o valor do ingresso é investido no hotel, decorações e brindes sem sobrar dinheiro para doar por uma causa.",
-                "O Capibára pode ter essa fuça de gaúcho rabugento, mas tem um coração grande que nem o Rio Grande do Sul. Assim como qualquer capivara ele faz amizade com qualquer um! Pode ser um gato ou um jacaré, qualquer furry é bem vindo para ser seu amigo.",
-                "Um bom gaúcho sempre anda bem pilchado, então Capibára não dispensa sua boina, seu lenço e sua faixa pampa da cintura! Para completar ele não larga seu mate de jeito nenhum!",
-                "A primeira convenção furry no sul do Brasil está voltando com mais uma edição! O vale dos dinossauros aguarda você para uma aventura jurássica!! 🦖🦕"
+                "Mas bá, guri! Dá um chego aqui no FurSMeet! É aqui no Rio Grande do Sul, em Santa Maria! Vem conhecer um pessoal tri legal e fazer festa!",
+    			"Assim, ó: Tu tens agora a oportunidade perfeita para te conectar com outros furries e criar memórias pra tu contar mais pra frente na vida.",
+    			"Nosso objetivo é reunir amantes da cultura antropomórfica da região Sul e de todo o Brasil e criar grandes memórias. Vem ser um bichinho colorido com a gente!", 
+    			"Ó, tchê: Lucro do evento não fica com a gente. É reservado pros próximos eventos e pretendemos começar a ajudar instituições carentes com doações! Tu vem, te diverte e ainda ajuda uma boa causa.",
+    			"Aproveita, piá. Rateia, não. Esse é o último evento antes do hiato. Te apruma e separa uns pila pra ir porque a gente não sabe quando vamos ter o próximo. Se te falta motivo pra ir, lembra que a gente tem chimarrão!",
+    			"O Capibára pode ter essa fuça de chinelo, mas tem um coração grande que nem o Rio Grande do Sul. Tchê, ele faz amizade com qualquer um; não importa se é cusco ou se é jacaré. E quanto mais colorido, melhor.",
+    			"Pozólha, este ano a gente tem umas participações tri legais! Ainda mais nesses erre pê gê aí que os guri jogam hoje, os cusco tão tudo louco. Bá, meu, vai ser de cair os butiá dos bolso!",
+    			"Ôôôôô piá, tu curte RPG? Tu curte chimarrão? Tu curte evento de bichinho colorido? Bora ir num evento furry tematizado nisso! Que tal? Ali em Santa Maria, no Rio Grande do Sul, meu!"
             ],
             "caption": "%(headline)s\n\n%(cta_line)s\n\n%(when_line)s\n%(where_line)s\n🎫 Ingressos: fursmeet.carrd.co\n%(links_line)s"
         },
@@ -240,4 +240,5 @@
         "next": "UPCOMING BIRTHDAYS (all groups):\n\n"
     },
     "dummy": "DO NOT USE ME"
+
 }
