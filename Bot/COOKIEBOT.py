@@ -1,5 +1,5 @@
-from threading import Thread, Lock, Timer
-from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from threading import Lock, Timer
+from concurrent.futures import ThreadPoolExecutor
 import gc
 import sys
 import traceback
@@ -31,7 +31,6 @@ current_date_utc = None
 current_date_mutex = Lock()
 is_alternate_bot = int(sys.argv[1])
 furbots_cmds = [x.strip() for x in open("Static/FurBots_functions.txt", "r+", encoding='utf-8').readlines()]
-unnatended_threads = list()
 IGNORED_MSG_TYPES = {
     'dice', 'poll', 'voice_chat_started', 'voice_chat_ended', 
     'video_chat_scheduled', 'video_chat_started', 'video_chat_ended',
@@ -41,7 +40,10 @@ IGNORED_MSG_TYPES = {
     'chat_boost', 'removed_chat_boost', 'message_auto_delete_timer_changed'
 }
 MAX_THREADS = 50
-THREAD_TIMEOUT = 15
+DEDUP_MAX_SIZE = 10000 # Deduplication caches to avoid re-processing the same update under retries
+dedup_mutex = Lock()
+processed_message_ids = set()
+processed_callback_ids = set()
 executor = ThreadPoolExecutor(max_workers=MAX_THREADS)
 cookiebot = telepot.Bot(get_bot_token(is_alternate_bot))
 myself = cookiebot.getMe()
@@ -58,6 +60,15 @@ def thread_function(msg):
         if any(key in msg for key in IGNORED_MSG_TYPES):
             return
         content_type, chat_type, chat_id = telepot.glance(msg)
+        message_id = msg.get('message_id')
+        if message_id is not None:
+            with dedup_mutex:
+                if len(processed_message_ids) >= DEDUP_MAX_SIZE:
+                    processed_message_ids.clear()
+                key = (chat_id, message_id)
+                if key in processed_message_ids:
+                    return
+                processed_message_ids.add(key)
         print(content_type, chat_type, chat_id, msg['message_id'])
         if chat_type == 'channel':
             return
@@ -318,11 +329,7 @@ def thread_function(msg):
     except requests.exceptions.ReadTimeout:
         print("Read timeout")
     except Exception:
-        errormsg = traceback.format_exc()
-        if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
-            handle(msg)
-            return
-        send_error_traceback(cookiebot, msg, errormsg)
+        send_error_traceback(cookiebot, msg, traceback.format_exc())
     finally:
         check_new_name(cookiebot, msg, chat_id, chat_type)
         if is_alternate_bot or current_date_mutex.locked():
@@ -340,6 +347,12 @@ def thread_function_query(msg):
         if any(key in msg for key in IGNORED_MSG_TYPES):
             return
         query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
+        with dedup_mutex:
+            if len(processed_callback_ids) >= DEDUP_MAX_SIZE:
+                processed_callback_ids.clear()
+            if query_id in processed_callback_ids:
+                return
+            processed_callback_ids.add(query_id)
         print('Callback Query:', query_id, from_id, query_data)
         try:
             chat_id = msg['message']['reply_to_message']['chat']['id']
@@ -419,50 +432,20 @@ def thread_function_query(msg):
         run_unnatendedthreads()
     except Exception:
         errormsg = f"{traceback.format_exc()}"
-        if 'ConnectionResetError' in errormsg or 'RemoteDisconnected' in errormsg:
-            handle_query(msg)
-        else:
-            send_error_traceback(cookiebot, msg, errormsg)
-
-def thread_with_timeout(msg, isquery):
-    future = executor.submit(thread_function if not isquery else thread_function_query, msg)
-    try:
-        future.result(timeout = THREAD_TIMEOUT if not isquery else None)
-    except TimeoutError:
-        print("Timeout")
-    except Exception as e:
-        print(f"Error in thread: {str(e)}")
-        traceback.print_exc()
+        send_error_traceback(cookiebot, msg, errormsg)
 
 def run_unnatendedthreads():
-    num_running_threads = len([t for t in threading.enumerate() if t.is_alive() and not t.daemon])
-    for unnatended_thread in list(unnatended_threads):
-        if unnatended_thread.is_alive() and unnatended_thread in unnatended_threads:
-            unnatended_threads.remove(unnatended_thread)
-        elif num_running_threads < MAX_THREADS:
-            if unnatended_thread.is_alive():
-                continue
-            unnatended_thread.daemon = True
-            unnatended_thread.start()
-            num_running_threads += 1
-            if unnatended_thread in unnatended_threads:
-                unnatended_threads.remove(unnatended_thread)
-    if len(unnatended_threads):
-        print(f"{len(unnatended_threads)} threads are still unnatended")
+    return # No-op: executor manages concurrency; kept for compatibility with call sites
 
 def handle(msg):
     try:
-        new_thread = Thread(target=thread_with_timeout, args=(msg,False,))
-        unnatended_threads.append(new_thread)
-        run_unnatendedthreads()
+        executor.submit(thread_function, msg)
     except Exception:
         send_error_traceback(cookiebot, msg, traceback.format_exc())
 
 def handle_query(msg):
     try:
-        new_thread = Thread(target=thread_with_timeout, args=(msg,True,))
-        unnatended_threads.append(new_thread)
-        run_unnatendedthreads()
+        executor.submit(thread_function_query, msg)
     except Exception:
         send_error_traceback(cookiebot, msg, traceback.format_exc())
 
