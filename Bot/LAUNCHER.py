@@ -4,8 +4,8 @@ import time
 import psutil
 from Server import kill_api_server
 
-CPU_THRESHOLD = 80  # in percent
-MEMORY_THRESHOLD = 80  # in percent
+CPU_THRESHOLD = 70  # in percent
+MEMORY_THRESHOLD = 70  # in percent
 
 def monitor_resources(process):
     try:
