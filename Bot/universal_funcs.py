@@ -4,6 +4,7 @@ import re, html
 import traceback
 import json
 import urllib3
+from http.client import RemoteDisconnected
 from urllib.parse import quote
 import requests
 from requests.auth import HTTPBasicAuth
@@ -25,6 +26,14 @@ storage_client = storage.Client()
 translate_client = translate_v2.Client()
 storage_bucket = storage_client.get_bucket("cookiebot-bucket")
 storage_bucket_public = storage_client.get_bucket("cookiebot-bucket-public")
+
+retry_exceptions = (
+    urllib3.exceptions.ProtocolError,
+    ConnectionResetError,
+    requests.exceptions.ConnectionError,
+    requests.exceptions.ReadTimeout,
+    RemoteDisconnected,
+)
 
 def get_bot_token(is_alternate_bot):
     match is_alternate_bot:
@@ -64,10 +73,11 @@ def retry_with_backoff(max_retries=3, base_delay=1):
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
+            
             for attempt in range(max_retries + 1):
                 try:
                     return func(*args, **kwargs)
-                except urllib3.exceptions.ProtocolError as e:
+                except retry_exceptions as e:
                     if attempt == max_retries:
                         cookiebot = args[0] if args else None
                         send_error_traceback(cookiebot, None, f"Max retries exceeded for {func.__name__}: {str(e)}")
@@ -151,29 +161,25 @@ def translate(text, dest='en'):
     translated = translated.replace('R $', 'R$')
     return translated
 
+@retry_with_backoff(max_retries=3, base_delay=1)
 def send_chat_action(cookiebot, chat_id, action):
-    try:
-        cookiebot.sendChatAction(chat_id, action)
-    except urllib3.exceptions.ProtocolError:
-        cookiebot.sendChatAction(chat_id, action)
+    return cookiebot.sendChatAction(chat_id, action)
 
+@retry_with_backoff(max_retries=3, base_delay=1)
 def get_media_content(cookiebot, msg, media_type, is_alternate_bot=0, downloadfile=False):
     token = get_bot_token(is_alternate_bot)
     try:
-        try:
-            file_path_telegram = cookiebot.getFile(msg[media_type]['file_id'])['file_path']
-        except TypeError:
-            file_path_telegram = cookiebot.getFile(msg[media_type][-1]['file_id'])['file_path']
-        url = f"https://api.telegram.org/file/bot{token}/{file_path_telegram}"
-        r = requests.get(url, allow_redirects=True, timeout=60)
-        if not downloadfile:
-            return r.content
-        filename = file_path_telegram.split('/')[-1]
-        with open(filename, 'wb') as f:
-            f.write(r.content)
-        return filename
-    except urllib3.exceptions.ProtocolError:
-        get_media_content(cookiebot, msg, is_alternate_bot, downloadfile)
+        file_path_telegram = cookiebot.getFile(msg[media_type]['file_id'])['file_path']
+    except TypeError:
+        file_path_telegram = cookiebot.getFile(msg[media_type][-1]['file_id'])['file_path']
+    url = f"https://api.telegram.org/file/bot{token}/{file_path_telegram}"
+    r = requests.get(url, allow_redirects=True, timeout=60)
+    if not downloadfile:
+        return r.content
+    filename = file_path_telegram.split('/')[-1]
+    with open(filename, 'wb') as f:
+        f.write(r.content)
+    return filename
 
 def send_error_traceback(cookiebot, msg, traceback_text):
     if msg:
@@ -211,8 +217,8 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
                 return cookiebot.sendMessage(chat_id, text, reply_markup=reply_markup, disable_notification=disable_notification, parse_mode=parse_mode)
             except telepot.exception.TelegramError:
                 return cookiebot.sendMessage(chat_id, text.replace('\\', '').replace('>', ''), disable_notification=disable_notification, reply_markup=reply_markup)
-    except urllib3.exceptions.ProtocolError:
-        raise
+    except retry_exceptions:
+        raise # Propagate network errors to the retry decorator
     except Exception:
         traceback_text = traceback.format_exc()
         if not 'Bad Request: PEER_ID_INVALID' in traceback_text:
@@ -238,7 +244,7 @@ def send_photo(cookiebot, chat_id, photo, caption=None, msg_to_reply=None, langu
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, parse_mode=parse_mode)
             else:
                 sentphoto = cookiebot.sendPhoto(chat_id, photo, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode=parse_mode)
-    except urllib3.exceptions.ProtocolError:
+    except retry_exceptions:
         raise
     except TelegramError:
         send_error_traceback(cookiebot, None, traceback.format_exc())
@@ -263,7 +269,7 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
                 sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, parse_mode=parse_mode)
             else:
                 sentanimation = cookiebot.sendAnimation(chat_id, animation, caption=caption, reply_to_message_id=reply_to_message_id, reply_markup=reply_markup, parse_mode=parse_mode)
-    except urllib3.exceptions.ProtocolError:
+    except retry_exceptions:
         raise
     except TelegramError:
         send_error_traceback(cookiebot, None, traceback.format_exc())

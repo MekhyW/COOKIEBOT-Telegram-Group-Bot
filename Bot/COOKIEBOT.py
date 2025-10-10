@@ -107,7 +107,6 @@ def thread_function(msg):
                 send_message(cookiebot, chat_id, "Commands must be used in a group chat!", msg)
             else:
                 pv_default_message(cookiebot, msg, chat_id, is_alternate_bot)       
-            run_unnatendedthreads()
             return
         thread_id = msg['message_thread_id'] if 'message_thread_id' in msg else None
         listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
@@ -317,7 +316,6 @@ def thread_function(msg):
                     check_captcha(cookiebot, msg, chat_id, captchatimespan, language)
         if chat_type != 'private' and content_type != "sticker":
             sticker_cooldown_updates(chat_id)
-        run_unnatendedthreads()
     except TooManyRequestsError:
         print("Too many requests")
     except BotWasBlockedError:
@@ -429,13 +427,9 @@ def thread_function_query(msg):
                 cookiebot.answerCallbackQuery(query_id, text="ERROR! please contact @MekhyW")
         else:
             cookiebot.answerCallbackQuery(query_id, text="ERROR! please contact @MekhyW")
-        run_unnatendedthreads()
     except Exception:
         errormsg = f"{traceback.format_exc()}"
         send_error_traceback(cookiebot, msg, errormsg)
-
-def run_unnatendedthreads():
-    return # No-op: executor manages concurrency; kept for compatibility with call sites
 
 def handle(msg):
     try:
