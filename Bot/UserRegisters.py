@@ -1,6 +1,6 @@
 import random
 import time
-from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, put_request_backend, delete_request_backend, ownerID, spampouncer_url, spampouncer_key
+from universal_funcs import send_chat_action, send_message, react_to_message, get_request_backend, post_request_backend, put_request_backend, delete_request_backend, delete_message, ban_and_blacklist, ownerID, spampouncer_url, spampouncer_key
 import requests
 import hmac
 import hashlib
@@ -45,11 +45,11 @@ def get_user_info(cookiebot, msg, chat_id, user_id, username, first_name, last_n
         response = requests.post(spampouncer_url, data=request_body_bytes, headers={"Content-Type": "application/json", "Authorization": f"HMAC {hmac.new(spampouncer_key.encode('utf-8'), request_body_bytes, hashlib.sha256).hexdigest()}"})
         if 'result' in response.json() and response.json()['result'] == 'spam':
             try:
-                cookiebot.kickChatMember(chat_id, int(user_id))
-                cookiebot.deleteMessage(telepot.message_identifier(msg))
-                send_message(cookiebot, chat_id, f"Spam message detected. User banned", msg)
+                delete_message(cookiebot, telepot.message_identifier(msg))
+                ban_and_blacklist(cookiebot, chat_id, user_id)
+                send_message(cookiebot, chat_id, f"Spam message detected. User banned")
             except:
-                send_message(cookiebot, chat_id, f"Spam message detected, but I don't have admin rights to kick/delete", msg)
+                send_message(cookiebot, chat_id, f"Spam message detected, but user could not be kicked")
             print(f"Spam message detected in chat {chat_id}")
             return info
         user = info
