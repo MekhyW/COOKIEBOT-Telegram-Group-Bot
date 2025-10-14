@@ -197,7 +197,7 @@ def send_message(cookiebot, chat_id, text, msg_to_reply=None, language="pt", thr
             text = translate(text, language)
         if msg_to_reply and link_preview_options:
             url = f"https://api.telegram.org/bot{get_bot_token(is_alternate_bot)}/sendMessage"
-            params = {'chat_id': chat_id, 'text': text, 'reply_markup': reply_markup, 'link_preview_options': link_preview_options, 'disable_notification': disable_notification, 'parse_mode': parse_mode}
+            params = {'chat_id': chat_id, 'text': text, 'reply_markup': reply_markup, 'link_preview_options': link_preview_options, 'disable_notification': disable_notification, 'parse_mode': parse_mode, 'reply_parameters': {'message_id': msg_to_reply['message_id']} if msg_to_reply else None}
             full_url = f"{url}?" + "&".join(f"{k}={quote(str(v))}" for k, v in params.items())
             if reply_markup is None:
                 full_url = full_url.replace('&reply_markup=None', '')
