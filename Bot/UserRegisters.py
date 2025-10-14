@@ -194,9 +194,8 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
             cookiebot.forwardMessage(ownerID, chat_id, message_id) #will error if original message is deleted
         try:
             text = i18n.get("notification_admin", lang=language, title=chat['title'])
-            send_message(cookiebot, user[0]['id'], text, parse_mode='HTML', reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-                [InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{message_id}")],
-            ]))
+            reply_markup = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Show message", url=f"https://t.me/c/{str(chat['id']).replace('-100', '')}/{message_id}")],]) if '-100' in str(chat['id']) else None
+            send_message(cookiebot, user[0]['id'], text, parse_mode='HTML', reply_markup=reply_markup)
             time.sleep(0.1)
         except Exception as e:
             pass
