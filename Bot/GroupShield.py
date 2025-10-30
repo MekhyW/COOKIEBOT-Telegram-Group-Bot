@@ -207,7 +207,7 @@ def check_banlist(cookiebot, msg, chat_id, language):
     is_blacklisted = get_request_backend(f"blacklist/{msg['new_chat_participant']['id']}")
     is_blacklisted_username = get_request_backend(f"blacklist/username/{msg['new_chat_participant']['username']}") if 'username' in msg['new_chat_participant'] else {'error': 'no username'}
     fullname = f"{msg['new_chat_participant']['first_name']} {msg['new_chat_participant']['last_name']}" if 'last_name' in msg['new_chat_participant'] else msg['new_chat_participant']['first_name']
-    if ('id' in is_blacklisted and is_blacklisted['id'] == str(msg['new_chat_participant']['id'])) or ('id' in is_blacklisted_username and is_blacklisted_username['id'] == msg['new_chat_participant']['username']) or '卐' in fullname:
+    if ('id' in is_blacklisted and is_blacklisted['id'] == str(msg['new_chat_participant']['id'])) or ('id' in is_blacklisted_username and is_blacklisted_username['id'] == msg['new_chat_participant']['username']) or any(forbidden_char in fullname for forbidden_char in ['卐','ζ','𝛇']):
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
         text = i18n.get("ban", lang=language)
         send_message(cookiebot, chat_id, text)

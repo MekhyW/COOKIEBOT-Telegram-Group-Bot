@@ -114,7 +114,7 @@ def thread_function(msg):
         if 'group_chat_created' in msg and msg['group_chat_created']:
             isCreatorBlacklisted = get_request_backend(f"blacklist/{msg['from']['id']}")
             chatinfo = cookiebot.getChat(chat_id)
-            if (not 'error' in isCreatorBlacklisted and 'id' in isCreatorBlacklisted and isCreatorBlacklisted['id'] == str(msg['from']['id'])) or len(chatinfo['title']) < 3 or '卐' in chatinfo['title']:
+            if (not 'error' in isCreatorBlacklisted and 'id' in isCreatorBlacklisted and isCreatorBlacklisted['id'] == str(msg['from']['id'])) or len(chatinfo['title']) < 3 or any(forbidden_char in chatinfo['title'] for forbidden_char in ['卐','ζ','𝛇']):
                 leave_and_blacklist(cookiebot, chat_id)
                 send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
                 return
