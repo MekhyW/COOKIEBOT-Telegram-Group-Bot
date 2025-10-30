@@ -68,7 +68,7 @@ def fix_embed_if_social_link(message: str) -> str | bool:
     for main_pattern, template, extract_pattern in transformations:
         if re.search(main_pattern, message):
             if match := re.search(extract_pattern, message):
-                if 'ddinstagram.com' in template:
+                if 'kkinstagram.com' in template:
                     path = match.group(1) + '/' + match.group(2)
                     query = message[message.find('?'):] if '?' in message else ''
                     return template.format(path) + query
