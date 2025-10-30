@@ -48,7 +48,7 @@ with open('Static/Meme/meme_metadata.csv', 'r', encoding='utf-8') as f:
 
 def fix_embed_if_social_link(message: str) -> str | bool:
     message = message.strip()
-    if any(domain in message for domain in ['vxtwitter.com', 'fxtwitter.com', 'fixupx.com', 'd.tnktok.com', 'vm.vxtiktok.com', 'ddinstagram.com', 'fxbsky.app']):
+    if any(domain in message for domain in ['vxtwitter.com', 'fxtwitter.com', 'fixupx.com', 'd.tnktok.com', 'vm.vxtiktok.com', 'ddinstagram.com', 'kkinstagram.com', 'fxbsky.app']):
         return False
     try:
         requests.get(message, timeout=2)
@@ -57,7 +57,7 @@ def fix_embed_if_social_link(message: str) -> str | bool:
     transformations = [
         (TWITTER_REGEX, "https://fixupx.com/{}", r'[^/]+/status/[0-9]+'),
         (TIKTOK_REGEX, "https://vm.vxtiktok.com/{}", r'@[^/]+/video/[0-9]+'),
-        #(INSTAGRAM_REGEX, "https://ddinstagram.com/{}", r'(reel|p)/([^?/]+)'),
+        (INSTAGRAM_REGEX, "https://kkinstagram.com/{}", r'(reel|p)/([^?/]+)'),
         (BSKY_REGEX, "https://fxbsky.app/profile/{}", r'\.app/profile/(.+)')
     ]
     if re.search(TIKTOK_REGEX, message) and re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+', message):
