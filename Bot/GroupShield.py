@@ -239,8 +239,9 @@ def captcha_message(cookiebot, msg, chat_id, captchatimespan, language):
     with open('CAPTCHA.png', 'rb') as photo:
         caption = i18n.get("captcha.title", lang=language, name = msg['new_chat_participant']['first_name'], time = round(captchatimespan/60))
         captchaspawnID = send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg, reply_markup = InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="ADMINS: Approve",callback_data=f'CAPTCHAAPPROVE {language} 0')],
-            [InlineKeyboardButton(text="I'm not a Robot!",callback_data=f'CAPTCHASELF {language} {msg["new_chat_participant"]["id"]}')]
+            [InlineKeyboardButton(text=i18n.get("captcha.button_approve", lang=language),callback_data=f'CAPTCHAAPPROVE {language} 0')],
+            [InlineKeyboardButton(text=i18n.get("captcha.button_call_admin", lang=language),callback_data=f'CAPTCHACALLADMIN {language}')],
+            [InlineKeyboardButton(text=i18n.get("captcha.button_not_robot", lang=language),callback_data=f'CAPTCHASELF {language} {msg["new_chat_participant"]["id"]}')]
         ]))
     wait_open("Captcha.txt")
     with open("Captcha.txt", 'r', encoding='utf-8') as text:

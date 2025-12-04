@@ -4,32 +4,37 @@
     "canceled": "Comando cancelado",
     "new_bot_participant": "¡Un nuevo compañero bot ha sido agregado!\n<blockquote> Si algún comando entra en conflicto, hable con el Mekhy </blockquote>",
     "restrict_message": "¡ATENCIÓN! Sus medios están restringidos por <b> %(time)s minutos </b>. Por favor, preséntese y entérmese en la conversación con los miembros.\n<blockquote> Presione el botón de abajo o use el /regras para ver las reglas del grupo </blockquote>",
-    "rules":"Ver las Reglas!",
+    "rules": "Ver las Reglas!",
     "no_rules": "Aún no hay reglas colocadas para este grupo\n<blockquote> Si eres un admin y quieres poner reglas, usa /novasregras </blockquote>",
     "questions": "\n\n¿Preguntas sobre el bot? Envíalo a @MekhyW",
-    "kick":"Eché al nuevo usuario por <b> sospecha de ser un robot </b>\n<blockquote> Si esto fue un error, pídale que agregue un nombre de usuario (@) o una foto de perfil y un ADM lo agregue nuevamente </blockquote>",
+    "kick": "Eché al nuevo usuario por <b> sospecha de ser un robot </b>\n<blockquote> Si esto fue un error, pídale que agregue un nombre de usuario (@) o una foto de perfil y un ADM lo agregue nuevamente </blockquote>",
     "ban_cas": "Eché al nuevo usuario por <b> ser flagrado por el sistema anti-spam CAS (https://cas.chat/) </b>",
     "ban": "Eché al nuevo usuario por <b> haber sido reportado en otros chats </b>",
-    "captcha":  {
-        "title": "⚠️%(name)s, Escribe el código O presiona el botón⚠️\n\nTienes %(time)s minutos, si no lo resuelves en este tiempo te eliminaré del chat ⏳\n(Si no aparecen 4 dígitos, abre la foto completa)",
+    "captcha": {
+        "title": "⚠️%(name)s, Escribe el código O presiona el botón 'No soy un robot! ⚠️\n\nTienes %(time)s minutos, si no lo resuelves en este tiempo te eliminaré del chat ⏳\n(Si no aparecen 4 dígitos, abre la foto completa)",
         "limit": "exceder el límite de intentos para resolver el captcha",
         "time": "no solucionar el captcha a tiempo",
         "kick": "Eché al usuario con id <b> %(user)s </b> por <b> %(reason)s </b>.\n<blockquote> Si esto fue un error, pídale a un staff que lo agregue de nuevo </blockquote>",
-        "error_kick": "Error kicking user with ID <b> %(user)s </b> for <b> %(reason)s </b>\n<blockquote> User is no longer in the chat, or I don't have permission to kick </blockquote>"
+        "error_kick": "Error kicking user with ID <b> %(user)s </b> for <b> %(reason)s </b>\n<blockquote> User is no longer in the chat, or I don't have permission to kick </blockquote>",
+        "button_approve": "ADMINS: Aprobar",
+        "button_call_admin": "Llamar a los admins",
+        "button_not_robot": "No soy un robot!"
     },
     "welcome_user": "¡Hola! Bienvenido al grupo %(user)s!",
     "welcome": "¡Hola! Bienvenido al grupo!",
     "image_limit": "Límite de búsquedas de imágenes alcanzado",
-    "account_report":"Cuenta con ID %(targetid)s marcada como spam\n<blockquote> ¡Gracias por la denuncia! </blockquote>",
-    "adverbial_phrases": ["Sin duda el/la",
-                        "Sin lugar a dudas el/la",
-                        "Supongo que el/la",
-                        "Apuesto a que el/la",
-                        "Quizás el/la",
-                        "Quién sabe el/la",
-                        "Aparentemente el/la"],
+    "account_report": "Cuenta con ID %(targetid)s marcada como spam\n<blockquote> ¡Gracias por la denuncia! </blockquote>",
+    "adverbial_phrases": [
+        "Sin duda el/la",
+        "Sin lugar a dudas el/la",
+        "Supongo que el/la",
+        "Apuesto a que el/la",
+        "Quizás el/la",
+        "Quién sabe el/la",
+        "Aparentemente el/la"
+    ],
     "no_ship": "¡Todavía no he visto suficientes miembros para enviar un barco!",
-    "ship":"¡Detecté una pareja! @%(target_a)s + @%(target_b)s = ❤️\n\nDinámica: %(ship_dynamic)s\nHijos: %(children_quantity)s 🧸\nProbabilidad de divorcio: %(divorce_prob)s%% 📈",
+    "ship": "¡Detecté una pareja! @%(target_a)s + @%(target_b)s = ❤️\n\nDinámica: %(ship_dynamic)s\nHijos: %(children_quantity)s 🧸\nProbabilidad de divorcio: %(divorce_prob)s%% 📈",
     "flood_stickers": "Cuidado con las inundaciones de stickers",
     "blocked_raid": "🚨 ¡Detecté y bloqueé un intento de raid! Varios usuarios intentaron unirse simultáneamente (Si no funcionó, verifique mis permisos de administrador).",
     "everyone_no": "¡No tienes permiso para llamar a todos los miembros del grupo!\n<blockquote>Si estás hablando como canal, únete y usa el comando como usuario</blockquote>",
@@ -52,9 +57,54 @@
     "battle_no": "No hay miembros suficientes para luchar",
     "battle_extract": "No pude extraer la foto de %(user)s. ¡Verifica si es público!",
     "battle_title": "¿QUIÉN GANA?",
-    "battle_type": ["Boxeo 🥊🥊", "Lucha 🎭", "Lucha griega 🤼‍♂️", "Artes marciales 🥋", "Sambo 👊", "Muay Thai 🥋", "Lucha callejera 👊", "Lucha en la piscina💧", "Judo 🇯🇵", "Sumo ⛩", "Golpes al estómago 💪", "Romper pelotas 🍳🍳"],
-    "battle_rule": ["KO por asaltos", "KO sin asaltos", "Todo vale", "Más goles en Bomba Patch", "La mayor cantidad de latas bebidas", "La mayor cantidad de litros", "Hasta beber, caer, levantarse", "El último de la mesa de Magic"],
-    "battle_equip": ["Equipo completo", "Solo guantes", "En bragas", "Desnudo", "Uniforme de combate", "Vale todo", "Tanga de sumo", "Robot gigante", "Uniforme de sirvienta", "Kimono de judo", "Armadura de samurái", "Toalla de nerd", "Uniforme de waifu escolar", "Disfraz de Sailor Moon", "Niña mágica", "Cosplay de Akatsuki", "Esos trajes de baño japoneses", "Traje de conejita", "Abrigo de invierno cyberpunk", "Zapatilla", "Traje de bruja", "Tanga"],
+    "battle_type": [
+        "Boxeo 🥊🥊",
+        "Lucha 🎭",
+        "Lucha griega 🤼‍♂️",
+        "Artes marciales 🥋",
+        "Sambo 👊",
+        "Muay Thai 🥋",
+        "Lucha callejera 👊",
+        "Lucha en la piscina💧",
+        "Judo 🇯🇵",
+        "Sumo ⛩",
+        "Golpes al estómago 💪",
+        "Romper pelotas 🍳🍳"
+    ],
+    "battle_rule": [
+        "KO por asaltos",
+        "KO sin asaltos",
+        "Todo vale",
+        "Más goles en Bomba Patch",
+        "La mayor cantidad de latas bebidas",
+        "La mayor cantidad de litros",
+        "Hasta beber, caer, levantarse",
+        "El último de la mesa de Magic"
+    ],
+    "battle_equip": [
+        "Equipo completo",
+        "Solo guantes",
+        "En bragas",
+        "Desnudo",
+        "Uniforme de combate",
+        "Vale todo",
+        "Tanga de sumo",
+        "Robot gigante",
+        "Uniforme de sirvienta",
+        "Kimono de judo",
+        "Armadura de samurái",
+        "Toalla de nerd",
+        "Uniforme de waifu escolar",
+        "Disfraz de Sailor Moon",
+        "Niña mágica",
+        "Cosplay de Akatsuki",
+        "Esos trajes de baño japoneses",
+        "Traje de conejita",
+        "Abrigo de invierno cyberpunk",
+        "Zapatilla",
+        "Traje de bruja",
+        "Tanga"
+    ],
     "battle_full": "\n\nTipo: %(type)s\nReglas: %(rule)s\nEquipamento: %(equip)s",
     "battle_private": "No pude extraer la foto de perfil de este usuario. ¡Verifica si es público!",
     "battle_no_picture": "Necesitas tener una foto de perfil <i> (o está privado) </i>",
@@ -72,23 +122,27 @@
         "male": "¡Es <span class='tg-spoiler'>un niño! 👨</span> \n\nProbabilidad --> %(probability)s%%\nRegistrado %(registered_times)s veces",
         "female": "¡Es <span class='tg-spoiler'>una niña! 👩</span> \n\nProbabilidad --> %(probability)s%%\nRegistrado %(registered_times)s veces"
     },
-    "event":{
+    "event": {
         "error": "¡Evento no encontrado!"
     },
     "death": {
         "template": " %(variant)s! 💀💀💀",
-        "variants": ["ha muerto", "está muerto", "se fue"],
+        "variants": [
+            "ha muerto",
+            "está muerto",
+            "se fue"
+        ],
         "Reason": "\nMotivo: <b> %(line)s </b> 🔥\nF en el chat. 🫡"
     },
     "luck": "Tu suerte:\n 🥠 <span class='tg-spoiler'> %(line)s </span> 🥠\nTus números de la suerte: <span class='tg-spoiler'>%(num)s</span>",
     "destroy": {
         "instru": "Responde a una foto, audio o sticker con el comando para distorsionar (o usa /zoar pfp)",
         "video": "La distorsión de video está desactivada en este momento.",
-        "gif": "La distorsión de GIF está desactivada en este momento." 
+        "gif": "La distorsión de GIF está desactivada en este momento."
     },
     "giveaway": {
         "permission": "¡No tienes permiso para crear sorteos! \n <blockquote> ¿Si hablas como usuario y no como canal? ¡El permiso de anonimato debe estar desactivado! </blockquote>",
-        "raffled": "¡Necesitas escribir lo que se está sorteando! \n <blockquote> EJEMPLO: /giveaway Fursuit de Mekhy 🐾🦝 </blockquote>" ,
+        "raffled": "¡Necesitas escribir lo que se está sorteando! \n <blockquote> EJEMPLO: /giveaway Fursuit de Mekhy 🐾🦝 </blockquote>",
         "create": "¡Vamos a crear un sorteo! \n ¿Cuántos usuarios serán sorteados?",
         "strftime": "%d/%m, %H:%M",
         "time": "🎰 ¡ES HORA DEL SORTEO! 🎰 \n \n 🎯 El premio es: <b> %(prize)s </b> \n 👥 Número de ganadores: %(win)s \n ⌛ Comenzó el: %(date)s",
@@ -112,20 +166,20 @@
         "user_fallback": "amigue"
     },
     "bots": {
-        "bombot": { 
-            "name": "BomBot", 
+        "bombot": {
+            "name": "BomBot",
             "description": "Soy un clon de @CookieMWbot creado para los grupos de Brasil FurFest (BFF)"
         },
-        "pawsy":  { 
-            "name": "Pawsy",  
+        "pawsy": {
+            "name": "Pawsy",
             "description": "Soy un clon de @CookieMWbot creado para los grupos de Pawstral, un evento furry en Chile"
         },
-        "tarinbot": { 
-            "name": "TarinBot", 
+        "tarinbot": {
+            "name": "TarinBot",
             "description": "Soy un clon de @CookieMWbot creado para el grupo estatal de furries de Santa Catarina (Brasil), SCFurs"
         },
-        "connectbot": { 
-            "name": "ConnectBot", 
+        "connectbot": {
+            "name": "ConnectBot",
             "description": "Soy un clon de @CookieMWbot desarrollado para el evento FurConect en Goiás (Brasil)"
         },
         "cookiebot": {
@@ -144,9 +198,9 @@
             "¡OMG!! 🦊💖 ¡Es el cumpleaños de %(names)s! ¡Que tu día esté lleno de cariño, abrazos peludos y montañas de pastel! 🎂🥰",
             "¡AAAAH! 🎊 ¡Feliz cumpleaños, %(names)s! ¡Que sea tan especial como tú, con muchos mordisquitos de cariño y ronroneos! 🐾💞",
             "¡YIP YIP! 🐺💙 ¡El mundo brilla más porque %(names)s celebra hoy! 🎂 ¡No olvides disfrutar cada momento y comer muchos dulces! 🍩✨"
-          ],
+        ],
         "closing": "\n\n<i>¡Feliz cumpleaños!</i>\n%(date)s",
         "next": "PRÓXIMOS CUMPLEAÑEROS (todos los grupos):\n\n"
     },
-    "dummy":"DO NOT USE ME"
+    "dummy": "DO NOT USE ME"
 }

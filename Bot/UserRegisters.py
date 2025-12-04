@@ -175,7 +175,7 @@ def call_admins_ask(cookiebot, msg, chat_id, language):
         ]
     ))
 
-def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
+def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id=None):
     send_chat_action(cookiebot, chat_id, 'typing')
     response = " ".join(f"@{admin}" for admin in listaadmins)
     caller = msg['from'].get('username', msg['from']['first_name'])
@@ -185,6 +185,8 @@ def call_admins(cookiebot, msg, chat_id, listaadmins, language, message_id):
     chat = cookiebot.getChat(chat_id)
     myself = cookiebot.getMe()
     notification_count = 0
+    if message_id is None:
+        return
     for username in listaadmins:
         user = get_request_backend(f"users?username={username}")
         if len(user) != 1 or int(user[0]['id']) == int(myself['id']):

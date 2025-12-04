@@ -10,24 +10,29 @@
     "kick": "Kickei o novo usuário por <b> suspeita de ser um robô </b>\n<blockquote> Se isso foi um erro, peça para ele adicionar um username (@) ou foto de perfil e um ADM adicioná-lo de volta </blockquote>",
     "ban_cas": "Bani o usuário recém-chegado por <b> ser flagrado pelo sistema anti-spam CAS (https://cas.chat/) </b>",
     "ban": "Bani o usuário recém-chegado por <b> ser denunciado em outros chats </b>",
-    "captcha":  {
-        "title": "⚠️%(name)s, Digite o código OU aperte o botão⚠️\n\nVocê tem %(time)s minutos, se não resolver nesse tempo te removerei do chat ⏳\n(Se não aparecem 4 digitos, abra a foto completa)",
+    "captcha": {
+        "title": "⚠️%(name)s, Digite o código OU aperte o botão 'Não sou um Robô!' ⚠️\n\nVocê tem %(time)s minutos, se não resolver nesse tempo te removerei do chat ⏳\n(Se não aparecem 4 digitos, abra a foto completa)",
         "limit": "exceder o limite de tentativas para resolver o captcha",
         "time": "não solucionar o captcha a tempo",
         "kick": "Kickei o usuário com id <b> %(user)s </b> por <b> %(reason)s </b>.\n<blockquote> Se isso foi um erro, peça para um staff adicioná-lo de volta </blockquote>",
-        "error_kick": "Erro ao kickar o usuário com id <b> %(user)s </b> por <b> %(reason)s </b>.\n<blockquote> Usuário não está mais no chat, ou não tenho permissão para kickar </blockquote>"
+        "error_kick": "Erro ao kickar o usuário com id <b> %(user)s </b> por <b> %(reason)s </b>.\n<blockquote> Usuário não está mais no chat, ou não tenho permissão para kickar </blockquote>",
+        "button_approve": "ADMINS: Aprovar",
+        "button_call_admin": "Chamar Admins",
+        "button_not_robot": "Não sou um Robô!"
     },
     "welcome_user": "Olá! As boas-vindas ao grupo %(user)s!",
     "welcome": "Olá! As boas-vindas ao grupo!",
     "image_limit": "Limite de buscas de imagens atingido",
-    "account_report":"Conta com ID %(targetid)s marcada como spam\n<blockquote> Obrigado pela denúncia! </blockquote>",
-    "adverbial_phrases": ["Com certeza o(a)",
-                        "Sem sombra de dúvidas o(a)",
-                        "Suponho que o(a)",
-                        "Aposto que o(a)",
-                        "Talvez o(a)",
-                        "Quem sabe o(a)",
-                        "Aparentemente o(a)"],
+    "account_report": "Conta com ID %(targetid)s marcada como spam\n<blockquote> Obrigado pela denúncia! </blockquote>",
+    "adverbial_phrases": [
+        "Com certeza o(a)",
+        "Sem sombra de dúvidas o(a)",
+        "Suponho que o(a)",
+        "Aposto que o(a)",
+        "Talvez o(a)",
+        "Quem sabe o(a)",
+        "Aparentemente o(a)"
+    ],
     "no_ship": "Ainda não vi membros suficientes para shippar!",
     "ship": "Detectei um Casal! @%(target_a)s + @%(target_b)s = ❤️\n\nDinâmica: %(ship_dynamic)s\nFilhos: %(children_quantity)s 🧸\nChance de divórcio: %(divorce_prob)s%% 📈",
     "flood_stickers": "Cuidado com o flood de stickers",
@@ -53,10 +58,70 @@
     "battle_extract": "Não consegui extrair a foto de %(user)s. Verifique se está público!",
     "battle_title": "QUEM VENCE?",
     "battle_title_plus": "QUEM VENCE %(plus)s?",
-    "battle_title_list": ["NO TAPA", "NO X1", "NO SOCO", "NA MÃO", "NA PORRADA", "NO ARGUMENTO", "NO DUELO", "NA VIDA"],
-    "battle_type": ["Boxe 🥊🥊", "Luta Livre 🎭", "Luta Greco 🤼‍♂️", "Artes Marciais 🥋", "Sambo 👊", "Muay Thai 🥋", "Luta de rua 👊", "Luta de piscina💧", "Judo 🇯🇵", "Sumo ⛩", "Gutpunching 💪", "Ballbusting 🍳🍳"],
-    "battle_rule": ["KO por rounds", "KO sem rounds", "Vale tudo", "Mais gols no Bomba Patch", "Mais latinhas bebidas", "Maior numero de litrão", "Até Beber, Cair, Levantar", "O último do mesão de magic"],
-    "battle_equip": ["Full Gear", "Só luvas", "De calcinha", "Pelados", "Uniforme de luta", "Vale tudo", "Tanguinha de sumô", "Robô gigante", "Uniforme de Maid", "Kimono de Judô", "Armadura Samurai", "Toalha de nerdola", "Uniforme de Waifu escolar", "Roupa da Sailor Moon", "Menininha mágica", "Cosplay da Akatsuki", "Aqueles maiôs de natação japoneses", "Bunnysuit", "Casaco de inverno cyberpunk", "Chinelo", "Ronaldinho Gaúcho", "Uniforme do Vasco", "Uniforme do Curintia", "Camiseta do São Paulo", "Uniforme do Parmeira", "Roupa de bruxinha", "Óculos Juliett", "Tanguinha de Ratanabá"],
+    "battle_title_list": [
+        "NO TAPA",
+        "NO X1",
+        "NO SOCO",
+        "NA MÃO",
+        "NA PORRADA",
+        "NO ARGUMENTO",
+        "NO DUELO",
+        "NA VIDA"
+    ],
+    "battle_type": [
+        "Boxe 🥊🥊",
+        "Luta Livre 🎭",
+        "Luta Greco 🤼‍♂️",
+        "Artes Marciais 🥋",
+        "Sambo 👊",
+        "Muay Thai 🥋",
+        "Luta de rua 👊",
+        "Luta de piscina💧",
+        "Judo 🇯🇵",
+        "Sumo ⛩",
+        "Gutpunching 💪",
+        "Ballbusting 🍳🍳"
+    ],
+    "battle_rule": [
+        "KO por rounds",
+        "KO sem rounds",
+        "Vale tudo",
+        "Mais gols no Bomba Patch",
+        "Mais latinhas bebidas",
+        "Maior numero de litrão",
+        "Até Beber, Cair, Levantar",
+        "O último do mesão de magic"
+    ],
+    "battle_equip": [
+        "Full Gear",
+        "Só luvas",
+        "De calcinha",
+        "Pelados",
+        "Uniforme de luta",
+        "Vale tudo",
+        "Tanguinha de sumô",
+        "Robô gigante",
+        "Uniforme de Maid",
+        "Kimono de Judô",
+        "Armadura Samurai",
+        "Toalha de nerdola",
+        "Uniforme de Waifu escolar",
+        "Roupa da Sailor Moon",
+        "Menininha mágica",
+        "Cosplay da Akatsuki",
+        "Aqueles maiôs de natação japoneses",
+        "Bunnysuit",
+        "Casaco de inverno cyberpunk",
+        "Chinelo",
+        "Ronaldinho Gaúcho",
+        "Uniforme do Vasco",
+        "Uniforme do Curintia",
+        "Camiseta do São Paulo",
+        "Uniforme do Parmeira",
+        "Roupa de bruxinha",
+        "Óculos Juliett",
+        "Tanguinha de Ratanabá"
+    ],
     "battle_full": "\n\nTipo: %(type)s\nRegras: %(rule)s\nEquipamento: %(equip)s",
     "battle_private": "Não consegui extrair a foto de perfil desse usuário. Verifique se está público!",
     "battle_no_picture": "Você precisa ter uma foto de perfil <i> (ou está privado) </i>",
@@ -77,21 +142,37 @@
         "male": "É <span class='tg-spoiler'>um menino! 👨</span> \n\nProbabilidade --> %(probability)s%%\nRegistrado %(registered_times)s vezes",
         "female": "É <span class='tg-spoiler'>uma menina! 👩</span> \n\nProbabilidade --> %(probability)s%%\nRegistrado %(registered_times)s vezes"
     },
-    "complaint":"Bom dia/tarde/noite, %(user)s,\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem. Se não, seguimos com nossas atividades.\nAtenciosamente,\nMilton do RH.",
-    "event":{
+    "complaint": "Bom dia/tarde/noite, %(user)s,\nCaso tenha alguma reclamação, fique à vontade para responder essa mensagem. Se não, seguimos com nossas atividades.\nAtenciosamente,\nMilton do RH.",
+    "event": {
         "error": "Evento não encontrado!"
     },
     "death": {
-      "template": " foi de %(variant)s! 💀💀💀",
-      "variants": [
-        "ARRASTA PRA CIMA", "AMERICANAS", "F NO CHAT", "HEXA 2022",
-        "COMES E BEBES", "WAKANDA FOREVER NA HORIZONTAL", "VOLANTE NO VASCO",
-        "DRAKE E JOSH", "OLAVO DE CARVALHO", "SEGUE PRA PARTE 2", "TELA AZUL",
-        "FUNDADOR DA FAROFA YOKI", "ESTAMPA DE CAMISA", "CPF CANCELADO",
-        "KICK DO SERVIDOR", "CARRINHO BATE BATE", "SAMBARILOVE",
-        "ESTUDAR EM REALENGO", "FISH AND CHIPS", "LINK NA BIO",
-        "TOBOGÃ PRO INFERNO", "CRINJOLAS", "FRAIDI NAITES ATÉ FREDE"
-      ],
+        "template": " foi de %(variant)s! 💀💀💀",
+        "variants": [
+            "ARRASTA PRA CIMA",
+            "AMERICANAS",
+            "F NO CHAT",
+            "HEXA 2022",
+            "COMES E BEBES",
+            "WAKANDA FOREVER NA HORIZONTAL",
+            "VOLANTE NO VASCO",
+            "DRAKE E JOSH",
+            "OLAVO DE CARVALHO",
+            "SEGUE PRA PARTE 2",
+            "TELA AZUL",
+            "FUNDADOR DA FAROFA YOKI",
+            "ESTAMPA DE CAMISA",
+            "CPF CANCELADO",
+            "KICK DO SERVIDOR",
+            "CARRINHO BATE BATE",
+            "SAMBARILOVE",
+            "ESTUDAR EM REALENGO",
+            "FISH AND CHIPS",
+            "LINK NA BIO",
+            "TOBOGÃ PRO INFERNO",
+            "CRINJOLAS",
+            "FRAIDI NAITES ATÉ FREDE"
+        ],
         "Reason": "\nMotivo: <b> %(line)s </b> 🔥\nF no chat. 🫡"
     },
     "luck": "Sua sorte:\n 🥠 <span class='tg-spoiler'> %(line)s </span> 🥠\nSeus números da sorte: <span class='tg-spoiler'>%(num)s</span>",
@@ -106,7 +187,10 @@
         "create": "Vamos criar um sorteio! \n Quantos usuários serão sorteados?",
         "strftime": "%d/%m, %H:%M",
         "time": "🎰 É HORA DO SORTEIO! 🎰 \n \n 🎯 O Prêmio é: <b> %(prize)s </b> \n 👥 Número de vencedores: %(win)s \n ⌛ Começou em: %(date)s",
-        "buttons": ["Quero Entrar!", "ADMINS: Finalizar Sorteio"],
+        "buttons": [
+            "Quero Entrar!",
+            "ADMINS: Finalizar Sorteio"
+        ],
         "not_found": "Sorteio não encontrado",
         "in": "Você já está participando!",
         "enter": "YAY! Você entrou no sorteio!",
@@ -120,7 +204,7 @@
         },
         "draw_more": "Sortear mais ganhadores?",
         "selected": "Ganhadores sorteados",
-        "end_error": "Erro ao encerrar sorteio" 
+        "end_error": "Erro ao encerrar sorteio"
     },
     "pv": {
         "title": "*Olá %(first_name)s, eu sou o %(name)s!*",
@@ -148,7 +232,7 @@
             "name": "TarinBot",
             "description": "Sou um clone do @CookieMWbot criado para o grupo estadual de furries de Santa Catarina, o SCFurs (Santa Catarina Furries)"
         },
-            "connectbot": {
+        "connectbot": {
             "name": "ConnectBot",
             "description": "Sou um clone do @CookieMWbot desenvolvido para o evento FurConect em Goiás!"
         },
@@ -173,4 +257,4 @@
         "next": "PRÓXIMOS ANIVERSARIANTES (todos os grupos):\n\n"
     },
     "dummy": "DO NOT USE ME"
-}   
+}

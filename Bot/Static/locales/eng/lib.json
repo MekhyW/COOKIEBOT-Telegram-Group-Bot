@@ -4,33 +4,40 @@
     "canceled": "Command canceled",
     "new_bot_participant": "A new bot companion has been added!\n<blockquote> If any command conflicts, talk to Mekhy </blockquote>",
     "restrict_message": "ATTENTION! Your media is restricted for <b> %(time)s minutes </b>. Please introduce yourself and get to know the members in the conversation.\n<blockquote> Press the button below or use /rules to see the group rules </blockquote>",
-    "rules":"See the Rules!",
+    "rules": "See the Rules!",
     "no_rules": "There are no rules set for this group yet\n<blockquote> If you are an admin and want to set rules, use /newrules </blockquote>",
     "questions": "\n\nQuestions about the bot? Send to @MekhyW",
-    "kick":"Kicked the new user for <b> suspicion of being a bot </b>\n<blockquote> If this was a mistake, ask them to add a username (@) or profile picture and an ADM to add them back </blockquote>",
+    "kick": "Kicked the new user for <b> suspicion of being a bot </b>\n<blockquote> If this was a mistake, ask them to add a username (@) or profile picture and an ADM to add them back </blockquote>",
     "ban_cas": "Banned the new user for <b> being flagged by the anti-spam system CAS (https://cas.chat/) </b>",
     "ban": "Banned the new user for <b> being reported in other chats </b>",
-    "captcha":  {
-        "title": "⚠️%(name)s, Type the code OR press the button⚠️\n\nYou have %(time)s minutes, if you don't solve it in this time I'll remove you from the chat ⏳\n(If 4 digits don't appear, open the full photo)",
+    "captcha": {
+        "title": "⚠️%(name)s, Type the code OR press the 'I'm not a Robot!' button ⚠️\n\nYou have %(time)s minutes, if you don't solve it in this time I'll remove you from the chat ⏳\n(If 4 digits don't appear, open the full photo)",
         "limit": "exceed the limit of attempts to solve the captcha",
         "time": "not solving the captcha in time",
         "kick": "Kicked user with ID <b> %(user)s </b> for <b> %(reason)s </b>\n<blockquote> If this was a mistake, ask a staff to add them back </blockquote>",
-        "error_kick": "Error kicking user with ID <b> %(user)s </b> for <b> %(reason)s </b>\n<blockquote> User is no longer in the chat, or I don't have permission to kick </blockquote>"
+        "error_kick": "Error kicking user with ID <b> %(user)s </b> for <b> %(reason)s </b>\n<blockquote> User is no longer in the chat, or I don't have permission to kick </blockquote>",
+        "button_approve": "ADMINS: Approve",
+        "button_call_admin": "Call Admins",
+        "button_not_robot": "I'm not a Robot!"
     },
-    "teste": ["WIP"],
+    "teste": [
+        "WIP"
+    ],
     "private_chat": "This is a private chat, send a message in a group chat to use me!",
     "welcome_user": "Hello! Welcome to the group %(user)s!",
     "welcome": "Hello! Welcome to the group!",
     "caption": "Obrigado por me adicionar!\nThanks for adding me!\n\n--> Use /comandos para ver todas as minhas funcionalidades\n--> /configurar para ligar/desligar funções ou alterar valores\n--> Não esqueça de me dar direitos administrativos para poder defender o grupo de raiders/spammers ou apagar mensagens\n--> Website, painel de controle e tutoriais virão em breve. Estou em crescimento!\n\nIf this chat is not in portuguese language, you can use /configure to change my lang.\nIf you have any questions or want something added, message @MekhyW",
     "image_limit": "Image search limit reached",
-    "account_report":"Account with ID %(targetid)s marked as spam\n<blockquote> Thank you for the report! </blockquote>",
-    "adverbial_phrases": ["Without a doubt",
-                        "Without a shadow of a doubt",
-                        "I suppose",
-                        "I bet",
-                        "Maybe",
-                        "Who knows",
-                        "Apparently"],
+    "account_report": "Account with ID %(targetid)s marked as spam\n<blockquote> Thank you for the report! </blockquote>",
+    "adverbial_phrases": [
+        "Without a doubt",
+        "Without a shadow of a doubt",
+        "I suppose",
+        "I bet",
+        "Maybe",
+        "Who knows",
+        "Apparently"
+    ],
     "no_ship": "I haven't seen enough members to ship yet!",
     "ship": "I detected a Couple! @%(target_a)s + @%(target_b)s = ❤️\n\nDynamics: %(ship_dynamic)s\nChildren: %(children_quantity)s 🧸\nChance of divorce: %(divorce_prob)s%% 📈",
     "flood_stickers": "Be careful with sticker flood",
@@ -55,9 +62,54 @@
     "battle_no": "Not enough members to battle",
     "battle_extract": "I couldn't extract the photo of %(user)s. Check if it's public!",
     "battle_title": "WHO WINS?",
-    "battle_type": ["Boxing 🥊🥊", "Wrestling 🎭", "Greco Wrestling 🤼‍♂️", "Martial Arts 🥋", "Sambo 👊", "Muay Thai 🥋", "Street Fighting 👊", "Pool Fighting💧", "Judo 🇯🇵", "Sumo ⛩", "Gutpunching 💪", "Ballbusting 🍳🍳"],
-    "battle_rule": ["KO by rounds", "KO without rounds", "Anything goes", "Most goals in Bomba Patch", "Most cans of drinks", "Biggest number of liters", "Until Drinking, Falling, Getting Up", "The last of the magic table"],
-    "battle_equip": ["Full Gear", "Gloves Only", "In Panties", "Naked", "Fighting Uniform", "Anything Goes", "Sumo Thong", "Giant Robot", "Maid Uniform", "Judo Kimono", "Samurai Armor", "Nerd Towel", "School Waifu Uniform", "Sailor Moon Outfit", "Magical Little Girl", "Akatsuki Cosplay", "Those Japanese Swimming Swimsuits", "Bunnysuit", "Cyberpunk Winter Coat", "Flip Flops", "Witch Outfit", "Thong"],
+    "battle_type": [
+        "Boxing 🥊🥊",
+        "Wrestling 🎭",
+        "Greco Wrestling 🤼‍♂️",
+        "Martial Arts 🥋",
+        "Sambo 👊",
+        "Muay Thai 🥋",
+        "Street Fighting 👊",
+        "Pool Fighting💧",
+        "Judo 🇯🇵",
+        "Sumo ⛩",
+        "Gutpunching 💪",
+        "Ballbusting 🍳🍳"
+    ],
+    "battle_rule": [
+        "KO by rounds",
+        "KO without rounds",
+        "Anything goes",
+        "Most goals in Bomba Patch",
+        "Most cans of drinks",
+        "Biggest number of liters",
+        "Until Drinking, Falling, Getting Up",
+        "The last of the magic table"
+    ],
+    "battle_equip": [
+        "Full Gear",
+        "Gloves Only",
+        "In Panties",
+        "Naked",
+        "Fighting Uniform",
+        "Anything Goes",
+        "Sumo Thong",
+        "Giant Robot",
+        "Maid Uniform",
+        "Judo Kimono",
+        "Samurai Armor",
+        "Nerd Towel",
+        "School Waifu Uniform",
+        "Sailor Moon Outfit",
+        "Magical Little Girl",
+        "Akatsuki Cosplay",
+        "Those Japanese Swimming Swimsuits",
+        "Bunnysuit",
+        "Cyberpunk Winter Coat",
+        "Flip Flops",
+        "Witch Outfit",
+        "Thong"
+    ],
     "battle_full": "\n\nType: %(type)s\nRules: %(rule)s\nEquipment: %(equip)s",
     "battle_private": "I couldn't extract the profile picture of this user. Check if it's public!",
     "battle_no_picture": "You need to have a profile picture <i> (or it's private) </i>",
@@ -79,8 +131,8 @@
         "female": "Its <span class='tg-spoiler'>a girl! 👩</span> \n\nProbability --> %(probability)s%%\nRegistered %(registered_times)s times",
         "unknown": "It's a baby! 🍼\n\nProbability → %(probability_str)s%%\nRegistered %(registered_times)s"
     },
-    "complaint":"Good morning/afternoon/evening, %(user)s,\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.",
-    "event":{
+    "complaint": "Good morning/afternoon/evening, %(user)s,\nIf you have any complaints, feel free to reply to this message. If not, we continue with our activities.\nSincerely,\nMilton from HR.",
+    "event": {
         "patas": {
             "name": "Patas",
             "cta": [
@@ -89,7 +141,7 @@
                 "O evento vai acontecer no SOROCABA PARK HOTEL, um local que oferece comodidade e conforto para todos os participantes do evento!",
                 "As atrações incluem:\n\n-Show com Banda\n-Balada Furry com DJ\n-Pool Party com brinquedos de piscina e DJ\n-Mercadinho Furry\n-E muito mais!"
             ],
-             "caption": "%(headline)s\n\n%(cta_line)s\n\n%(when_line)s, %(where_line)s\n%(links_line)s"
+            "caption": "%(headline)s\n\n%(cta_line)s\n\n%(when_line)s, %(where_line)s\n%(links_line)s"
         },
         "bff": {
             "name": "Brasil FurFest 2026 — Sem Tempo Irmão!",
@@ -113,13 +165,13 @@
             "name": "FurSMeet %(year)s",
             "cta": [
                 "Mas bá, guri! Dá um chego aqui no FurSMeet! É aqui no Rio Grande do Sul, em Santa Maria! Vem conhecer um pessoal tri legal e fazer festa!",
-    			"Assim, ó: Tu tens agora a oportunidade perfeita para te conectar com outros furries e criar memórias pra tu contar mais pra frente na vida.",
-    			"Nosso objetivo é reunir amantes da cultura antropomórfica da região Sul e de todo o Brasil e criar grandes memórias. Vem ser um bichinho colorido com a gente!", 
-    			"Ó, tchê: Lucro do evento não fica com a gente. É reservado pros próximos eventos e pretendemos começar a ajudar instituições carentes com doações! Tu vem, te diverte e ainda ajuda uma boa causa.",
-    			"Aproveita, piá. Rateia, não. Esse é o último evento antes do hiato. Te apruma e separa uns pila pra ir porque a gente não sabe quando vamos ter o próximo. Se te falta motivo pra ir, lembra que a gente tem chimarrão!",
-    			"O Capibára pode ter essa fuça de chinelo, mas tem um coração grande que nem o Rio Grande do Sul. Tchê, ele faz amizade com qualquer um; não importa se é cusco ou se é jacaré. E quanto mais colorido, melhor.",
-    			"Pozólha, este ano a gente tem umas participações tri legais! Ainda mais nesses erre pê gê aí que os guri jogam hoje, os cusco tão tudo louco. Bá, meu, vai ser de cair os butiá dos bolso!",
-    			"Ôôôôô piá, tu curte RPG? Tu curte chimarrão? Tu curte evento de bichinho colorido? Bora ir num evento furry tematizado nisso! Que tal? Ali em Santa Maria, no Rio Grande do Sul, meu!"
+                "Assim, ó: Tu tens agora a oportunidade perfeita para te conectar com outros furries e criar memórias pra tu contar mais pra frente na vida.",
+                "Nosso objetivo é reunir amantes da cultura antropomórfica da região Sul e de todo o Brasil e criar grandes memórias. Vem ser um bichinho colorido com a gente!",
+                "Ó, tchê: Lucro do evento não fica com a gente. É reservado pros próximos eventos e pretendemos começar a ajudar instituições carentes com doações! Tu vem, te diverte e ainda ajuda uma boa causa.",
+                "Aproveita, piá. Rateia, não. Esse é o último evento antes do hiato. Te apruma e separa uns pila pra ir porque a gente não sabe quando vamos ter o próximo. Se te falta motivo pra ir, lembra que a gente tem chimarrão!",
+                "O Capibára pode ter essa fuça de chinelo, mas tem um coração grande que nem o Rio Grande do Sul. Tchê, ele faz amizade com qualquer um; não importa se é cusco ou se é jacaré. E quanto mais colorido, melhor.",
+                "Pozólha, este ano a gente tem umas participações tri legais! Ainda mais nesses erre pê gê aí que os guri jogam hoje, os cusco tão tudo louco. Bá, meu, vai ser de cair os butiá dos bolso!",
+                "Ôôôôô piá, tu curte RPG? Tu curte chimarrão? Tu curte evento de bichinho colorido? Bora ir num evento furry tematizado nisso! Que tal? Ali em Santa Maria, no Rio Grande do Sul, meu!"
             ],
             "caption": "%(headline)s\n\n%(cta_line)s\n\n%(when_line)s\n%(where_line)s\n🎫 Ingressos: fursmeet.carrd.co\n%(links_line)s"
         },
@@ -152,7 +204,11 @@
     },
     "death": {
         "template": " %(variant)s! 💀💀💀",
-        "variants": ["is dead", "is gone", "is deceased"],
+        "variants": [
+            "is dead",
+            "is gone",
+            "is deceased"
+        ],
         "Reason": "\nReason: <b> %(line)s </b> 🔥\nF in chat. 🫡"
     },
     "luck": "Your luck:\n 🥠 <span class='tg-spoiler'> %(line)s </span> 🥠\nYour lucky numbers: <span class='tg-spoiler'>%(num)s</span>",
@@ -167,7 +223,10 @@
         "create": "Let's create a giveaway! \n How many users will be drawn?",
         "strftime": "%m/%d, %H:%M",
         "time": "🎰 IT'S GIVEAWAY TIME! 🎰 \n \n 🎯 The Prize is: <b>%(prize)s</b> \n 👥 Number of winners: %(win)s \n ⌛ Started on: %(date)s",
-        "buttons": ["Put me in!","ADMINS: End Giveaway"],
+        "buttons": [
+            "Put me in!",
+            "ADMINS: End Giveaway"
+        ],
         "not_found": "Giveaway not found",
         "in": "You are already participating!",
         "enter": "YAY! You entered the giveaway!",
@@ -223,7 +282,6 @@
         "total": "Total groups found: %(value)s",
         "new": "New groups found: %(text)s",
         "remove": "Removed groups: %(text)s"
-
     },
     "bday": {
         "title": "You need to type the usernames of today's birthday people!",
@@ -240,5 +298,4 @@
         "next": "UPCOMING BIRTHDAYS (all groups):\n\n"
     },
     "dummy": "DO NOT USE ME"
-
 }

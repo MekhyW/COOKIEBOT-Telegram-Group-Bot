@@ -391,6 +391,9 @@ def thread_function_query(msg):
             delete_message(cookiebot, telepot.message_identifier(msg['message']))
         elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(ownerID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
             solve_captcha(cookiebot, msg, chat_id, True, is_alternate_bot=is_alternate_bot, language=query_data.split()[1])
+        elif (query_data.startswith('CAPTCHACALLADMIN') and (str(from_id) in listaadmins_id or str(from_id) == str(ownerID))):
+            language = query_data.split()[1]
+            call_admins(cookiebot, msg, chat_id, listaadmins, language)
         elif query_data.startswith('ADM'):
             yesno = query_data.split()[1]
             language = query_data.split()[2]
