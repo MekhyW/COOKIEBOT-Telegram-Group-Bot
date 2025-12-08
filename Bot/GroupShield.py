@@ -216,7 +216,11 @@ def check_banlist(cookiebot, msg, chat_id, language):
 
 def check_banlist_public(cookiebot, msg, chat_id, language):
     is_blacklisted = requests.post("https://burrbot.xyz/noraid.php", data={"id": str(msg['new_chat_participant']['id'])})
-    raider = json.loads(is_blacklisted.text.replace('""', '"'))['raider']
+    try:
+        raider = json.loads(is_blacklisted.text.replace('""', '"'))['raider']
+    except Exception as e:
+        print(e)
+        return False
     if raider:
         cookiebot.kickChatMember(chat_id, msg['new_chat_participant']['id'])
         text = i18n.get("ban", lang=language)
