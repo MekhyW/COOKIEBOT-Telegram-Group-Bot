@@ -53,20 +53,24 @@ timedatectl
 
 ### Option 1: Service Template (Recommended)
 
-Put servicetemplate.ini (don't forget to edit YOUR_USER) in /etc/systemd/system/
+Edit the startup script start_cookiebot.sh and replace YOUR_USER with your system username.
 
-Then enable 5 instances:
+Place the startup script in /usr/local/bin/
+
+Make it executable:
+
+```bash
+sudo chmod +x /usr/local/bin/start_cookiebot.sh
+```
+
+Then put start_cookiebot.service in /etc/systemd/system/
+
+And enable it:
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now cookiebot@0
-sudo systemctl enable --now cookiebot@1
-sudo systemctl enable --now cookiebot@2
-sudo systemctl enable --now cookiebot@3
-sudo systemctl enable --now cookiebot@4
+sudo systemctl enable --now start_cookiebot
 ```
-
-The VM will now run 5 parallel bots at boot, auto-restart if they crash, etc.
 
 ### Option 2: Manual Deployment
 

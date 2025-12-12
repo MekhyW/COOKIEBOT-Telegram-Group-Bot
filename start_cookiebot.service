@@ -1,0 +1,11 @@
+[Unit]
+Description=Start Cookiebot Screens at Boot
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/start_cookiebot.sh
+RemainAfterExit=true
+
+[Install]
+WantedBy=multi-user.target
