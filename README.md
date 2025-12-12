@@ -53,9 +53,17 @@ timedatectl
 
 ### Option 1: Service Template (Recommended)
 
+Place the startup script in /usr/local/bin/
+
+```bash
+sudo cp start_cookiebot.sh /usr/local/bin/
+```
+
 Edit the startup script start_cookiebot.sh and replace YOUR_USER with your system username.
 
-Place the startup script in /usr/local/bin/
+```bash
+sudo nano /usr/local/bin/start_cookiebot.sh
+```
 
 Make it executable:
 
@@ -64,6 +72,10 @@ sudo chmod +x /usr/local/bin/start_cookiebot.sh
 ```
 
 Then put start_cookiebot.service in /etc/systemd/system/
+
+```bash
+sudo cp start_cookiebot.service /etc/systemd/system/
+```
 
 And enable it:
 
