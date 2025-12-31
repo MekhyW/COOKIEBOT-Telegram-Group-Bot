@@ -1,6 +1,7 @@
 telepota
 python-dotenv
 urllib3
+requests
 beautifulsoup4
 Pillow
 opencv-python==4.10.0.84
