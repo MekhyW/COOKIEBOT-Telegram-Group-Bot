@@ -1,4 +1,4 @@
-telepota
+git+https://github.com/MekhyW/telepota.git
 python-dotenv
 urllib3
 requests
