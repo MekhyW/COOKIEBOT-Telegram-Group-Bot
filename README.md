@@ -49,16 +49,6 @@ sudo timedatectl set-timezone <your_time_zone>
 timedatectl
 ```
 
-## Disable IPv6 (just in case)
-
-```bash
-sudo sysctl -w net.ipv6.conf.all.disable_ipv6=1
-sudo sysctl -w net.ipv6.conf.default.disable_ipv6=1
-echo "net.ipv6.conf.all.disable_ipv6 = 1" | sudo tee /etc/sysctl.d/99-disable-ipv6.conf
-echo "net.ipv6.conf.default.disable_ipv6 = 1" | sudo tee -a /etc/sysctl.d/99-disable-ipv6.conf
-sudo sysctl --system
-```
-
 ## Run the bot
 
 ### Option 1: Service Template (Recommended)
