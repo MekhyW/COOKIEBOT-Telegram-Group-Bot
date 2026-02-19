@@ -295,7 +295,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
                 daysremaining += 365
             caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurSMeet {year}! </b>\n\n<i> {calltoaction} </i>\n🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫🦕🦖🦫\n\n📆 {day} a {day+2}/{month}, Santa Maria, Rio Grande do Sul\n🎫Link para comprar ingresso: fursmeet.carrd.co\n💻 Informações no site: fursmeet.wixsite.com/fursmeet\n📲 Grupo do evento: @fursmeetchat"
     elif msg['text'].lower().startswith('/furcamp'):
-        day, month, year = 13, 2, 2026
+        day, month, year = 5, 2, 2027
         calltoaction = random.choice(i18n.get("event.furcamp.cta", lang=language))
         pic = bloblist_furcamp[random.randint(0, len(bloblist_furcamp)-1)].generate_signed_url(datetime.timedelta(minutes=15), method='GET')
         daysremaining = (datetime.datetime(year, month, day) - datetime.datetime.now()).days + 1
