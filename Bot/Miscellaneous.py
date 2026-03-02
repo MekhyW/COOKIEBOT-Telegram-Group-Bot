@@ -304,7 +304,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurCamp! </b>\n\n<i> {calltoaction} </i>\n🐾🌲🐾🌳🐾🌲🐾🌳🐾🌲🐾🌳\n\n📆 {day} a {day+4}/{month}, Acampamento Terra do Saber - Cajamar - SP\n💻 Ingressos em: furcamp.com\n📲 Grupo do evento: @FurcampOficial"
+            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o FurCamp! </b>\n\n<i> {calltoaction} </i>\n🐾🌲🐾🌳🐾🌲🐾🌳🐾🌲🐾🌳\n\n📆 {day} a {day+4}/{month}\n📍 Acampamento Aruanã, Embu-Guaçu - SP\n💻 Ingressos em: furcamp.com\n📲 Grupo do evento: @FurcampOficial"
     elif msg['text'].lower().startswith('/pawstral'):
         day, month, year = 29, 8, 2025
         calltoaction = random.choice(i18n.get("event.pawstral.cta", lang=language))
