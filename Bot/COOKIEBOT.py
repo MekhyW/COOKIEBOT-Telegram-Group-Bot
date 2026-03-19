@@ -330,15 +330,14 @@ def thread_function(msg):
         send_error_traceback(cookiebot, msg, traceback.format_exc())
     finally:
         check_new_name(cookiebot, msg, chat_id, chat_type)
-        if is_alternate_bot or current_date_mutex.locked():
-            return
-        msg_date_utc = datetime.datetime.now(datetime.timezone.utc).timestamp()
-        msg_date = datetime.datetime.fromtimestamp(msg_date_utc, tz=datetime.timezone.utc).strftime('%Y-%m-%d')
-        with current_date_mutex:
-            current_stored_date = datetime.datetime.fromtimestamp(current_date_utc, tz=datetime.timezone.utc).strftime('%Y-%m-%d') if current_date_utc else None
-            if current_stored_date != msg_date:
-                current_date_utc = msg_date_utc
-                birthday(cookiebot, current_date_utc, msg=msg)
+        if not is_alternate_bot and not current_date_mutex.locked():
+            msg_date_utc = datetime.datetime.now(datetime.timezone.utc).timestamp()
+            msg_date = datetime.datetime.fromtimestamp(msg_date_utc, tz=datetime.timezone.utc).strftime('%Y-%m-%d')
+            with current_date_mutex:
+                current_stored_date = datetime.datetime.fromtimestamp(current_date_utc, tz=datetime.timezone.utc).strftime('%Y-%m-%d') if current_date_utc else None
+                if current_stored_date != msg_date:
+                    current_date_utc = msg_date_utc
+                    birthday(cookiebot, current_date_utc, msg=msg)
 
 def thread_function_query(msg):
     try:
