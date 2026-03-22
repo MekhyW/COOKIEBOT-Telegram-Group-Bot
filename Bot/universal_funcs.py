@@ -32,6 +32,7 @@ retry_exceptions = (
     ConnectionResetError,
     requests.exceptions.ConnectionError,
     requests.exceptions.ReadTimeout,
+    requests.exceptions.SSLError,
     RemoteDisconnected,
 )
 
@@ -276,12 +277,16 @@ def send_animation(cookiebot, chat_id, animation, caption=None, msg_to_reply=Non
         return None
     return sentanimation['message_id']
 
+@retry_with_backoff(max_retries=3, base_delay=2)
 def set_bot_commands(cookiebot, commands, scope_chat_id, is_alternate_bot=0, language="pt"):
     token = get_bot_token(is_alternate_bot)
     url = f'https://api.telegram.org/bot{token}/setMyCommands'
     data = {'commands': commands, 'scope': {'type': 'chat', 'chat_id': scope_chat_id}, 'language_code': language[0:2].lower()}
-    r = requests.get(url, json=data, timeout=60)
-    return r.text
+    try:
+        r = requests.get(url, json=data, timeout=60)
+        return r.text
+    except retry_exceptions:
+        raise
 
 def forward_message(cookiebot, chat_id, from_chat_id, message_id, thread_id=None, is_alternate_bot=0):
     send_chat_action(cookiebot, chat_id, 'typing')
