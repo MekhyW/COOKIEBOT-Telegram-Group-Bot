@@ -179,12 +179,12 @@
             "name": "FurCamp",
             "cta": [
                 "O FURCAMP é um evento furry criado no Brasil e acontece todos os anos em meados de fevereiro (durante o Carnaval). Com sua primeira edição piloto em março de 2019 sendo um sucesso, o evento cativou seus participantes e a equipe que o criou.",
-                "Com sua bela paisagem, o Acampamento Terra do Saber possui pomar, trilhas e lagos para a pesca esportiva. É destinado a grupos grandes e especialmente aos visitantes que estejam em busca de uma acomodação diferenciada, podendo contar com todo o conforto da hospedagem em suítes e também em alojamentos.",
-                "O Acampamento Terra do Saber conta com alojamentos com beliches, refeitórios, salões para reunião, janelas com tela de proteção contra insetos, banheiros com aquecimento central a gás, reservatórios de água, poços artesianos e muito mais.",
+                "Com sua bela paisagem, o Acampamento Aruanã possui pomar, trilhas e lagos para a pesca esportiva. É destinado a grupos grandes e especialmente aos visitantes que estejam em busca de uma acomodação diferenciada, podendo contar com todo o conforto da hospedagem em suítes e também em alojamentos.",
+                "O Acampamento Aruanã conta com alojamentos com beliches, refeitórios, salões para reunião, janelas com tela de proteção contra insetos, banheiros com aquecimento central a gás, reservatórios de água, poços artesianos e muito mais.",
                 "O FURCAMP oferece várias atividades emocionantes para os participantes durante todo o evento, como Batalha no Campo e Gincana, Show de Talentos e Balada Furry, com cada atividade tendo uma pontuação para o participante ou equipe do participante!",
                 "Se você sabe atuar, dançar, cantar, tocar um instrumento, fazer truques de mágica ou tem qualquer habilidade maluca, este é o lugar para mostrá-las. Que tal contar uma piada ruim, fazer o público chorar ou rir com um stand-up? No Show de Talentos, vale tudo!",
                 "Prepare-se para dançar, agitar, pular e se divertir na boate do FURCAMP com música eletrizante e um show de luzes, junto com um set incrível dos DJs Furries!",
-                "Você perdeu a nossa livestream especial no dia 19? Quer saber tudo que rolou sobre as atualizações do evento e informações cruciais que não pode deixar passar? Não se preocupe! Assista ao VOD da live no nosso canal do YouTube e fique por dentro de tudo! 🎥✨"
+                "Você perdeu as nossas livestreams? Quer saber tudo que rolou sobre as atualizações do evento e informações cruciais que não pode deixar passar? Não se preocupe! Assista ao VOD da live no nosso canal do YouTube e fique por dentro de tudo! 🎥✨"
             ],
             "caption": "%(headline)s\n\n%(cta_line)s\n\n%(when_line)s\n%(where_line)s\n🎫 Ingressos em: furcamp.com\n📲 Grupo do evento: @FurcampOficial fursmeet.carrd.co\n%(links_line)s"
         },
