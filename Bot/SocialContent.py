@@ -57,7 +57,7 @@ def fix_embed_if_social_link(message: str) -> str | bool:
     transformations = [
         (TWITTER_REGEX, "https://fixupx.com/{}", r'[^/]+/status/[0-9]+'),
         (TIKTOK_REGEX, "https://vm.vxtiktok.com/{}", r'@[^/]+/video/[0-9]+'),
-        (INSTAGRAM_REGEX, "https://kkinstagram.com/{}", r'(reel|p)/([^?/]+)'),
+        #(INSTAGRAM_REGEX, "https://kkinstagram.com/{}", r'(reel|p)/([^?/]+)'),
         (BSKY_REGEX, "https://fxbsky.app/profile/{}", r'\.app/profile/(.+)')
     ]
     if re.search(TIKTOK_REGEX, message) and re.search(r'vm\.tiktok\.com/.+|tiktok\.com/t/.+', message):
@@ -68,10 +68,10 @@ def fix_embed_if_social_link(message: str) -> str | bool:
     for main_pattern, template, extract_pattern in transformations:
         if re.search(main_pattern, message):
             if match := re.search(extract_pattern, message):
-                if 'kkinstagram.com' in template:
-                    path = match.group(1) + '/' + match.group(2)
-                    query = message[message.find('?'):] if '?' in message else ''
-                    return template.format(path) + query
+                #if 'kkinstagram.com' in template:
+                #    path = match.group(1) + '/' + match.group(2)
+                #    query = message[message.find('?'):] if '?' in message else ''
+                #    return template.format(path) + query
                 return template.format(match.group(1) if '(' in extract_pattern else match.group())
             return False
     return False
