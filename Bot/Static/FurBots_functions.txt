@@ -241,3 +241,9 @@
 /results
 /endpoll
 /help
+/FruityFur_Bot
+/FFPost
+/FFNewPost
+/FFPing
+/FFHelp
+/FFThisMonth
