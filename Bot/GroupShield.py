@@ -337,7 +337,7 @@ def solve_captcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt
                         delete_message(cookiebot, telepot.message_identifier(msg))
                         attempts -= 1
                         if attempts > 0:
-                            send_message(cookiebot, chat_id, "Senha incorreta, por favor tente novamente.", language=language)
+                            send_message(cookiebot, chat_id, "Código incorreto, por favor tente novamente.", language=language)
                         line = f"{chat} {user} {datetime.datetime.now()} {password} {captcha_id} {attempts}\n"
                         text.write(line)
                 else:
