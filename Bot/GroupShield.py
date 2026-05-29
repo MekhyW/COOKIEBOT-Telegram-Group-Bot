@@ -138,7 +138,7 @@ def check_raid(cookiebot, msg, chat_id, language):
         return True
 
 def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=0):
-    if str(chat_id) in ['-1001063487371', '-1001649779623', '-1001582063371', '-1002048063981', '-1002193913344']: # Groups where the bot should not welcome new members
+    if str(chat_id) in ['-1001063487371', '-1001649779623', '-1001582063371', '-1002048063981', '-1002193913344', '-1001468185802']: # Groups where the bot should not welcome new members
         return
     send_chat_action(cookiebot, chat_id, 'typing')
     user = msg['new_chat_member'] if 'new_chat_member' in msg else msg['from']
