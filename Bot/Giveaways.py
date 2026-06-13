@@ -176,7 +176,7 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
     except Exception as e:
         text = i18n.get("giveaway.end_error", lang=language)
         cookiebot.answerCallbackQuery(msg['id'], text=text)
-        send_message(cookiebot, ownerID, f"GIVEAWAY ERROR\n\n{e}", language='en')
+        send_message(cookiebot, ownerID, f"GIVEAWAY ERROR\n\n{str(e)}", language='en')
 
 def giveaways_delete(cookiebot, msg, chat_id):
     language = get_config(cookiebot, chat_id)[7]
