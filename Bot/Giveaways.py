@@ -19,6 +19,7 @@ def get_db_connection():
         local_storage.giveaways_db = sqlite3.connect('Giveaways.db')
         local_storage.giveaways_cursor = local_storage.giveaways_db.cursor()
         local_storage.giveaways_cursor.execute("CREATE TABLE IF NOT EXISTS giveaways (creator_id INT, message_id INT, chat_id INT, prize TEXT, number_of_winners INT, participants TEXT)")
+        local_storage.giveaways_cursor.execute("CREATE TABLE IF NOT EXISTS giveaway_prizes (id INTEGER PRIMARY KEY AUTOINCREMENT, prize TEXT)")
         local_storage.giveaways_db.commit()
     return local_storage.giveaways_db, local_storage.giveaways_cursor
 
@@ -33,10 +34,16 @@ def giveaways_ask(cookiebot, msg, chat_id, language, listaadmins_id, listaadmins
         send_message(cookiebot, chat_id, text, msg)
         return
     prize_text = " ".join(msg["text"].split()[1:])
-    prize = json.dumps(prize_text)[:20]
+    if len(prize_text) > 200:
+        prize_text = prize_text[:200]
+    db_tmp, cursor_tmp = get_db_connection()
+    cursor_tmp.execute("INSERT INTO giveaway_prizes (prize) VALUES (?)", (prize_text,))
+    prize_id = cursor_tmp.lastrowid
+    db_tmp.commit()
+    prize = str(prize_id)
     text = i18n.get("giveaway.create", lang=language)
     send_chat_action(cookiebot, chat_id, 'typing')
-    send_message(cookiebot, chat_id, text, msg, 
+    send_message(cookiebot, chat_id, text, msg,
                  reply_markup=InlineKeyboardMarkup(inline_keyboard=[
                      [InlineKeyboardButton(text="1", callback_data=f'GIVEAWAY 1 {prize}')],
                      [InlineKeyboardButton(text="2", callback_data=f'GIVEAWAY 2 {prize}')],
@@ -45,12 +52,16 @@ def giveaways_ask(cookiebot, msg, chat_id, language, listaadmins_id, listaadmins
                      [InlineKeyboardButton(text="5", callback_data=f'GIVEAWAY 5 {prize}')],
                  ]))
     
-def giveaways_create(cookiebot, msg, n_winners, chat_id, prize):
+def giveaways_create(cookiebot, msg, n_winners, chat_id, prize_id):
     if not isinstance(n_winners, int) or n_winners <= 0 or n_winners > 5:
         return
     language = get_config(cookiebot, chat_id)[7]
+    db_prize, cursor_prize = get_db_connection()
+    cursor_prize.execute("SELECT prize FROM giveaway_prizes WHERE id = ?", (int(prize_id),))
+    prize_row = cursor_prize.fetchone()
+    prize = prize_row[0] if prize_row else ""
     ctx = {
-        "prize": json.loads(prize),
+        "prize": prize,
         "win": n_winners,
         "date": datetime.datetime.now().strftime(i18n.get("giveaway.strftime", lang=language))
     }
@@ -110,7 +121,11 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
                 text = i18n.get("giveaway.not_found", lang=language)
                 cookiebot.answerCallbackQuery(msg['id'], text=text)
                 return
-            creator_id, prize, n_winners, participants_str = result
+            creator_id, prize_id, n_winners, participants_str = result
+            db_prize_end, cursor_prize_end = get_db_connection()
+            cursor_prize_end.execute("SELECT prize FROM giveaway_prizes WHERE id = ?", (int(prize_id),))
+            prize_row_end = cursor_prize_end.fetchone()
+            prize = prize_row_end[0] if prize_row_end else ""
             if msg['from']['id'] not in [int(admin_id) for admin_id in listaadmins_id] and msg['from']['id'] != creator_id and msg['from']['id'] != ownerID:
                 text = i18n.get("giveaway.end_adm", lang=language)
                 cookiebot.answerCallbackQuery(msg['id'], text=text)
