@@ -75,7 +75,7 @@ def giveaways_create(cookiebot, msg, n_winners, chat_id, prize_id):
                                 )['message_id']
     with db_lock:
         db, cursor = get_db_connection()
-        cursor.execute("INSERT INTO giveaways VALUES (?, ?, ?, ?, ?, ?)", (int(msg['from']['id']), int(giveaways_msg_id), int(chat_id), str(prize), int(n_winners), ""))
+        cursor.execute("INSERT INTO giveaways VALUES (?, ?, ?, ?, ?, ?)", (int(msg['from']['id']), int(giveaways_msg_id), int(chat_id), str(prize_id), int(n_winners), ""))
         db.commit()
     try:
         cookiebot.pinChatMessage(chat_id, giveaways_msg_id)
@@ -121,11 +121,14 @@ def giveaways_end(cookiebot, msg, chat_id, listaadmins_id):
                 text = i18n.get("giveaway.not_found", lang=language)
                 cookiebot.answerCallbackQuery(msg['id'], text=text)
                 return
-            creator_id, prize_id, n_winners, participants_str = result
-            db_prize_end, cursor_prize_end = get_db_connection()
-            cursor_prize_end.execute("SELECT prize FROM giveaway_prizes WHERE id = ?", (int(prize_id),))
-            prize_row_end = cursor_prize_end.fetchone()
-            prize = prize_row_end[0] if prize_row_end else ""
+            creator_id, prize_id_str, n_winners, participants_str = result
+            try:
+                db_prize_end, cursor_prize_end = get_db_connection()
+                cursor_prize_end.execute("SELECT prize FROM giveaway_prizes WHERE id = ?", (int(prize_id_str),))
+                prize_row_end = cursor_prize_end.fetchone()
+                prize = prize_row_end[0] if prize_row_end else prize_id_str
+            except ValueError:
+                prize = prize_id_str
             if msg['from']['id'] not in [int(admin_id) for admin_id in listaadmins_id] and msg['from']['id'] != creator_id and msg['from']['id'] != ownerID:
                 text = i18n.get("giveaway.end_adm", lang=language)
                 cookiebot.answerCallbackQuery(msg['id'], text=text)
