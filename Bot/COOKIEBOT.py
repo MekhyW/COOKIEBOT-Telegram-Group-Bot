@@ -76,34 +76,35 @@ def thread_function(msg):
             if 'text' not in msg:
                 send_message(cookiebot, chat_id, i18n.get("private_chat", lang="en"), msg)
                 return
-            if msg['text'].startswith("/start"):
+            msg_text_lower = msg['text'].lower()
+            if msg_text_lower.startswith("/start"):
                 set_private_commands(cookiebot, chat_id, is_alternate_bot=is_alternate_bot)
             elif 'reply_to_message' in msg and 'text' in msg['reply_to_message'] and "REPLY THIS MESSAGE with the new variable value" in msg['reply_to_message']['text']:
                 configurar_set(cookiebot, msg, chat_id, is_alternate_bot=is_alternate_bot)
-            elif msg['text'].startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == ownerID:
+            elif msg_text_lower.startswith(("/grupos", "/groups")) and 'from' in msg and msg['from']['id'] == ownerID:
                 list_groups(cookiebot, chat_id)
-            elif msg['text'].startswith(("/comandos", "/commands")):
+            elif msg_text_lower.startswith(("/comandos", "/commands")):
                 list_commands(cookiebot, msg, chat_id, 'eng')
-            elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
+            elif msg_text_lower.startswith(("/privacy", "/privacidade", "/privacidad")):
                 privacy_statement(cookiebot, msg, chat_id, 'eng')
-            elif msg['text'] == "/stop" and 'from' in msg and msg['from']['id'] == ownerID:
+            elif msg_text_lower == "/stop" and 'from' in msg and msg['from']['id'] == ownerID:
                 kill_api_server()
                 os._exit(0)
-            elif msg['text'] == "/restart" and 'from' in msg and msg['from']['id'] == ownerID:
+            elif msg_text_lower == "/restart" and 'from' in msg and msg['from']['id'] == ownerID:
                 kill_api_server()
                 os.execl(sys.executable, sys.executable, *sys.argv)
-            elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
+            elif msg_text_lower.startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
                 leave_and_blacklist(cookiebot, msg['text'].split()[1])
                 send_message(cookiebot, ownerID, f"Auto-left\n{chat_id}")
-            elif msg['text'].startswith("/blacklist") and 'from' in msg and msg['from']['id'] == ownerID:
+            elif msg_text_lower.startswith("/blacklist") and 'from' in msg and msg['from']['id'] == ownerID:
                 blacklist_user(msg['text'].split()[1])
                 send_message(cookiebot, ownerID, f"Blacklisted user with ID {msg['text'].split()[1]}")
-            elif msg['text'].startswith("/unblacklist") and 'from' in msg and msg['from']['id'] == ownerID:
+            elif msg_text_lower.startswith("/unblacklist") and 'from' in msg and msg['from']['id'] == ownerID:
                 unblacklist_user(msg['text'].split()[1])
                 send_message(cookiebot, ownerID, f"Unblacklisted user with ID {msg['text'].split()[1]}")
-            elif msg['text'].startswith("/broadcast") and 'from' in msg and msg['from']['id'] == ownerID:
+            elif msg_text_lower.startswith("/broadcast") and 'from' in msg and msg['from']['id'] == ownerID:
                 broadcast_message(cookiebot, msg)
-            elif msg['text'].startswith("/"):
+            elif msg_text_lower.startswith("/"):
                 send_message(cookiebot, chat_id, "Commands must be used in a group chat!", msg)
             else:
                 pv_default_message(cookiebot, msg, chat_id, is_alternate_bot)       
@@ -183,104 +184,105 @@ def thread_function(msg):
             if funfunctions and 'reply_to_message' in msg and msg['reply_to_message']['from']['first_name'] == 'Cookiebot':
                 reply_sticker(cookiebot, msg, chat_id)
         elif 'text' in msg:
-            if msg['text'].startswith("/") and len(msg['text']) > 1:
-                if FurBots and msg['text'].split()[0].split('@')[0] in furbots_cmds:
+            msg_text_lower = msg['text'].lower()
+            if msg_text_lower.startswith("/") and len(msg['text']) > 1:
+                if FurBots and msg_text_lower.split()[0].split('@')[0] in [cmd.lower() for cmd in furbots_cmds]:
                     return
-                if msg['text'].startswith("/start@CookieMWbot") or msg['text'].startswith("/start@MekhysBombot"):
+                if msg_text_lower.startswith("/start@cookiemwbot") or msg_text_lower.startswith("/start@mekhysbombot"):
                     cookiebot.sendAnimation(chat_id, 'https://cdn.dribbble.com/users/4228736/screenshots/10874431/media/28ef00faa119065224429a0f94be21f3.gif',
                     caption= i18n.get("caption", lang=language),
                     reply_to_message_id=msg['message_id'])
-                elif msg['text'].startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
+                elif msg_text_lower.startswith("/leave") and 'from' in msg and msg['from']['id'] == ownerID:
                     leave_and_blacklist(cookiebot, chat_id)
-                elif msg['text'].startswith(("/privacy", "/privacidade", "/privacidad")):
+                elif msg_text_lower.startswith(("/privacy", "/privacidade", "/privacidad")):
                     privacy_statement(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/reload", "/recarregar")):
+                elif msg_text_lower.startswith(("/reload", "/recarregar")):
                     get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     get_config(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     text = i18n.get("reload", lang=language)
                     send_message(cookiebot, chat_id, text, msg)
-                elif msg['text'].startswith(("/analise", "/analisis", "/analysis")):
+                elif msg_text_lower.startswith(("/analise", "/analisis", "/analysis")):
                     analyze(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
-                elif msg['text'].startswith(("/divulgar", "/publish", "/publicar")):
+                elif msg_text_lower.startswith(("/divulgar", "/publish", "/publicar")):
                     ask_publisher_command(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/repost", "/repostar", "/reenviar")):
+                elif msg_text_lower.startswith(("/repost", "/repostar", "/reenviar")):
                     listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     schedule_autopost(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=is_alternate_bot)
-                elif msg['text'].startswith(("/deleteposts", "/apagarposts", "/apagarposts")):
+                elif msg_text_lower.startswith(("/deleteposts", "/apagarposts", "/apagarposts")):
                     listaadmins, listaadmins_id, _ = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     cancel_posts(cookiebot, msg, chat_id, language, listaadmins_id, is_alternate_bot=is_alternate_bot)
-                elif utilityfunctions and msg['text'].startswith(("/buscarfonte", "/searchsource", "/buscarfuente")):
+                elif utilityfunctions and msg_text_lower.startswith(("/buscarfonte", "/searchsource", "/buscarfuente")):
                     reverse_search(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
-                elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
+                elif msg_text_lower.startswith(("/aleatorio", "/aleatório", "/random", "/meme", "/idade", "/age", "/edad", "/genero", "/gênero", "/gender", 
                                                 "/rojao", "/rojão", "/acende", "/fogos", "/firecracker", "/shippar", "/ship", "/milton", "/reclamacao", "/reclamação", "/complaint", "/queja",
                                                 "/batalha", "/battle", "/batalla", "/desenterrar", "/unearth", "/morte", "/death", "/muerte", "/sorte", "/fortunecookie", "/suerte",
                                                 "/zoar", "/destroy", "/destruir", "/aniversário", "/aniversario", "/birthday", "/cumpleanos", "/cumpleaños", "/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
                     if not funfunctions:
                         notify_fun_off(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/aleatorio", "/aleatório", "/random")):
+                    elif msg_text_lower.startswith(("/aleatorio", "/aleatório", "/random")):
                         random_media(cookiebot, msg, chat_id, thread_id=thread_id, is_alternate_bot=is_alternate_bot)
-                    elif msg['text'].startswith("/meme"):
+                    elif msg_text_lower.startswith("/meme"):
                         meme(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/batalha", "/battle", "/batalla")):
+                    elif msg_text_lower.startswith(("/batalha", "/battle", "/batalla")):
                         battle(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
-                    elif msg['text'].startswith(("/idade", "/age", "/edad")):
+                    elif msg_text_lower.startswith(("/idade", "/age", "/edad")):
                         age(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/genero", "/gênero", "/gender")):
+                    elif msg_text_lower.startswith(("/genero", "/gênero", "/gender")):
                         gender(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/rojao", "/rojão", "/acende", "/fogos", "/firecracker")):
+                    elif msg_text_lower.startswith(("/rojao", "/rojão", "/acende", "/fogos", "/firecracker")):
                         firecracker(cookiebot, msg, chat_id, thread_id=thread_id, is_alternate_bot=is_alternate_bot)
-                    elif msg['text'].startswith(("/shippar", "/ship")):
+                    elif msg_text_lower.startswith(("/shippar", "/ship")):
                         shipp(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
-                    elif msg['text'].startswith(("/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
+                    elif msg_text_lower.startswith(("/milton", "/reclamacao", "/reclamação", "/complaint", "/queja")):
                         complaint(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/desenterrar", "/unearth")):
+                    elif msg_text_lower.startswith(("/desenterrar", "/unearth")):
                         unearth(cookiebot, msg, chat_id, thread_id=thread_id)
-                    elif msg['text'].startswith(("/morte", "/muerte", "/death")):
+                    elif msg_text_lower.startswith(("/morte", "/muerte", "/death")):
                         death(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/sorte", "/fortunecookie", "/suerte")):
+                    elif msg_text_lower.startswith(("/sorte", "/fortunecookie", "/suerte")):
                         fortune_cookie(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/zoar", "/destroy", "/destruir")):
+                    elif msg_text_lower.startswith(("/zoar", "/destroy", "/destruir")):
                         destroy(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
-                    elif msg['text'].startswith(("/aniversário", "/aniversario", "/birthday", "/cumpleaños", "/cumpleanos")):
+                    elif msg_text_lower.startswith(("/aniversário", "/aniversario", "/birthday", "/cumpleaños", "/cumpleanos")):
                         birthday(cookiebot, current_date_utc, msg=msg, manual_chat_id=chat_id, language=language)
-                    elif msg['text'].startswith(("/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
+                    elif msg_text_lower.startswith(("/proximosaniversarios", "/nextbirthdays", "/proximoscumpleanos")):
                         next_birthdays(cookiebot, msg, chat_id, language, current_date_utc)
-                elif msg['text'].startswith(("/dado", "/dice", "/patas", "/bff", "/furcamp", "/fursmeet", "/pawstral", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
-                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube", "/giveaway")) or (msg['text'].startswith("/d") and msg['text'].split()[0].split('/d')[1].isdigit()):
-                    if msg['text'].startswith(("/patas", "/bff", "/furcamp", "/fursmeet", "/pawstral")):
+                elif msg_text_lower.startswith(("/dado", "/dice", "/patas", "/bff", "/furcamp", "/fursmeet", "/pawstral", "/ideiadesenho", "/drawingidea", "/ideadibujo", 
+                                             "/qualquercoisa", "/anything", "/cualquiercosa", "/youtube", "/giveaway")) or (msg_text_lower.startswith("/d") and msg_text_lower.split()[0].split('/d')[1].isdigit()):
+                    if msg_text_lower.startswith(("/patas", "/bff", "/furcamp", "/fursmeet", "/pawstral")):
                         event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
                     elif not utilityfunctions:
                         notify_utility_off(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/dado", "/dice", "/d")):
+                    elif msg_text_lower.startswith(("/dado", "/dice", "/d")):
                         roll_dice(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")):
+                    elif msg_text_lower.startswith(("/ideiadesenho", "/drawingidea", "/ideadibujo")):
                         drawing_idea(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/qualquercoisa", "/anything", "/cualquiercosa")):
+                    elif msg_text_lower.startswith(("/qualquercoisa", "/anything", "/cualquiercosa")):
                         prompt_qualquer_coisa(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith(("/youtube")):
+                    elif msg_text_lower.startswith(("/youtube")):
                         youtube_search(cookiebot, msg, chat_id, language)
-                    elif msg['text'].startswith("/giveaway"):
+                    elif msg_text_lower.startswith("/giveaway"):
                         giveaways_ask(cookiebot, msg, chat_id, language, listaadmins_id, listaadmins_status)
-                elif msg['text'].startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
+                elif msg_text_lower.startswith(("/novobemvindo", "/newwelcome", "/nuevabienvenida")):
                     new_welcome_message(cookiebot, msg, chat_id)
-                elif msg['text'].startswith(("/novasregras", "/newrules", "/nuevasreglas")):
+                elif msg_text_lower.startswith(("/novasregras", "/newrules", "/nuevasreglas")):
                     new_rules_message(cookiebot, msg, chat_id)
-                elif msg['text'].startswith(("/regras", "/rules", "/reglas")):
+                elif msg_text_lower.startswith(("/regras", "/rules", "/reglas")):
                     rules_message(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/tavivo", "/isalive", "/estavivo")):
+                elif msg_text_lower.startswith(("/tavivo", "/isalive", "/estavivo")):
                     is_alive(cookiebot, msg, chat_id, language, is_alternate_bot=is_alternate_bot)
-                elif msg['text'].startswith(("/everyone", "@everyone")):
+                elif msg_text_lower.startswith(("/everyone", "@everyone")):
                     everyone(cookiebot, msg, chat_id, listaadmins, language, is_alternate_bot=is_alternate_bot)
-                elif msg['text'].startswith(("/adm", "@admin", "@adm", "/report")):
+                elif msg_text_lower.startswith(("/adm", "@admin", "@adm", "/report")):
                     call_admins_ask(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/comandos", "/commands")):
+                elif msg_text_lower.startswith(("/comandos", "/commands")):
                     list_commands(cookiebot, msg, chat_id, language)
-                elif msg['text'].startswith(("/configurar", "/configure")):
+                elif msg_text_lower.startswith(("/configurar", "/configure")):
                     listaadmins, listaadmins_id, listaadmins_status = get_admins(cookiebot, chat_id, ignorecache=True, is_alternate_bot=is_alternate_bot)
                     configurar(cookiebot, msg, chat_id, listaadmins_id, listaadmins_status, language)
-                elif funfunctions and msg['text'].replace('/', '').replace("@CookieMWbot", '').replace("@pawstralbot", '').split()[0] in custom_commands:
+                elif funfunctions and msg_text_lower.replace('/', '').replace("@cookiemwbot", '').replace("@pawstralbot", '').split()[0] in [cmd.lower() for cmd in custom_commands]:
                     custom_command(cookiebot, msg, chat_id, language)
-                elif utilityfunctions and "//" not in msg['text'] and (len(msg['text'].split('@')) < 2 or msg['text'].split('@')[1] in ['CookieMWbot', 'MekhysBombot', 'pawstralbot', 'SCTarinBot', 'MekhysConnectBot']):
+                elif utilityfunctions and "//" not in msg['text'] and (len(msg_text_lower.split('@')) < 2 or msg_text_lower.split('@')[1] in ['cookiemwbot', 'mekhysbombot', 'pawstralbot', 'sctarinbot', 'mekhysconnectbot']):
                     decrease_remaining_image_searches(msg['from']['id'])
                     if remaining_image_searches[msg['from']['id']]['remaining'] >= 0 and remaining_image_searches['total_remaining']['remaining'] >= 0:
                         qualquer_coisa(cookiebot, msg, chat_id, sfw, language)
