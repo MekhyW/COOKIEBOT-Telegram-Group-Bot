@@ -282,7 +282,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b> Faltam ?? dias para a Brasil FurFest 2027 - Teorias da Conspiração </b>\n\n<i> {calltoaction} </i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 {day} a {day+2}/{month}\n📍 Local a definir\n💻 Site: brasilfurfest.com.br, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
+            caption = f"<b> Faltam ?? dias para a Brasil FurFest 2027 - Teorias da Conspiração </b>\n\n<i> {calltoaction} </i>\n🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩🐾🟨🐾🟩\n\n📆 Data a definir\n📍 Local a definir\n💻 Site: brasilfurfest.com.br, upgrades até 1 mês antes do evento através do email reg@brasilfurfest.com.br\n📲 Grupo do evento: @brasilfurfest"
     elif msg['text'].lower().startswith('/fursmeet'):
         day, month, year = 21, 11, 2025
         calltoaction = random.choice(i18n.get("event.fursmeet.cta", lang=language))
