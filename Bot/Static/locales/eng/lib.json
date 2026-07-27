@@ -153,11 +153,7 @@
                 "Bombom nasceu na Fantástica Fábrica de Doces com intuito de reunir os furries na Brasil FurFest para muita festa e diversão. Aliás, se a festa tiver caipirinhas melhor ainda!",
                 "Em 2026, o tempo vai dar tilt! Preparem-se para uma viagem maluca por uma linha do tempo quebrada - passado, presente e futuro colidindo em um só lugar!",
                 "Mais de mil participantes! Isso mesmo: MIL! Desde 2024, batemos um recorde histórico para o furry fandom brasileiro, e tudo graças a vocês que vieram com toda a energia e alegria que só a nossa comunidade furry sabe trazer!",
-                "O evento utiliza o ConCat, um sistema de gerenciamento de eventos usado em algumas das maiores convenções furry do mundo!",
-                "Nosso novo lar será em Campinas, no Hotel Premium, que conta com um espaço de lazer incrível e muito mais conforto no centro de convenções para todo mundo curtir ao máximo.",
-                "O Premium Hotel é a opção perfeita para quem procura a melhor hospedagem na região de Campinas, seja para desfrutar de momentos agradáveis e relaxantes com a família ou então participar de eventos como a BFF!",
-                "O Premium Hotel dispõe de wi-fi cortesia para hóspedes, restaurante, american bar, business center e ampla área de lazer com academia, sauna, duas piscinas externas, uma piscina climatizada, quadras esportivas, espaço kids e playground.",
-                "O Premium Hotel Campinas está localizado na R. Novotel, 931 - Jardim Nova Aparecida, oferecendo fácil acesso às principais atrações e rodovias da cidade."
+                "O evento utiliza o ConCat, um sistema de gerenciamento de eventos usado em algumas das maiores convenções furry do mundo!"
             ],
             "caption": "%(headline)s\n\n%(cta_line)s\n\n%(when_line)s\n%(where_line)s\n%(links_line)s"
         },
