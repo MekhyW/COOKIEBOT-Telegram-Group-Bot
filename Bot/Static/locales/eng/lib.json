@@ -14,9 +14,11 @@
         "title": "⚠️%(name)s, Type the code OR press the 'I'm not a Robot!' button ⚠️\n\nYou have %(time)s minutes, if you don't solve it in this time I'll remove you from the chat ⏳\n(If 4 digits don't appear, open the full photo)",
         "limit": "exceed the limit of attempts to solve the captcha",
         "time": "not solving the captcha in time",
+        "adminban": "group admin ban request",
         "kick": "Kicked user with ID <b> %(user)s </b> for <b> %(reason)s </b>\n<blockquote> If this was a mistake, ask a staff to add them back </blockquote>",
         "error_kick": "Error kicking user with ID <b> %(user)s </b> for <b> %(reason)s </b>\n<blockquote> User is no longer in the chat, or I don't have permission to kick </blockquote>",
         "button_approve": "ADMINS: Approve",
+        "button_ban": "ADMINS: Ban",
         "button_call_admin": "Call Admins",
         "button_not_robot": "I'm not a Robot!"
     },

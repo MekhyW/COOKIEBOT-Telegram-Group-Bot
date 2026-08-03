@@ -14,9 +14,11 @@
         "title": "⚠️%(name)s, Escribe el código O presiona el botón 'No soy un robot! ⚠️\n\nTienes %(time)s minutos, si no lo resuelves en este tiempo te eliminaré del chat ⏳\n(Si no aparecen 4 dígitos, abre la foto completa)",
         "limit": "exceder el límite de intentos para resolver el captcha",
         "time": "no solucionar el captcha a tiempo",
+        "adminban": "solicitud de baneo por administrador del grupo",
         "kick": "Eché al usuario con id <b> %(user)s </b> por <b> %(reason)s </b>.\n<blockquote> Si esto fue un error, pídale a un staff que lo agregue de nuevo </blockquote>",
         "error_kick": "Error kicking user with ID <b> %(user)s </b> for <b> %(reason)s </b>\n<blockquote> User is no longer in the chat, or I don't have permission to kick </blockquote>",
         "button_approve": "ADMINS: Aprobar",
+        "button_ban": "ADMINS: Banear",
         "button_call_admin": "Llamar a los admins",
         "button_not_robot": "No soy un robot!"
     },
