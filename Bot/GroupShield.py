@@ -352,13 +352,10 @@ def captcha_admin_ban(cookiebot, msg, chat_id, language='pt'):
                 continue
             _, _, _, _, chat, user, password, captcha_id, attempts = parse_line_captcha(line)
             if str(chat_id) == str(chat):
-                ctx= {
-                    "user": user,
-                    "reason": i18n.get("captcha.adminban", lang=language)
-                }
+                ctx= {"user": user, "reason": i18n.get("captcha.adminban", lang=language)}
                 try:
                     cookiebot.kickChatMember(chat_id, user)
-                    send_message(cookiebot, chat_id, i18n.get("captcha.ban", lang=language, **ctx))
+                    send_message(cookiebot, chat_id, i18n.get("captcha.kick", lang=language, **ctx))
                 except Exception as e:
                     print(e)
                     send_message(cookiebot, chat_id, i18n.get("captcha.error_kick", lang=language, **ctx))
