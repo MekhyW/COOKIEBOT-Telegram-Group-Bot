@@ -393,7 +393,7 @@ def thread_function_query(msg):
         elif (query_data.startswith('CAPTCHAAPPROVE') and (str(from_id) in listaadmins_id or str(from_id) == str(ownerID))) or (query_data.startswith('CAPTCHASELF') and str(from_id) == query_data.split()[2]):
             solve_captcha(cookiebot, msg, chat_id, True, is_alternate_bot=is_alternate_bot, language=query_data.split()[1])
         elif query_data.startswith('CAPTCHABAN') and (str(from_id) in listaadmins_id or str(from_id) == str(ownerID)):
-            captcha_admin_ban()
+            captcha_admin_ban(cookiebot, msg, chat_id, language=query_data.split()[1])
         elif query_data.startswith('CAPTCHACALLADMIN'):
             language = query_data.split()[1]
             call_admins(cookiebot, msg, chat_id, listaadmins, language)
