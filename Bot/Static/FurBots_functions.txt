@@ -243,7 +243,11 @@
 /help
 /FruityFur_Bot
 /FFPost
-/FFNewPost
 /FFPing
 /FFHelp
 /FFThisMonth
+/grow@growlegbot
+/battle@growlegbot
+/offer@growlegbot
+/scoreboard@growlegbot
+/stats@growlegbot
