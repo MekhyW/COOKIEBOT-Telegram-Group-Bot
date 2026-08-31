@@ -138,7 +138,7 @@ def check_raid(cookiebot, msg, chat_id, language):
         return True
 
 def welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot=0):
-    if str(chat_id) in ['-1001063487371', '-1001649779623', '-1001582063371', '-1002048063981', '-1002193913344']: # Groups where the bot should not welcome new members
+    if str(chat_id) in ['-1001063487371', '-1001649779623', '-1001582063371', '-1002048063981', '-1002193913344', '-1001468185802']: # Groups where the bot should not welcome new members
         return
     send_chat_action(cookiebot, chat_id, 'typing')
     user = msg['new_chat_member'] if 'new_chat_member' in msg else msg['from']
@@ -244,6 +244,7 @@ def captcha_message(cookiebot, msg, chat_id, captchatimespan, language):
         caption = i18n.get("captcha.title", lang=language, name = msg['new_chat_participant']['first_name'], time = round(captchatimespan/60))
         captchaspawnID = send_photo(cookiebot, chat_id, photo, caption=caption, msg_to_reply=msg, reply_markup = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text=i18n.get("captcha.button_approve", lang=language),callback_data=f'CAPTCHAAPPROVE {language} 0')],
+            [InlineKeyboardButton(text=i18n.get("captcha.button_ban", lang=language),callback_data=f'CAPTCHABAN {language}')],
             [InlineKeyboardButton(text=i18n.get("captcha.button_call_admin", lang=language),callback_data=f'CAPTCHACALLADMIN {language}')],
             [InlineKeyboardButton(text=i18n.get("captcha.button_not_robot", lang=language),callback_data=f'CAPTCHASELF {language} {msg["new_chat_participant"]["id"]}')]
         ]))
@@ -283,32 +284,29 @@ def check_captcha(cookiebot, msg, chat_id, captchatimespan, language):
         lines = text.readlines()
     with open("Captcha.txt", 'w+', encoding='utf-8') as text:
         for line in lines:
-            if len(line.split()) >= 5:
-                _, _, _, captchasettime, chat, user, _, captcha_id, attempts = parse_line_captcha(line)
-                if chat == chat_id and (captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) or attempts <= 0):
-                    if attempts <= 0:
-                        reason = i18n.get("captcha.limit", lang=language)
-                    else:
-                        reason = i18n.get("captcha.time", lang=language)
-                    ctx= {
-                        "user": user,
-                        "reason": reason
-                    }
-                    try:
-                        cookiebot.kickChatMember(chat_id, user)
-                        text = i18n.get("captcha.kick", lang=language, **ctx)
-                        send_message(cookiebot, chat_id, text)
-                        timer_unban = threading.Timer(30, cookiebot.unbanChatMember, [chat_id, user])
-                        timer_unban.start()
-                    except Exception as e:
-                        text = i18n.get("captcha.error_kick", lang=language, **ctx)
-                        send_message(cookiebot, chat_id, text)
-                    delete_message(cookiebot, (str(chat), str(captcha_id)))
-                elif chat == chat_id and user == msg['from']['id']:
-                    text.write(line)
-                    delete_message(cookiebot, telepot.message_identifier(msg))
+            if len(line.split()) < 5:
+                continue
+            _, _, _, captchasettime, chat, user, _, captcha_id, attempts = parse_line_captcha(line)
+            if chat == chat_id and (captchasettime+captchatimespan <= ((datetime.datetime.now().hour*3600)+(datetime.datetime.now().minute*60)+(datetime.datetime.now().second)) or attempts <= 0):
+                if attempts <= 0:
+                    reason = i18n.get("captcha.limit", lang=language)
                 else:
-                    text.write(line)
+                    reason = i18n.get("captcha.time", lang=language)
+                ctx= {"user": user, "reason": reason}
+                try:
+                    cookiebot.kickChatMember(chat_id, user)
+                    send_message(cookiebot, chat_id, i18n.get("captcha.kick", lang=language, **ctx))
+                    timer_unban = threading.Timer(30, cookiebot.unbanChatMember, [chat_id, user])
+                    timer_unban.start()
+                except Exception as e:
+                    print(e)
+                    send_message(cookiebot, chat_id, i18n.get("captcha.error_kick", lang=language, **ctx))
+                delete_message(cookiebot, (str(chat), str(captcha_id)))
+            elif chat == chat_id and user == msg['from']['id']:
+                text.write(line)
+                delete_message(cookiebot, telepot.message_identifier(msg))
+            else:
+                text.write(line)
 
 def solve_captcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt', is_alternate_bot=0):
     wait_open("Captcha.txt")
@@ -319,26 +317,48 @@ def solve_captcha(cookiebot, msg, chat_id, button, limbotimespan=0, language='pt
         return
     with open("Captcha.txt", 'w+', encoding='utf-8') as text:
         for line in lines:
-            if len(line.split()) >= 5:
-                _, _, _, _, chat, user, password, captcha_id, attempts = parse_line_captcha(line)
-                if str(chat_id) == str(chat) and button:
-                    send_chat_action(cookiebot, chat_id, 'typing')
+            if len(line.split()) < 5:
+                continue
+            _, _, _, _, chat, user, password, captcha_id, attempts = parse_line_captcha(line)
+            if str(chat_id) == str(chat) and button:
+                send_chat_action(cookiebot, chat_id, 'typing')
+                delete_message(cookiebot, (str(chat), str(captcha_id)))
+                msg['new_chat_member'] = cookiebot.getChatMember(chat, str(user))['user']
+                welcome_message(cookiebot, msg, chat, limbotimespan, language, is_alternate_bot)
+            elif str(chat_id) == str(chat) and str(msg['from']['id']) == str(user):
+                send_chat_action(cookiebot, chat_id, 'typing')
+                solveattempt = "".join(msg['text'].upper().split())
+                if solveattempt.isnumeric() and len(solveattempt) == 4:
                     delete_message(cookiebot, (str(chat), str(captcha_id)))
-                    msg['new_chat_member'] = cookiebot.getChatMember(chat, str(user))['user']
-                    welcome_message(cookiebot, msg, chat, limbotimespan, language, is_alternate_bot)
-                elif str(chat_id) == str(chat) and str(msg['from']['id']) == str(user):
-                    send_chat_action(cookiebot, chat_id, 'typing')
-                    solveattempt = "".join(msg['text'].upper().split())
-                    if solveattempt.isnumeric() and len(solveattempt) == 4:
-                        delete_message(cookiebot, (str(chat), str(captcha_id)))
-                        delete_message(cookiebot, telepot.message_identifier(msg))
-                        welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot)
-                    else:
-                        delete_message(cookiebot, telepot.message_identifier(msg))
-                        attempts -= 1
-                        if attempts > 0:
-                            send_message(cookiebot, chat_id, "Senha incorreta, por favor tente novamente.", language=language)
-                        line = f"{chat} {user} {datetime.datetime.now()} {password} {captcha_id} {attempts}\n"
-                        text.write(line)
+                    delete_message(cookiebot, telepot.message_identifier(msg))
+                    welcome_message(cookiebot, msg, chat_id, limbotimespan, language, is_alternate_bot)
                 else:
+                    delete_message(cookiebot, telepot.message_identifier(msg))
+                    attempts -= 1
+                    if attempts > 0:
+                        send_message(cookiebot, chat_id, "Código incorreto, por favor tente novamente.", language=language)
+                    line = f"{chat} {user} {datetime.datetime.now()} {password} {captcha_id} {attempts}\n"
                     text.write(line)
+            else:
+                text.write(line)
+
+def captcha_admin_ban(cookiebot, msg, chat_id, language='pt'):
+    wait_open("Captcha.txt")
+    with open("Captcha.txt", 'r', encoding='utf-8') as text:
+        lines = text.readlines()
+    with open("Captcha.txt", 'w+', encoding='utf-8') as text:
+        for line in lines:
+            if len(line.split()) < 5:
+                continue
+            _, _, _, _, chat, user, password, captcha_id, attempts = parse_line_captcha(line)
+            if str(chat_id) == str(chat):
+                ctx= {"user": user, "reason": i18n.get("captcha.adminban", lang=language)}
+                try:
+                    cookiebot.kickChatMember(chat_id, user)
+                    send_message(cookiebot, chat_id, i18n.get("captcha.kick", lang=language, **ctx))
+                except Exception as e:
+                    print(e)
+                    send_message(cookiebot, chat_id, i18n.get("captcha.error_kick", lang=language, **ctx))
+                delete_message(cookiebot, (str(chat), str(captcha_id)))
+            else:
+                text.write(line)

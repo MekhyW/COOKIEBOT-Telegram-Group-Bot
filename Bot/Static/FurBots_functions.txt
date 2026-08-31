@@ -246,6 +246,7 @@
 /FFPing
 /FFHelp
 /FFThisMonth
+/pelucia
 /grow@growlegbot
 /battle@growlegbot
 /offer@growlegbot
