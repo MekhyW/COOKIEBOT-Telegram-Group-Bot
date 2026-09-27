@@ -271,7 +271,7 @@ def event_countdown(cookiebot, msg, chat_id, language, is_alternate_bot):
         else:
             while daysremaining < -5:
                 daysremaining += 365
-            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o Patas! </b>\n\n<i> {calltoaction} </i>\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+3}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: patas.site\n📲 Grupo do evento: @EventoPatas"
+            caption = f"<b> Faltam {number_to_emojis(daysremaining)} dias para o Patas! </b>\n\n<i> {calltoaction} </i>\n🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌🐾🐒🐾🍌\n\n📆 {day} a {day+2}/{month}, Sorocaba Park Hotel\n💻 Ingressos em: eventopatas.com\n📲 Grupo do evento: @EventoPatas"
     elif msg['text'].lower().startswith('/bff'):
         day, month, year = 31, 12, 2027
         calltoaction = random.choice(i18n.get("event.bff.cta", lang=language))
